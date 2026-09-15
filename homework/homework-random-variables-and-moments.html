@@ -1,0 +1,3043 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>16&nbsp; Homework — Random Variables, Moments, and the Standard Deviation – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/chapter-normal-approximation.html" rel="next">
+<link href="../chapters/chapter-standard-deviation.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  
+<script>
+(function() {
+  var prev = window.MathJax || {};
+  var prevTex = prev.tex || {};
+  var prevMacros = prevTex.macros || {};
+  window.MathJax = Object.assign({}, prev, {
+    tex: Object.assign({}, prevTex, {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      processEscapes: true,
+      macros: Object.assign({}, prevMacros, {
+        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
+        qty: ['\\left(#1\\right)', 1],
+        qfor: ['\\quad\\text{for}\\quad', 0],
+        qand: ['\\quad\\text{and}\\quad', 0],
+        qwhere: ['\\quad\\text{where}\\quad', 0],
+        E: '\\operatorname{E}',
+        Var: '\\operatorname{V}',
+        Cov: '\\operatorname{Cov}',
+        bias: '\\operatorname{bias}',
+        RMSE: '\\operatorname{RMSE}',
+        sd: '\\operatorname{sd}',
+        hVar: '\\widehat{\\operatorname{V}}',
+        nprior: 'n_0',
+        ind: '\\perp\\!\\!\\!\\perp'
+      })
+    })
+  });
+})();
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating quarto-light">
+<div class="tlda-chapter-title">
+  <div class="tlda-chapter-title-text">Homework — Random Variables, Moments, and the Standard Deviation</div>
+</div>
+<style>
+.tlda-chapter-title {
+  padding: 40px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 32px;
+}
+.tlda-chapter-title-text {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+</style>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-random-variables-and-moments.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework −1: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Homework 4: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Homework 5: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributional Approximation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Why the CLT Works — Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-poisson-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">When Normal Breaks Down — Poisson Approximation and Quality Control</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-poisson.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Stein’s Method and Poisson Approximation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part2-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Two-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-comparing-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Comparing Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bias-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Homework 7: Bias with Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework 8: Sample Size Calculation for Two-Sample Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-potential-outcomes-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Potential Outcomes and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-causality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Homework 9: Causality</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-and-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Sampling and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-observational-confounding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Observational Studies and Confounding</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Practice Midterm 2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/causality-questions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Causality Questions for Unit 2 Exam</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-many-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Summarizing Trends involving Many Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-multivariate-adjustment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Multivariate Analysis and Adjustment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-covariate-shift.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Homework: Covariate Shift</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-telephone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">A Game of Telephone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Inference for Adjusted Comparisons</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-complex-summaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Homework: Point Estimation for Complex Summaries</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-conditional-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Conditional Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-inverse-probability-weighting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Inverse Probability Weighting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Homework: IPW and Estimating Treatment Effects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-imagined-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Imagining Randomization in Observational Studies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Practice Midterm 3</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather-s2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tools in Signal Processing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models-and-loss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Models and Loss Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-erm-union-bound.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Empirical Risk Minimization and the Union Bound</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-linear-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Homework: Linear Models and Basis Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-signal-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Signal Processing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-polynomials-and-splines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Linear Models 2: Polynomials and Splines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Least Squares Regression in Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">The Behavior of Least Squares Predictors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Homework: Misspecification and Bias</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Linear Algebra: Stability of Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-misspecification-and-averaging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Misspecification and Averaging</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-model-choice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Homework: The Impact of Model Choice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Linear Algebra: Residual Orthogonality and Variance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-ipw-least-squares.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Inverse Probability Weighted Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-estimating-ipw-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Estimating IPW Weights</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-trees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Trees</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-heart-attack-application.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Application: Profit vs.&nbsp;Outcomes in Heart Attack Patients</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#warm-up-computing-moments" id="toc-warm-up-computing-moments" class="nav-link active" data-scroll-target="#warm-up-computing-moments">Warm-up: Computing Moments</a></li>
+  <li><a href="#recognition" id="toc-recognition" class="nav-link" data-scroll-target="#recognition">Recognition</a></li>
+  <li><a href="#same-move-many-surfaces" id="toc-same-move-many-surfaces" class="nav-link" data-scroll-target="#same-move-many-surfaces">Same Move, Many Surfaces</a></li>
+  <li><a href="#indicator-counting-cards" id="toc-indicator-counting-cards" class="nav-link" data-scroll-target="#indicator-counting-cards">Indicator Counting (Cards)</a></li>
+  <li><a href="#tell-a-story" id="toc-tell-a-story" class="nav-link" data-scroll-target="#tell-a-story">Tell a Story</a></li>
+  <li><a href="#bias-and-consistency" id="toc-bias-and-consistency" class="nav-link" data-scroll-target="#bias-and-consistency">Bias and Consistency</a>
+  <ul class="collapse">
+  <li><a href="#using-prior-information" id="toc-using-prior-information" class="nav-link" data-scroll-target="#using-prior-information">Using Prior Information</a></li>
+  <li><a href="#visualizating-the-impact-of-prior-information" id="toc-visualizating-the-impact-of-prior-information" class="nav-link" data-scroll-target="#visualizating-the-impact-of-prior-information">Visualizating the Impact of Prior Information</a></li>
+  </ul></li>
+  <li><a href="#convergence-in-probability" id="toc-convergence-in-probability" class="nav-link" data-scroll-target="#convergence-in-probability">Convergence in Probability</a>
+  <ul class="collapse">
+  <li><a href="#markovs-inequality" id="toc-markovs-inequality" class="nav-link" data-scroll-target="#markovs-inequality">Markov’s Inequality</a></li>
+  <li><a href="#markovs-inequality-and-interval-estimation" id="toc-markovs-inequality-and-interval-estimation" class="nav-link" data-scroll-target="#markovs-inequality-and-interval-estimation">Markov’s Inequality and Interval Estimation</a></li>
+  </ul></li>
+  <li><a href="#comparing-interval-calibration-methods" id="toc-comparing-interval-calibration-methods" class="nav-link" data-scroll-target="#comparing-interval-calibration-methods">Comparing Interval Calibration Methods</a></li>
+  <li><a href="#paleyzygmund-the-other-half" id="toc-paleyzygmund-the-other-half" class="nav-link" data-scroll-target="#paleyzygmund-the-other-half">Paley–Zygmund: The Other Half</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-random-variables-and-moments.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout-handout">
+<p><a href="handouts/homework-random-variables-and-moments-handout.zip" download="homework-random-variables-and-moments-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-random-variables-and-moments.qmd</code> in Positron, and answer inside the answer blocks.</p>
+</div>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<!-- Recurring submit reminder. Add it at the top of every homework AFTER week 0 with the
+     Quarto include shortcode pointing at this file (_submit-reminder.qmd). Do NOT write that
+     shortcode literally in this comment: Quarto's include pass scans comments too, so a literal
+     self-include here recurses infinitely. Week 0 carries the full "How to Submit". -->
+<p><em>Reminder: put each answer in its answer block. Working on paper is fine—photograph it and include it with <code>![](photo.png)</code> (image in the same folder as this file).</em></p>
+<div class="hidden">
+<p data-source-line="31"><span class="math display">\[
+\newcommand{\thetaprior}{\theta^{\text{prior}}}
+\newcommand{\nprior}{n^{\text{prior}}}
+\newcommand{\yprior}{y^{\text{prior}}}
+\]</span></p>
+</div>
+<!-- ============================================================================
+  HOMEWORK STUB for the RV/Moments week. Created 2026-06-19.
+  Rationale + portfolio logic: scratch/hw-rv-moments-PLAN.md
+  Design: scratch/design-probability-week-rv-moments.md
+
+  STRUCTURE: floor -> ceiling. Routine fluency first (keeps the bottom third afloat),
+  the conceptually hard / fun problems last. Skip's instinct = the lecture; the homework
+  carries the intro-class ballast (fluency, repetition) that the lecture skips.
+
+  This is a SKELETON stub: HOLE = new writing; PULL = lift from hw5 when we reshape it
+  (the kept hw5 sections move here; Markov/Chebyshev derivations went up to Ch2).
+============================================================================ -->
+<section id="warm-up-computing-moments" class="level1">
+<h1 data-source-line="50">Warm-up: Computing Moments</h1>
+<!-- MECHANICAL FLOOR — ONE UNIFIED CONTEXT (Skip 2026-06-19, refine into final voice).
+     Structure (Skip): don't scatter a separate bait per problem — run the WHOLE set through
+     ONE rich context, and let the with-vs-without-replacement CONTRAST surface every trap by
+     itself. The setup contains the cue ("without replacement") but never flags it; noticing the
+     dependence is the skill. So the floor discriminates without being mindless, and the student
+     stays in one world.
+     NO "name the distribution" anywhere (Skip: naming is in-name garbage / vocabulary-as-
+     gatekeeping — the class rewards the reasoning, never the label). Frame everything as
+     BEHAVIOR (do the variances add or not?), never as names.
+
+  THE CONTEXT: "Draw 3 cards from a deck. Do everything twice — once WITH replacement
+  (shuffle each card back), once WITHOUT (a normal deal). Let X = the number of hearts."
+
+  DRAFT sub-exercises (one deck, both draw-modes):
+  (1) INDICATOR + LINEARITY: write X = sum of three heart-indicators. Find E[X] for both
+      draw-modes. (Same answer — linearity needs no independence. That sameness is the cue.)
+  (2) VARIANCE — THE TRAP: find Var[X] WITH replacement by adding the indicators' variances.
+      Try the same WITHOUT replacement. Which is legitimate? What did "without replacement"
+      change, and what term is missing? (independent -> variances add; dependent -> they don't,
+      and the gap is a covariance.)
+  (3) E[X^2] vs (E[X])^2: back E[X^2] out of Var = E[X^2] - (E[X])^2 using (1),(2). Note they
+      differ — the mini "flaw of averages."
+  (4) FACTORIZATION: is E[(heart_1)(heart_2)] = E[heart_1] E[heart_2]? True WITH replacement,
+      false WITHOUT — compute both; the difference IS the covariance from (2).
+  (5) MARKOV/CHEBYSHEV floor rep: bound P(X >= 3) (all hearts). Sets up the flush problem later.
+  (6) PROBABILITY <-> INDICATOR: (a) write P(X > 0) as an expectation of an indicator;
+      (b) if E[1_{X=3}] = p, what is P(X=3)?; (c) one sentence: why is P(A) = E[1_A] not a trick?
+
+  CAPSTONE (rigor) for the variance trap: the existing without-replacement covariance derivation,
+  homework/homework-comparing-estimators.qmd @exr-covariance-with-replacement — derive
+  E[(Y_i-E Y_i)(Y_j-E Y_j)] = -theta(1-theta)/(m-1) and the full Var = theta(1-theta)/n * (m-n)/(m-1).
+  This is the "we'll leave deriving this for homework" promise the Ch1 variance section makes.
+  ARC: discover the trap (deck) -> name the covariance (lecture) -> derive it (week3). -->
+<div id="exr-deck-moments" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="87"><span class="theorem-title"><strong>Exercise 17.1 (One Deck, Two Sampling Mechanisms)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="89">Draw three cards from a standard deck. Do every calculation twice: first replace and reshuffle each card before the next draw; then deal three cards without replacement. Let <span class="math inline">\(I_i\)</span> indicate that card <span class="math inline">\(i\)</span> is a heart, and let <span class="math inline">\(H=I_1+I_2+I_3\)</span>.</p>
+<ol type="1">
+<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}[H]\)</span> in both designs. Explain why the answer is the same even though only one design has independent indicators.</li>
+<li>Calculate <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(H)\)</span> with replacement by centering and squaring out the sum.</li>
+<li>Without replacement, calculate <span class="math inline">\(\mathop{\mathrm{E}}[I_1I_2]\)</span> and compare it with <span class="math inline">\(\mathop{\mathrm{E}}[I_1]\mathop{\mathrm{E}}[I_2]\)</span>. Use the difference to calculate <span class="math inline">\(\mathop{\mathrm{Cov}}(I_1,I_2)\)</span>.</li>
+<li data-source-line="98">Use the three variances and six ordered cross-terms to calculate <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(H)\)</span> without replacement. Which design is more precise, and where does the difference enter?</li>
+<li>Recover <span class="math inline">\(\mathop{\mathrm{E}}[H^2]\)</span> in both designs from your means and variances.</li>
+<li data-source-line="101">In each design, use Markov and Chebyshev to bound the probability of drawing three hearts. Then calculate the exact probability. What information does the exact calculation use that the two moment bounds discard?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-deck-moments" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="recognition" class="level1">
+<h1 data-source-line="133">Recognition</h1>
+<!-- Engine note: quick reps that keep the vocabulary live. Course-original. DRAFT: -->
+<!-- DRAFT R1 (independent or not? — one-line each, say why):
+     (a) The two numbers shown on a roll of two dice.
+     (b) A card drawn from a deck, and the next card drawn without replacing the first.
+     (c) Two separate fair coin flips.
+     (d) Two players' picks in odds-and-evens when each flips a SEPARATE coin.
+     (e) Two players' picks in odds-and-evens when both read the SAME coin.
+     (Callbacks to the Ch1 independence example — (d)/(e) are the fair-vs-cheating pair.) -->
+<div id="exr-recognize-independence" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="146"><span class="theorem-title"><strong>Exercise 18.1 (What Is Independent?)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="148">For each pair, say whether the two random variables are independent and identify the random mechanism that makes your answer true.</p>
+<ol type="1">
+<li data-source-line="151">The numbers shown on two separately rolled dice.</li>
+<li data-source-line="152">Two successive cards dealt from one shuffled deck.</li>
+<li data-source-line="153">Two separate fair coin flips.</li>
+<li data-source-line="154">Two odds-and-evens players who each flip a separate independent fair coin.</li>
+<li data-source-line="155">Two odds-and-evens players when the second player copies the first.</li>
+<li data-source-line="156">The sum of two dice and the number on the first die.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-recognize-independence" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<!-- R2 (name the distribution) — CUT (Skip 2026-06-19): naming distributions is in-name
+     garbage / vocabulary-as-gatekeeping. The class rewards reasoning, never the label. The
+     real skill (independent or not? does the variance shrink?) lives in R1 + the deck floor. -->
+</section>
+<section id="same-move-many-surfaces" class="level1">
+<h1 data-source-line="176">Same Move, Many Surfaces</h1>
+<!-- Engine 1 of repetition done right (Skip 2026-06-19): the SAME core move restaged across
+     different stories, so the student practices RECOGNIZING the move, not arithmetic.
+     Course-original. DRAFT: -->
+<!-- DRAFT S1 (linearity on indicators — expected count, dependence-free; same one-line move x3):
+     Find the expected count three ways, each by writing the count as a sum of indicators:
+     (a) POLL: expected number of "yes" answers in n=625 calls, turnout theta.
+     (b) CARDS: expected number of hearts in a 5-card hand. (cf. the card problem)
+     (c) DICE: expected number of 6s in 10 rolls.
+     Then: "You used the same one-line move all three times. In which of (a)-(c) were the
+     terms independent, and did it matter for the answer?" (Punchline: linearity didn't care.) -->
+<!-- DRAFT S2 (center-and-square-out — variance, same procedure x2):
+     (a) Number of heads in n fair flips: center and square out to get Var = n*theta*(1-theta).
+     (b) Sample mean of n iid draws with variance sigma^2: get Var = sigma^2 / n. (callback)
+     Note where the cross-terms vanish (independence) — same story both times. -->
+<div id="exr-variance-sums-conventional" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="196"><span class="theorem-title"><strong>Exercise 19.1 (Variance of a Sum, the Conventional Way)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Let <span class="math inline">\(Y_1 \ldots Y_n\)</span> be independent random variables with means <span class="math inline">\(\mu_1 \ldots \mu_n\)</span> and finite variances.</p>
+<ol type="1">
+<li>Center <span class="math inline">\(\sum_iY_i\)</span>, square out the centered sum, and take expectations term by term.</li>
+<li data-source-line="202">Explain exactly where independence is used and why every off-diagonal term is zero.</li>
+<li>Conclude that <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(\sum_iY_i)=\sum_i\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_i)\)</span>.</li>
+<li data-source-line="204">Compare this proof with the independent-copy proof from class. Which step is genuinely different, and which algebra merely appears in a different place?</li>
+<li data-source-line="206">If <span class="math inline">\(A,B,C\)</span> are independent, use the operational rule for independence to explain why <span class="math inline">\(A+B\)</span> and <span class="math inline">\(C\)</span> are independent.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-variance-sums-conventional" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<!-- DRAFT S3 (two moments -> a bound, same move x2):
+     (a) MARKOV: X >= 0 with E[X] = 4. Bound P(X >= 16).
+     (b) CHEBYSHEV: X with mean mu, sd sigma. Bound P(|X-mu| >= 2.5 sigma), and say whether
+         you'd trust this bound more for a "typical" deviation or a "rare" one. (Ties to the flush.) -->
+</section>
+<section id="indicator-counting-cards" class="level1">
+<h1 data-source-line="236">Indicator Counting (Cards)</h1>
+<p data-source-line="238">The indicator-counting technique in this section follows Blitzstein and Hwang, <em>Introduction to Probability</em>, 2nd ed.&nbsp;(2019), Chapter 4.</p>
+<div id="exr-card-indicator-count" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="242"><span class="theorem-title"><strong>Exercise 20.1 (Count Without Finding the Distribution)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="244">Deal five cards from a shuffled standard deck without replacement.</p>
+<ol type="1">
+<li data-source-line="246">Let <span class="math inline">\(H\)</span> be the number of hearts in the hand. Write <span class="math inline">\(H\)</span> as a sum of five indicators.</li>
+<li>Use linearity to calculate <span class="math inline">\(\mathop{\mathrm{E}}[H]\)</span>. Why does the dependence among the five indicators not matter for this calculation?</li>
+<li data-source-line="249">Repeat the calculation for the number of aces.</li>
+<li data-source-line="250">Generalize both answers to a hand of <span class="math inline">\(k\)</span> cards.</li>
+<li data-source-line="251">Which corresponding variance calculation would require information that linearity alone does not provide?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-card-indicator-count" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<!-- *** CITATION REQUIRED (Skip 2026-06-19): these problems ADAPT material from
+     Blitzstein & Hwang, "Introduction to Probability" (Ch. 4 — indicator random variables,
+     the matching problem). Cite it: add Blitzstein-Hwang to references.qmd and footnote this
+     section, e.g. "The indicator-counting technique and the matching problem follow the
+     treatment in Blitzstein & Hwang (2019), Ch. 4. The matching problem is classically due to
+     de Montmort." Adapt the wording into Skip's voice; do NOT reproduce Blitzstein's text. ***
+
+     The on-brand technique: write a COUNT as a sum of indicators, take linearity, IGNORE the
+     dependence. Callback to the Lec3 card warm-ups (hearts/pairs), now abstract. The lesson =
+     LINEARITY NEEDS NO INDEPENDENCE: expected count of dependent events for free, never
+     touching the joint. DRAFT problems below. -->
+<!-- PROVENANCE NOTE for the rest of this homework: the mechanical-floor drills (W1-W4), the
+     same-move-many-surfaces sets, the recognition items, the storytelling problem, and the
+     bias/pseudo-observations + coverage-comparison material are ORIGINAL to this course
+     (no Blitzstein citation needed). Only the card indicator/matching problems above are
+     Blitzstein-adapted. The flush problem reuses our own H and is original. -->
+<!-- DRAFT — Problem A (expected count; dependence irrelevant):
+     Deal a 5-card hand from a standard 52-card deck.
+     (a) Let H = the number of hearts in the hand. Write H as a sum of indicators
+         H = sum_{i=1}^5 1_{card i is a heart}.
+     (b) Use linearity to find E[H]. (Note: the cards are drawn WITHOUT replacement, so the
+         indicators are NOT independent. Does linearity care?)
+     (c) Repeat for the number of aces. (d) Generalize to a k-card hand.
+     PAYOFF to state: E[H] = 5 * 13/52, computed without ever finding the distribution of H. -->
+<!-- DRAFT — Problem B (the matching problem, capstone):
+     Shuffle a 52-card deck and lay the cards in a row. Say card i "matches" if the card in
+     position i is the i-th card of an ordered reference deck.
+     (a) Let M = number of matches; write M as a sum of indicators.
+     (b) Find P(card i matches) and use linearity to get E[M].
+     (c) Marvel: E[M] = 1, no matter the deck size, despite wild dependence among the matches.
+     OPTIONAL stretch: why is Var[M] also ~ 1? (here the dependence DOES matter — sets up that
+     expectation is easy but variance needs the cross-terms / covariances). -->
+<!-- DRAFT — Problem C (FLUSH: Chebyshev is terrible at rare events). Bridges cards -> Chebyshev.
+     Reuse H = # hearts in a 5-card hand (E[H]=1.25, Var[H] ~ 0.86, hypergeometric).
+     (a) A heart flush is H=5. Compute P(H=5) EXACTLY: C(13,5)/C(52,5) ~ 0.0005 (~0.05%).
+     (b) Now bound it with Chebyshev: P(|H-1.25| >= 3.75) <= Var[H]/3.75^2 ~ 6%.
+     (c) Compare: Chebyshev says "<= ~6%", truth is ~0.05% — off by ~100x. Why so bad?
+     THE ESSENTIAL FEELING TO PLANT (Skip 2026-06-19): a flush is FIVE things happening at once
+     (a 5-way coincidence); variance is built from PAIRS (2nd-order info, E[Y_i Y_j]). You can't
+     see a five-way coincidence through a two-way lens. The ORDER of the event must match the
+     order of the information. Chebyshev nails the BULK (low-order/typical), goes silent on rare
+     (high-order) events. Foreshadows the moment hierarchy (Paley-Zygmund needs the 4th moment;
+     rarer tails need more). The flush is the ideal case because the truth is EXACTLY computable,
+     so the gap is visible with your own eyes. -->
+</section>
+<section id="tell-a-story" class="level1">
+<h1 data-source-line="323">Tell a Story</h1>
+<!-- HOLE (storytelling — the most "Skip" problem, 2026-06-19): "Here is a (joint)
+     distribution. Tell a story in which a real random variable has it." Drill that carries
+     an idea — builds the y_j-vs-Y_i / what-IS-a-random-variable intuition in reverse.
+     Could reuse the odds-and-evens / checkerboard joint from the Ch1 independence example. -->
+<div id="exr-joint-story" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="331"><span class="theorem-title"><strong>Exercise 21.1 (Tell a Story About a Joint Distribution)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="333">The random pair <span class="math inline">\((A,B)\)</span> takes values in <span class="math inline">\(\{1,2\}\times\{1,2\}\)</span>. Its joint probabilities are <span class="math display">\[
+P(A=1,B=1)=P(A=2,B=2)=\frac12,
+\qquad
+P(A=1,B=2)=P(A=2,B=1)=0.
+\]</span></p>
+<ol type="1">
+<li data-source-line="340">Tell a concrete story whose random pair has this joint distribution.</li>
+<li data-source-line="341">Calculate the marginal distributions of <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>.</li>
+<li data-source-line="342">Someone sees only the two margins and says both variables look fair. What did they miss?</li>
+<li data-source-line="343">Give a second joint distribution with the same margins in which <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are independent.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-joint-story" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<!-- PULL from hw5 (stays this week, Skip 2026-06-19): "Biased Estimators" +
+     "Bias, Variance, and Mean Squared Error" (lines 162-345). The Bernoulli
+     pseudo-observations estimator; E, bias, sd; bias/variance/MSE; optimal n_prior. -->
+</section>
+<section id="bias-and-consistency" class="level1">
+<h1 data-source-line="361">Bias and Consistency</h1>
+<section id="using-prior-information" class="level2">
+<h2 class="anchored" data-anchor-id="using-prior-information" data-source-line="363">Using Prior Information</h2>
+<p data-source-line="364">So far, we’ve exclusively talked about <em>unbiased estimators</em>. That is, estimators with the property that their expected value is equal to the estimation target. <span class="math display">\[
+\hat\theta \qqtext{ is called unbiased if } \mathop{\mathrm{E}}[\hat{\theta}] = \theta.
+\]</span> We say an estimator is <em>biased</em> if this isn’t true. To get a sense of what that means, let’s consider a simple example of a biased estimator. <span class="math display">\[
+\tilde{Y}_1 = \frac{1}{n+1}\cdot \{\frac{1}{2} + \sum_{i=1}^{n}Y_i\}
+\]</span></p>
+<div id="exr-bias-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 22.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="376">Calculate the expected value of the estimator <span class="math inline">\(\hat\theta =\tilde{Y}_1\)</span>. Then calculate its bias <span class="math inline">\(\mathop{\mathrm{E}}[\hat\theta] - \theta\)</span> and its standard deviation <span class="math inline">\(\sqrt{\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\theta]}\)</span>. Report all three.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-bias-1" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p data-source-line="399">This is a specific example of a more general estimator that integrates information from a prior study. Maybe a real study or maybe a study we’re imagining. Suppose we have <span class="math inline">\(\nprior\)</span> observations <span class="math inline">\(\yprior_1 \ldots \yprior_{\nprior}\)</span> from this study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[
+\thetaprior = \frac{1}{\nprior}\sum_{i=1}^{\nprior}\yprior_i.
+\]</span></p>
+<p data-source-line="404">Then averaging all our observations — from our current study and this prior one — gives us the following estimator.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\tilde{Y}_{\nprior}
+&amp;= \frac{1}{\nprior + n} \left\{ * \right\}{\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i} \\
+&amp;= \frac{1}{\nprior + n}  \left\{ * \right\}{ \nprior\thetaprior + n\bar Y }
+\end{aligned}
+\]</span></p>
+<p data-source-line="414">We treat these prior observations, and therefore their mean <span class="math inline">\(\thetaprior\)</span>, as deterministic. The simple example we started with, <span class="math inline">\(\tilde{Y}_1\)</span>, is a special case where we have a single prior observation <span class="math inline">\(\yprior_1 = \frac{1}{2}\)</span>.</p>
+<div id="exr-bias-general" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 22.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Repeat <a href="#exr-bias-1" class="quarto-xref">Exercise&nbsp;<span>22.1</span></a> for <span class="math inline">\(\tilde{Y}_{\nprior}\)</span>.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-bias-general" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="visualizating-the-impact-of-prior-information" class="level2">
+<h2 class="anchored" data-anchor-id="visualizating-the-impact-of-prior-information" data-source-line="438">Visualizating the Impact of Prior Information</h2>
+<p data-source-line="440">Lets’s try to get a sense of how using prior information like this impacts our inference. We’ll do it visually. The plot below shows the sampling distributions of three estimators of a population mean <span class="math inline">\(\theta\)</span> at three sample sizes <span class="math inline">\(n\)</span>: 10, 40, and 160. These are the estimators.</p>
+<ol type="1">
+<li>The estimator <span class="math inline">\(\hat\theta_1 = \tilde{Y}_{\nprior}\)</span> for <span class="math inline">\(\thetaprior=3/4\)</span> and <span class="math inline">\(\nprior=10\)</span> prior observations.</li>
+<li>The estimator <span class="math inline">\(\hat\theta_2 = \tilde{Y}_{n}\)</span> for <span class="math inline">\(\thetaprior=3/4\)</span> and <span class="math inline">\(\nprior=n\)</span> prior observations—the bigger the sample, the more prior observations we incorporate.</li>
+<li>The sample mean, <span class="math inline">\(\hat\theta_3 = \bar Y\)</span>.</li>
+</ol>
+<p data-source-line="447">As usual, the estimation target <span class="math inline">\(\theta\)</span> is indicated by a green line, the sampling distribution’s mean by a solid blue line, and its mean plus and minus two standard deviations by dotted blue lines. In our first exercise, we’ll match estimators to pictures.</p>
+<div id="exr-bias-visualize" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 22.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="450">What is the correspondence between <span class="math inline">\(\theta_1\)</span>, <span class="math inline">\(\theta_2\)</span>, and <span class="math inline">\(\theta_3\)</span> described above and ‘estimator a’, ‘estimator b’, and ‘estimator c’ from the plot?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-bias-visualize" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="fig-3-sampling-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-random-variables-and-moments.handout_files/figure-html/plot-prior-information-grid-1.svg?v=1789407485218" style="height:4in" alt="Nine sampling distributions arranged by sample size (10, 40, and 160) and estimator (a, b, and c). A green line marks the target, a solid blue line marks each distribution's mean, and dotted blue lines mark two standard deviations on either side." class="figure-img"></p>
+</figure>
+</div>
+</div>
+<details class="tlda-output-source" data-source-file="homework/homework-random-variables-and-moments.qmd" data-source-line="461"><summary>Show plotting code</summary><pre class="sourceCode"><code>#| label: plot-prior-information-grid
+#| echo: false
+#| out-height: 4in
+#| fig-alt: "Nine sampling distributions arranged by sample size (10, 40, and 160) and estimator (a, b, and c). A green line marks the target, a solid blue line marks each distribution's mean, and dotted blue lines mark two standard deviations on either side."
+set.seed(1234)
+n.prior = 10
+theta.prior = .75
+theta = .5
+
+error = 2 * rnorm(100000)
+bias = list(a = function(n) 0,
+            b = function(n) n.prior * (theta.prior - theta) / (n.prior + n),
+            c = function(n) n * (theta.prior-theta) / (n + n))                # n.prior = n
+variance = list(a = function(n) theta*(1-theta)/n,
+                b = function(n) theta*(1-theta) * n / (n.prior + n)^2,
+                c = function(n) theta*(1-theta) * n / (n + n)^2)
+
+
+plotdata = expand_grid(estimator = names(bias), n = c(10, 40, 160)) %&gt;%
+    pmap(function(estimator, n) {
+        thebias = bias[[estimator]](n)
+        thevar = variance[[estimator]](n)
+        data.frame(estimator = estimator, n = n, muhat = thebias + error * sqrt(thevar))
+    }) |&gt; bind_rows()
+
+summaries = plotdata |&gt;
+    group_by(n, estimator) |&gt;
+    summarize(mean = mean(muhat), sd = sd(muhat))
+
+breaks = seq(-2/3, 2/3, by = 1/3)
+signs = case_when(
+    breaks &lt; 0 ~ "-",
+    breaks == 0 ~ "",
+    breaks &gt; 0 ~ "+"
+)
+offsets = case_when(
+    breaks != 0 ~ sprintf("%d/3", 3*abs(breaks)),
+    breaks == 0 ~ ""
+)
+labels.abstract = sprintf("θ %s %s", signs, offsets)
+
+ggplot(plotdata) +
+    geom_vline(aes(xintercept = theta), data = data.frame(theta=0), color='green',alpha=.4, linewidth=1.5) +
+    geom_histogram(aes(x = muhat, y = after_stat(density)), bins = 100, alpha = .2) +
+    geom_vline(aes(xintercept = mean), data = summaries, alpha=.4, color='blue') +
+    geom_vline(aes(xintercept = mean + 2 * sd), data = summaries, linetype = "dotted", color='blue',alpha=.4) +
+    geom_vline(aes(xintercept = mean - 2 * sd), data = summaries, linetype = "dotted", color='blue',alpha=.4) +
+    scale_x_continuous(breaks = breaks, labels = labels.abstract, limits = c(-3/4,3/4)) +
+    theme(axis.text.x = element_text(angle = -90, vjust = 0.5, hjust = 1)) +
+    xlab("") +
+    ylab("") +
+    facet_grid(n ~ estimator, labeller = labeller(n = label_both, estimator = label_both))</code></pre></details></div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.1
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="convergence-in-probability" class="level1">
+<h1 data-source-line="517">Convergence in Probability</h1>
+<p data-source-line="519">Now let’s think about another notion of convergence. If an estimator’s sampling distribution ends up in the right location (<span class="math inline">\(\text{bias} \to 0\)</span>) with arbitrarily little spread (<span class="math inline">\(\text{variance} \to 0\)</span>), then it makes sense that <em>any draw from it</em> will be close to the estimation target <span class="math inline">\(\mu\)</span>.</p>
+<p data-source-line="523">Recall that you can visualize your estimator as a single dot drawn from its sampling distribution. Like the black one below. And if you want to think of what happens if you were to repeat your survey 100 times, you can visualize the results by plotting 100 dots. Like the purple ones.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-random-variables-and-moments.handout_files/figure-html/plot-convergence-in-probability-1.svg?v=1789407485218" class="img-fluid figure-img" alt="Sampling distribution for estimator b at sample size 40, with one black draw and 99 purple draws plotted over the histogram; a vertical line marks the distribution's mean."></p>
+</figure>
+</div>
+</div>
+</div>
+<p data-source-line="552">We formalize this idea by talking about <em>convergence in probability</em>. We say an estimator <span class="math inline">\(\hat\mu\)</span> converges in probability to <span class="math inline">\(\mu\)</span> if, for anyone’s idea of `sufficiently close’, the probability that <span class="math inline">\(\hat\mu\)</span> is sufficiently close to <span class="math inline">\(\mu\)</span> goes to one. Or equivalently, the probability that it isn’t sufficiently close goes to zero. <span class="math display">\[
+P(\lvert\hat\mu - \mu\rvert \ge \epsilon) \to 0 \qqtext{ as } n \to \infty
+\]</span></p>
+<p data-source-line="557">Convergence in mean square <em>implies</em> convergence in probability. Let’s see why. We’ll use <em>Markov’s inequality</em>.</p>
+<section id="markovs-inequality" class="level2">
+<h2 class="anchored" data-anchor-id="markovs-inequality" data-source-line="559">Markov’s Inequality</h2>
+<p data-source-line="561">Markov’s inequality says that the probability a nonnegative random variable <span class="math inline">\(X\)</span> exceeds some threshold <span class="math inline">\(t\)</span> is bounded by the ratio of its expected value and <span class="math inline">\(t\)</span>, i.e., <span class="math display">\[ P(X \geq t) \leq \frac{\mathop{\mathrm{E}}[X]}{t}\]</span> Often, instead of using this to bound the random variable we’re interested in directly, e.g.&nbsp;<span class="math inline">\(X=\lvert\hat\mu - \mu\rvert\)</span>, we use it to bound its square. <span class="math inline">\(X \ge t\)</span> if and only if <span class="math inline">\(X^2 \ge t^2\)</span>, so the probability that <span class="math inline">\(X \ge t\)</span> is the same as the probability that <span class="math inline">\(X^2 \ge t^2\)</span>. Applying Markov’s inequality to the random variable <span class="math inline">\(X^2\)</span> gives us a bound in terms of <span class="math inline">\(X\)</span>’s mean square. <span class="math display">\[
+P(X \ge t) = P(X^2 \ge t^2) \leq \frac{\mathop{\mathrm{E}}[X^2]}{t^2} \qqtext{ e.g.}
+P(\lvert\hat\mu - \mu\rvert \ge \epsilon) = P((\hat\mu - \mu)^2 \ge \epsilon^2) \leq \frac{\mathop{\mathrm{E}}[(\hat\mu - \mu)^2]}{\epsilon^2}
+\]</span></p>
+<p data-source-line="571">This tells us, in terms of the mean squared error of <span class="math inline">\(\hat\mu\)</span>, how likely it is that <span class="math inline">\(\hat\mu\)</span> is far from <span class="math inline">\(\mu\)</span>. And, in particular, it tells us that if the mean squared error goes to zero, then the probability that <span class="math inline">\(\hat\mu\)</span> is any distance <span class="math inline">\(\epsilon\)</span> away from <span class="math inline">\(\mu\)</span> goes to zero.</p>
+<p data-source-line="573">Now we’re going to do two things. First, we’re going to prove Markov’s inequality. It’s good practice working with expectations and probabilities. Second, we’re going to look at what Markov’s inequality tells us about how close <span class="math inline">\(\hat\mu\)</span> is to <span class="math inline">\(\mu\)</span>, i.e., we’re going to use it to calculate the coverage of an interval estimate.</p>
+<p data-source-line="576">First we define the following two functions, <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span>, with <span class="math inline">\(t, x\ge 0\)</span>. <span class="math display">\[
+f(x,t) = \frac{x}{t}
+\]</span> <span class="math display">\[
+g(x,t) = 1_{\ge t}(x) = \begin{cases}
+1 &amp; \text{ if } x \ge t \\
+0 &amp; \text{ otherwise }
+\end{cases}
+\]</span></p>
+<div id="exr-markov-proof" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 23.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<ol type="1">
+<li><p data-source-line="588">We pick <span class="math inline">\(t=3\)</span>, plot the two functions above on the same coordinate with <span class="math inline">\(x\)</span> on the x axis. Based on the graph, what can we infer about the relationship between <span class="math inline">\(f(x,t)\)</span> and <span class="math inline">\(g(x,t)\)</span>?</p></li>
+<li><p data-source-line="590">It turns out that your inference is correct! For all <span class="math inline">\(t, x\ge 0\)</span>, <span class="math inline">\(\frac{x}{t} \ge 1_{\ge t}(x)\)</span>. Use the fact to prove <em>Markov’s inequality</em>.</p>
+<p><em>Hint 1</em>. <span class="math inline">\(\mathop{\mathrm{E}}[Y]\ge \mathop{\mathrm{E}}[Z]\)</span> if <span class="math inline">\(Y\ge Z\)</span></p>
+<p><em>Hint 2</em>. Knowing that <span class="math inline">\(\frac{x}{t} \ge 1_{\ge t}(x)\)</span>, we can infer that <span class="math inline">\(\frac{X}{t} \ge 1_{\ge t}(X)\)</span> for <span class="math inline">\(X\)</span> being a non-negative random variable.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-markov-proof" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="markovs-inequality-and-interval-estimation" class="level2">
+<h2 class="anchored" data-anchor-id="markovs-inequality-and-interval-estimation" data-source-line="605">Markov’s Inequality and Interval Estimation</h2>
+<p data-source-line="607">So far, when we’ve calculated the coverage of an interval estimate in terms of its mean and variance, we’ve relied on normal approximation. That is, we’ve been using a different formula for <span class="math inline">\(P(\lvert\hat\mu - \mu\rvert \ge \epsilon)\)</span> based on the idea that <span class="math inline">\(\hat\mu-\mu\)</span> has approximately the same distribution as a normally-distributed random variable <span class="math inline">\(Z\)</span> with the same mean—zero—and variance <span class="math inline">\(\sigma_{\hat\mu}^2=\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu-\mu]\)</span>. We can use this approximation, in combination with our knowledge of the probability density of the normal approximation, to get a bound on the probability that <span class="math inline">\(\lvert\hat\mu - \mu\rvert \ge \epsilon\)</span>.</p>
+<p data-source-line="611"><span class="math display">\[
+P(\abs{\hat\mu - \mu} \ge \epsilon) \approx P(\abs{Z} \ge \epsilon) = 1-P(\abs{Z} &lt; \epsilon) = 1- \int_{-\epsilon}^{\epsilon} f_{\sigma_{\hat\mu}}(z) dz \qfor f_{\sigma}(z) = \frac{1}{\sqrt{2\pi}\sigma} e^{-z^2/(2\sigma^2)}
+\]</span></p>
+<p data-source-line="614">The reason we’re always talking about intervals of the form <span class="math inline">\(\hat\mu \pm 2 \sigma_{\hat\mu}\)</span> is that, using this approximation, that yields 95% coverage. That is, <span class="math inline">\(P(\abs{Z} &lt; 2 \sigma_{\hat\mu}) \approx .95\)</span>. To see why we tend to use normal approximation instead of Markov’s inequality, let’s see what Markov’s inequality tells us about how close an estimator is to its estimation target and about the coverage of this interval.</p>
+<div id="exr-markov-coverage" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 23.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<ol type="1">
+<li><p data-source-line="617">To see what Markov’s inequality can tell us, first we can apply the property to the squared deviation from the mean:</p>
+<p><span class="math display">\[
+X = \{\hat{\theta}-\mathop{\mathrm{E}}[\hat{\theta}]\}^2
+\]</span></p>
+<p><span class="math display">\[
+P(X\ge t)\le \frac{\mathop{\mathrm{E}}[\{\hat{\theta}-\mathop{\mathrm{E}}[\hat{\theta}]\}^2]}{t} = \frac{\mathop{\mathrm{\mathop{\mathrm{V}}}}(\hat{\theta})}{t}
+\]</span></p>
+<p data-source-line="627">When we do this, what does Markov’s inequality tell us about how close our estimator is to its mean? What is the probability that it’s within 1, 2, 3 standard deviations?</p></li>
+<li><p data-source-line="629">We can use this to calibrate an interval. What does it tell us about the probability that <span class="math inline">\(\hat{\theta} \pm 2 \sigma_{\hat{\theta}}\)</span> contains <span class="math inline">\(\mathop{\mathrm{E}}[\hat{\theta}]\)</span>? How wide must an interval of width <span class="math inline">\(w\)</span> be so that <span class="math inline">\(\hat{\theta} \pm \frac{w}{2}\)</span> has 95% coverage?</p>
+<p data-source-line="631"><em>Hint</em>. <span class="math inline">\(\hat{\theta} \pm \frac{w}{2}\)</span> contains <span class="math inline">\(\theta\)</span> if and only if <span class="math inline">\(|\hat{\theta}-\theta| \le \frac{w}{2}\)</span>. Therefore, <span class="math inline">\(P(\hat{\theta} \pm \frac{w}{2} \text{ contains } \theta) = P(|\hat{\theta}-\theta| \le \frac{w}{2})\)</span>.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-markov-coverage" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="comparing-interval-calibration-methods" class="level1">
+<h1 data-source-line="641">Comparing Interval Calibration Methods</h1>
+<!-- PULL from hw5 (stays): "Comparing Interval Calibration Methods" (lines 348-482).
+     The programming exercise: empirical coverage of bootstrap vs normal vs Markov;
+     measure coverage & width; choose; does it change with n? This is the empirical
+     coverage calculation Skip wants paired with the biased-estimation material. -->
+<div id="exr-chebyshev-binomial-comparison" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="649"><span class="theorem-title"><strong>Exercise 24.1 (Exact and Guaranteed Intervals)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="651">Return to the binary population and sample size from the earlier calibration homework. Use the exact Binomial method from that homework and the Chebyshev method from this week’s chapter.</p>
+<ol type="1">
+<li data-source-line="654">Derive the value <span class="math inline">\(t\)</span> for which Chebyshev guarantees <span class="math inline">\(P(|\hat\theta-\theta|\le t\sigma)\ge .95\)</span>.</li>
+<li data-source-line="656">On the same axis, draw the exact middle-95% interval for <span class="math inline">\(\hat\theta\)</span> and the guaranteed interval <span class="math inline">\(\theta\pm t\sigma\)</span>.</li>
+<li data-source-line="658">Compare their widths over a grid of values of <span class="math inline">\(\theta\)</span>. Which method needs the full distribution, and which needs only the first two moments?</li>
+<li data-source-line="660">Explain why the guaranteed interval is useful even though it is much wider.</li>
+<li data-source-line="661">Save this comparison. After normal approximation, add the normal interval to the same object rather than starting a new exercise.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-chebyshev-binomial-comparison" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-calibration-method-simulation" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="685"><span class="theorem-title"><strong>Exercise 24.2 (Coverage Is an Empirical Question)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="687">Let <span class="math inline">\(\theta=.7\)</span> and draw binary samples of size <span class="math inline">\(n=625\)</span>. For each sample, calculate both the sample mean <span class="math inline">\(\bar Y\)</span> and the pseudo-observation estimator <span class="math inline">\(\tilde Y_{\nprior}\)</span> from <a href="#exr-bias-general" class="quarto-xref">Exercise&nbsp;<span>22.2</span></a> with <span class="math inline">\(\nprior=100\)</span> and <span class="math inline">\(\thetaprior=.5\)</span>.</p>
+<ol type="1">
+<li data-source-line="691">For each estimator, construct three intervals centered at the observed point estimate: a 95% bootstrap interval, a 95% normal-approximation interval, and an interval whose radius is <span class="math inline">\(\sqrt{20}\)</span> times the estimated standard deviation. For the pseudo-observation estimator, estimate its standard deviation by replacing <span class="math inline">\(\theta\)</span> with <span class="math inline">\(\bar Y\)</span> in the variance formula you derived earlier. The last radius is Chebyshev-calibrated around the estimator’s expectation; for the biased estimator, it does not guarantee 95% coverage of <span class="math inline">\(\theta\)</span>.</li>
+<li data-source-line="698">Repeat the experiment 1,000 times. For each of the six estimator-and-calibration pairs, report empirical coverage and average width.</li>
+<li data-source-line="700">Which calibration method would you use for each point estimator? Separate the question “is the interval narrow?” from “does it cover <span class="math inline">\(\theta\)</span> 95% of the time?”</li>
+<li data-source-line="702">Repeat with <span class="math inline">\(n=2500\)</span>. Explain why increasing the amount of real data changes both the bias and the variance advantage of the pseudo-observations.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-calibration-method-simulation" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-bernoulli-third-absolute-moment" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="772"><span class="theorem-title"><strong>Exercise 24.3 (One More Moment)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="774">Let <span class="math inline">\(X\)</span> equal one with probability <span class="math inline">\(p\)</span> and zero with probability <span class="math inline">\(1-p\)</span>.</p>
+<ol type="1">
+<li data-source-line="776">List the two possible values of <span class="math inline">\(|X-p|^3\)</span> and their probabilities.</li>
+<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}|X-p|^3\)</span>.</li>
+<li data-source-line="778">For <span class="math inline">\(n\)</span> independent copies, calculate the sum of the <span class="math inline">\(n\)</span> individual third absolute centered moments.</li>
+<li data-source-line="780">The later normal-approximation result uses this sum. Why is that easier than calculating the distribution—or the third absolute centered moment—of the sum itself?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-bernoulli-third-absolute-moment" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="paleyzygmund-the-other-half" class="level1">
+<h1 data-source-line="794">Paley–Zygmund: The Other Half</h1>
+<!-- HOLE (the conceptual ceiling — new writing, exists nowhere): the LOWER bound.
+     Chebyshev only capped sigma from above; show the spread is genuinely there, so sigma
+     is pinned from BOTH sides ("the SD is standard, for real"). The 4th moment
+     E[(Y-mu)^4] is the vehicle — frame as DISCOVERING the other half of the story. -->
+<div id="exr-paley-zygmund-bonus" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p data-source-line="802"><span class="theorem-title"><strong>Exercise 25.1 (Bonus: A Lower Bound on Spread)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="804">For a nonnegative random variable <span class="math inline">\(Z\)</span> and <span class="math inline">\(0&lt;a&lt;1\)</span>, the Paley–Zygmund inequality says <span class="math display">\[
+P(Z\ge a\mathop{\mathrm{E}}Z)\ge (1-a)^2\frac{(\mathop{\mathrm{E}}Z)^2}{\mathop{\mathrm{E}}[Z^2]}.
+\]</span> Let <span class="math inline">\(Y\)</span> have mean <span class="math inline">\(\mu\)</span>, positive variance <span class="math inline">\(\sigma^2\)</span>, and finite fourth centered moment. Apply the inequality with <span class="math inline">\(Z=(Y-\mu)^2\)</span> and <span class="math inline">\(a=1/2\)</span>.</p>
+<ol type="1">
+<li>Rewrite the event <span class="math inline">\(Z\ge a\mathop{\mathrm{E}}Z\)</span> as a statement about <span class="math inline">\(|Y-\mu|\)</span> and <span class="math inline">\(\sigma\)</span>.</li>
+<li data-source-line="812">Express the resulting lower bound using <span class="math inline">\(\sigma^4\)</span> and <span class="math inline">\(\mathop{\mathrm{E}}[(Y-\mu)^4]\)</span>.</li>
+<li data-source-line="813">Chebyshev says there cannot be too much probability far from <span class="math inline">\(\mu\)</span>. Explain how this result says that the standard deviation cannot be describing spread that is not really there.</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-paley-zygmund-bonus" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Sometimes we call these <em>pseudo-observations</em>. This particular interpretation, in which we think of them as coming from a prior study, can be used to derive this estimator from Bayesian principles.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+<div class="tlda-chapter-nav">
+  <div class="tlda-nav-prev" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'prev'},'*')"><span class="tlda-nav-arrow">←</span> The Standard Deviation is Standard</div>
+  <div class="tlda-nav-next" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'next'},'*')"><span class="tlda-nav-arrow">→</span> Normal Approximation</div>
+</div>
+<style>
+.tlda-chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 20px 60px;
+  margin-top: 60px;
+  border-top: 1px solid #ccc;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tlda-nav-prev, .tlda-nav-next {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  max-width: 45%;
+}
+.tlda-nav-prev:hover, .tlda-nav-next:hover { color: #444; }
+.tlda-nav-next { text-align: right; }
+.tlda-nav-arrow { font-size: 16px; }
+</style></main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../homework";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/chapter-standard-deviation.html" class="pagination-link" aria-label="The Standard Deviation is Standard">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/chapter-normal-approximation.html" class="pagination-link" aria-label="Normal Approximation">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+
+<script>
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // Strip Quarto navigation elements for clean embedding
+  function stripNav() {
+    var selectors = [
+      '#quarto-sidebar',
+      '#quarto-margin-sidebar',
+      '.navbar',
+      '#quarto-header',
+      '#quarto-back-to-top',
+      '.nav-footer',
+      '#quarto-overlay',
+      '#quarto-search',
+      '.page-navigation',
+      '.quarto-title-breadcrumbs',
+    ];
+    selectors.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+    // Hide the first h1 — redundant with the injected title card
+    var firstH1 = document.querySelector('h1');
+    if (firstH1) firstH1.style.display = 'none';
+    // Make content full-width (remove sidebar offset)
+    var main = document.querySelector('#quarto-content');
+    if (main) {
+      main.style.marginLeft = '0';
+      main.style.paddingLeft = '0';
+    }
+    var content = document.querySelector('.page-columns');
+    if (content) {
+      content.style.display = 'block';
+    }
+    // Add padding to approximate default article margins (1in each side at 800/612 scale)
+    document.body.style.margin = '0';
+    document.body.style.padding = '0 90px';
+    document.body.style.overflow = 'visible';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+      if (e.data?.type === 'tlda-figure-transform') {
+        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
+        if (!wrapper) return;
+        var svg = wrapper.querySelector('svg');
+        if (!svg) return;
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Extract just the hash portion — these are same-document cross-refs
+        var hashIdx = href.indexOf('#');
+        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Hide WebR loading spinners (bracket chars) but keep the container visible
+    // so code editors and outputs remain accessible
+    var style = document.createElement('style');
+    style.textContent = [
+      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
+      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
+      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
+      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
+      '.cm-line { overflow-wrap: anywhere; }',
+      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
+      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
+      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
+      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
+      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
+      '.spinner-grow, .spinner-border { opacity: 0.3; }',
+      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
+      '.image-toggle .image-toggle-controls { display: none !important; }',
+      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
+      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
+      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
+    var main = document.querySelector('main');
+    var h;
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      h = Math.ceil(rect.bottom + window.scrollY);
+    } else {
+      h = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight
+      );
+    }
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      var y = 0;
+      var node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      positions[id] = y;
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  var figuresReported = false;
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  function reportFigures() {
+    var result = [];
+    var globalIdx = 0;
+
+    // 1. Old-style: <figure> with <img src="...svg">
+    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
+    figures.forEach(function(fig) {
+      var img = fig.querySelector('img[src$=".svg"]');
+      if (!img) return;
+      if (fig.closest('.image-toggle')) return;
+      var tabPane = fig.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      var rect = fig.getBoundingClientRect();
+      if (rect.height < 10) return;
+      img.style.visibility = 'hidden';
+      var tabset = fig.closest('.panel-tabset');
+      result.push({
+        svgUrl: img.src,
+        offsetY: getOffsetY(fig),
+        w: rect.width,
+        h: rect.height,
+        id: img.id || fig.id || null,
+        caption: (fig.querySelector('figcaption') || {}).textContent || null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
+      });
+    });
+
+    // 2. Inline SVGs from the inline-svg Lua filter
+    // The overlay is a transparent glass pane — content stays in the iframe for styling.
+    // Each wrapper gets a data-figure-idx for targeted transform messages.
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      var wrapper = svg.parentElement;
+      if (wrapper.closest('.image-toggle')) return;
+      var tabPane = wrapper.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      var wrapperRect = wrapper.getBoundingClientRect();
+      if (wrapperRect.height < 10) return;
+      // Tag wrapper for transform messages and set up clipping
+      wrapper.dataset.figureIdx = String(globalIdx);
+      wrapper.style.overflow = 'hidden';
+      var tabset = wrapper.closest('.panel-tabset');
+      var figEl = wrapper.closest('figure');
+      result.push({
+        svgUrl: '',
+        inline: true,
+        offsetX: getOffsetX(wrapper),
+        offsetY: getOffsetY(wrapper),
+        w: wrapperRect.width,
+        h: wrapperRect.height,
+        id: (figEl && figEl.id) || wrapper.id || null,
+        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
+      });
+    });
+
+    if (result.length > 0 && window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
+      figuresReported = true;
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Strip nav on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      stripNav();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for MathJax accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    stripNav();
+    processWebRCells();
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, MathJax rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        if (!figuresReported) reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
+<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
+<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/homework/homework-random-variables-and-moments.html">App version</a>
+<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
+</body></html>

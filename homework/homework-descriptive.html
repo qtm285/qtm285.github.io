@@ -1,0 +1,3191 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; Homework 0: Basic Descriptive Statistics – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/chapter-point-and-interval-estimates.html" rel="next">
+<link href="../homework/homework-setup.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  
+<script>
+(function() {
+  var prev = window.MathJax || {};
+  var prevTex = prev.tex || {};
+  var prevMacros = prevTex.macros || {};
+  window.MathJax = Object.assign({}, prev, {
+    tex: Object.assign({}, prevTex, {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      processEscapes: true,
+      macros: Object.assign({}, prevMacros, {
+        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
+        qty: ['\\left(#1\\right)', 1],
+        qfor: ['\\quad\\text{for}\\quad', 0],
+        qand: ['\\quad\\text{and}\\quad', 0],
+        qwhere: ['\\quad\\text{where}\\quad', 0],
+        E: '\\operatorname{E}',
+        Var: '\\operatorname{V}',
+        Cov: '\\operatorname{Cov}',
+        bias: '\\operatorname{bias}',
+        RMSE: '\\operatorname{RMSE}',
+        sd: '\\operatorname{sd}',
+        hVar: '\\widehat{\\operatorname{V}}',
+        nprior: 'n_0',
+        ind: '\\perp\\!\\!\\!\\perp'
+      })
+    })
+  });
+})();
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating quarto-light">
+<div class="tlda-chapter-title">
+  <div class="tlda-chapter-title-text">Homework 0: Basic Descriptive Statistics</div>
+</div>
+<style>
+.tlda-chapter-title {
+  padding: 40px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 32px;
+}
+.tlda-chapter-title-text {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+</style>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-descriptive.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework −1: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Homework 4: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Homework 5: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributional Approximation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Why the CLT Works — Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-poisson-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">When Normal Breaks Down — Poisson Approximation and Quality Control</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-poisson.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Stein’s Method and Poisson Approximation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part2-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Two-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-comparing-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Comparing Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bias-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Homework 7: Bias with Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework 8: Sample Size Calculation for Two-Sample Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-potential-outcomes-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Potential Outcomes and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-causality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Homework 9: Causality</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-and-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Sampling and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-observational-confounding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Observational Studies and Confounding</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Practice Midterm 2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/causality-questions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Causality Questions for Unit 2 Exam</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-many-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Summarizing Trends involving Many Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-multivariate-adjustment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Multivariate Analysis and Adjustment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-covariate-shift.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Homework: Covariate Shift</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-telephone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">A Game of Telephone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Inference for Adjusted Comparisons</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-complex-summaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Homework: Point Estimation for Complex Summaries</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-conditional-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Conditional Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-inverse-probability-weighting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Inverse Probability Weighting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Homework: IPW and Estimating Treatment Effects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-imagined-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Imagining Randomization in Observational Studies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Practice Midterm 3</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather-s2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tools in Signal Processing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models-and-loss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Models and Loss Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-erm-union-bound.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Empirical Risk Minimization and the Union Bound</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-linear-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Homework: Linear Models and Basis Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-signal-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Signal Processing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-polynomials-and-splines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Linear Models 2: Polynomials and Splines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Least Squares Regression in Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">The Behavior of Least Squares Predictors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Homework: Misspecification and Bias</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Linear Algebra: Stability of Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-misspecification-and-averaging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Misspecification and Averaging</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-model-choice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Homework: The Impact of Model Choice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Linear Algebra: Residual Orthogonality and Variance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-ipw-least-squares.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Inverse Probability Weighted Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-estimating-ipw-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Estimating IPW Weights</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-trees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Trees</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-heart-attack-application.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Application: Profit vs.&nbsp;Outcomes in Heart Attack Patients</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#mean-and-standard-deviation" id="toc-mean-and-standard-deviation" class="nav-link active" data-scroll-target="#mean-and-standard-deviation">Mean and Standard Deviation</a>
+  <ul class="collapse">
+  <li><a href="#definitions" id="toc-definitions" class="nav-link" data-scroll-target="#definitions">Definitions</a></li>
+  <li><a href="#calculations" id="toc-calculations" class="nav-link" data-scroll-target="#calculations">Calculations</a></li>
+  <li><a href="#properties" id="toc-properties" class="nav-link" data-scroll-target="#properties">Properties</a></li>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization">Visualization</a></li>
+  </ul></li>
+  <li><a href="#supreme-court-justices" id="toc-supreme-court-justices" class="nav-link" data-scroll-target="#supreme-court-justices">Supreme Court Justices</a>
+  <ul class="collapse">
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
+  <li><a href="#breaking-down-the-data" id="toc-breaking-down-the-data" class="nav-link" data-scroll-target="#breaking-down-the-data">Breaking Down the Data</a></li>
+  </ul></li>
+  <li><a href="#frequencies-indicators-and-means" id="toc-frequencies-indicators-and-means" class="nav-link" data-scroll-target="#frequencies-indicators-and-means">Frequencies, Indicators and Means</a>
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#sec-freq-R" id="toc-sec-freq-R" class="nav-link" data-scroll-target="#sec-freq-R">Calculating Frequencies in <strong>R</strong></a></li>
+  </ul></li>
+  <li><a href="#visualization-1" id="toc-visualization-1" class="nav-link" data-scroll-target="#visualization-1">Visualization</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-descriptive.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout-handout">
+<p><a href="https://pic.cormorant-matrix.ts.net/api/classroom/assignments/homework-0-descriptive/handout.zip" download="homework-descriptive-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-descriptive.qmd</code> in Positron, and answer inside the answer blocks.</p>
+</div>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<p data-source-line="10">This assignment is about summarizing a dataset numerically and visually: the mean, the standard deviation, and the frequency that something happens. You’ll calculate them by hand and in <strong>R</strong>, draw them, and ask each time whether the summary is a fair picture of what’s there.</p>
+<section id="mean-and-standard-deviation" class="level1">
+<h1 data-source-line="15">Mean and Standard Deviation</h1>
+<section id="definitions" class="level2">
+<h2 class="anchored" data-anchor-id="definitions" data-source-line="18">Definitions</h2>
+<p data-source-line="20">Below is a list of a thousand numbers, drawn as dots, with the two things we are about to define marked on it: their mean, and one standard deviation either side of it.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-poisson-sample-1.svg?v=1789407483430" class="img-fluid figure-img" alt="One thousand purple observations shown with their histogram, a solid blue mean line, and dashed lines one standard deviation below and above the mean."></p>
+</figure>
+</div>
+</div>
+<details class="tlda-output-source" data-source-file="homework/homework-descriptive.qmd" data-source-line="24"><summary>Show plotting code</summary><pre class="sourceCode"><code>#| label: plot-poisson-sample
+#| echo: false
+#| fig-alt: "One thousand purple observations shown with their histogram, a solid blue mean line, and dashed lines one standard deviation below and above the mean."
+Y = rpois(1000,20)/20
+ggplot(data.frame(x=1:length(Y), y=Y)) + 
+  geom_point(aes(y=x,x=y), alpha=.2, size=1/2, color='purple') + 
+  geom_vline(aes(xintercept=mean(y)), color='blue', alpha=.5) + 
+  geom_vline(aes(xintercept=mean(y)-sd(y)), color='blue', alpha=.5, linetype='dashed') + 
+  geom_vline(aes(xintercept=mean(y)+sd(y)), color='blue', alpha=.5, linetype='dashed') +
+  geom_histogram(aes(x=y, y=300*after_stat(density)), bins=20, alpha=.15) + 
+  xlab('') + ylab('') + theme(axis.text.y=element_blank(), axis.text.x=element_blank())</code></pre></details></div>
+<p>If you have a list of numbers <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span>, the <strong>mean</strong> (which we call <span class="math inline">\(\bar X\)</span>), is the sum of the numbers divided by the number of numbers. <span class="math display">\[
+\bar X = \frac{1}{n}\sum_{i=1}^n X_i
+\]</span></p>
+<p data-source-line="45">The <strong>standard deviation</strong> (which we call <span class="math inline">\(\hat\sigma\)</span>) is a measure of how spread out the numbers are. It’s meant to be what it sounds like: the standard (usual) deviation (distance) of number in the list from the list’s mean.</p>
+<p><span class="math display">\[
+\hat \sigma^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar X)^2
+\]</span></p>
+<p data-source-line="51">Here to come up with one number describing what’s ‘standard’, instead of just taking the average, we do something different. We square our deviations, take the average of squares, and use the square root of the result. This still gives us a number that measures the size of ‘a deviation’ instead of ‘a squared deviation’ because we’ve taken the square root after averaging. But by averaging the squares, we’re effectively making bigger deviations ‘count more’ than smaller ones.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p data-source-line="54">In the figure above, we visualize a list of n=1000 numbers as purple dots. The x-coordinates are their values <span class="math inline">\(X_i\)</span> and their y-coordinates are their index <span class="math inline">\(i\)</span> in the list. The solid blue line indicates their mean <span class="math inline">\(\bar X\)</span> and the dashed lines one standard deviation away from the mean in either direction, i.e., <span class="math inline">\(\bar X \pm \hat\sigma\)</span>. We also include a histogram of the numbers to show the density of dots near different values of <span class="math inline">\(x\)</span>. As you think about the following exercises, it might make sense to think about what a visualization like this might look like for the lists you’re working with.</p>
+</section>
+<section id="calculations" class="level2">
+<h2 class="anchored" data-anchor-id="calculations" data-source-line="57">Calculations</h2>
+<div id="exr-calculations-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="60">Each of the following lists has a mean of 50. For which is the standard deviation biggest? Smallest?</p>
+<ol type="1">
+<li data-source-line="62">0, 20, 40, 50, 60, 80, 100.</li>
+<li data-source-line="63">0, 48, 49, 50, 51, 52, 100</li>
+<li data-source-line="64">0, 1, 2, 50, 98, 99, 100</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-calculations-1" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p data-source-line="360"><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-calculations-2" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>For the two lists below, calculate the mean and standard deviation of the numbers. Then compare the your answers for the two lists. Think about this comparison. How is the first list related to the second? How does this relationship carry over to the mean? The standard deviation?</p>
+<ol type="1">
+<li>1, 3, 4, 5, 7</li>
+<li>6, 8, 9, 10, 12</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-calculations-2" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-calculations-3" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Repeat this exercise for a new pair of lists.</p>
+<ol type="1">
+<li>1, 3, 4, 5, 7</li>
+<li>3, 9, 12, 15, 21</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-calculations-3" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-calculations-4" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Repeat it again.</p>
+<ol type="1">
+<li>5, -4, 3, -1, 7</li>
+<li>-5, 4, -3, 1, -7</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-calculations-4" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="properties" class="level2">
+<h2 class="anchored" data-anchor-id="properties">Properties</h2>
+<div id="exr-properties-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Can a standard deviation ever be negative? Explain.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-properties-1" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-properties-2" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.6</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>For a set of non-negative numbers, can the standard deviation ever be larger than the average? Explain.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-properties-2" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="visualization" class="level2">
+<h2 class="anchored" data-anchor-id="visualization" data-source-line="594">Visualization</h2>
+<p>Consider the three histograms below.</p>
+<div class="cell quarto-layout-panel" data-layout-nrow="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Left-skewed beta-sample histogram concentrated near .7."></p>
+<figcaption>Histogram 1</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-2.svg?v=1789407483430" class="img-fluid figure-img" alt="Right-skewed beta-sample histogram concentrated near .3."></p>
+<figcaption>Histogram 2</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-3.svg?v=1789407483430" class="img-fluid figure-img" alt="Symmetric beta-sample histogram centered near .5."></p>
+<figcaption>Histogram 3</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-visual-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.7</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>The means of the samples we’ve histogrammed are approximately 0.3, 0.7, 0.5. Which histogram corresponds to which mean?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-visual-1" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-visual-2" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.8</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>True or false: the standard deviation of the sample summarized by Histogram 1 is a lot smaller than the one summarized by Histogram 2. Explain.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-visual-2" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-sketch-by-hand" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5.9</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p><strong>By hand</strong>, on paper, sketch two histograms that have the <em>same mean</em> but clearly <em>different standard deviations</em>. Label which one has the larger standard deviation. Then photograph your sketch and include it in your answer below.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-sketch-by-hand" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(paste your photo here. be sure to identify which has the larger standard deviation)</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="supreme-court-justices" class="level1">
+<h1>Supreme Court Justices</h1>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<p>Start <strong>R</strong> and run this block to get the dataset we’ll be working with.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>EMdata <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://qtm285-1.github.io/assets/data/EMdata.csv"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li>This data is on 27 justices from the Warren (’53 - ’69), Burger (’69 - ’86), and Rehnquist (’86 - ’05) courts</li>
+<li>The data can be interpreted as a census of justices for the 1953 - 2005 era. Each row is a justice and each column is a variable. The column ‘justice’ is the name of the justice. We’ll be looking at a few other variables.
+<ul>
+<li>CLlib: The percentage of votes in liberal direction for each justice in civil liberties cases</li>
+<li>party: the political party that nominated the justice (Republican =0, Democrat=1)</li>
+<li>ur: the justice is a member of an under-represented group, such as a racial or gender minority (under-represented group=1, not in under-represented group=0)</li>
+</ul></li>
+<li>To get you started, I’m going to plot a histogram of the percentage of liberal votes, identifying the mean with a vertical line. You may want to edit this code to answer future questions.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>CL.histogram <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x=</span>CLlib, <span class="at">y=</span><span class="fu">after_stat</span>(density)), </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">bins=</span><span class="dv">10</span>, <span class="at">alpha=</span>.<span class="dv">3</span>, <span class="at">color=</span><span class="st">'black'</span>) <span class="sc">+</span>  </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept=</span><span class="fu">mean</span>(CLlib)), </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">color=</span><span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">xlab</span>(<span class="st">"% Support for Liberal Position on Civil Liberties Cases (CLlib)"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>CL.histogram</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-histogram-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Histogram of Supreme Court justices' percentages of liberal civil-liberties votes, with the mean marked by a blue vertical line."></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled" title="How that plot is put together">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>How that plot is put together
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here’s that plot one piece at a time. It starts with the dataset, and pieces are added onto it with <code>+</code>. ggplot calls these pieces layers.</p>
+<p><code>ggplot(EMdata)</code> says which dataset we’re drawing from. Every piece added after it looks up its columns there, which is why they can all say <code>CLlib</code> without saying <code>EMdata</code> again.</p>
+<p><code>geom_histogram(aes(x=CLlib, y=after_stat(density)), bins=10, alpha=.3, color='black')</code> draws the bars. A histogram chops the range of a variable into equal intervals—its <em>bins</em>—and draws a bar over each one, whose height says how much of the data falls in each.</p>
+<ul>
+<li><code>x=CLlib</code> says the variable from the dataset that we will be histogramming is <code>CLlib</code>.</li>
+<li><code>y=after_stat(density)</code> says what the height of the bars is. <code>after_stat</code> is there because that number comes from the histogram’s own calculation and not from a column of the dataset. You could omit <code>y</code> to use ggplot’s default choice, which is the <em>count</em> of justices in each bin. Instead, we ask it to plot <em>density</em>, which chooses the bar’s height so its area is the fraction of the justices that falls into the range described by the histogram bin. The implication is this—if you want to know what fraction of the justices voted the liberal way in between 40% and 60% of their civil liberties cases, you <em>integrate</em> the bar heights over that interval; the area under the histogram between 40 and 60 is that fraction.</li>
+<li><code>bins=10</code> is how many bars to chop the range of <code>CLlib</code> into.</li>
+<li><code>alpha=.3</code> is how opaque the bars are.</li>
+<li><code>color='black'</code> is their outline.</li>
+</ul>
+<p><code>geom_vline(aes(xintercept=mean(CLlib)), color="blue")</code> draws one vertical line.</p>
+<ul>
+<li><code>xintercept=mean(CLlib)</code> is where along the bottom to put it, here at the mean.</li>
+<li><code>color="blue"</code> is what makes it blue.</li>
+</ul>
+<p><code>xlab("% Support for ...")</code> is the text written under the x-axis.</p>
+<p>By wrapping our x and y specifications up in an <code>aes</code>, we are specifying that the variables we refer to should be looked up in the dataset we passed in when we said <code>ggplot(EMdata)</code>, not where <em>R</em> usually looks for variables. The other inputs—<code>bins=10</code>, <code>alpha=.3</code>, <code>color='black'</code>—sit outside the <code>aes</code> because we want them used directly instead of looked up.</p>
+<p>The whole thing is saved as <code>CL.histogram</code>, so to add something to it later I can write <code>CL.histogram +</code> and one more layer, without repeating any of this.</p>
+</div>
+</div>
+<div id="exr-justices-calc" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Write your own function to calculate the standard deviation of CLlib (i.e.&nbsp;not using “sd”) and report it. Use ‘sd’ to check your answer.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Draw a new figure that adds, to the plot above, vertical lines indicating the mean plus and minus 1 and 2 standard deviations. What is the substantive interpretation of this mean?</p>
+<p><strong>Tip</strong>. To make the plot easier to read and talk about, style these lines differently. I tend to use dashed lines for one standard deviation and dotted lines for two. To do that, pass <code>linetype="dashed"</code> or <code>linetype="dotted"</code> after the <code>color</code> argument for <code>geom_vline</code>.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-justices-calc" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-histogram-with-sd-1.svg?v=1789407483430" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol type="1">
+<li>Your calculation goes here.</li>
+<li>Add your lines to this plot.</li>
+</ol>
+<p><em>(your interpretation here)</em></p>
+</div>
+</div>
+<div id="exr-justices-histogram-ur" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Replicate the plot above, i.e.&nbsp;a histogram with lines for the mean plus or minus two standard deviations, for the variable ‘ur’. What is this mean? And what is its substantive interpretation? What do you think of your plot? Is it a good visualization of the data?</p>
+<p><strong>Tip</strong>. To point that same picture at a different variable, you change <code>CLlib</code> everywhere it appears—in both of the <code>aes(...)</code> and in the <code>xlab</code>.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-justices-histogram-ur" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+<section id="breaking-down-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="breaking-down-the-data">Breaking Down the Data</h2>
+<p>The next question asks for one plot per party, so you need a copy of the data with only those justices in it. Two bits of notation do that.</p>
+<p>To get at one column, put a <code>$</code> after the dataset’s name. <code>EMdata$party</code> is the list of 27 zeros and ones, one per justice, so <code>EMdata$party == 0</code> is TRUE for each justice a Republican nominated and FALSE for the rest.</p>
+<p>To get at some of the rows, put a condition in front of the comma. <code>EMdata[EMdata$party == 0, ]</code> keeps the rows where that condition is TRUE. What comes before the comma picks rows and what comes after it picks columns, and leaving the part after it empty means all of them. What comes back is a dataset just like <code>EMdata</code> with fewer rows in it, so anything you can do to <code>EMdata</code> you can do to that.</p>
+<div id="exr-justices-histogram-clib-party" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Draw two histograms of CLlib, one for Republican-nominated justices and one for Democrat-nominated justices. Calculate the mean of CLlib in each group. Which is larger, the mean among Republican-nominated justices or Democrat-nominated justices? Give a substantive interpretation of this difference.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-justices-histogram-clib-party" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your interpretation here)</em></p>
+</div>
+</div>
+<p>You have just drawn the two parties as separate histograms. Here they are in one picture instead: every justice as a dot, the parties side by side, and each party’s mean marked with a line reaching two standard deviations either side of it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mean_sd <span class="ot">=</span> <span class="cf">function</span>(x,<span class="at">mult=</span><span class="dv">1</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">y=</span><span class="fu">mean</span>(x),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">ymin=</span><span class="fu">mean</span>(x)<span class="sc">-</span>mult<span class="sc">*</span><span class="fu">sd</span>(x),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">ymax=</span><span class="fu">mean</span>(x)<span class="sc">+</span>mult<span class="sc">*</span><span class="fu">sd</span>(x))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>civil.liberties.plot <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">w=</span>.<span class="dv">1</span>, <span class="at">h=</span><span class="dv">0</span>), <span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), <span class="at">geom=</span><span class="st">"pointrange"</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.data=</span>mean_sd, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nominating Party"</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"%Support for Liberal Position on CL Cases"</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>civil.liberties.plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-by-party-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party, with individual justices jittered and each party mean plus or minus two standard deviations."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That scatter plot is put together the same way as the histogram was, out of two drawing pieces instead of one.</p>
+<p><code>geom_point(aes(x=party, y=CLlib), position=position_jitter(w=.1, h=0), alpha=.4)</code> draws one dot per justice.</p>
+<ul>
+<li><code>x=party</code> and <code>y=CLlib</code> put the nominating party along the bottom and the percentage up the side.</li>
+<li><code>position=position_jitter(w=.1, h=0)</code> shifts each dot sideways by a random amount of up to <code>.1</code>, so that justices nominated by the same party don’t land on top of one another. <code>h=0</code> leaves the height alone, because that one is the justice’s actual percentage and moving it would be a lie.</li>
+<li><code>alpha=.4</code> is how opaque the dots are.</li>
+</ul>
+<p><code>stat_summary(aes(x=party, y=CLlib), geom="pointrange", fun.data=mean_sd, fun.args=list(mult=2))</code> draws a summary on top of them.</p>
+<ul>
+<li>It collects the justices that share an <code>x</code>, hands that group’s <code>CLlib</code> values to the function named in <code>fun.data</code>, and draws whatever comes back. Which summary you get is decided entirely by that function.</li>
+<li><code>mean_sd</code> is the function written just above. Given a list of numbers it returns a single row with three columns: <code>y</code> is their mean, and <code>ymin</code> and <code>ymax</code> are <code>mult</code> standard deviations below and above it.</li>
+<li><code>geom="pointrange"</code> says how to draw that row—a dot at <code>y</code>, and a line running from <code>ymin</code> up to <code>ymax</code>. The columns have to carry those names, because that is what <code>pointrange</code> goes looking for.</li>
+<li><code>fun.args=list(mult=2)</code> is how the <code>2</code> reaches <code>mean_sd</code>, so the lines run two standard deviations either side of the mean rather than one.</li>
+</ul>
+<p><code>ylab(...)</code> is the label up the side, the way <code>xlab(...)</code> is the one along the bottom.</p>
+<div id="exr-justices-scatter" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Above, I’ve drawn a scatter plot of CLlib with the nominating party as the x-axis. I’ve used <code>stat_summary</code> to draw in the mean plus and minus two standard deviations for each group. Calculate these means and standard deviations and report the mean and endpoints of the intervals that have been drawn in. Check your answer visually for agreement with the plot. Can you give a substantive interpretation of these intervals?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-justices-scatter" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your interpretation here)</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="frequencies-indicators-and-means" class="level1">
+<h1>Frequencies, Indicators and Means</h1>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Look at this list of numbers. <span class="math display">\[
+1, 2, 3, 4, 5
+\]</span></p>
+<p>How many of those numbers are greater than or equal to 3? 3/5 of them are. We pronounce this ‘3 out of 5’, but if we take the division sign in there seriously, we get <span class="math inline">\(3/5 = .6\)</span>. <span class="math inline">\(.6\)</span>—often we say, equivalently, 60%—is the <em>frequency</em> that one of those five numbers is greater than or equal to 3.</p>
+<p>We’ve been talking a lot about means so far and there is a connection. Frequencies are means. Let’s think of the list above as a sample of 5 numbers: <span class="math inline">\(Y_1=1, Y_2=2, \ldots\)</span>. And let’s define, in terms of these, a corresponding sample of zeros and ones, <span class="math inline">\(O_1 \ldots O_5\)</span>.</p>
+<p><span class="math display">\[
+O_i = \begin{cases}
+1 &amp; \text{ if } Y_i \ge 3 \\
+0 &amp; \text{ otherwise }
+\end{cases}
+\]</span></p>
+<p>We call these <strong>indicators</strong>: <span class="math inline">\(O_i\)</span> <em>indicates</em> whether <span class="math inline">\(Y_i\)</span> is greater than or equal to <span class="math inline">\(3\)</span> by being one if it is and zero if it isn’t. And for our list specifically, the indicator list can be written as</p>
+<p><span class="math display">\[
+O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
+\]</span></p>
+<p>What’s the mean of our indicators <span class="math inline">\(O_1 \ldots O_5\)</span>? <span class="math inline">\(.6\)</span>, right? That’s not a coincidence. The frequency that something happens is the mean of <em>indicators that it does happen</em>. Thinking this way will come in handy because we’ll talk about means a lot in this class and this lets us use all the same ideas to think about frequencies. We do this so often that we have a special notation for indicators. Instead of <span class="math inline">\(O_i\)</span>, we’d usually write <span class="math inline">\(1_{\ge 3}(Y_i)\)</span> so we don’t have to remember the meaning of a new letter—it’s all there. Indicators aren’t just for something being greater than equal to something else. We could, for example, talk about the indicators <span class="math inline">\(1_{=3}(Y_i)\)</span> or <span class="math inline">\(1_{&lt;0}(Y_i)\)</span>. I’ll leave it to you to work out what those mean.</p>
+<p>Writing indicators this way makes it clear that what we’re doing is <em>evaluating a function</em> at <span class="math inline">\(Y_i\)</span>. A function that is defined like this. <span class="math display">\[
+1_{\ge 3}(y) = \begin{cases}
+  1 &amp; \text{ if } y \ge 3 \\
+  0 &amp; \text{ otherwise }
+\end{cases}  \qqtext{ for any value of $y$}
+\]</span></p>
+<p><span class="math inline">\(1_{=3}\)</span> and <span class="math inline">\(1_{&lt;0}\)</span> are, of course, also functions. We call them <em>indicator functions</em>.</p>
+<section id="sec-freq-R" class="level3">
+<h3 class="anchored" data-anchor-id="sec-freq-R">Calculating Frequencies in <strong>R</strong></h3>
+<p>The <strong>R</strong> code we tend to use to calculate frequencies uses these connections. Here’s one phrased exactly the way we’ve been talking about it, where we first <em>evaluate</em> the indicator function <span class="math inline">\(1_{\ge 3}\)</span> at the sample <span class="math inline">\(Y_1 \ldots Y_5\)</span>, to get the <em>indicator variables</em> <span class="math inline">\(1_{\ge 3}(Y_1) \ldots 1_{\ge 3}(Y_5)\)</span>, then take their mean to get the frequency we want.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-1" class="code-annotation-target"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-2" class="code-annotation-target"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>ge<span class="fl">.3</span> <span class="ot">=</span> <span class="cf">function</span>(x) { <span class="fu">ifelse</span>(x <span class="sc">&gt;=</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>) }</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="3">3</button><span id="annotated-cell-4-3" class="code-annotation-target"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>freq.X.ge<span class="fl">.3</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">ge.3</span>(Y))</span>
+<span id="annotated-cell-4-4"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>freq.X.ge<span class="fl">.3</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="1" data-code-annotation="1">This is the list of numbers we’re talking about. <span class="math inline">\(Y_1 \ldots Y_n\)</span>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="2" data-code-annotation="2">This defines the indicator function <span class="math inline">\(1_{\ge 3}\)</span></span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="3" data-code-annotation="3">This evaluates it to get the the indicator variables <span class="math inline">\(1_{\ge 3}(Y_i)\)</span> and takes their mean.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6</code></pre>
+</div>
+</div>
+<p>And here’s what we’d usually write in practice. It’s more compact.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y <span class="sc">&gt;=</span> <span class="dv">3</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="visualization-1" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-1">Visualization</h2>
+<p data-source-line="596">Drawing indicator functions into our data visualizations can help us get a sense of what they mean in the context of the data. In particular, it helps us identify cases where a lot of observations are just outside the region where the indicator is 1. Or just inside. This matters because coarsening loses that distinction: after we’ve merged the rows, the result doesn’t tell us who was just inside and who was far in. It also matters because it’s often effective to talk about frequencies—they’re simple and a lot of people feel comfortable with them—but saying things like ‘only 15% of people in Georgia live below the poverty line’ can be a way of concealing the truth if another 35% are just above it. We’ll be working with income data a few weeks from now. We’ll get a chance to see whether it’s possible to use frequencies to tell two different stories about the same reality.</p>
+<p data-source-line="608">In the plot below, the dots show the sample <span class="math inline">\(Y_1 \ldots Y_5 = 1 \ldots 5\)</span> we were talking about earlier. And the blue-shaded rectangle shows the indicator function <span class="math inline">\(1_{\ge 3}\)</span>. The indicator values <span class="math inline">\(1_{\ge 3}(Y_1)  \ldots 1_{\ge 3}(Y_5)\)</span> are 1 for the points inside the rectangle and 0 for the points outside. The frequency we’ve been talking about is represented visually by the proportion of points inside this rectangle.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>freq.data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Y =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">X =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="annotated-cell-6-3"><a href="#annotated-cell-6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-6-4"><a href="#annotated-cell-6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(freq.data) <span class="sc">+</span></span>
+<span id="annotated-cell-6-5"><a href="#annotated-cell-6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>X, <span class="at">y =</span> Y)) <span class="sc">+</span></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="2">2</button><span id="annotated-cell-6-6" class="code-annotation-target"><a href="#annotated-cell-6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> <span class="cn">Inf</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">3</span>,</span>
+<span id="annotated-cell-6-7"><a href="#annotated-cell-6-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">alpha =</span> .<span class="dv">1</span>,<span class="at">fill =</span> <span class="st">"blue"</span>)                                                         </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
+<dd data-source-line="627">
+<span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="1">To draw a ‘scatter plot’ when we have Ys but no Xs, we need to make up some Xs. Here we’ve just used 1s so they all appear in one column.</span>
+</dd>
+<dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-6" data-code-lines="6" data-code-annotation="2">This is ‘ggplot’ for the indicator <span class="math inline">\(1_{\ge 3}\)</span>. More explicitly, it’s ggplot for the indicator <span class="math inline">\(1_{\in [-\infty, +\infty] \times [3, +\infty]}\)</span>, where <span class="math inline">\([-\infty, +\infty] \times [3, +\infty]\)</span> is an infinitely wide ‘rectangle’ that starts at 3 on the y-axis and goes up to infinity.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-frequency-example-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Five values from one through five in a vertical column, with the region at or above three shaded blue to show the indicator function."></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises" data-source-line="633">Exercises</h2>
+<p data-source-line="635">All this—the <strong>R</strong> stuff and the visualizations — starts to get more useful when we have a larger list. We usually do. Let’s check that we’ve got all of this down by doing a few simple exercises using another list of five numbers, then move on to our supreme court data.</p>
+<div id="exr-indicators-def" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="640">Here’s a new list of five numbers. <span class="math display">\[
+3, 0, 1, 2, -1
+\]</span></p>
+<p>If we call these <span class="math inline">\(Y_1 \ldots Y_5\)</span>, what are the values of the indicator variables <span class="math inline">\(1_{\le 0}(Y_1) \ldots 1_{\le 0}(Y_5)\)</span>?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-indicators-def" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-indicators-calc" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="655">Calculate the frequency of numbers <em>less than or equal to 0</em> three ways: by counting, by writing out indicators and taking the mean, and by writing <strong>R</strong> code. Are they all the same? I’m looking for a yes/no answer to this question. I’m hoping for a yes. If it’s a no and you’re not sure why, ask me about it.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-indicators-calc" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-indicators-viz" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="667">Adapt the <strong>R</strong> code above to visualize this new list of numbers and our new indicator function <span class="math inline">\(1_{\le 0}\)</span>. It may help to sketch out what you want then translate your sketch into code. And when you’ve done that, check that the plot is, in fact, what you wanted to draw. Sometimes we mistranslate.</p>
+<p data-source-line="671">What I’m asking for here is the plot.</p>
+<p data-source-line="673"><em>Hint</em>. Assuming you’ve re-defined <code>freq.data</code> so that <code>Y</code> is the new list of numbers, all you’ve got to do is adjust the call to <code>annotate</code> to highlight the correct region.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-indicators-viz" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p data-source-line="697">Now that we’ve got all this down, let’s think about the frequency a few things happen in the supreme court. Suppose I want indicators that support for liberal position on civil liberties cases among both parties is greater than or equal to 25%. Denoting percent of support as <span class="math inline">\(Y_i\)</span>, these can be written as <span class="math display">\[
+1_{\ge 25}(Y_i) \qfor
+1_{\ge 25}(y) = \begin{cases}
+1 &amp; \text{ if } y \ge 25 \\
+0 &amp; \text{ otherwise.}
+\end{cases}
+\]</span></p>
+<div id="exr-freq-CLlib" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="708">Calculate the frequency that support for the liberal position is greater than or equal to 25%. What is it?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-freq-CLlib" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p data-source-line="721">If you want to avoid writing a very small amount of code, go ahead and do it using this plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>CLindicator25.plot <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span>  </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">w=</span>.<span class="dv">1</span>, <span class="at">h=</span><span class="dv">0</span>), <span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), <span class="at">geom=</span><span class="st">"pointrange"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">fun.data=</span>mean_sd, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">2</span>)) <span class="sc">+</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> <span class="cn">Inf</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">25</span>, <span class="at">alpha =</span> .<span class="dv">1</span>,<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nominating Party"</span>) <span class="sc">+</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"%Support for Liberal Position on CL Cases"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>CLindicator25.plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-25-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the region at or above 25 percent is shaded blue and contains all but one justice."></p>
+</figure>
+</div>
+</div>
+</div>
+<p data-source-line="741">What if we want to know the frequency that support for the liberal position exceeds 50% <em>among justices nominated by Republicans</em>? All we’ve got now is to do about the same thing with part of our sample — a <em>subsample</em>. The code below calculates the frequency. It’s the row-picking from before done to a single column rather than the whole table: <code>Y[X==0]</code> keeps the entries of <code>Y</code> where <code>X</code> is 0, the way <code>EMdata[EMdata$party == 0, ]</code> kept the rows.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> EMdata<span class="sc">$</span>CLlib</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> EMdata<span class="sc">$</span>party</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(Y[X<span class="sc">==</span><span class="dv">0</span>] <span class="sc">&gt;=</span> <span class="dv">50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3333333</code></pre>
+</div>
+</div>
+<p data-source-line="756">And this code draws a plot to help us interpret it.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>CLindicator50.repub.plot <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span>  </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">position=</span><span class="fu">position_jitter</span>(<span class="at">w=</span>.<span class="dv">1</span>, <span class="at">h=</span><span class="dv">0</span>), <span class="at">alpha=</span>.<span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), <span class="at">geom=</span><span class="st">"pointrange"</span>, </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">fun.data=</span>mean_sd, <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="dv">2</span>)) <span class="sc">+</span>  </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">"rect"</span>, <span class="at">xmin =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">xmax =</span> .<span class="dv">5</span>, <span class="at">ymax =</span> <span class="cn">Inf</span>, <span class="at">ymin =</span> <span class="dv">50</span>, <span class="at">alpha =</span> .<span class="dv">1</span>, <span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nominating Party"</span>) <span class="sc">+</span> </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"%Support for Liberal Position on CL Cases"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>CLindicator50.repub.plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-50-republican-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the Republican region at or above 50 percent is shaded blue."></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="exr-indicators-CLlib-viz" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p data-source-line="777">What if we want to know how often support is greater than or equal to 50% among justices nominated by Democrats? Calculate this frequency. Then, by adapting the <strong>R</strong> code above, draw a plot to help you interpret it. Do you think this frequency is a reasonable summary of the way Democrat-nominated justices vote in civil liberties cases? With reference to the plot, explain why or why not. What about frequency 33% as a summary of the way Republican-nominated justices vote?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-indicators-CLlib-viz" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Usually we don’t really need to think at this level of subtlety to have the right intuition. Thinking ‘the usual deviation’ is enough. But it’s good to know what’s going on under the hood in case you do need it.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You may be slightly off. In particular, you may be off by a factor of <span class="math inline">\(\sqrt{26/27}\)</span>. That’s ok. There are two conventions for calculating the sample standard deviation—one involves division by <span class="math inline">\(n\)</span> and the other <span class="math inline">\(n-1\)</span>. That’s a factor of 26/27 inside the square root, so it’s the square root of that factor in the standard deviation itself.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+<div class="tlda-chapter-nav">
+  <div class="tlda-nav-prev" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'prev'},'*')"><span class="tlda-nav-arrow">←</span> Homework −1: Setting Up</div>
+  <div class="tlda-nav-next" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'next'},'*')"><span class="tlda-nav-arrow">→</span> Point and Interval Estimates</div>
+</div>
+<style>
+.tlda-chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 20px 60px;
+  margin-top: 60px;
+  border-top: 1px solid #ccc;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tlda-nav-prev, .tlda-nav-next {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  max-width: 45%;
+}
+.tlda-nav-prev:hover, .tlda-nav-next:hover { color: #444; }
+.tlda-nav-next { text-align: right; }
+.tlda-nav-arrow { font-size: 16px; }
+</style></main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../homework";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../homework/homework-setup.html" class="pagination-link" aria-label="Homework −1: Setting Up">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework −1: Setting Up</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/chapter-point-and-interval-estimates.html" class="pagination-link" aria-label="Point and Interval Estimates">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+
+<script>
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // Strip Quarto navigation elements for clean embedding
+  function stripNav() {
+    var selectors = [
+      '#quarto-sidebar',
+      '#quarto-margin-sidebar',
+      '.navbar',
+      '#quarto-header',
+      '#quarto-back-to-top',
+      '.nav-footer',
+      '#quarto-overlay',
+      '#quarto-search',
+      '.page-navigation',
+      '.quarto-title-breadcrumbs',
+    ];
+    selectors.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+    // Hide the first h1 — redundant with the injected title card
+    var firstH1 = document.querySelector('h1');
+    if (firstH1) firstH1.style.display = 'none';
+    // Make content full-width (remove sidebar offset)
+    var main = document.querySelector('#quarto-content');
+    if (main) {
+      main.style.marginLeft = '0';
+      main.style.paddingLeft = '0';
+    }
+    var content = document.querySelector('.page-columns');
+    if (content) {
+      content.style.display = 'block';
+    }
+    // Add padding to approximate default article margins (1in each side at 800/612 scale)
+    document.body.style.margin = '0';
+    document.body.style.padding = '0 90px';
+    document.body.style.overflow = 'visible';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+      if (e.data?.type === 'tlda-figure-transform') {
+        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
+        if (!wrapper) return;
+        var svg = wrapper.querySelector('svg');
+        if (!svg) return;
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Extract just the hash portion — these are same-document cross-refs
+        var hashIdx = href.indexOf('#');
+        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Hide WebR loading spinners (bracket chars) but keep the container visible
+    // so code editors and outputs remain accessible
+    var style = document.createElement('style');
+    style.textContent = [
+      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
+      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
+      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
+      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
+      '.cm-line { overflow-wrap: anywhere; }',
+      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
+      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
+      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
+      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
+      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
+      '.spinner-grow, .spinner-border { opacity: 0.3; }',
+      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
+      '.image-toggle .image-toggle-controls { display: none !important; }',
+      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
+      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
+      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
+    var main = document.querySelector('main');
+    var h;
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      h = Math.ceil(rect.bottom + window.scrollY);
+    } else {
+      h = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight
+      );
+    }
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      var y = 0;
+      var node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      positions[id] = y;
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  var figuresReported = false;
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  function reportFigures() {
+    var result = [];
+    var globalIdx = 0;
+
+    // 1. Old-style: <figure> with <img src="...svg">
+    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
+    figures.forEach(function(fig) {
+      var img = fig.querySelector('img[src$=".svg"]');
+      if (!img) return;
+      if (fig.closest('.image-toggle')) return;
+      var tabPane = fig.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      var rect = fig.getBoundingClientRect();
+      if (rect.height < 10) return;
+      img.style.visibility = 'hidden';
+      var tabset = fig.closest('.panel-tabset');
+      result.push({
+        svgUrl: img.src,
+        offsetY: getOffsetY(fig),
+        w: rect.width,
+        h: rect.height,
+        id: img.id || fig.id || null,
+        caption: (fig.querySelector('figcaption') || {}).textContent || null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
+      });
+    });
+
+    // 2. Inline SVGs from the inline-svg Lua filter
+    // The overlay is a transparent glass pane — content stays in the iframe for styling.
+    // Each wrapper gets a data-figure-idx for targeted transform messages.
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      var wrapper = svg.parentElement;
+      if (wrapper.closest('.image-toggle')) return;
+      var tabPane = wrapper.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      var wrapperRect = wrapper.getBoundingClientRect();
+      if (wrapperRect.height < 10) return;
+      // Tag wrapper for transform messages and set up clipping
+      wrapper.dataset.figureIdx = String(globalIdx);
+      wrapper.style.overflow = 'hidden';
+      var tabset = wrapper.closest('.panel-tabset');
+      var figEl = wrapper.closest('figure');
+      result.push({
+        svgUrl: '',
+        inline: true,
+        offsetX: getOffsetX(wrapper),
+        offsetY: getOffsetY(wrapper),
+        w: wrapperRect.width,
+        h: wrapperRect.height,
+        id: (figEl && figEl.id) || wrapper.id || null,
+        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
+      });
+    });
+
+    if (result.length > 0 && window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
+      figuresReported = true;
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Strip nav on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      stripNav();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for MathJax accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    stripNav();
+    processWebRCells();
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, MathJax rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        if (!figuresReported) reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
+<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
+<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/homework/homework-descriptive.html">App version</a>
+<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
+</body></html>

@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="chapter-least-squares-in-r-slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/anchor.min.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter-least-squares-in-r-slides_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="chapter-least-squares-in-r-slides_files/libs/bootstrap/bootstrap-cc141ae100e68527df6bbd5dc48a0916.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><script src="chapter-least-squares-in-r-slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="chapter-least-squares-in-r-slides_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <title>Least Squares in R</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter-least-squares-in-r-slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter-least-squares-in-r-slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="chapter-least-squares-in-r-slides_files/libs/revealjs/dist/theme/quarto-2740581606dc327e82f18f789b69d8a0.css">
+  <link href="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="chapter-least-squares-in-r-slides_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="chapter-least-squares-in-r-slides_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/physics', '[tex]/unicode']},
+      tex: {packages: {'[+]': ['physics', 'unicode']}}
+    }
+  </script>
+</head>
+<body class="quarto-light fullcontent">
+<div class="tlda-chapter-title">
+  <div class="tlda-chapter-title-text">Least Squares in R — Slides</div>
+</div>
+<style>
+.tlda-chapter-title {
+  padding: 40px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 32px;
+}
+.tlda-chapter-title-text {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+</style>
+  <div class="reveal page-columns page-full">
+    <div class="slides page-columns page-full">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Least Squares in <strong>R</strong></h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="setup" class="slide level2">
+<h2>Setup</h2>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Loading the Data and Sampling</a></li><li><a href="#tabset-1-2">Plotting Code</a></li><li><a href="#tabset-1-3">Styling</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY2EucG9wID0gcmVhZC5jc3YoJy4uL2xlY3R1cmVzL2RhdGEvY2EtaW5jb21lLXBvcC5jc3YnKVxucG9wID0gZGF0YS5mcmFtZSh3PShjYS5wb3Akc2V4PT0nZmVtYWxlJykgKyAwLCB4PWNhLnBvcCRlZHVjYXRpb24sIHk9Y2EucG9wJGluY29tZSlcbm0gPSBucm93KHBvcClcblxuc2V0LnNlZWQoMSlcbm4gPSAyMDAwXG5KID0gc2FtcGxlKDE6bSwgbiwgcmVwbGFjZT1UUlVFKVxuc2FtID0gcG9wW0osXSJ9
+</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibGlicmFyeShnZ3Bsb3QyKVxubGlicmFyeShzY2FsZXMpIFxuXG5zY2FsZV95ID0gZnVuY3Rpb24obGltaXRzPWMoMCwgMmU1KSwgYnJlYWtzPXNlcSgwLCBtYXgobGltaXRzKSwgYnk9MjVlMyksIC4uLikgeyBcbiAgbGlzdChzY2FsZV95X2NvbnRpbnVvdXMoYnJlYWtzPWJyZWFrcywgXG4gICAgICAgICAgICAgICAgICAgICAgICAgIGxhYmVscz1sYWJlbF9kb2xsYXIoc2NhbGU9MWUtMywgc3VmZml4PSdrJyksIC4uLiksIFxuICAgICAgIGNvb3JkX2NhcnRlc2lhbih5bGltPWxpbWl0cykpXG59XG55ZWFycyA9IDg6MjBcbnNjYWxlX3ggPSBmdW5jdGlvbihsaW1pdHM9YyhtaW4oeWVhcnMpLS41LCBtYXgoeWVhcnMpKy41KSkgeyBcbiAgc2NhbGVfeF9jb250aW51b3VzKGJyZWFrcz15ZWFycywgbGFiZWxzPXNwcmludGYoJyVkeScsIHllYXJzKSwgbGltaXRzPWxpbWl0cylcbn1cblxuZG90LnNpemUgPSAyXG5wbG90WCA9IGZ1bmN0aW9uKHcseCwgc2hpZnQ9LjE1KSB7IHggKyBzaGlmdCooMip3LTEpIH1cbm1lYW5fc2QgPSBmdW5jdGlvbih4KSB7IFxuICBkYXRhLmZyYW1lKHk9bWVhbih4KSwgeW1pbj1tZWFuKHgpLXNkKHgpLCB5bWF4PW1lYW4oeCkrc2QoeCkpXG59XG5cbnNjYXR0ZXIucGxvdCA9IGZ1bmN0aW9uKHNhbSwgYWxwaGE9cmVwKC4yLCBucm93KHNhbSkpLCBkb3Quc2l6ZT0xKSB7XG4gIGdncGxvdChzYW0pICsgZ2VvbV9wb2ludChhZXMoeD1wbG90WCh3LHgpLCB5PXksIGNvbG9yPWZhY3Rvcih3KSwgYWxwaGE9SShhbHBoYSkpLCBcbiAgICBwb3NpdGlvbj1wb3NpdGlvbl9qaXR0ZXIod2lkdGg9LjE1LCBzZWVkPTEpLCBzaXplPWRvdC5zaXplKSArIFxuICAgIHN0YXRfc3VtbWFyeShhZXMoeD1wbG90WCh3LHgpLCB5PXksIGZpbGw9ZmFjdG9yKHcpKSwgXG4gICAgICBmdW4uZGF0YT1tZWFuX3NkLCBnZW9tPSdwb2ludHJhbmdlJywgYWxwaGE9LjMsIHNoYXBlPTIxKSArIFxuICAgIHNjYWxlX3goKSArIHNjYWxlX3koKSArIGd1aWRlcyhjb2xvcj0nbm9uZScsIGZpbGw9J25vbmUnKVxufVxuXG5yZWQgICA9IHJnYigyNDgsMTE4LDEwOSwgbWF4Q29sb3JWYWx1ZT0yNTUpXG5ncmVlbiA9IHJnYigwLDE5MSwxOTYsICAgbWF4Q29sb3JWYWx1ZT0yNTUpXG5zY2F0dGVyLnBsb3QudW5pID0gZnVuY3Rpb24oc2FtLCBjb2xvcj1ncmVlbiwgZG90LnNpemU9MSwgYWxwaGE9LjIpIHtcbiAgZ2dwbG90KHNhbSkgKyBnZW9tX3BvaW50KGFlcyh4PXgsIHk9eSksIGNvbG9yPWNvbG9yLCBhbHBoYT0uMiwgICBcbiAgICBwb3NpdGlvbj1wb3NpdGlvbl9qaXR0ZXIod2lkdGg9LjE1LCBzZWVkPTEpLCBzaXplPWRvdC5zaXplKSArIFxuICAgIHN0YXRfc3VtbWFyeShhZXMoeD14LCB5PXkpLCBmaWxsPWNvbG9yLCBmdW4uZGF0YT1tZWFuX3NkLCBnZW9tPSdwb2ludHJhbmdlJywgYWxwaGE9LjMsIHNoYXBlPTIxKSArIFxuICAgIHNjYWxlX3goKSArIHNjYWxlX3koKSArIGd1aWRlcyhjb2xvcj0nbm9uZScsIGZpbGw9J25vbmUnKVxufVxuXG54ID0gc2VxKG1pbihwb3AkeCksIG1heChwb3AkeCksIGxlbmd0aC5vdXQ9MTAwMClcbmdyaWQgPSBleHBhbmQuZ3JpZCh4PXgsIHc9YygwLCAxKSkifQ==
+</script>
+</div>
+</div>
+</div>
+<div id="tabset-1-3">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImxhYmVsIjoiZ2dwbG90LXRoZW1lIn0sImNvZGUiOiJsaWdodGdyYXkgPSBcIiNiYmJiYmJcIlxuZ3JpZGNvbG9yID0gcmdiKDAsMCwwLC4xLCBtYXhDb2xvclZhbHVlPTEpXG5cbmxhYi50aGVtZSA9IHRoZW1lKFxuICAgICAgICBwbG90LmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9IFwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICBwYW5lbC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGwgPSBcInRyYW5zcGFyZW50XCIsIGNvbG91ciA9IE5BKSxcbiAgICAgICAgICAgICAgICAgICAgbGVnZW5kLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbD1cInRyYW5zcGFyZW50XCIsIGNvbG91ciA9IE5BKSxcbiAgICAgICAgICAgICAgICAgICAgbGVnZW5kLmJveC5iYWNrZ3JvdW5kID0gZWxlbWVudF9yZWN0KGZpbGw9XCJ0cmFuc3BhcmVudFwiLCBjb2xvdXIgPSBOQSksXG4gICAgICAgICAgICAgICAgICAgIGxlZ2VuZC5rZXkgPSBlbGVtZW50X3JlY3QoZmlsbD1cInRyYW5zcGFyZW50XCIsIGNvbG91ciA9IE5BKSxcbiAgICAgICAgYXhpcy50aWNrcy54ID0gZWxlbWVudF9ibGFuaygpLFxuICAgICAgICBheGlzLnRpY2tzLnkgPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgIGF4aXMudGV4dC54ICA9IGVsZW1lbnRfdGV4dChjb2xvdXIgPSBsaWdodGdyYXkpLFxuICAgICAgICBheGlzLnRleHQueSAgPSBlbGVtZW50X3RleHQoY29sb3VyID0gbGlnaHRncmF5KSxcbiAgICAgICAgYXhpcy50aXRsZS54ICA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgYXhpcy50aXRsZS55ICA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgcGFuZWwuZ3JpZC5tYWpvcj1lbGVtZW50X2xpbmUoY29sb3VyPWdyaWRjb2xvciksXG4gICAgICAgIHBhbmVsLmdyaWQubWlub3I9ZWxlbWVudF9saW5lKGNvbG91cj1ncmlkY29sb3IsIGxpbmV3aWR0aD0wLjI1KSlcblxudGhlbWVfc2V0KGxhYi50aGVtZSlcbnNldC5zZWVkKDEpIn0=
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="least-squares-in-linear-models" class="slide level2">
+<h2>Least Squares in Linear Models</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Sample</a></li><li><a href="#tabset-2-2">Population</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2NhdHRlci5wbG90KHNhbSkifQ==
+</script>
+</div>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoic2NhdHRlci5wbG90KHBvcCwgZG90LnNpemU9LjEpIn0=
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Least Squares</a></li><li><a href="#tabset-3-2">Linear Models</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<ul>
+<li>The estimation targets we’ve talked about are all summaries of column means <em>in the population</em>.</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\mu(w,x)
+&amp;= \frac{1}{m_{w,x}}\sum_{j:w_j=w,x_j=x} y_j \qfor m_{w,x} = \sum_{j: w_j=w, x_j=x} 1 \\
+&amp;= \mathop{\mathrm{E}}[Y_i \mid W_i=w, X_i=x] \qfor (W_i,X_i,Y_i) \qqtext{sampled uniformly-at-random}
+\end{aligned}
+\]</span></p>
+<ul>
+<li>Least Squares Regression is a method for <em>choosing a function</em> to estimate these column means.
+<ul>
+<li>When we choose from the set of <em>all functions</em> of <span class="math inline">\((w,x)\)</span> …</li>
+<li>… we get the mean in the corresponding column of the sample.</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\hat\mu(w,x)
+&amp;= \mathop{\mathrm{argmin}}_{m \in \mathcal{M}} \sum_{i=1}^n \left\{ * \right\}{Y_i - m(W_i,X_i)}^2 \\
+&amp;= \frac{1}{N_{w,x}}\sum_{i:W_i=w,X_i=x} Y_i \qqtext{ when } \mathcal{M}= \{ \text{all functions of } (w,x) \}
+\end{aligned}
+\]</span></p>
+</div>
+<div id="tabset-3-2">
+<ul>
+<li>The set of functions we choose from is our <strong>model</strong>.
+<ul>
+<li>Or <strong>regression model</strong> if we want to be verbose.</li>
+<li>And there are, of course, many other models.</li>
+</ul></li>
+<li>When we don’t have a lot of data in some columns in the sample …
+<ul>
+<li>Column means are really sensitive to who we happened to sample.</li>
+<li>And we’re probably better off using a smaller model, i.e., one that includes fewer functions.</li>
+</ul></li>
+<li>The models we’ll focus on in this class are linear models.
+<ul>
+<li>They’re closed under <em>addition</em>, <em>subtraction</em>, and <em>scalar multiplication</em>.</li>
+<li>That means when you add, subtract, or scale any functions in the model …</li>
+<li>… you get another function in the model.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section class="page-columns page-full">
+<section id="least-squares-with-univariate-data" class="title-slide slide level1 center">
+<h1>Least Squares with Univariate Data</h1>
+
+</section>
+<section id="models" class="slide level2 page-columns page-full">
+<h2>Models</h2>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoidW5pc2FtID0gc2FtW3NhbSR3PT0xLF1cbmZpdHRlZC5tb2RlbCA9IGxtKHkgfiAxK3gsIGRhdGE9dW5pc2FtKVxubXVoYXQgPSBmdW5jdGlvbih4KSB7IHByZWRpY3QoZml0dGVkLm1vZGVsLCBuZXdkYXRhPWRhdGEuZnJhbWUoeD14KSkgfVxuXG5zY2F0dGVyLnBsb3QudW5pKHVuaXNhbSkgK1xuICBnZW9tX2xpbmUoYWVzKHg9eCwgeT1tdWhhdCh4KSksIGNvbG9yPWdyZWVuKSJ9
+</script>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Models</a></li><li><a href="#tabset-4-2">The Example Above</a></li><li><a href="#tabset-4-3">Using <code>predict</code></a></li><li><a href="#tabset-4-4">How <code>lm</code> and <code>predict</code> work (optional reading)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<p><span class="math display">\[
+\begin{aligned}
+\mathcal{M}&amp;= \{ \text{all functions } \  m(x) \}  &amp;&amp; \text{all functions} \\
+\mathcal{M}&amp;= \{ \text{all functions } \ m(c(x)) \} &amp;&amp; \text{all functions of $c(x)$, a coarsened version of $x$} \\
+\mathcal{M}&amp;= \{ m(x) = a + bx \ : \ a,b \in \mathbb{R} \} &amp;&amp; \text{all lines}
+\end{aligned}
+\]</span></p>
+<ul>
+<li>We use <strong>R</strong>’s built-in function <code>lm</code><sup>1</sup> to do least squares with linear models.</li>
+<li>To tell it which model to use, we use what <strong>R</strong> calls a ‘formula’.
+<ul>
+<li>What a formula does is describe a <em>basis</em> for the model.</li>
+<li>i.e.&nbsp;a set of functions that we can <em>take linear combinations of</em> to get any function in the model. <span class="math display">\[
+\begin{aligned}
+\mathcal{M}&amp;= \{ m(x) = a_0 b_0(x) + a_1 b_1(x) + \ldots + a_k b_k(x) \ \ : \ a_0 \ldots a_k \in \mathbb{R} \} \\
+&amp; \qif b_0(x),b_1(x),\ldots,b_k(x) \ \text{ is a basis for } \ \mathcal{M}.
+\end{aligned}
+\]</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-4-2">
+<ul>
+<li>Where it says <code>lm(y~1+x, data=unisam)</code> above, <code>y~1+x</code> is the formula and <code>unisam</code> is the data.
+<ul>
+<li>It’s saying that we want to choose a function <span class="math inline">\(m\)</span> from our model for which <span class="math inline">\(m(X_i) \approx Y_i\)</span> …</li>
+<li>… where <span class="math inline">\((X_i,Y_i)\)</span> are <code>unisam$x[i]</code> and <code>unisam$y[i]</code> for <span class="math inline">\(i=1 \ldots n\)</span>.</li>
+<li>And our model is the set of all linear combinations of the functions <span class="math inline">\(b_0(x) = 1\)</span> and <span class="math inline">\(b_1(x) = x\)</span>. <span class="math display">\[
+\hat \mu = \mathop{\mathrm{argmin}}_{m \in \mathcal{M}} \sum_{i=1}^n \left\{ * \right\}{Y_i - m(X_i)}^2 \qfor
+\mathcal{M}= \{m(x) = a_0 \ 1 + a_1 \ x \ \ : \ \  a_0,a_1 \in \mathbb{R} \}
+\]</span></li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-4-3">
+<ul>
+<li>What <code>lm</code> gives you is not really the function <span class="math inline">\(\hat\mu\)</span>.
+<ul>
+<li>It’s something else. But whatever it is, you can calculate <span class="math inline">\(\hat\mu(x)\)</span> by calling <code>predict</code>.</li>
+<li>The code below uses <code>predict</code> to calculate <span class="math inline">\(\hat\mu(8)\)</span>, <span class="math inline">\(\hat\mu(10)\)</span>, and <span class="math inline">\(\hat\mu(12)\)</span>.</li>
+</ul></li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoieDMgPSBjKDgsMTAsMTIpXG5wcmVkaWN0KGZpdHRlZC5tb2RlbCwgbmV3ZGF0YT1kYXRhLmZyYW1lKHg9eDMpKSJ9
+</script>
+</div>
+</div>
+<ul>
+<li>I like to write a function <code>muhat</code> that calls <code>predict</code> on its argument.
+<ul>
+<li>This makes the code shorter and more like the mathematical notation.</li>
+</ul></li>
+</ul>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-8" class="exercise-cell">
+
+</div>
+<script type="webr-8-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibXVoYXQgPSBmdW5jdGlvbih4KSB7IHByZWRpY3QoZml0dGVkLm1vZGVsLCBuZXdkYXRhPWRhdGEuZnJhbWUoeD14KSkgfVxubXVoYXQoeDMpIn0=
+</script>
+</div>
+</div>
+</div>
+<div id="tabset-4-4">
+<ul>
+<li>If you’re familiar with object oriented programming …
+<ul>
+<li><code>lm</code> returns an object we call <code>fitted.model</code>.</li>
+<li><code>predict</code> is one of its <em>methods</em>.</li>
+</ul></li>
+<li>Method calls in <em>R</em> look a little different than they do in <em>Python</em>, <em>C++</em>, or <em>Java</em>.
+<ul>
+<li>But they work pretty much the same way. Almost.</li>
+<li><em>R</em>, like <em>Common Lisp</em> and <em>Julia</em>, has an object system based on <a href="https://en.wikipedia.org/wiki/Multiple_dispatch">multimethods</a>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>‘lm’ stands for ‘linear model’</p></li></ol></aside></section>
+<section id="formulas-in-abstract" class="slide level2">
+<h2>Formulas in Abstract</h2>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-9" class="exercise-cell">
+
+</div>
+<script type="webr-9-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiYi4wID0gZnVuY3Rpb24oeCkgeyBhcnJheSgxLCBkaW09bGVuZ3RoKHgpKSB9XG5iLjEgPSBmdW5jdGlvbih4KSB7IHggfVxuYi4yID0gZnVuY3Rpb24oeCkgeyB4XjIgfVxubW9kZWwgPSBsbSh5IH4gYi4wKHgpICsgYi4xKHgpLCBkYXRhPXVuaXNhbSlcbm11aGF0ID0gZnVuY3Rpb24oeCkgeyBwcmVkaWN0KG1vZGVsLCBuZXdkYXRhPWRhdGEuZnJhbWUoeD14KSkgfVxuXG5zY2F0dGVyLnBsb3QudW5pKHVuaXNhbSkgK1xuICBnZW9tX2xpbmUoYWVzKHg9eCwgeT1tdWhhdCh4KSksIGNvbG9yPWdyZWVuKSJ9
+</script>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">A General Formula</a></li><li><a href="#tabset-5-2">Typing Less</a></li><li><a href="#tabset-5-3">A Quirk</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1">
+<ul>
+<li>You can use any <strong>R</strong> functions you like in a formula.
+<ul>
+<li>Above, I’ve implemented my own functions <code>b.0</code> and <code>b.1</code> to use as my basis.</li>
+<li>You can also use <strong>R</strong>’s built-in functions. Try replacing <code>b.1</code> in the formula with <code>sin</code>.</li>
+</ul></li>
+<li>You can use as many basis functions as you like.
+<ul>
+<li>Try adding <code>b.2(x)</code> to the formula <code>y ~ b.0(x) + b.1(x)</code> above.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-5-2">
+<ul>
+<li>You don’t really have to define all these functions.
+<ul>
+<li><span class="math inline">\(1\)</span> and <span class="math inline">\(x\)</span> will do in place of <code>b.0(x)</code> and <code>b.1(x)</code>.</li>
+</ul></li>
+<li>But <code>x^2</code> won’t do in place of <code>b.2(x)</code>.
+<ul>
+<li>It’s because squaring means something special in formulas.</li>
+<li>But you can work around this by writing <code>I(x^2)</code> instead.<br>
+</li>
+<li>In short, wrapping an expression in <code>I</code> says ‘interpret this the normal way.’</li>
+</ul></li>
+<li>Try writing out a formula that does the same thing as <code>y ~ b.0(x) + b.1(x) + b.2(x)</code> …
+<ul>
+<li>… but without using <code>b.0</code>, <code>b.1</code>, or <code>b.2</code>.</li>
+</ul></li>
+</ul>
+</div>
+<div id="tabset-5-3">
+<ul>
+<li><strong>R</strong> implicitly adds the constant function <span class="math inline">\(b_0(x)=1\)</span> to every basis you give it.
+<ul>
+<li>Go ahead and get rid of <code>b.0(x)</code> in the formula <code>y~b.0(x)+b.1(x)</code> above.</li>
+<li>Does anything change in the plot?</li>
+</ul></li>
+<li>If you want to stop it from doing this, you can write <code>y ~ 0 + b.1(x)</code> instead.
+<ul>
+<li>What changes in the plot? Why?</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="the-all-functions-model" class="slide level2">
+<h2>The All-Functions Model</h2>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-10" class="exercise-cell">
+
+</div>
+<script type="webr-10-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiZml0dGVkLm1vZGVsID0gbG0oeSB+IGZhY3Rvcih4KSwgZGF0YT11bmlzYW0pXG5tdWhhdCA9IGZ1bmN0aW9uKHgpIHsgcHJlZGljdChmaXR0ZWQubW9kZWwsIG5ld2RhdGE9ZGF0YS5mcmFtZSh4PXgpKSB9XG5cbnNjYXR0ZXIucGxvdC51bmkodW5pc2FtKSArXG4gIGdlb21fcG9pbnQoYWVzKHg9eCwgeT1tdWhhdCh4KSksIGNvbG9yPWdyZWVuLCBzaXplPTMpIn0=
+</script>
+</div>
+</div>
+<ul>
+<li>When we write <code>y ~ factor(x)</code>, we’re telling <strong>R</strong> to treat each value of <code>x</code> as a separate category.</li>
+<li>The model has one parameter per unique value of <code>x</code>—so the least squares solution is just the mean of <code>y</code> within each column.</li>
+<li>This is the “all functions” model: it can fit any pattern in the column means.</li>
+<li>Try comparing this to <code>y ~ 1 + x</code> from before. The line model smooths across columns; the all-functions model doesn’t.</li>
+</ul>
+</section>
+<section id="piecewise-constant-models" class="slide level2">
+<h2>Piecewise-Constant Models</h2>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-11" class="exercise-cell">
+
+</div>
+<script type="webr-11-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoiY29hcnNlbiA9IGZ1bmN0aW9uKHgpIHsgXG4gIGNhc2Vfd2hlbih4IDw9IDEyIH4gXCJubyBjb2xsZWdlXCIsXG4gICAgICAgICAgICB4ID09IDE0IH4gXCIyLXllYXJcIixcbiAgICAgICAgICAgIHggPT0gMTYgfiBcIjQteWVhclwiLFxuICAgICAgICAgICAgeCA+ICAxNiB+IFwiZ3JhZHVhdGVcIilcbn1cbmZpdHRlZC5tb2RlbCA9IGxtKHkgfiBmYWN0b3IoY29hcnNlbih4KSksIGRhdGE9dW5pc2FtKVxubXVoYXQgPSBmdW5jdGlvbih4KSB7IHByZWRpY3QoZml0dGVkLm1vZGVsLCBuZXdkYXRhPWRhdGEuZnJhbWUoeD14KSkgfVxuXG5zY2F0dGVyLnBsb3QudW5pKHVuaXNhbSkgK1xuICBnZW9tX3BvaW50KGFlcyh4PXgsIHk9bXVoYXQoeCkpLCBjb2xvcj1ncmVlbiwgc2l6ZT0zKSJ9
+</script>
+</div>
+</div>
+<ul>
+<li>We can get something in between by <em>coarsening</em> <code>x</code> before treating it as a factor.</li>
+<li>Here <code>coarsen(x)</code> groups years of education into four categories: no college degree, 2-year degree, 4-year degree, and graduate degree.</li>
+<li>The least squares solution is the mean within each group.</li>
+<li>Try changing the coarsening. What happens if you collapse “no college” and “2-year” into one group?</li>
+</ul>
+</section>
+<section id="least-squares-with-multivariate-data" class="slide level2">
+<h2>Least Squares with Multivariate Data</h2>
+<div class="cell" data-autorun="true">
+<div>
+<div id="webr-12" class="exercise-cell">
+
+</div>
+<script type="webr-12-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWV9LCJjb2RlIjoibW9kZWwgPSBsbSh5IH4gMSArIHcsIGRhdGE9c2FtKVxubXVoYXQgPSBmdW5jdGlvbih3LCB4KSB7IHByZWRpY3QobW9kZWwsIG5ld2RhdGE9ZGF0YS5mcmFtZSh3PXcsIHg9eCkpIH0gXG5cbmdyaWQgPSBleHBhbmQuZ3JpZCh3PWMoMCwxKSwgeD14KVxuc2NhdHRlci5wbG90KHNhbSkgK1xuICBnZW9tX2xpbmUoYWVzKHg9Z3JpZCR4LCB5PW11aGF0KGdyaWQkdywgZ3JpZCR4KSwgY29sb3I9ZmFjdG9yKGdyaWQkdykpKSAifQ==
+</script>
+</div>
+</div>
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjgvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyJdLCJyZXBvcyI6W119LCJyZW5kZXJfZGYiOiJkZWZhdWx0In0=
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEyID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTItY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTIsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzExID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMTA7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xMCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEwID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMTAtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xMC1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xMCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMTAsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC05IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV85O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItOSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzkgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici05LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItOS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV85ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl85LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtOCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfODtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTgiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl84ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItOC1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTgtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfOCA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfOCwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTciLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzc7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNyA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici03LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzcgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzcsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC02IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV82O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzYgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItNi1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV82ID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl82LCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNTtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl81ID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTUtY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfNSA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfNSwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTQiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzQ7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfNCA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici00LWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzQgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzQsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0zIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8zO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzMgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMy1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8zID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8zLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoidmlld29mIF93ZWJyX2VkaXRvcl8yID0ge1xuICBjb25zdCB7IFdlYlJFeGVyY2lzZUVkaXRvciwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHsgaWQ6IGB3ZWJyLTItY29udGVudHNgIH0sIGJsb2NrLmF0dHIpO1xuICBjb25zdCBlZGl0b3IgPSBuZXcgV2ViUkV4ZXJjaXNlRWRpdG9yKHdlYlJPanMud2ViUlByb21pc2UsIGJsb2NrLmNvZGUsIG9wdGlvbnMpO1xuXG4gIHJldHVybiBlZGl0b3IuY29udGFpbmVyO1xufVxuX3dlYnJfdmFsdWVfMiA9IHdlYlJPanMucHJvY2Vzcyhfd2Vicl9lZGl0b3JfMiwge30pO1xuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTEiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzE7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6InZpZXdvZiBfd2Vicl9lZGl0b3JfMSA9IHtcbiAgY29uc3QgeyBXZWJSRXhlcmNpc2VFZGl0b3IsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7IGlkOiBgd2Vici0xLWNvbnRlbnRzYCB9LCBibG9jay5hdHRyKTtcbiAgY29uc3QgZWRpdG9yID0gbmV3IFdlYlJFeGVyY2lzZUVkaXRvcih3ZWJST2pzLndlYlJQcm9taXNlLCBibG9jay5jb2RlLCBvcHRpb25zKTtcblxuICByZXR1cm4gZWRpdG9yLmNvbnRhaW5lcjtcbn1cbl93ZWJyX3ZhbHVlXzEgPSB3ZWJST2pzLnByb2Nlc3MoX3dlYnJfZWRpdG9yXzEsIHt9KTtcbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXByZWx1ZGUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ3ZWJST2pzID0ge1xuICBjb25zdCB7IFdlYlIsIENoYW5uZWxUeXBlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lLldlYlI7XG4gIGNvbnN0IHtcbiAgICBXZWJSRXZhbHVhdG9yLFxuICAgIFdlYlJFbnZpcm9ubWVudE1hbmFnZXIsXG4gICAgc2V0dXBSLFxuICAgIGI2NERlY29kZSxcbiAgICBjb2xsYXBzZVBhdGhcbiAgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG5cbiAgY29uc3Qgc3RhdHVzQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLXN0YXR1c1wiKTtcbiAgY29uc3QgaW5kaWNhdG9yQ29udGFpbmVyID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoXCJleGVyY2lzZS1sb2FkaW5nLWluZGljYXRvclwiKTtcbiAgaW5kaWNhdG9yQ29udGFpbmVyLmNsYXNzTGlzdC5yZW1vdmUoXCJkLW5vbmVcIik7XG5cbiAgbGV0IHN0YXR1c1RleHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpXG4gIHN0YXR1c1RleHQuY2xhc3NMaXN0ID0gXCJleGVyY2lzZS1sb2FkaW5nLWRldGFpbHNcIjtcbiAgc3RhdHVzVGV4dCA9IHN0YXR1c0NvbnRhaW5lci5hcHBlbmRDaGlsZChzdGF0dXNUZXh0KTtcbiAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBJbml0aWFsaXNlYDtcblxuICAvLyBIb2lzdCBpbmRpY2F0b3Igb3V0IGZyb20gZmluYWwgc2xpZGUgd2hlbiBydW5uaW5nIHVuZGVyIHJldmVhbFxuICBjb25zdCByZXZlYWxTdGF0dXMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKFwiLnJldmVhbCAuZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGlmIChyZXZlYWxTdGF0dXMpIHtcbiAgICByZXZlYWxTdGF0dXMucmVtb3ZlKCk7XG4gICAgZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgPiAuc2xpZGVzXCIpLmFwcGVuZENoaWxkKHJldmVhbFN0YXR1cyk7XG4gIH1cblxuICAvLyBNYWtlIGFueSByZXZlYWwgc2xpZGVzIHdpdGggbGl2ZSBjZWxscyBzY3JvbGxhYmxlXG4gIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3JBbGwoXCIucmV2ZWFsIC5leGVyY2lzZS1jZWxsXCIpLmZvckVhY2goKGVsKSA9PiB7XG4gICAgZWwuY2xvc2VzdCgnc2VjdGlvbi5zbGlkZScpLmNsYXNzTGlzdC5hZGQoXCJzY3JvbGxhYmxlXCIpO1xuICB9KVxuXG4gIC8vIHdlYlIgc3VwcGxlbWVudGFsIGRhdGEgYW5kIG9wdGlvbnNcbiAgY29uc3QgZGF0YUNvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici1kYXRhXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ2ZnMtZmlsZVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGZpbGVzID0gSlNPTi5wYXJzZShiNjREZWNvZGUoZmlsZXNDb250ZW50KSk7XG5cbiAgLy8gSW5pdGlhbGlzZSB3ZWJSIGFuZCBzZXR1cCBmb3IgUiBjb2RlIGV2YWx1YXRpb25cbiAgbGV0IHdlYlJQcm9taXNlID0gKGFzeW5jICh3ZWJSKSA9PiB7XG4gICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyB3ZWJSYDtcbiAgICBhd2FpdCB3ZWJSLmluaXQoKTtcblxuICAgIC8vIEluc3RhbGwgcHJvdmlkZWQgbGlzdCBvZiBwYWNrYWdlc1xuICAgIC8vIEVuc3VyZSB3ZWJSIGRlZmF1bHQgcmVwbyBpcyBpbmNsdWRlZFxuICAgIGRhdGEucGFja2FnZXMucmVwb3MucHVzaChcImh0dHBzOi8vcmVwby5yLXdhc20ub3JnXCIpXG4gICAgYXdhaXQgZGF0YS5wYWNrYWdlcy5wa2dzLm1hcCgocGtnKSA9PiAoKSA9PiB7XG4gICAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYERvd25sb2FkaW5nIHBhY2thZ2U6ICR7cGtnfWA7XG4gICAgICByZXR1cm4gd2ViUi5ldmFsUlZvaWQoYFxuICAgICAgICB3ZWJyOjppbnN0YWxsKHBrZywgcmVwb3MgPSByZXBvcylcbiAgICAgICAgbGlicmFyeShwa2csIGNoYXJhY3Rlci5vbmx5ID0gVFJVRSlcbiAgICAgIGAsIHsgZW52OiB7XG4gICAgICAgIHBrZzogcGtnLFxuICAgICAgICByZXBvczogZGF0YS5wYWNrYWdlcy5yZXBvcyxcbiAgICAgIH19KTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIC8vIERvd25sb2FkIGFuZCBpbnN0YWxsIHJlc291cmNlc1xuICAgIGF3YWl0IGZpbGVzLm1hcCgoZmlsZSkgPT4gYXN5bmMgKCkgPT4ge1xuICAgICAgY29uc3QgbmFtZSA9IGZpbGUuc3Vic3RyaW5nKGZpbGUubGFzdEluZGV4T2YoJy8nKSArIDEpO1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyByZXNvdXJjZTogJHtuYW1lfWA7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGZldGNoKGZpbGUpO1xuICAgICAgaWYgKCFyZXNwb25zZS5vaykge1xuICAgICAgICB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGRvd25sb2FkIFxcYCR7ZmlsZX1cXGAuIEVycm9yICR7cmVzcG9uc2Uuc3RhdHVzfTogXCIke3Jlc3BvbnNlLnN0YXR1c1RleHR9XCIuYCk7XG4gICAgICB9XG4gICAgICBjb25zdCBkYXRhID0gYXdhaXQgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKTtcblxuICAgICAgLy8gU3RvcmUgVVJMcyBpbiB0aGUgY3dkIHdpdGhvdXQgYW55IHN1YmRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGlmIChmaWxlLmluY2x1ZGVzKFwiOi8vXCIpKSB7XG4gICAgICAgIGZpbGUgPSBuYW1lO1xuICAgICAgfVxuXG4gICAgICAvLyBDb2xsYXBzZSBoaWdoZXIgZGlyZWN0b3J5IHN0cnVjdHVyZVxuICAgICAgZmlsZSA9IGNvbGxhcHNlUGF0aChmaWxlKTtcblxuICAgICAgLy8gQ3JlYXRlIGRpcmVjdG9yeSB0cmVlLCBpZ25vcmluZyBcImRpcmVjdG9yeSBleGlzdHNcIiBWRlMgZXJyb3JzXG4gICAgICBjb25zdCBwYXJ0cyA9IGZpbGUuc3BsaXQoJy8nKS5zbGljZSgwLCAtMSk7XG4gICAgICBsZXQgcGF0aCA9ICcnO1xuICAgICAgd2hpbGUgKHBhcnRzLmxlbmd0aCA+IDApIHtcbiAgICAgICAgcGF0aCArPSBwYXJ0cy5zaGlmdCgpICsgJy8nO1xuICAgICAgICBjb25zdCBhbmFseXNpcyA9IGF3YWl0IHdlYlIuRlMuYW5hbHl6ZVBhdGgocGF0aCk7XG4gICAgICAgIGlmICghYW5hbHlzaXMuZXhpc3RzKSB7XG4gICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgIGF3YWl0IHdlYlIuRlMubWtkaXIocGF0aCk7XG4gICAgICAgICAgfSBjYXRjaCAoZSkge1xuICAgICAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBGaWxlc3lzdGVtIEVycm9yOiBcIiR7ZS5tZXNzYWdlfVwiLmApO1xuICAgICAgICAgIH1cbiAgICAgICAgfVxuICAgICAgfVxuXG4gICAgICAvLyBXcml0ZSB0aGlzIGZpbGUgdG8gdGhlIFZGU1xuICAgICAgcmV0dXJuIGF3YWl0IHdlYlIuRlMud3JpdGVGaWxlKGZpbGUsIG5ldyBVaW50OEFycmF5KGRhdGEpKTtcbiAgICB9KS5yZWR1Y2UoKGN1ciwgbmV4dCkgPT4gY3VyLnRoZW4obmV4dCksIFByb21pc2UucmVzb2x2ZSgpKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5zdGFsbGluZyB3ZWJSIHNoaW1zYDtcbiAgICBhd2FpdCB3ZWJSLmV2YWxSVm9pZChgd2Vicjo6c2hpbV9pbnN0YWxsKClgKTtcblxuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgV2ViUiBlbnZpcm9ubWVudCBzZXR1cGA7XG4gICAgYXdhaXQgc2V0dXBSKHdlYlIsIGRhdGEpO1xuXG4gICAgc3RhdHVzVGV4dC5yZW1vdmUoKTtcbiAgICBpZiAoc3RhdHVzQ29udGFpbmVyLmNoaWxkcmVuLmxlbmd0aCA9PSAwKSB7XG4gICAgICBzdGF0dXNDb250YWluZXIucGFyZW50Tm9kZS5yZW1vdmUoKTtcbiAgICB9XG4gICAgcmV0dXJuIHdlYlI7XG4gIH0pKG5ldyBXZWJSKGRhdGEub3B0aW9ucykpO1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgd2ViUlByb21pc2U7XG4gICAgY29uc3QgZXZhbHVhdG9yID0gbmV3IFdlYlJFdmFsdWF0b3Iod2ViUiwgY29udGV4dClcbiAgICBhd2FpdCBldmFsdWF0b3IucHJvY2VzcyhpbnB1dHMpO1xuICAgIHJldHVybiBldmFsdWF0b3IuY29udGFpbmVyO1xuICB9XG5cbiAgcmV0dXJuIHtcbiAgICBwcm9jZXNzLFxuICAgIHdlYlJQcm9taXNlLFxuICAgIHJlbmRlcmVkT2pzLFxuICB9O1xufVxuIn1dfQ==
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+WyIuLi9sZWN0dXJlcy9kYXRhL2NhLWluY29tZS1wb3AuY3N2Il0=
+</script>
+</section></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="chapter-least-squares-in-r-slides_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  
+<script>
+(function() {
+  var prev = window.MathJax || {};
+  var prevTex = prev.tex || {};
+  var prevMacros = prevTex.macros || {};
+  window.MathJax = Object.assign({}, prev, {
+    tex: Object.assign({}, prevTex, {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      processEscapes: true,
+      macros: Object.assign({}, prevMacros, {
+        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
+        qty: ['\\left(#1\\right)', 1],
+        qfor: ['\\quad\\text{for}\\quad', 0],
+        qand: ['\\quad\\text{and}\\quad', 0],
+        qwhere: ['\\quad\\text{where}\\quad', 0],
+        E: '\\operatorname{E}',
+        Var: '\\operatorname{V}',
+        Cov: '\\operatorname{Cov}',
+        bias: '\\operatorname{bias}',
+        RMSE: '\\operatorname{RMSE}',
+        sd: '\\operatorname{sd}',
+        hVar: '\\widehat{\\operatorname{V}}',
+        nprior: 'n_0',
+        ind: '\\perp\\!\\!\\!\\perp'
+      })
+    })
+  });
+})();
+</script>
+<script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../../..";
+    window._ojs.paths.docToRoot = "..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+
+<script>
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // Strip Quarto navigation elements for clean embedding
+  function stripNav() {
+    var selectors = [
+      '#quarto-sidebar',
+      '#quarto-margin-sidebar',
+      '.navbar',
+      '#quarto-header',
+      '#quarto-back-to-top',
+      '.nav-footer',
+      '#quarto-overlay',
+      '#quarto-search',
+      '.page-navigation',
+      '.quarto-title-breadcrumbs',
+    ];
+    selectors.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+    // Hide the first h1 — redundant with the injected title card
+    var firstH1 = document.querySelector('h1');
+    if (firstH1) firstH1.style.display = 'none';
+    // Make content full-width (remove sidebar offset)
+    var main = document.querySelector('#quarto-content');
+    if (main) {
+      main.style.marginLeft = '0';
+      main.style.paddingLeft = '0';
+    }
+    var content = document.querySelector('.page-columns');
+    if (content) {
+      content.style.display = 'block';
+    }
+    // Add padding to approximate default article margins (1in each side at 800/612 scale)
+    document.body.style.margin = '0';
+    document.body.style.padding = '0 90px';
+    document.body.style.overflow = 'visible';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+      if (e.data?.type === 'tlda-figure-transform') {
+        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
+        if (!wrapper) return;
+        var svg = wrapper.querySelector('svg');
+        if (!svg) return;
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Extract just the hash portion — these are same-document cross-refs
+        var hashIdx = href.indexOf('#');
+        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Hide WebR loading spinners (bracket chars) but keep the container visible
+    // so code editors and outputs remain accessible
+    var style = document.createElement('style');
+    style.textContent = [
+      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
+      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
+      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
+      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
+      '.cm-line { overflow-wrap: anywhere; }',
+      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
+      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
+      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
+      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
+      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
+      '.spinner-grow, .spinner-border { opacity: 0.3; }',
+      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
+      '.image-toggle .image-toggle-controls { display: none !important; }',
+      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
+      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
+      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
+    var main = document.querySelector('main');
+    var h;
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      h = Math.ceil(rect.bottom + window.scrollY);
+    } else {
+      h = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight
+      );
+    }
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      var y = 0;
+      var node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      positions[id] = y;
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  var figuresReported = false;
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  function reportFigures() {
+    var result = [];
+    var globalIdx = 0;
+
+    // 1. Old-style: <figure> with <img src="...svg">
+    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
+    figures.forEach(function(fig) {
+      var img = fig.querySelector('img[src$=".svg"]');
+      if (!img) return;
+      if (fig.closest('.image-toggle')) return;
+      var tabPane = fig.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      var rect = fig.getBoundingClientRect();
+      if (rect.height < 10) return;
+      img.style.visibility = 'hidden';
+      var tabset = fig.closest('.panel-tabset');
+      result.push({
+        svgUrl: img.src,
+        offsetY: getOffsetY(fig),
+        w: rect.width,
+        h: rect.height,
+        id: img.id || fig.id || null,
+        caption: (fig.querySelector('figcaption') || {}).textContent || null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
+      });
+    });
+
+    // 2. Inline SVGs from the inline-svg Lua filter
+    // The overlay is a transparent glass pane — content stays in the iframe for styling.
+    // Each wrapper gets a data-figure-idx for targeted transform messages.
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      var wrapper = svg.parentElement;
+      if (wrapper.closest('.image-toggle')) return;
+      var tabPane = wrapper.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      var wrapperRect = wrapper.getBoundingClientRect();
+      if (wrapperRect.height < 10) return;
+      // Tag wrapper for transform messages and set up clipping
+      wrapper.dataset.figureIdx = String(globalIdx);
+      wrapper.style.overflow = 'hidden';
+      var tabset = wrapper.closest('.panel-tabset');
+      var figEl = wrapper.closest('figure');
+      result.push({
+        svgUrl: '',
+        inline: true,
+        offsetX: getOffsetX(wrapper),
+        offsetY: getOffsetY(wrapper),
+        w: wrapperRect.width,
+        h: wrapperRect.height,
+        id: (figEl && figEl.id) || wrapper.id || null,
+        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
+      });
+    });
+
+    if (result.length > 0 && window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
+      figuresReported = true;
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Strip nav on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      stripNav();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for MathJax accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    stripNav();
+    processWebRCells();
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, MathJax rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        if (!figuresReported) reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
+<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
+<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/decks/chapter-least-squares-in-r-slides.html">App version</a>
+<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
+</body></html>

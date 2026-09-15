@@ -1,0 +1,2557 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>17&nbsp; Normal Approximation – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../homework/homework-sample-size-coverage.html" rel="next">
+<link href="../homework/homework-random-variables-and-moments.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  
+<script>
+(function() {
+  var prev = window.MathJax || {};
+  var prevTex = prev.tex || {};
+  var prevMacros = prevTex.macros || {};
+  window.MathJax = Object.assign({}, prev, {
+    tex: Object.assign({}, prevTex, {
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      processEscapes: true,
+      macros: Object.assign({}, prevMacros, {
+        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
+        qty: ['\\left(#1\\right)', 1],
+        qfor: ['\\quad\\text{for}\\quad', 0],
+        qand: ['\\quad\\text{and}\\quad', 0],
+        qwhere: ['\\quad\\text{where}\\quad', 0],
+        E: '\\operatorname{E}',
+        Var: '\\operatorname{V}',
+        Cov: '\\operatorname{Cov}',
+        bias: '\\operatorname{bias}',
+        RMSE: '\\operatorname{RMSE}',
+        sd: '\\operatorname{sd}',
+        hVar: '\\widehat{\\operatorname{V}}',
+        nprior: 'n_0',
+        ind: '\\perp\\!\\!\\!\\perp'
+      })
+    })
+  });
+})();
+</script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+<div class="tlda-chapter-title">
+  <div class="tlda-chapter-title-text">Normal Approximation</div>
+</div>
+<style>
+.tlda-chapter-title {
+  padding: 40px 0 32px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 32px;
+}
+.tlda-chapter-title-text {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  color: #222;
+}
+</style>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework −1: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Homework 0: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Homework 4: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Homework 5: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distributional Approximation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-normal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Why the CLT Works — Stein’s Method</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-poisson-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">26</span>&nbsp; <span class="chapter-title">When Normal Breaks Down — Poisson Approximation and Quality Control</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-stein-poisson.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">27</span>&nbsp; <span class="chapter-title">Stein’s Method and Poisson Approximation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part2-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Two-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-comparing-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">28</span>&nbsp; <span class="chapter-title">Comparing Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bias-two-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">29</span>&nbsp; <span class="chapter-title">Homework 7: Bias with Two Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-two-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">30</span>&nbsp; <span class="chapter-title">Homework 8: Sample Size Calculation for Two-Sample Problems</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-potential-outcomes-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">31</span>&nbsp; <span class="chapter-title">Potential Outcomes and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-causality.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">32</span>&nbsp; <span class="chapter-title">Homework 9: Causality</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-and-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">33</span>&nbsp; <span class="chapter-title">Sampling and Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-observational-confounding.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">34</span>&nbsp; <span class="chapter-title">Observational Studies and Confounding</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">35</span>&nbsp; <span class="chapter-title">Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">36</span>&nbsp; <span class="chapter-title">Practice Midterm 2</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/causality-questions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">37</span>&nbsp; <span class="chapter-title">Causality Questions for Unit 2 Exam</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Regression Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-many-groups.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">38</span>&nbsp; <span class="chapter-title">Summarizing Trends involving Many Groups</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-multivariate-adjustment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">39</span>&nbsp; <span class="chapter-title">Multivariate Analysis and Adjustment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-covariate-shift.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">40</span>&nbsp; <span class="chapter-title">Homework: Covariate Shift</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-telephone.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">41</span>&nbsp; <span class="chapter-title">A Game of Telephone</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">42</span>&nbsp; <span class="chapter-title">Inference for Adjusted Comparisons</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-complex-summaries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">43</span>&nbsp; <span class="chapter-title">Homework: Point Estimation for Complex Summaries</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-conditional-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">44</span>&nbsp; <span class="chapter-title">Conditional Randomization</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-inverse-probability-weighting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">45</span>&nbsp; <span class="chapter-title">Inverse Probability Weighting</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-adjusted-comparisons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">46</span>&nbsp; <span class="chapter-title">Homework: IPW and Estimating Treatment Effects</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-imagined-randomization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">47</span>&nbsp; <span class="chapter-title">Imagining Randomization in Observational Studies</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">48</span>&nbsp; <span class="chapter-title">Practice Midterm 3</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part-breather-s2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tools in Signal Processing</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-models-and-loss.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">49</span>&nbsp; <span class="chapter-title">Models and Loss Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-erm-union-bound.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">50</span>&nbsp; <span class="chapter-title">Empirical Risk Minimization and the Union Bound</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-linear-models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">51</span>&nbsp; <span class="chapter-title">Homework: Linear Models and Basis Functions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-signal-processing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">52</span>&nbsp; <span class="chapter-title">Signal Processing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-polynomials-and-splines.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">53</span>&nbsp; <span class="chapter-title">Linear Models 2: Polynomials and Splines</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">54</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Linear Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">55</span>&nbsp; <span class="chapter-title">Least Squares Regression in Linear Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-in-r.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">56</span>&nbsp; <span class="chapter-title">Least Squares in <strong>R</strong></span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-least-squares-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">57</span>&nbsp; <span class="chapter-title">The Behavior of Least Squares Predictors</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">58</span>&nbsp; <span class="chapter-title">Homework: Misspecification and Bias</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-behavior.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">59</span>&nbsp; <span class="chapter-title">Linear Algebra: Stability of Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-misspecification-and-averaging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">60</span>&nbsp; <span class="chapter-title">Misspecification and Averaging</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-model-choice.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">61</span>&nbsp; <span class="chapter-title">Homework: The Impact of Model Choice</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-linear-algebra-misspecification.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">62</span>&nbsp; <span class="chapter-title">Linear Algebra: Residual Orthogonality and Variance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-ipw-least-squares.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">63</span>&nbsp; <span class="chapter-title">Inverse Probability Weighted Least Squares</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-estimating-ipw-weights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">64</span>&nbsp; <span class="chapter-title">Estimating IPW Weights</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-trees.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">65</span>&nbsp; <span class="chapter-title">Trees</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-heart-attack-application.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">66</span>&nbsp; <span class="chapter-title">Application: Profit vs.&nbsp;Outcomes in Heart Attack Patients</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#review" id="toc-review" class="nav-link active" data-scroll-target="#review">Review</a>
+  <ul class="collapse">
+  <li><a href="#the-bootstrap" id="toc-the-bootstrap" class="nav-link" data-scroll-target="#the-bootstrap">The Bootstrap</a></li>
+  <li><a href="#bootstrapping-proportions" id="toc-bootstrapping-proportions" class="nav-link" data-scroll-target="#bootstrapping-proportions">Bootstrapping Proportions</a></li>
+  <li><a href="#an-important-limitation-of-the-bootstrap" id="toc-an-important-limitation-of-the-bootstrap" class="nav-link" data-scroll-target="#an-important-limitation-of-the-bootstrap">An Important Limitation of the Bootstrap</a></li>
+  </ul></li>
+  <li><a href="#sec-normal-approximation" id="toc-sec-normal-approximation" class="nav-link" data-scroll-target="#sec-normal-approximation">Normal Approximation</a>
+  <ul class="collapse">
+  <li><a href="#the-normal-distribution" id="toc-the-normal-distribution" class="nav-link" data-scroll-target="#the-normal-distribution">The Normal Distribution</a></li>
+  <li><a href="#normal-approximation" id="toc-normal-approximation" class="nav-link" data-scroll-target="#normal-approximation">Normal Approximation</a></li>
+  <li><a href="#exact-guaranteed-approximate" id="toc-exact-guaranteed-approximate" class="nav-link" data-scroll-target="#exact-guaranteed-approximate">Exact, Guaranteed, Approximate</a></li>
+  <li><a href="#the-width-of-normal-distributions" id="toc-the-width-of-normal-distributions" class="nav-link" data-scroll-target="#the-width-of-normal-distributions">The Width of Normal Distributions</a></li>
+  <li><a href="#calibration-using-normal-approximation" id="toc-calibration-using-normal-approximation" class="nav-link" data-scroll-target="#calibration-using-normal-approximation">Calibration Using Normal Approximation</a></li>
+  <li><a href="#when-this-works" id="toc-when-this-works" class="nav-link" data-scroll-target="#when-this-works">When This Works</a></li>
+  </ul></li>
+  <li><a href="#normal-approximation-in-context" id="toc-normal-approximation-in-context" class="nav-link" data-scroll-target="#normal-approximation-in-context">Normal Approximation in Context</a>
+  <ul class="collapse">
+  <li><a href="#a-proportion-when-sampling-with-replacement" id="toc-a-proportion-when-sampling-with-replacement" class="nav-link" data-scroll-target="#a-proportion-when-sampling-with-replacement">A Proportion when Sampling with Replacement</a></li>
+  <li><a href="#a-proportion-when-sampling-without-replacement" id="toc-a-proportion-when-sampling-without-replacement" class="nav-link" data-scroll-target="#a-proportion-when-sampling-without-replacement">A Proportion when Sampling without Replacement</a></li>
+  <li><a href="#using-normal-approximation" id="toc-using-normal-approximation" class="nav-link" data-scroll-target="#using-normal-approximation">Using Normal Approximation</a></li>
+  </ul></li>
+  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
+  <ul class="collapse">
+  <li><a href="#sec-a-blessing" id="toc-sec-a-blessing" class="nav-link" data-scroll-target="#sec-a-blessing">Why Continuous Distribution is a Blessing</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="146"><a href="../chapters/chapter-normal-approximation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title" data-source-line="180"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Normal Approximation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="review" class="level1">
+<h1>Review</h1>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<p>In the last chapter, we saw that the sample mean is an unbiased estimator of the population mean—and that this is true whether we’re estimating a proportion or a general mean. Now we need to work out how much our estimates vary from sample to sample. We’ll do this for proportions first, where the formulas are simplest, then use the same ideas for general means later.</p>
+<section id="the-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="the-bootstrap">The Bootstrap</h2>
+<div class="columns">
+<div class="column">
+<p>The Sample <span class="math display">\[
+\begin{array}{r|rrrr|r}
+i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}  \\
+Y_i  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+\]</span></p>
+<p>The Bootstrap Sample</p>
+<p><span class="math display">\[
+\begin{array}{r|rrrr|r}
+i    &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{Y}_{625}^*  \\
+Y_i^*  &amp;  1 &amp; 0 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+\]</span></p>
+</div><div class="column">
+<p>The Population</p>
+<p><span class="math display">\[
+\begin{array}{r|rrrr|r}
+j &amp; 1 &amp; 2 &amp; \dots &amp;   7.23M &amp; \bar{y}_{7.23M}  \\
+y_{j} &amp; 1 &amp; 1 &amp; \dots &amp; 1   &amp; 0.70  \\
+\end{array}
+\]</span></p>
+<p>The ‘Bootstrap Population’ — The Sample <span class="math display">\[
+\begin{array}{r|rrrr|r}
+j        &amp;   1 &amp; 2 &amp; \dots &amp; 625 &amp; \bar{y}^*_{625}  \\
+y_j^*  &amp;  1 &amp; 1 &amp; \dots &amp; 1 &amp; 0.68 \\
+\end{array}
+\]</span></p>
+</div>
+</div>
+<p>Last time, we looked at a general method for estimating sampling distributions: bootstrapping.</p>
+<ol type="1">
+<li>Draw a sample of size <span class="math inline">\(n\)</span> from your sample. That’s <em>a bootstrap sample</em>.</li>
+<li>Calculate your estimator using that sample. That’s <em>a bootstrap estimate</em>.</li>
+<li>Repeat to get draws from the distribution of bootstrap estimates. That’s <em>the bootstrap sampling distribution</em>.</li>
+</ol>
+<p>It’s a <em>nonparametric estimate</em>. We’re approximating the sampling distribution without using its parametric form. This is useful because we usually don’t know the parametric form. Estimating the proportion of 1s in a population of binary outcomes is a special case in which we do.</p>
+</section>
+<section id="bootstrapping-proportions" class="level2">
+<h2 class="anchored" data-anchor-id="bootstrapping-proportions">Bootstrapping Proportions</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-1.svg?v=1789407485286" class="img-fluid figure-img" alt="The teal bootstrap distribution of a sample proportion closely overlaps the red exact Binomial sampling distribution when sampling with replacement."></p>
+<figcaption>Sampling with replacement</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-binomial-vs-hypergeometric-2.svg?v=1789407485286" class="img-fluid figure-img" alt="The teal bootstrap distribution is wider than the blue exact Hypergeometric sampling distribution when sampling half of a finite population without replacement."></p>
+<figcaption>Sampling without replacement</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>When we’re estimating a proportion, the <span class="teal">bootstrap sampling distribution</span> is <em>exactly the same</em> as the parametric estimate we get by plugging the sample proportion into the Binomial distribution’s formula. That’s good when we’ve sampled with replacement, so our <span class="red">sampling distribution is actually Binomial</span>. It’s less good when we’ve sampled without replacement, so our <span class="blue">sampling distribution is Hypergeometric</span>.</p>
+</section>
+<section id="an-important-limitation-of-the-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="an-important-limitation-of-the-bootstrap">An Important Limitation of the Bootstrap</h2>
+<p>The bootstrap is a great method for understanding what we <em>have learned</em> after we have data. It’s easy to use and we usually get good calibration.</p>
+<p>But it’s also important to be able to reason about what we <em>can learn</em> before we have data. For this, the bootstrap is not very helpful.</p>
+<p>Today, we’ll talk about that. To do it, we’ll introduce a new tool: <em>normal approximation</em>. And we’ll use it for an important ‘before data reasoning’ task: sample size calculation. This is using what you know—or are willing to assume—to choose the size of your study. In particular, to choose it so your confidence intervals are as narrow as you want them to be.</p>
+</section>
+</section>
+<section id="sec-normal-approximation" class="level1">
+<h1 data-source-line="364">Normal Approximation</h1>
+<section id="the-normal-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="the-normal-distribution">The Normal Distribution</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-1.svg?v=1789407485286" class="img-fluid figure-img" alt="Three normal density curves have the same spread and different means at minus two, zero, and two; changing the mean shifts the curve horizontally without changing its shape."></p>
+<figcaption>Different means θ</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-family-2.svg?v=1789407485286" class="img-fluid figure-img" alt="Three normal density curves share mean zero and have standard deviations one-half, one, and two; larger standard deviation produces a wider, lower curve."></p>
+<figcaption>Different standard deviations σ</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The normal distribution is a parametric family of distributions involving two parameters: its mean <span class="math inline">\(\theta\)</span> and its standard deviation <span class="math inline">\(\sigma\)</span>. We say a random variable <span class="math inline">\(X\)</span> is normally distributed with mean <span class="math inline">\(\theta\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> if the probability that it’s in an interval <span class="math inline">\([a,b]\)</span> is given by this integral of its <em>probability density</em>.</p>
+<p><span class="math display">\[
+P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\theta, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\theta)^2}{2\sigma^2}}
+\]</span></p>
+<p>We have to talk about the probability that it’s ‘in an interval’ rather than that it ‘takes a value’ because the probability it actually takes on any particular value is zero—it’s an integral from <span class="math inline">\(x\)</span> to <span class="math inline">\(x\)</span>. This seems like an annoyance, but given what the normal distribution is actually used for, it’s a blessing.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="normal-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="normal-approximation">Normal Approximation</h2>
+<div id="fig-normal-approx" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-labels="n = 10,n = 30,n = 90" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-normal-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-10-1.svg?v=1789407485286" class="img-fluid figure-img" alt="For ten fair coin flips, the discrete Binomial distribution of the sample proportion is visibly jagged while its overlaid normal approximation is smooth."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-30-1.svg?v=1789407485286" class="img-fluid figure-img" alt="For thirty fair coin flips, the discrete Binomial distribution of the sample proportion lies more closely along its overlaid normal approximation."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-90-1.svg?v=1789407485286" class="img-fluid figure-img" alt="For ninety fair coin flips, the narrow discrete Binomial distribution of the sample proportion closely follows its overlaid normal approximation."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-normal-approx-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;19.1
+</figcaption>
+</figure>
+</div>
+<p>A distribution’s normal approximation is a normal distribution with the same mean <span class="math inline">\(\theta\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. These show up everywhere because they’re easy to work with and the approximation tends to be good. Approximation is good, in particular, for the distribution of a mean of independent random variables. Or independent enough ones.</p>
+<p>Above, we see three Binomial distributions with their normal approximations: the distributions of the mean of <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> coin flips. These approximations get increasingly accurate as the number of flips <span class="math inline">\(n\)</span> increases. That’s universal. It always happens with means. It’s called the <em>Central Limit Theorem</em>.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>The Central Limit Theorem
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The sampling distribution of a mean of independent random variables, <span class="math inline">\(\frac{1}{n}\sum_{i=1}^n X_i\)</span>, gets arbitrarily close to its normal approximation as the number of random variables <span class="math inline">\(n\)</span> increases to infinity.</p>
+<p><em>Caveat</em>. This is only true if each random variable contributes infinitesimally to the mean, i.e.&nbsp;<span class="math inline">\(\max_{i\le n} X_i/n \to 0\)</span> as <span class="math inline">\(n \to \infty\)</span>.</p>
+</div>
+</div>
+</section>
+<section id="exact-guaranteed-approximate" class="level2">
+<h2 class="anchored" data-anchor-id="exact-guaranteed-approximate">Exact, Guaranteed, Approximate</h2>
+<p>For a sample proportion, we can now put three answers to the same question on one line.</p>
+<ol type="1">
+<li><strong>Exact:</strong> use Binomial probabilities for sampling with replacement and Hypergeometric probabilities for sampling without replacement. This needs the whole distribution and the sampling design.</li>
+<li><strong>Guaranteed:</strong> use Chebyshev. This needs only the mean and variance, but the interval is wide.</li>
+<li><strong>Approximate:</strong> use the normal distribution with the same mean and standard deviation. This adds shape information and produces the familiar narrow interval.</li>
+</ol>
+<p>The standard deviation is the common yardstick. What changes is how much we claim to know about the distribution around it.</p>
+</section>
+<section id="the-width-of-normal-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="the-width-of-normal-distributions">The Width of Normal Distributions</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-normal-width-1.svg?v=1789407485286" class="img-fluid figure-img" alt="Standard normal density with vertical reference lines at the mean, one standard deviation on either side, and two standard deviations on either side. The central intervals contain progressively more of the distribution."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One thing that’s convenient about the normal distribution is that it’s easy to reason about. In particular, it’s easy to reason about the width of its middle <em>x</em>%.</p>
+<ul>
+<li>To include 68.3% of draws, you go out 1 standard deviation from its mean.</li>
+<li>To include 95.4% of draws, you go out 2 standard deviations.</li>
+<li>To include 99.7% of draws, you go out 3 standard deviations.</li>
+</ul>
+<p>To get almost exactly 95% of draws, we go out 1.96 standard deviations: <span class="math inline">\(\theta \pm 1.96\sigma\)</span>. Two is close enough in practice, but we tend to write 1.96 anyway. It’s a signal about what we’re doing. You can get a 2 anywhere in a calculation. When you see a 1.96, you know you’re talking about the middle 95% of the normal.</p>
+</section>
+<section id="calibration-using-normal-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="calibration-using-normal-approximation" data-source-line="440">Calibration Using Normal Approximation</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-1.svg?v=1789407485286" class="img-fluid figure-img" alt="The true Binomial sampling distribution and its normal approximation, with a simulated estimate marked and red exact-Binomial and blue normal-approximation intervals nearly overlapping."></p>
+<figcaption>The (Binomial) sampling distribution and its normal approximation.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-actual-vs-estimated-sampling-dist-2.svg?v=1789407485286" class="img-fluid figure-img" alt="Estimated Binomial and normal sampling distributions centered at the observed sample proportion, with their corresponding red and blue intervals nearly overlapping."></p>
+<figcaption>Binomial and normal estimates of the sampling distribution.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Calibrating interval estimates using normal approximation is easy. You estimate the standard deviation of your point estimator. You go out <span class="math inline">\(\pm\)</span> 1.96 (estimated) standard deviations from your point estimate.</p>
+<p><span class="math display">\[
+\text{interval estimate} = \hat\theta \pm 1.96 \hat\sigma
+\]</span></p>
+<p>We’re choosing our interval’s width essentially the same way we always have. We’re still using the middle 95% of an estimate of the sampling distribution. It just looks different because we have a convenient formula for that width.</p>
+<p>Above left, you can see two interval estimates superimposed on the sampling distribution of a sample proportion. The red one is calibrated using the binomial as before. The blue one is calibrated using normal approximation. Above right, you can see the binomial and normal sampling distribution estimates these are based on.</p>
+</section>
+<section id="when-this-works" class="level2">
+<h2 class="anchored" data-anchor-id="when-this-works">When This Works</h2>
+<p>This all works if three things are true.</p>
+<ol type="1">
+<li>The sampling distribution needs to be in the right place, i.e.&nbsp;centered on the estimation target.</li>
+<li>The sampling distribution needs to be approximately normal.</li>
+<li>The estimated sampling distribution has approximately the right width.</li>
+</ol>
+<p>The first is called <em>unbiasedness</em> of our point estimator. Most of the estimators we’ll talk about in this class are unbiased or almost unbiased. We’ll check this for the sample proportion in a minute.</p>
+<p>The second is something that the CLT tells us tends to happen, especially for large <span class="math inline">\(n\)</span>. Talking about the accuracy of normal approximation is interesting, but beyond the scope of this class. I’d need at least a couple weeks to teach you about what’s going on there. But you can take it as a given for most of the estimators we’ll study.</p>
+<p>The third amounts to getting a good estimate of our point estimator’s standard deviation. We’ll work on this, again for the sample proportion, later today. And we’ll talk about this for other estimators throughout the semester. It is, however, a bit of a pain. That’s one reason you might prefer the bootstrap.</p>
+</section>
+</section>
+<section id="normal-approximation-in-context" class="level1">
+<h1>Normal Approximation in Context</h1>
+<p>Let’s see how this plays out for our main example: estimating a proportion.</p>
+<section id="a-proportion-when-sampling-with-replacement" class="level2">
+<h2 class="anchored" data-anchor-id="a-proportion-when-sampling-with-replacement">A Proportion when Sampling with Replacement</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-1.svg?v=1789407485286" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 10 fair draws with replacement; the discrete bars remain visibly coarse."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-2.svg?v=1789407485286" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 30 fair draws with replacement; the bars follow the normal curve more closely."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/show-binomial-with-replacement-3.svg?v=1789407485286" class="img-fluid" alt="Binomial distributions and normal approximations for sample proportions from 90 fair draws with replacement; the narrow bars closely follow the normal curve."></p>
+</div>
+</div>
+</div>
+<p>When we sample from a binary population with replacement, our sample proportion’s distribution is Binomial. And we can estimate that distribution by plugging our sample proportion into the Binomial formula. But its normal approximation tends to be very good, so we can get away with estimating that instead.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{normal approximation}     &amp; \ f_{\theta,\sigma}(x) \qfor  \sigma^2 = \frac{\theta(1-\theta)}{n} \\
+\text{corresponding estimate}   &amp; \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n}
+\end{aligned}
+\]</span></p>
+<p>Pictured: three Binomial distributions with their normal approximations. These are the distributions of the sample proportion when we draw samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> with replacement from a binary population in which the proportion of ones is <span class="math inline">\(\theta=.5\)</span>.</p>
+</section>
+<section id="a-proportion-when-sampling-without-replacement" class="level2">
+<h2 class="anchored" data-anchor-id="a-proportion-when-sampling-without-replacement">A Proportion when Sampling without Replacement</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-1.svg?v=1789407485286" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 10 draws without replacement from a balanced population of 20; the discrete bars are coarse."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-2.svg?v=1789407485286" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 30 draws without replacement from a balanced population of 60; the bars follow the normal curve more closely."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
+<p><img src="chapter-normal-approximation_files/figure-html/plot-hypergeometric-without-replacement-3.svg?v=1789407485286" class="img-fluid" alt="Hypergeometric distributions and normal approximations for sample proportions from 90 draws without replacement from a balanced population of 180; the narrow bars closely follow the normal curve."></p>
+</div>
+</div>
+</div>
+<p>When we sample from a binary population <em>without</em> replacement, our sample proportion’s distribution is Hypergeometric. And we can estimate that distribution by plugging our sample proportion into the Hypergeometric formula. But again, its normal approximation tends to be very good, so we can get away with estimating that instead.</p>
+<p>When we do this, we can see where we go wrong when we use the Binomial—or equivalently the bootstrap. When our sample size <span class="math inline">\(n\)</span> is a meaningful fraction of our population size <span class="math inline">\(m\)</span>, the Binomial is too wide. The Hypergeometric’s standard deviation differs from the Binomial’s by a factor of <span class="math inline">\(\sqrt{\frac{m-n}{m-1}}\)</span>. When we’re sampling half our population, i.e.&nbsp;<span class="math inline">\(n=m/2\)</span>, that’s roughly <span class="math inline">\(\sqrt{1/2} \approx .7\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{normal approximation}     &amp; \ f_{\theta,\sigma}(x) \qfor \sigma^2 = \frac{\theta(1-\theta)}{n} \times  \frac{m-n}{m-1} \\
+\text{corresponding estimate}   &amp; \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1}
+\end{aligned}
+\]</span></p>
+<p>Pictured: three Hypergeometric distributions with their normal approximations. These are the distribution of the sample proportion when we draw samples of size <span class="pollb">10</span>, <span class="pollc">30</span>, and <span class="polld">90</span> without replacement from a binary population twice the size in which the proportion of ones is <span class="math inline">\(\theta=.5\)</span>.</p>
+</section>
+<section id="using-normal-approximation" class="level2">
+<h2 class="anchored" data-anchor-id="using-normal-approximation">Using Normal Approximation</h2>
+<span class="math display">\[\begin{aligned}
+&amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} &amp;&amp; \text{a proportion when sampling with replacement} \\
+&amp;f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1} &amp;&amp; \text{a proportion when sampling without replacement}
+\end{aligned}\]</span>
+<p data-source-line="447">What makes all this work is that we’re using good estimates of our estimator’s standard deviation. If we have a formula for the estimator’s standard deviation, this is usually not so hard. We estimate whatever population summaries show up in the formula and plug them in.</p>
+<p data-source-line="449">But we do need to do a bit of work to get that formula. The standard deviation of the sample proportion is <span class="math inline">\(\sqrt{\theta(1-\theta)/n}\)</span> when we sample with replacement and <span class="math inline">\(\sqrt{\theta(1-\theta)/n} \times \sqrt{(m-n)/(m-1)}\)</span> when we sample without replacement. You’ve already seen these formulas—they showed up in the normal approximations we just discussed. We’ll derive them after we’ve built up tools for working with expectations and variances.</p>
+</section>
+</section>
+<section id="appendix" class="level1">
+<h1 data-source-line="451">Appendix</h1>
+<p data-source-line="453">Nothing here will show up on an exam.</p>
+<section id="sec-a-blessing" class="level2">
+<h2 class="anchored" data-anchor-id="sec-a-blessing" data-source-line="455">Why Continuous Distribution is a Blessing</h2>
+<p data-source-line="457">Think about what happens when you tried to compare binomial distributions for different sample sizes <span class="math inline">\(n\)</span>. If you’re lucky, and your sample sizes are all multiples of each other, then the probability shown in one wide bar gets split up into several narrow bars when sample size increases. E.g., how the probability in the bar <span class="math inline">\(5/10\)</span> gets split into <span class="math inline">\(14/30\)</span>, <span class="math inline">\(15/30\)</span>, and <span class="math inline">\(16/30\)</span> and then into <span class="math inline">\(42/90 \ldots 48/90\)</span> as sample size goes from <span class="math inline">\(10\)</span> to <span class="math inline">\(30\)</span> to <span class="math inline">\(90\)</span>.</p>
+<p data-source-line="459">If your sample sizes aren’t multiples, we don’t just split up one wide bar’s probability into several narrow ones. For the narrow bars we see straddling two wide bars, we have to ‘merge’ probability from two wide bars. It’s a mess. And using bars hides the worst of it. Most of the points that have mass for one <span class="math inline">\(n\)</span> will have none for the others. It’s not possible to have a sample mean of <span class="math inline">\(5/10\)</span> with a sample size of <span class="math inline">\(25\)</span>. It’s the wrong denominator. Probability mass at <span class="math inline">\(\hat\theta = 1/2\)</span> can go from maximal for <span class="math inline">\(n=10\)</span> to zero for <span class="math inline">\(n=25\)</span> even if the population mean is the same: always <span class="math inline">\(\theta=1/2\)</span>.</p>
+<p data-source-line="461">Using an approximation with zero mass at any particular point, like the normal distribution, lets us avoid all this. We do have to integrate whenever we want to calculate a probability. But we can easily compare the probabilities of the same interval at different sample sizes. In a sense, all the ‘splitting’ and ‘merging’ is built into the approximation.</p>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See <a href="#sec-a-blessing" class="quarto-xref"><span>Section 21.1</span></a> if you’re curious about what I mean by that.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+
+<div class="tlda-chapter-nav">
+  <div class="tlda-nav-prev" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'prev'},'*')"><span class="tlda-nav-arrow">←</span> Homework — Random Variables, Moments, and the Standard Deviation</div>
+  <div class="tlda-nav-next" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'next'},'*')"><span class="tlda-nav-arrow">→</span> Homework 4: Sample Size Calculation and Coverage</div>
+</div>
+<style>
+.tlda-chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px 20px 60px;
+  margin-top: 60px;
+  border-top: 1px solid #ccc;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tlda-nav-prev, .tlda-nav-next {
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  max-width: 45%;
+}
+.tlda-nav-prev:hover, .tlda-nav-next:hover { color: #444; }
+.tlda-nav-next { text-align: right; }
+.tlda-nav-arrow { font-size: 16px; }
+</style></main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../chapters";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../homework/homework-random-variables-and-moments.html" class="pagination-link" aria-label="Homework — Random Variables, Moments, and the Standard Deviation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../homework/homework-sample-size-coverage.html" class="pagination-link" aria-label="Homework 4: Sample Size Calculation and Coverage">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Homework 4: Sample Size Calculation and Coverage</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+
+<script>
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // Strip Quarto navigation elements for clean embedding
+  function stripNav() {
+    var selectors = [
+      '#quarto-sidebar',
+      '#quarto-margin-sidebar',
+      '.navbar',
+      '#quarto-header',
+      '#quarto-back-to-top',
+      '.nav-footer',
+      '#quarto-overlay',
+      '#quarto-search',
+      '.page-navigation',
+      '.quarto-title-breadcrumbs',
+    ];
+    selectors.forEach(function(sel) {
+      var el = document.querySelector(sel);
+      if (el) el.remove();
+    });
+    // Hide the first h1 — redundant with the injected title card
+    var firstH1 = document.querySelector('h1');
+    if (firstH1) firstH1.style.display = 'none';
+    // Make content full-width (remove sidebar offset)
+    var main = document.querySelector('#quarto-content');
+    if (main) {
+      main.style.marginLeft = '0';
+      main.style.paddingLeft = '0';
+    }
+    var content = document.querySelector('.page-columns');
+    if (content) {
+      content.style.display = 'block';
+    }
+    // Add padding to approximate default article margins (1in each side at 800/612 scale)
+    document.body.style.margin = '0';
+    document.body.style.padding = '0 90px';
+    document.body.style.overflow = 'visible';
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+      if (e.data?.type === 'tlda-figure-transform') {
+        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
+        if (!wrapper) return;
+        var svg = wrapper.querySelector('svg');
+        if (!svg) return;
+        svg.style.transformOrigin = '0 0';
+        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Extract just the hash portion — these are same-document cross-refs
+        var hashIdx = href.indexOf('#');
+        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Hide WebR loading spinners (bracket chars) but keep the container visible
+    // so code editors and outputs remain accessible
+    var style = document.createElement('style');
+    style.textContent = [
+      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
+      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
+      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
+      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
+      '.cm-line { overflow-wrap: anywhere; }',
+      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
+      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
+      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
+      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
+      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
+      '.spinner-grow, .spinner-border { opacity: 0.3; }',
+      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
+      '.image-toggle .image-toggle-controls { display: none !important; }',
+      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
+      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
+      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
+    var main = document.querySelector('main');
+    var h;
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      h = Math.ceil(rect.bottom + window.scrollY);
+    } else {
+      h = Math.max(
+        document.body.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.scrollHeight
+      );
+    }
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      var y = 0;
+      var node = el;
+      while (node) {
+        y += node.offsetTop || 0;
+        node = node.offsetParent;
+      }
+      positions[id] = y;
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  var figuresReported = false;
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  function reportFigures() {
+    var result = [];
+    var globalIdx = 0;
+
+    // 1. Old-style: <figure> with <img src="...svg">
+    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
+    figures.forEach(function(fig) {
+      var img = fig.querySelector('img[src$=".svg"]');
+      if (!img) return;
+      if (fig.closest('.image-toggle')) return;
+      var tabPane = fig.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      var rect = fig.getBoundingClientRect();
+      if (rect.height < 10) return;
+      img.style.visibility = 'hidden';
+      var tabset = fig.closest('.panel-tabset');
+      result.push({
+        svgUrl: img.src,
+        offsetY: getOffsetY(fig),
+        w: rect.width,
+        h: rect.height,
+        id: img.id || fig.id || null,
+        caption: (fig.querySelector('figcaption') || {}).textContent || null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
+      });
+    });
+
+    // 2. Inline SVGs from the inline-svg Lua filter
+    // The overlay is a transparent glass pane — content stays in the iframe for styling.
+    // Each wrapper gets a data-figure-idx for targeted transform messages.
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      var wrapper = svg.parentElement;
+      if (wrapper.closest('.image-toggle')) return;
+      var tabPane = wrapper.closest('.tab-pane');
+      if (tabPane && !tabPane.classList.contains('active')) return;
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+      var wrapperRect = wrapper.getBoundingClientRect();
+      if (wrapperRect.height < 10) return;
+      // Tag wrapper for transform messages and set up clipping
+      wrapper.dataset.figureIdx = String(globalIdx);
+      wrapper.style.overflow = 'hidden';
+      var tabset = wrapper.closest('.panel-tabset');
+      var figEl = wrapper.closest('figure');
+      result.push({
+        svgUrl: '',
+        inline: true,
+        offsetX: getOffsetX(wrapper),
+        offsetY: getOffsetY(wrapper),
+        w: wrapperRect.width,
+        h: wrapperRect.height,
+        id: (figEl && figEl.id) || wrapper.id || null,
+        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
+        index: globalIdx++,
+        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
+      });
+    });
+
+    if (result.length > 0 && window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
+      figuresReported = true;
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Strip nav on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      stripNav();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for MathJax accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    stripNav();
+    processWebRCells();
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, MathJax rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function() {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = document.body.scrollHeight;
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        if (!figuresReported) reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+</script>
+<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
+<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/chapters/chapter-normal-approximation.html">App version</a>
+<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
+</body></html>
