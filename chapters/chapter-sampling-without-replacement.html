@@ -197,7 +197,7 @@ window.Quarto = {
 
 <body class="nav-sidebar floating quarto-light">
 <div class="tlda-chapter-title">
-  <div class="tlda-chapter-title-text">Sampling without Replacement and the Hypergeometric Distribution</div>
+  <div class="tlda-chapter-title-text">10&amp;nbsp; Sampling without Replacement and the Hypergeometric Distribution – Prediction, Inference, and Causality</div>
 </div>
 <style>
 .tlda-chapter-title {
@@ -746,7 +746,6 @@ window.Quarto = {
   </ul></li>
   <li><a href="#sec-binom-hyper-comparison" id="toc-sec-binom-hyper-comparison" class="nav-link" data-scroll-target="#sec-binom-hyper-comparison">Comparing Sampling with and without Replacement</a></li>
   <li><a href="#using-r" id="toc-using-r" class="nav-link" data-scroll-target="#using-r">Using <strong>R</strong></a></li>
-  <li><a href="#the-hypergeometric-distribution" id="toc-the-hypergeometric-distribution" class="nav-link" data-scroll-target="#the-hypergeometric-distribution">The Hypergeometric Distribution</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -754,7 +753,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item" data-source-line="504"><a href="../chapters/chapter-sampling-without-replacement.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-sampling-without-replacement.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></h1>
 </div>
@@ -778,13 +777,13 @@ window.Quarto = {
 <p>$$</p>
 </div>
 <section id="sec-sampling-without-replacement" class="level1">
-<h1>Review: Sampling with Replacement</h1>
-<p>We calculated a sampling distribution last time, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
-<p>Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">\(m_1\)</span> Yes-voters and <span class="math inline">\(m_0\)</span> No-voters, with <span class="math inline">\(m_1+m_0=10\)</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
-<p>Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">\(10 \times 10 \times 10 = 10^3\)</span> roll sequences in all.</p>
+<h1 data-source-line="15">Review: Sampling with Replacement</h1>
+<p data-source-line="17">We calculated a sampling distribution last time, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
+<p data-source-line="19">Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">\(m_1\)</span> Yes-voters and <span class="math inline">\(m_0\)</span> No-voters, with <span class="math inline">\(m_1+m_0=10\)</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
+<p data-source-line="21">Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">\(10 \times 10 \times 10 = 10^3\)</span> roll sequences in all.</p>
 <div class="grid">
 <section id="partially-marginalized" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized" data-source-line="27">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -856,7 +855,7 @@ window.Quarto = {
 </table>
 </section>
 <section id="fully-marginalized" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized" data-source-line="43">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -885,11 +884,11 @@ window.Quarto = {
 </table>
 </section>
 </div>
-<p>The left-hand column of the second table carries the multipliers <span class="math inline">\(1, 3, 3, 1\)</span>.</p>
-<p>The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">\(m_0^2m_1\)</span>.</p>
-<p>Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
-<p><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
-<p><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
+<p data-source-line="56">The left-hand column of the second table carries the multipliers <span class="math inline">\(1, 3, 3, 1\)</span>.</p>
+<p data-source-line="58">The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">\(m_0^2m_1\)</span>.</p>
+<p data-source-line="60">Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
+<p data-source-line="62"><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
+<p data-source-line="64"><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
 <p>For <span class="math inline">\(n\)</span> calls <strong>with replacement</strong> to <span class="math inline">\(m=m_1+m_0\)</span> people, we wrote the population frequencies as <span class="math inline">\(\theta_1=m_1/m\)</span> and <span class="math inline">\(\theta_0=m_0/m\)</span>. A response sequence <span class="math inline">\(a_1,\ldots,a_n\)</span> is a binary sequence of length <span class="math inline">\(n\)</span>. If its sum is <span class="math inline">\(k\)</span>, the same two steps are</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -897,10 +896,10 @@ P(Y_1=a_1,\ldots,Y_n=a_n)&amp;=\theta_1^k\theta_0^{n-k},\\
 P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 \end{aligned}
 \]</span></p>
-<p>The first line has one factor for each response: <span class="math inline">\(k\)</span> ones and <span class="math inline">\(n-k\)</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">\(k\)</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
-<p>You could work out how to count binary sequences of length <span class="math inline">\(n\)</span> with sum <span class="math inline">\(k\)</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\(\binom{n}{k}\)</span> and read ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(k\)</span>’. You don’t need to derive the count to write the formula.</p>
+<p data-source-line="75">The first line has one factor for each response: <span class="math inline">\(k\)</span> ones and <span class="math inline">\(n-k\)</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">\(k\)</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
+<p data-source-line="77">You could work out how to count binary sequences of length <span class="math inline">\(n\)</span> with sum <span class="math inline">\(k\)</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\(\binom{n}{k}\)</span> and read ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(k\)</span>’. You don’t need to derive the count to write the formula.</p>
 <section id="check-with-r" class="level3">
-<h3 class="anchored" data-anchor-id="check-with-r">Check with R</h3>
+<h3 class="anchored" data-anchor-id="check-with-r" data-source-line="79">Check with R</h3>
 <p>In these cells, <code>theta</code> is <span class="math inline">\(\theta_1\)</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">\(k\)</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
 <div>
 <div id="webr-1" class="exercise-cell">
@@ -910,16 +909,17 @@ P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEiOnRydWV9LCJjb2RlIjoibSA9IDEwICAgICAgICMgcG9wdWxhdGlvbiBzaXplXG5uID0gMyAgICAgICAgIyBudW1iZXIgb2YgY2FsbHNcbnRoZXRhID0gLjcgICAjIHBvcHVsYXRpb24gcHJvcG9ydGlvbiB3aG8gd2lsbCB2b3RlXG54ID0gMDpuICAgICAgIyBudW1iZXJzIG9mIFllc2VzIHRvIGNoZWNrOyBvciB1c2UgYSB2ZWN0b3IgbGlrZSBjKDAsIDIsIDMpXG5cbmRhdGEuZnJhbWUoWWVzZXMgPSB4LCBwcm9iYWJpbGl0eSA9IGRiaW5vbSh4LCBzaXplID0gbiwgcHJvYiA9IHRoZXRhKSkifQ==
 </script>
 </div>
-<p>Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
-<p>Now we sample without replacement: we can’t call the same person twice.</p>
-<p>Which step changes? What stays the same? Think about it.</p>
+<p data-source-line="92">Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
+<p data-source-line="94">Now we sample without replacement: we can’t call the same person twice.</p>
+<p data-source-line="96">Which step changes? What stays the same? Think about it.</p>
 </section>
 <section id="sampling-without-replacement-two-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises">Sampling without Replacement: Two Exercises</h2>
-<p>The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
-<p>With that in mind, work through the two exercises below.</p>
+<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises" data-source-line="98">Sampling without Replacement: Two Exercises</h2>
+<p data-source-line="100">The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
+<p data-source-line="102">With that in mind, work through the two exercises below.</p>
 <section id="three-calls-from-ten-people" class="level3">
-<h3 class="anchored" data-anchor-id="three-calls-from-ten-people">Three Calls from Ten People</h3>
+<h3 class="anchored" data-anchor-id="three-calls-from-ten-people" data-source-line="104">Three Calls from Ten People</h3>
+<p data-source-line="106">Deal three cards from your ten without putting any back, and count the Yeses. That count has a distribution, and the distribution has a name: this is the <em>hypergeometric distribution</em>. Find its probabilities in the first exercise, then generalize to any number of calls.</p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -931,20 +931,18 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">\(Y_1+Y_2+Y_3\)</span>.</p>
-<p>We call this the hypergeometric distribution. You’re going to calculate its probability distribution.</p>
-<p>Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your group’s own counts if they’re different. Draw three cards without putting them back.</p>
-<p>Use the same approach: partial marginalization first, from calls to responses, then full marginalization, from responses to their sum.</p>
+<p data-source-line="110">Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">\(Y_1+Y_2+Y_3\)</span>.</p>
+<p data-source-line="112">Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your group’s own counts if they’re different. Draw three cards without putting them back.</p>
 <ol type="1">
-<li>Write the eight response sequences and calculate their probabilities.</li>
-<li>Combine the sequences with the same sum.</li>
+<li data-source-line="114">Write the eight response sequences and calculate their probabilities.</li>
+<li data-source-line="115">Combine the sequences with the same sum.</li>
 </ol>
-<p>To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
-<p><strong>Checkpoint.</strong> Set <code>m</code> to your group’s number of cards and <code>theta</code> to the fraction that are red in the cell below. Check your numbers, then discuss your calculation with me before generalizing. Why do sequences with the same number of Yeses have the same probability?</p>
+<p data-source-line="117">To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
+<p data-source-line="119"><strong>Checkpoint.</strong> Set <code>m</code> to your group’s number of cards and <code>theta</code> to the fraction that are red in the cell below. Check your numbers, then discuss your calculation with me before generalizing. Why do sequences with the same number of Yeses have the same probability?</p>
 </div>
 </div>
 </div>
-<p>Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
+<p data-source-line="122">Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
 <div>
 <div id="webr-2" class="exercise-cell">
 
@@ -966,11 +964,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p>There are <span class="math inline">\(10\times9\times8=720\)</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">\(7\times6\times3=126\)</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">\(126/720\)</span>.</p>
-<p>The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
+<p data-source-line="138">There are <span class="math inline">\(10\times9\times8=720\)</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">\(7\times6\times3=126\)</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">\(126/720\)</span>.</p>
+<p data-source-line="140">The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
 <div class="grid">
 <section id="partially-marginalized-1" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized-1">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized-1" data-source-line="145">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1042,7 +1040,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 <section id="fully-marginalized-1" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized-1">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized-1" data-source-line="161">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1071,145 +1069,20 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 </div>
-<p>Look at the three rows with two Yeses. Their numerators are <span class="math inline">\(3\times7\times6\)</span>, <span class="math inline">\(7\times3\times6\)</span>, and <span class="math inline">\(7\times6\times3\)</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
+<p data-source-line="173">Look at the three rows with two Yeses. Their numerators are <span class="math inline">\(3\times7\times6\)</span>, <span class="math inline">\(7\times3\times6\)</span>, and <span class="math inline">\(7\times6\times3\)</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
 <p><span class="math display">\[
 P(Y_1+Y_2+Y_3=2)
 =\frac{126}{720}+\frac{126}{720}+\frac{126}{720}
 =3\times\frac{126}{720}.
 \]</span></p>
-<p>The multipliers are still <span class="math inline">\(1,3,3,1\)</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
-<section id="sec-two-calls-without-replacement" class="level4">
-<h4 class="anchored" data-anchor-id="sec-two-calls-without-replacement">Two Calls to A Small Population</h4>
-<p>Back to Rush, Mitt, Al, and Newt. On one call, nothing has been used up yet. <span class="math inline">\(J_1\)</span> is equally likely to be any of the four, so the distribution of <span class="math inline">\(Y_1\)</span> is the one we found before: <span class="math inline">\(2/4\)</span> on ‘No’ and <span class="math inline">\(2/4\)</span> on ‘Yes’. The two sampling schemes differ only once there’s a second call.</p>
-<div class="grid">
-<div class="g-col-5">
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th><span class="math inline">\(j\)</span></th>
-<th>name</th>
-<th><span class="math inline">\(y_j\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(1\)</span></td>
-<td>Rush</td>
-<td><span class="math inline">\(0\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(2\)</span></td>
-<td>Mitt</td>
-<td><span class="math inline">\(0\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(3\)</span></td>
-<td>Al</td>
-<td><span class="math inline">\(1\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(4\)</span></td>
-<td>Newt</td>
-<td><span class="math inline">\(1\)</span></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="g-col-7">
-<p>Same population, same two calls. The one change is that we can’t call the same person twice—so instead of rolling the die, we pull two names out of a cup.</p>
-</div>
-</div>
-<p>There are <span class="math inline">\(4 \times 3 = 12\)</span> sequences of two calls to distinct people, each with probability <span class="math inline">\(1/12\)</span>. The four we lost are the ones that call somebody twice — <span class="math inline">\((1,1)\)</span>, <span class="math inline">\((2,2)\)</span>, <span class="math inline">\((3,3)\)</span>, <span class="math inline">\((4,4)\)</span>.</p>
-<p>The counting changes in one place: after we use somebody up, there’s one fewer of them to pick.</p>
-<div class="grid">
-<section id="partially-marginalized-2" class="level5 g-col-7">
-<h5 class="anchored" data-anchor-id="partially-marginalized-2">Partially Marginalized</h5>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th><span class="math inline">\(p\)</span></th>
-<th><span class="math inline">\(Y_1\)</span></th>
-<th><span class="math inline">\(Y_2\)</span></th>
-<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
-<th>why</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\frac{2}{12}\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(2 \times 1\)</span>—two Nos, and only one left for the second call</td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\frac{4}{12}\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(2 \times 2\)</span>—different people, nothing used up</td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\frac{4}{12}\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(2 \times 2\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\frac{2}{12}\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-<td><span class="math inline">\(2\)</span></td>
-<td><span class="math inline">\(2 \times 1\)</span></td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="fully-marginalized-2" class="level5 g-col-5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-2">Fully Marginalized</h5>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th><span class="math inline">\(p\)</span></th>
-<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">\(\frac{2}{12}\)</span></td>
-<td><span class="math inline">\(0\)</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">\(\frac{8}{12}\)</span></td>
-<td><span class="math inline">\(1\)</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">\(\frac{2}{12}\)</span></td>
-<td><span class="math inline">\(2\)</span></td>
-</tr>
-</tbody>
-</table>
-</section>
-</div>
-<p><strong>Compare.</strong> Rolling the die we got <span class="math inline">\(\frac{4}{16}, \frac{8}{16}, \frac{4}{16}\)</span>—that is, <span class="math inline">\(\frac14, \frac12, \frac14\)</span>. Pulling from the cup we get <span class="math inline">\(\frac16, \frac23, \frac16\)</span>.</p>
-<p>Same shape, but the middle is heavier: a sum of one holds half the probability with replacement and two thirds without. The two ends are what got thinner, and they’re exactly the outcomes that need us to hear the <em>same</em> answer twice—which is what using somebody up makes harder.</p>
-<p>That’s sampling without replacement being <strong>more precise</strong>. We’re calling half the population, so refusing to waste a call on somebody we’ve already talked to buys us a lot.</p>
-</section>
+<p data-source-line="181">The multipliers are still <span class="math inline">\(1,3,3,1\)</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section id="generalize-your-answer" class="level3">
-<h3 class="anchored" data-anchor-id="generalize-your-answer">Generalize Your Answer</h3>
+<h3 class="anchored" data-anchor-id="generalize-your-answer" data-source-line="186">Generalize Your Answer</h3>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1222,10 +1095,10 @@ P(Y_1+Y_2+Y_3=2)
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>Now <span class="math inline">\(n\)</span> calls to <span class="math inline">\(m\)</span> voters, of whom <span class="math inline">\(m_1\)</span> will vote and <span class="math inline">\(m_0\)</span> won’t, still without replacement. Find the distribution of <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>.</p>
-<p><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_0\)</span>, and replace three calls by <span class="math inline">\(n\)</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
-<p>For a response sequence with <span class="math inline">\(s\)</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
-<p>You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
-<p>Check your formula by putting the three-call numbers back in. You can’t check arbitrary <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> computationally in the abstract, but you can try a couple of pairs. For each pair, choose how many of the <span class="math inline">\(m\)</span> voters will vote, set <code>m</code>, <code>n</code>, and <code>theta</code> in the cell above, and compare its probabilities with your formula.</p>
+<p data-source-line="192"><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_0\)</span>, and replace three calls by <span class="math inline">\(n\)</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
+<p data-source-line="194">For a response sequence with <span class="math inline">\(s\)</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
+<p data-source-line="196">You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
+<p data-source-line="198">Check your formula by putting the three-call numbers back in. You can’t check arbitrary <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> computationally in the abstract, but you can try a couple of pairs. For each pair, choose how many of the <span class="math inline">\(m\)</span> voters will vote, set <code>m</code>, <code>n</code>, and <code>theta</code> in the cell above, and compare its probabilities with your formula.</p>
 </div>
 </div>
 </div>
@@ -1241,13 +1114,13 @@ P(Y_1+Y_2+Y_3=2)
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted last time.</p>
-<p>Stage 1 is the one to redo, and the thing to work out is what each call uses up. When you’ve already heard three Yeses, how many Yeses are left to hear — and how many Nos?</p>
+<p data-source-line="203">Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted last time.</p>
+<p data-source-line="205">Stage 1 is the one to redo, and the thing to work out is what each call uses up. When you’ve already heard three Yeses, how many Yeses are left to hear — and how many Nos?</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1256,20 +1129,20 @@ P(Y_1+Y_2+Y_3=2)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p>To find the distribution of a sum <span class="math inline">\(Y_1 + \ldots + Y_n\)</span> when we sample <em>without replacement</em> we do the same thing. We start by writing out the joint distribution of <span class="math inline">\(n\)</span> calls. We’re equally likely to pull any sequence of <span class="math inline">\(n\)</span> <em>distinct</em> numbers in <span class="math inline">\(1\ldots m\)</span>. There are <span class="math inline">\(m \times (m-1) \times \ldots \times  (m-n+1)=m!/(m-n)!\)</span> sequences, so the probability is <span class="math inline">\((m-n)!/m!\)</span> for each sequence. Then we add the responses and sums as columns. That doesn’t change.</p>
-<p>Then we marginalize in two steps.</p>
+<p>To find the distribution of a sum <span class="math inline">\(Y_1 + \ldots + Y_n\)</span> when we sample <em>without replacement</em> we do the same thing. We start by writing out the joint distribution of <span class="math inline">\(n\)</span> calls. We’re equally likely to pull any sequence of <span class="math inline">\(n\)</span> <em>distinct</em> numbers in <span class="math inline">\(1\ldots m\)</span>. There are <span class="math inline">\(m \times (m-1) \times \ldots \times (m-n+1)\)</span> sequences, so the probability is <span class="math inline">\(1/\bigl[m(m-1)\ldots(m-n+1)\bigr]\)</span> for each sequence. Then we add the responses and sums as columns. That doesn’t change.</p>
+<p data-source-line="214">Then we marginalize in two steps.</p>
 <ol type="1">
-<li>Sum over roll sequences leading to the same response sequence <span class="math inline">\(a_1 \ldots a_n\)</span>.</li>
-<li>Sum over response sequences leading to the same sum <span class="math inline">\(s=a_1+\ldots+a_n\)</span>.</li>
+<li data-source-line="216">Sum over roll sequences leading to the same response sequence <span class="math inline">\(a_1 \ldots a_n\)</span>.</li>
+<li data-source-line="217">Sum over response sequences leading to the same sum <span class="math inline">\(s=a_1+\ldots+a_n\)</span>.</li>
 </ol>
 <section id="step-1.-partial-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization">Step 1. Partial Marginalization</h4>
-<p>Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. The displayed factorials apply when those responses fit in the population; otherwise that row has probability zero.</p>
-<section id="partially-marginalized-3" class="level5">
-<h5 class="anchored" data-anchor-id="partially-marginalized-3">Partially Marginalized</h5>
+<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization" data-source-line="219">Step 1. Partial Marginalization</h4>
+<p data-source-line="221">Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. A row has probability zero if it asks for more of either response than the population contains.</p>
+<section id="partially-marginalized-2" class="level5">
+<h5 class="anchored" data-anchor-id="partially-marginalized-2" data-source-line="223">Partially Marginalized</h5>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 16%">
@@ -1291,7 +1164,7 @@ P(Y_1+Y_2+Y_3=2)
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\frac{m_0!}{(m_0-n)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\frac{m_0(m_0-1)\ldots(m_0-n+1)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(\ldots\)</span></td>
@@ -1299,7 +1172,7 @@ P(Y_1+Y_2+Y_3=2)
 <td><span class="math inline">\(0\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\frac{m_1m_0!}{(m_0-n+1)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\frac{m_1\,m_0(m_0-1)\ldots(m_0-n+2)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(0\)</span></td>
 <td><span class="math inline">\(\ldots\)</span></td>
@@ -1315,7 +1188,7 @@ P(Y_1+Y_2+Y_3=2)
 <td>⋮</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\frac{m_0m_1!}{(m_1-n+1)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\frac{m_0\,m_1(m_1-1)\ldots(m_1-n+2)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(\ldots\)</span></td>
@@ -1323,7 +1196,7 @@ P(Y_1+Y_2+Y_3=2)
 <td><span class="math inline">\(n-1\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\frac{m_1!}{(m_1-n)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\frac{m_1(m_1-1)\ldots(m_1-n+1)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(1\)</span></td>
 <td><span class="math inline">\(\ldots\)</span></td>
@@ -1332,25 +1205,29 @@ P(Y_1+Y_2+Y_3=2)
 </tr>
 </tbody>
 </table>
-<p>There are still <span class="math inline">\(2^n\)</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one.</p>
-<p>To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">\(a_1 \ldots a_n = 0,0,...,0,0\)</span>. First assume <span class="math inline">\(n\leq m_0\)</span>, so this sequence is possible.</p>
+<p data-source-line="233">There are still <span class="math inline">\(2^n\)</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one. Each product has one factor per response of that kind; when there are none, that product is 1.</p>
+<p data-source-line="236">To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">\(a_1 \ldots a_n = 0,0,...,0,0\)</span>. First assume <span class="math inline">\(n\leq m_0\)</span>, so this sequence is possible.</p>
 <ol type="1">
 <li>We consider any ‘head’ <span class="math inline">\(j_1\ldots j_{n-1}\)</span> where <span class="math inline">\(y_{j_1} \ldots y_{j_{n-1}}=0,0,...0\)</span> and think about choosing the last element. No matter what the head is, we’ve ‘used up’ <span class="math inline">\(n-1\)</span> people with response <span class="math inline">\(y_j=0\)</span>. So there are <span class="math inline">\(m_0-(n-1)=m_0-n+1\)</span> ways to complete the sequence by choosing <em>an as-yet unused</em> <span class="math inline">\(j_{n}\)</span> with <span class="math inline">\(y_{j_n}=0\)</span>.</li>
 <li>We repeat with shortened ‘head’ <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> to consider the choice of <span class="math inline">\(j_{n-1}\)</span>. We have <span class="math inline">\(m_0-n+2\)</span> as-yet unused choices and our last step tells us that each choice results in <span class="math inline">\(m_0-(n-1)\)</span> call sequences, so there are <span class="math inline">\((m_0 - n + 1)(m_0 - n + 2)\)</span> sequences with head <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> ending in <span class="math inline">\(0,0\)</span>.</li>
-<li>Repeat <span class="math inline">\(n-2\)</span> more times. We get <span class="math inline">\((m_0 - n + 1) \times \ldots \times m_0 = m_0!/(m_0-n)!\)</span> rows.</li>
+<li>Repeat <span class="math inline">\(n-2\)</span> more times. We get <span class="math inline">\((m_0 - n + 1) \times \ldots \times m_0\)</span> rows.</li>
 </ol>
-<p>When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">\(s\)</span> ones and <span class="math inline">\(n-s\)</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\(m_0!/(m_0-(n-s))! \times m_1!/(m_1-s)!\)</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">\(s\)</span> ones.</p>
+<p data-source-line="242">When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">\(s\)</span> ones and <span class="math inline">\(n-s\)</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\(\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\times\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]\)</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">\(s\)</span> ones.</p>
 <p><span class="math display">\[
-\frac{m_0!}{(m_0-(n-s))!} \times \frac{m_1!}{(m_1-s)!} \times \frac{(m-n)!}{m!}
+\frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}
 \]</span></p>
 </section>
 </section>
 <section id="step-2.-full-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-2.-full-marginalization">Step 2. Full Marginalization</h4>
-<p>Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
-<section id="fully-marginalized-3" class="level5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-3">Fully Marginalized</h5>
+<h4 class="anchored" data-anchor-id="step-2.-full-marginalization" data-source-line="248">Step 2. Full Marginalization</h4>
+<p data-source-line="250">Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
+<section id="fully-marginalized-2" class="level5">
+<h5 class="anchored" data-anchor-id="fully-marginalized-2" data-source-line="252">Fully Marginalized</h5>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
 <thead>
 <tr class="header">
 <th><span class="math inline">\(p\)</span></th>
@@ -1359,11 +1236,11 @@ P(Y_1+Y_2+Y_3=2)
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">\(\binom{n}{0}\frac{m_0!}{(m_0-n)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\binom{n}{0}\frac{m_0(m_0-1)\ldots(m_0-n+1)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(0\)</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\binom{n}{1}\frac{m_1m_0!}{(m_0-n+1)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\binom{n}{1}\frac{m_1\,m_0(m_0-1)\ldots(m_0-n+2)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(1\)</span></td>
 </tr>
 <tr class="odd">
@@ -1371,36 +1248,56 @@ P(Y_1+Y_2+Y_3=2)
 <td>⋮</td>
 </tr>
 <tr class="even">
-<td><span class="math inline">\(\binom{n}{n-1}\frac{m_0m_1!}{(m_1-n+1)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\binom{n}{n-1}\frac{m_0\,m_1(m_1-1)\ldots(m_1-n+2)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(n-1\)</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">\(\binom{n}{n}\frac{m_1!}{(m_1-n)!}\frac{(m-n)!}{m!}\)</span></td>
+<td><span class="math inline">\(\binom{n}{n}\frac{m_1(m_1-1)\ldots(m_1-n+1)}{m(m-1)\ldots(m-n+1)}\)</span></td>
 <td><span class="math inline">\(n\)</span></td>
 </tr>
 </tbody>
 </table>
-<p>To calculate the probability that the sum takes on the value <span class="math inline">\(s\)</span>, we sum over response sequences with <span class="math inline">\(s\)</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
-<p>The count is the same as before: the number of binary sequences of length <span class="math inline">\(n\)</span> with <span class="math inline">\(s\)</span> ones is <span class="math inline">\(\binom{n}{s}\)</span>. For <span class="math inline">\(0\leq s\leq n\)</span> with <span class="math inline">\(s\leq m_1\)</span> and <span class="math inline">\(n-s\leq m_0\)</span>, multiplying, we get</p>
+<p data-source-line="263">To calculate the probability that the sum takes on the value <span class="math inline">\(s\)</span>, we sum over response sequences with <span class="math inline">\(s\)</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
+<p data-source-line="265">The count is the same as before: the number of binary sequences of length <span class="math inline">\(n\)</span> with <span class="math inline">\(s\)</span> ones is <span class="math inline">\(\binom{n}{s}\)</span>. For <span class="math inline">\(0\leq s\leq n\)</span>, multiplying, we get</p>
 <p><span class="math display">\[
-P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \times \frac{m_1!}{(m_1-s)!} \times \frac{(m-n)!}{m!}.
+P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}.
 \]</span></p>
-<p>Outside those counts the probability is zero.</p>
-<p>Those two factorial ratios are the falling products you wrote out call by call. <span class="math display">\[
+<p data-source-line="271">Outside <span class="math inline">\(0\leq s\leq n\)</span>, the probability is zero.</p>
+<p data-source-line="273">It’s a bit uglier than the Binomial, but the same R tricks work.</p>
+<p data-source-line="275">One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">\(m_1 (m_1-1) \ldots (m_1-s+1)\)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">\(s=4\)</span> row is <span class="math inline">\(3 \times 2 \times 1 \times 0\)</span>.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Factorial Notation
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For <span class="math inline">\(s\leq m_1\)</span> and <span class="math inline">\(n-s\leq m_0\)</span>, the falling products can be written with factorials: <span class="math display">\[
 \frac{m_1!}{(m_1-s)!} = m_1 (m_1-1) \ldots (m_1-s+1)
 \qand
 \frac{m_0!}{(m_0-(n-s))!} = m_0 (m_0-1) \ldots (m_0-(n-s)+1)
 \]</span></p>
-<p>It’s a bit uglier than the Binomial, but the same R tricks work.</p>
-<p>One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">\(m_1 (m_1-1) \ldots (m_1-s+1)\)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">\(s=4\)</span> row is <span class="math inline">\(3 \times 2 \times 1 \times 0\)</span>.</p>
+<p data-source-line="287">The same probability can then be written</p>
+<p><span class="math display">\[
+P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \times \frac{m_1!}{(m_1-s)!} \times \frac{(m-n)!}{m!}.
+\]</span></p>
+<p data-source-line="293">Outside those population counts the probability is zero; the factorial expression is only for counts that fit.</p>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="the-two-call-table" class="level4">
-<h4 class="anchored" data-anchor-id="the-two-call-table">The Two-Call Table</h4>
-<p>For <span class="math inline">\(n=2\)</span>, the same formula has the following table.</p>
+<h4 class="anchored" data-anchor-id="the-two-call-table" data-source-line="297">The Two-Call Table</h4>
+<p data-source-line="299">For <span class="math inline">\(n=2\)</span>, the same formula has the following table.</p>
 <div class="grid">
-<section id="partially-marginalized-4" class="level5 g-col-7">
-<h5 class="anchored" data-anchor-id="partially-marginalized-4">Partially Marginalized</h5>
+<section id="partially-marginalized-3" class="level5 g-col-7">
+<h5 class="anchored" data-anchor-id="partially-marginalized-3" data-source-line="304">Partially Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1438,8 +1335,8 @@ P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \time
 </tbody>
 </table>
 </section>
-<section id="fully-marginalized-4" class="level5 g-col-5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-4">Fully Marginalized</h5>
+<section id="fully-marginalized-3" class="level5 g-col-5">
+<h5 class="anchored" data-anchor-id="fully-marginalized-3" data-source-line="316">Fully Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1464,7 +1361,7 @@ P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \time
 </table>
 </section>
 </div>
-<p>Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
+<p data-source-line="327">Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
 </section>
 </div>
 </div>
@@ -1473,12 +1370,12 @@ P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \time
 </section>
 </section>
 <section id="sec-binom-hyper-comparison" class="level2">
-<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison">Comparing Sampling with and without Replacement</h2>
-<p>Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">\(n\)</span>; columns change the population size <span class="math inline">\(m\)</span>. The diagonal keeps <span class="math inline">\(n/m=1/5\)</span>. Use the tabs to change the population proportion <span class="math inline">\(\theta_1\)</span>.</p>
+<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison" data-source-line="332">Comparing Sampling with and without Replacement</h2>
+<p data-source-line="334">Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">\(n\)</span>; columns change the population size <span class="math inline">\(m\)</span>. The diagonal keeps <span class="math inline">\(n/m=1/5\)</span>. Use the tabs to change the population proportion <span class="math inline">\(\theta_1\)</span>.</p>
 <ol type="1">
-<li><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
-<li><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
-<li><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
+<li data-source-line="336"><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
+<li data-source-line="337"><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
+<li data-source-line="338"><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
 </ol>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Even: <span class="math inline">\(\theta_1=0.5\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Mid: <span class="math inline">\(\theta_1=0.7\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Extreme-ish: <span class="math inline">\(\theta_1=0.9\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Flipped: <span class="math inline">\(\theta_1=0.1\)</span></a></li></ul>
@@ -1489,7 +1386,7 @@ P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \time
 <div id="fig-binom-vs-hyper" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-vs-hyper-1.svg?v=1789499367967" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-vs-hyper-1.svg?v=1789514120154" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.1
@@ -1505,7 +1402,7 @@ Figure&nbsp;11.1
 <div id="fig-binom-hyper-mid" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-mid-1.svg?v=1789499367967" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-mid-1.svg?v=1789514120154" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.2
@@ -1521,7 +1418,7 @@ Figure&nbsp;11.2
 <div id="fig-binom-hyper-extreme" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1789499367967" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1789514120154" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.3
@@ -1537,7 +1434,7 @@ Figure&nbsp;11.3
 <div id="fig-binom-hyper-flipped" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1789499367967" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1789514120154" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.4
@@ -1549,12 +1446,12 @@ Figure&nbsp;11.4
 </div>
 </div>
 </div>
-<p>The Hypergeometric looks a lot like the Binomial when <span class="math inline">\(n\)</span> is small relative to <span class="math inline">\(m\)</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">\(n\)</span> is a meaningful fraction of <span class="math inline">\(m\)</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
-<p>If you called everybody you’d know <span class="math inline">\(\theta_1\)</span> exactly, and there’d be nothing left to be uncertain about.</p>
+<p data-source-line="429">The Hypergeometric looks a lot like the Binomial when <span class="math inline">\(n\)</span> is small relative to <span class="math inline">\(m\)</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">\(n\)</span> is a meaningful fraction of <span class="math inline">\(m\)</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
+<p data-source-line="431">If you called everybody you’d know <span class="math inline">\(\theta_1\)</span> exactly, and there’d be nothing left to be uncertain about.</p>
 </section>
 <section id="using-r" class="level2">
-<h2 class="anchored" data-anchor-id="using-r">Using <strong>R</strong></h2>
-<p>The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">\(P(\sum_{i=1}^n Y_i = s)\)</span> when we sample <span class="math inline">\(n\)</span> times without replacement from a population with <span class="math inline">\(m_1\)</span> ones and <span class="math inline">\(m_0\)</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
+<h2 class="anchored" data-anchor-id="using-r" data-source-line="435">Using <strong>R</strong></h2>
+<p data-source-line="437">The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">\(P(\sum_{i=1}^n Y_i = s)\)</span> when we sample <span class="math inline">\(n\)</span> times without replacement from a population with <span class="math inline">\(m_1\)</span> ones and <span class="math inline">\(m_0\)</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>R code</summary>
@@ -1575,39 +1472,11 @@ Figure&nbsp;11.4
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-sampling-without-replacement_files/figure-html/plot-hypergeometric-exact-and-simulated-1.svg?v=1789499367967" class="img-fluid figure-img" alt="Exact Hypergeometric probability histogram for sampling 100 without replacement from a binary population of 1000, overlaid with a simulated histogram and 100 simulated counts."></p>
+<p><img src="chapter-sampling-without-replacement_files/figure-html/plot-hypergeometric-exact-and-simulated-1.svg?v=1789514120154" class="img-fluid figure-img" alt="Exact Hypergeometric probability histogram for sampling 100 without replacement from a binary population of 1000, overlaid with a simulated histogram and 100 simulated counts."></p>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="the-hypergeometric-distribution" class="level2">
-<h2 class="anchored" data-anchor-id="the-hypergeometric-distribution">The Hypergeometric Distribution</h2>
-<div class="grid">
-<div class="g-col-6">
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="chapter-sampling-without-replacement_files/figure-html/plot-hypergeometric-across-thetas-1.svg?v=1789499367967" class="img-fluid figure-img" alt="Three overlapping Hypergeometric count distributions for population proportions .68, .70, and .72 when sampling half of a population; increasing the proportion shifts the distribution right."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="g-col-6">
-<p><span class="math display">\[
-\begin{aligned}
-&amp;P\p*{\sum_{i=1}^n Y_i = s} = \binom{n}{s} \frac{m_0!}{(m_0-n+s)!} \frac{m_1!}{(m_1-s)!} \frac{(m-n)!}{m!} \\
-&amp;\qfor n = 100, \ m = 200 \\
-&amp;\qand \theta_1 \in \{\textcolor[RGB]{239,71,111}{0.68}, \textcolor[RGB]{17,138,178}{0.7}, \textcolor[RGB]{6,214,160}{0.72} \}
-\end{aligned}
-\]</span></p>
-</div>
-</div>
-<p data-source-line="544">These functions have ‘hyper’ in their name because we call this distribution the <em>Hypergeometric distribution</em>. The Hypergeometric distribution describes the number of successes when we draw <span class="math inline">\(n\)</span> items without replacement from a population containing <span class="math inline">\(m_1\)</span> successes and <span class="math inline">\(m_0\)</span> failures.</p>
-<p data-source-line="546">We’ve shown that’s the sampling distribution of the <em>sum of responses</em>, <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>, when we sample without replacement from a population of binary responses <span class="math inline">\(y_1 \ldots y_m\)</span> in which <span class="math inline">\(m_1\)</span> are ones.</p>
-<p data-source-line="548">It’s a bit harder to estimate than the Binomial because it depends on two things we don’t know: the population size <span class="math inline">\(m\)</span> and the number of ones <span class="math inline">\(m_1\)</span>. We usually know <span class="math inline">\(m\)</span>, though. And if we do, we can estimate <span class="math inline">\(m_1\)</span> by <span class="math inline">\(m\hat\theta\)</span> where <span class="math inline">\(\hat\theta\)</span> is our sample proportion. That’s usually good enough.</p>
 
 
 <script type="webr-data">
@@ -1840,34 +1709,7 @@ setTimeout(function() {
 </section>
 </section>
 
-
-<div class="tlda-chapter-nav">
-  <div class="tlda-nav-prev" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'prev'},'*')"><span class="tlda-nav-arrow">←</span> Sampling with Replacement and the Binomial Distribution</div>
-  <div class="tlda-nav-next" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'next'},'*')"><span class="tlda-nav-arrow">→</span> Calibration using the Binomial Distribution</div>
-</div>
-<style>
-.tlda-chapter-nav {
-  display: flex;
-  justify-content: space-between;
-  padding: 40px 20px 60px;
-  margin-top: 60px;
-  border-top: 1px solid #ccc;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.tlda-nav-prev, .tlda-nav-next {
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  font-size: 14px;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.15s ease;
-  max-width: 45%;
-}
-.tlda-nav-prev:hover, .tlda-nav-next:hover { color: #444; }
-.tlda-nav-next { text-align: right; }
-.tlda-nav-arrow { font-size: 16px; }
-</style></main> <!-- /main -->
+</main> <!-- /main -->
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
@@ -3094,4 +2936,7 @@ window._ojs.runtime.interpretFromScriptTags();
   }
 })();
 </script>
+<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
+<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/chapters/chapter-sampling-without-replacement.html">App version</a>
+<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
 </body></html>
