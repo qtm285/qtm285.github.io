@@ -890,16 +890,18 @@ window.Quarto = {
 <p>Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
 <p><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
 <p><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
-<p>For <span class="math inline">\(n\)</span> calls to <span class="math inline">\(m=m_1+m_0\)</span> people, we wrote the population frequencies as <span class="math inline">\(\theta_1=m_1/m\)</span> and <span class="math inline">\(\theta_0=m_0/m\)</span>. If a response sequence <span class="math inline">\(a_1,\ldots,a_n\)</span> has <span class="math inline">\(s\)</span> Yeses, the same two steps were</p>
+<p>For <span class="math inline">\(n\)</span> calls <strong>with replacement</strong> to <span class="math inline">\(m=m_1+m_0\)</span> people, we wrote the population frequencies as <span class="math inline">\(\theta_1=m_1/m\)</span> and <span class="math inline">\(\theta_0=m_0/m\)</span>. A response sequence <span class="math inline">\(a_1,\ldots,a_n\)</span> is a binary sequence of length <span class="math inline">\(n\)</span>. If its sum is <span class="math inline">\(k\)</span>, the same two steps are</p>
 <p><span class="math display">\[
 \begin{aligned}
-P(Y_1=a_1,\ldots,Y_n=a_n)&amp;=\theta_1^s\theta_0^{n-s},\\
-P(Y_1+\ldots+Y_n=s)&amp;=\binom{n}{s}\theta_1^s\theta_0^{n-s}.
+P(Y_1=a_1,\ldots,Y_n=a_n)&amp;=\theta_1^k\theta_0^{n-k},\\
+P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 \end{aligned}
 \]</span></p>
+<p>The first line has one factor for each response: <span class="math inline">\(k\)</span> ones and <span class="math inline">\(n-k\)</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">\(k\)</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
+<p>You could work out how to count binary sequences of length <span class="math inline">\(n\)</span> with sum <span class="math inline">\(k\)</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\(\binom{n}{k}\)</span> and read ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(k\)</span>’. You don’t need to derive the count to write the formula.</p>
 <section id="check-with-r" class="level3">
 <h3 class="anchored" data-anchor-id="check-with-r">Check with R</h3>
-<p>In these cells, <code>theta</code> is <span class="math inline">\(\theta_1\)</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">\(s\)</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
+<p>In these cells, <code>theta</code> is <span class="math inline">\(\theta_1\)</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">\(k\)</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
 <div>
 <div id="webr-1" class="exercise-cell">
 
