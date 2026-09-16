@@ -1,0 +1,195 @@
+---
+title: "Observational Studies and Confounding"
+---
+
+{{< include shared-code.qmd >}}
+
+```{r}
+#| label: confounding-setup
+#| include: false
+set.seed(285)
+social.pressure = read.csv('../data/social-pressure-data.csv') |>
+  mutate(age=2006-yob,
+         W=as.numeric(treatment==' Neighbors'),
+         Y=as.numeric(voted=='Yes'))
+
+ggl.households = social.pressure |>
+  filter(treatment %in% c(' Control',' Neighbors')) |>
+  group_by(hh_id, treatment, W) |>
+  summarize(Y=mean(Y), age=mean(age), prior=mean(p2002=='yes'), .groups='drop')
+
+real.difference = with(ggl.households,mean(Y[W==1])-mean(Y[W==0]))
+```
+
+# What Randomization Bought Us
+
+In the real Gerber--Green--Larimer experiment, households did not choose whether
+to receive the Neighbors letter. The investigators randomized the assignment.
+Conditional on the arm counts, every household had the same assignment chance.
+That symmetry made the observed treated-control difference an unbiased estimate
+of an average causal effect.
+
+The real household-level difference is
+$$
+\hat\tau=`r sprintf('%0.3f',real.difference)`.
+$$
+
+An observational study starts differently. Treatment happens through decisions
+made by people, institutions, or circumstances. The treated and untreated groups
+can therefore differ before treatment occurs.
+
+# A Constructed Observational Study
+
+We will keep real GGL household covariates and construct a teaching simulation.
+The construction is not a claim about how the GGL letters were assigned; their
+actual assignment was randomized.
+
+```{r}
+#| label: constructed-observational-data
+#| include: false
+observational = ggl.households |>
+  slice_sample(n=30000) |>
+  mutate(
+    # Simulated potential-outcome probabilities: prior voters tend to vote again.
+    p0=plogis(-2.9 + .018*(age-50) + 1.25*prior),
+    p1=pmin(.98,p0+.05),
+    y0=rbinom(n(),1,p0),
+    y1=rbinom(n(),1,p1),
+    # Constructed selection: likely voters are more likely to receive treatment.
+    propensity=plogis(-1.0 + .015*(age-50) + 1.6*prior),
+    assigned=rbinom(n(),1,propensity),
+    observed=ifelse(assigned==1,y1,y0))
+
+constructed.ate=with(observational,mean(y1-y0))
+constructed.raw=with(observational,
+  mean(observed[assigned==1])-mean(observed[assigned==0]))
+```
+
+::: {.callout-warning}
+### Which Parts Are Real?
+Age and prior-voting status come from real GGL records. Treatment assignment and
+both potential outcomes in this section are simulated. This constructed study is
+used to expose confounding; it is not evidence about the real Neighbors letter.
+:::
+
+```{r}
+#| label: fig-constructed-selection
+#| layout-ncol: 2
+#| fig-cap:
+#|   - "Constructed treatment probabilities"
+#|   - "Observed outcomes after constructed selection"
+#| fig-alt:
+#|   - "Constructed treatment probability increases with household age and is higher for prior voters, so treatment selection depends on pretreatment covariates."
+#|   - "Simulated turnout plotted against age shows treated and untreated groups formed by the constructed, nonrandom selection mechanism."
+#| fig-width: 6
+ggplot(observational,aes(x=age,y=propensity,color=factor(prior>.5))) +
+  geom_point(alpha=.04,size=.4) +
+  stat_smooth(se=FALSE,linewidth=.8) +
+  labs(x='Mean household age',y='Constructed treatment probability',
+       color='Prior voter')
+
+ggplot(observational |> slice_sample(n=8000),
+       aes(x=age,y=observed,color=factor(assigned))) +
+  geom_point(alpha=.05,size=.4,position=position_jitter(height=.03,seed=285)) +
+  stat_smooth(method='loess',se=FALSE,linewidth=.8) +
+  scale_color_manual(values=c(twocolor.red,twocolor.green),
+                     labels=c('Untreated','Treated')) +
+  labs(x='Mean household age',y='Simulated turnout',color='Constructed group')
+```
+
+The true average effect in this simulated population is
+$$
+\bar\tau=`r sprintf('%0.3f',constructed.ate)`.
+$$
+The raw treated-control difference is
+$$
+\hat\Delta_{\mathrm{raw}}=`r sprintf('%0.3f',constructed.raw)`.
+$$
+
+The raw difference is not estimating only the effect of treatment. Treated
+households were more likely to contain prior voters, and prior voters also had
+higher untreated potential outcomes. The comparison mixes a treatment effect
+with a pre-existing difference.
+
+# Confounding
+
+Let $X_j$ collect pretreatment information such as age and prior voting. Under
+unconditional randomization,
+$$
+W_j\ \perp\ \{y_j(0),y_j(1),X_j\}.
+$$
+
+In the constructed observational study, assignment depends on $X_j$, while the
+potential outcomes also depend on $X_j$. Consequently treatment status carries
+information about what would have happened without treatment:
+$$
+\E[y_j(0)\mid W_j=1]\ne\E[y_j(0)\mid W_j=0].
+$$
+This is confounding. Even if treatment had no effect, the raw groups could have
+different outcomes.
+
+## Comparing Like With Like
+
+If the variables that drove assignment are observed, a plausible replacement for
+unconditional randomization is conditional randomization:
+$$
+W_j\ \perp\ \{y_j(0),y_j(1)\}\mid X_j.
+$$
+
+This says treatment may depend on $X_j$, but among households with the same $X_j$
+it does not depend further on their potential outcomes. Then we compare treatment
+and control within covariate groups before averaging those comparisons.
+
+```{r}
+#| label: constructed-adjustment
+adjusted = observational |>
+  mutate(age.band=cut(age,breaks=c(-Inf,40,55,70,Inf))) |>
+  group_by(prior.group=prior>.5,age.band) |>
+  summarize(effect=mean(observed[assigned==1])-mean(observed[assigned==0]),
+            weight=n(),.groups='drop') |>
+  filter(is.finite(effect)) |>
+  summarize(estimate=weighted.mean(effect,weight)) |>
+  pull(estimate)
+```
+
+Using coarse prior-voting and age groups gives an adjusted difference of
+`r sprintf('%0.3f',adjusted)`, closer to the simulated truth than the raw
+difference. The remaining discrepancy reflects finite samples and coarse grouping.
+
+# The Limit of Adjustment
+
+Adjustment works only for information represented in $X_j$. If an unrecorded
+variable affects both treatment and outcomes, treated and control households can
+still differ within every observed covariate group. The conditional-randomization
+story is then false.
+
+That is the central distinction:
+
+- In an experiment, the assignment mechanism supplies the independence claim.
+- In an observational study, conditional independence is an assumption that must
+  be defended from knowledge of how treatment was chosen.
+
+::: {.callout-exercise}
+### What Would Have to Be Recorded?
+Suppose campaign staff target households because of a private enthusiasm score.
+The score predicts turnout but is absent from the dataset. Does adjusting for age
+and prior voting recreate randomization? Why or why not?
+:::
+
+::: {.callout-solution}
+Not necessarily. Within the same recorded age and prior-voting group, treatment
+still depends on enthusiasm, and enthusiasm predicts potential turnout. Treatment
+therefore remains informative about potential outcomes after conditioning on the
+recorded variables.
+:::
+
+# Takeaways
+
+- The real GGL comparison is experimental; the observational assignment here is
+  explicitly constructed.
+- Confounding is a pre-existing difference in potential outcomes across treatment
+  groups.
+- Comparing like with like can remove confounding by observed pretreatment
+  variables.
+- Whether that comparison has a causal interpretation depends on an assignment
+  claim, not on the appearance of the adjusted estimate.

@@ -1,0 +1,179 @@
+---
+title: "Sampling and Randomization"
+---
+
+{{< include shared-code.qmd >}}
+
+```{r}
+#| label: two-source-setup
+#| include: false
+set.seed(285)
+social.pressure = read.csv('../data/social-pressure-data.csv') |>
+  mutate(age=2006-yob,
+         W=as.numeric(treatment==' Neighbors'),
+         Y=as.numeric(voted=='Yes'))
+
+ggl.households = social.pressure |>
+  filter(treatment %in% c(' Control',' Neighbors')) |>
+  group_by(hh_id, treatment, W) |>
+  summarize(Y=mean(Y), age=mean(age), prior=mean(p2002=='yes'), .groups='drop')
+
+# This completed potential-outcome population is a teaching simulation. The age
+# and prior-voting covariates come from GGL; neither potential outcome does.
+sim.pop = ggl.households |>
+  transmute(age, prior,
+            p0=plogis(-2.7 + .018*(age-50) + .9*prior),
+            p1=pmin(.98, p0+.05),
+            y0=rbinom(n(),1,p0),
+            y1=rbinom(n(),1,p1))
+true.ate = with(sim.pop, mean(y1-y0))
+```
+
+# Two Questions, Two Random Mechanisms
+
+The social-pressure experiment began with a finite population of households. In
+the previous chapter we treated those households as fixed and studied repeated
+treatment assignment. That isolates **randomization variability**.
+
+Often we also want an answer about a population larger than the units in one study.
+Then two mechanisms matter:
+
+1. **Sampling** determines which population units enter the study.
+2. **Randomization** determines which treatment each sampled unit receives.
+
+The mechanisms answer different questions. Sampling connects a study sample to a
+population. Randomization connects observed treatment groups to causal effects.
+
+::: {.callout-warning}
+### Observed and Simulated Layers
+The `age` and prior-voting fields used below are observed GGL household covariates.
+The completed pairs $(y_j(0),y_j(1))$ are simulated because the real experiment
+reveals only one outcome per household. The simulation illustrates the two
+mechanisms; it is not additional evidence about the GGL treatment effect.
+:::
+
+# The Process {#sec-sampling-then-randomization}
+
+Start with a finite population
+$$
+\{x_j,y_j(0),y_j(1)\}_{j=1}^m.
+$$
+
+First draw indices $J_1\ldots J_n$ uniformly with replacement from
+$1\ldots m$. The sampled potential outcomes are
+$$
+Y_i(0)=y_{J_i}(0),\qquad Y_i(1)=y_{J_i}(1).
+$$
+
+Then assign exactly $n_1$ sampled positions to treatment and $n_0=n-n_1$ to
+control. The realized outcome is
+$$
+Y_i=Y_i(W_i).
+$$
+
+The difference in observed means is
+$$
+\hat\tau
+=\frac1{n_1}\sum_{i:W_i=1}Y_i
+-\frac1{n_0}\sum_{i:W_i=0}Y_i.
+$$
+
+# Why the Two Stages Work
+
+Fix the sample first. Across repeated random assignments,
+$$
+\E[\hat\tau\mid J_1\ldots J_n]
+=\frac1n\sum_{i=1}^n\{Y_i(1)-Y_i(0)\}.
+$$
+Randomization therefore targets the average effect in the realized sample.
+
+Now average over repeated samples. Each sampled position is a uniform draw from
+the population, so
+$$
+\E\sb*{\frac1n\sum_{i=1}^n\{Y_i(1)-Y_i(0)\}}
+=\frac1m\sum_{j=1}^m\{y_j(1)-y_j(0)\}
+=\bar\tau.
+$$
+
+The law of iterated expectations joins the steps:
+$$
+\E[\hat\tau]
+=\E\sb*{\E[\hat\tau\mid J_1\ldots J_n]}
+=\bar\tau.
+$$
+
+Neither mechanism substitutes for the other. Randomizing a badly selected sample
+can identify its sample effect without making that sample representative.
+
+# Seeing the Two Sources
+
+```{r}
+#| label: three-distributions
+#| fig-width: 9
+#| fig-alt: "Three aligned histograms compare variation from sampling only, randomization only, and both mechanisms together. A common green vertical line marks the simulated finite-population average effect."
+n=400
+n1=n/2
+reps=3000
+
+draw.sample = function() sample(seq_len(nrow(sim.pop)), n, replace=TRUE)
+randomize = function() sample(c(rep(1,n1),rep(0,n-n1)))
+estimate = function(J,W) with(sim.pop[J,], mean(y1[W==1])-mean(y0[W==0]))
+
+fixed.J = draw.sample()
+fixed.W = randomize()
+
+sampling.only = replicate(reps, {
+  J=draw.sample()
+  with(sim.pop[J,], mean(y1-y0))
+})
+
+randomization.only = replicate(reps, estimate(fixed.J,randomize()))
+
+joint = replicate(reps, {
+  J=draw.sample()
+  estimate(J,randomize())
+})
+
+distributions = data.frame(
+  estimate=c(sampling.only,randomization.only,joint),
+  mechanism=rep(c('Sampling only','Randomization only','Sampling + randomization'),
+                each=reps))
+
+ggplot(distributions,aes(x=estimate,fill=mechanism)) +
+  geom_histogram(bins=45,alpha=.5,position='identity') +
+  geom_vline(xintercept=true.ate,color=twocolor.green,linewidth=1) +
+  facet_wrap(~mechanism,ncol=1) +
+  guides(fill='none') + labs(x='Estimated effect',y='Repeated studies')
+```
+
+The [green line]{.target} is the average effect in the simulated finite
+population. The panels use the same horizontal scale.
+
+- **Sampling only** varies who enters and calculates the sample's complete average
+  effect, as if both potential outcomes were visible.
+- **Randomization only** holds one sample fixed and varies which outcome is
+  revealed for each sampled unit.
+- **Sampling + randomization** repeats both stages, which is the actual two-source
+  process.
+
+::: {.callout-exercise}
+### Which Mechanism Is Missing?
+Suppose every household in the study is randomized correctly, but the study includes
+only households with a prior voter. Which claim remains justified, and which
+population claim is no longer justified?
+:::
+
+::: {.callout-solution}
+Randomization still makes the treated-control comparison valid for the households
+represented by that study. The study does not, by randomization alone, identify the
+average effect among households that were excluded or in the full target population.
+:::
+
+# Takeaways
+
+- Sampling variability is about who enters the study.
+- Randomization variability is about which potential outcome is revealed.
+- Conditioning on the sample isolates the randomization argument.
+- Iterated expectation joins the sample result to the population result.
+- Real GGL covariates can organize the example, but completed potential-outcome
+  pairs must remain explicitly simulated.

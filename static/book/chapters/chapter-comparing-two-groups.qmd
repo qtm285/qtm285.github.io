@@ -1,0 +1,1635 @@
+---
+title: "Comparing Two Groups"
+---
+
+# Examples and Introduction
+
+In Part 1, we estimated a single population mean using a sample mean. Now we compare means between two groups. This is a fundamental statistical task: estimating the difference in means between subpopulations.
+
+## [Black]{.groupb} vs. [non-Black]{.groupa} Voters in GA
+
+{{< include shared-code.qmd >}}
+{{< include ga-turnout.qmd >}}
+
+```{r}
+#| label: define-group-colors
+#| fig-alt: "Map of Georgia showing sampled voters as numbered points colored by Black versus non-Black group membership."
+color = function(x,y=x) { ifelse(x==1, sprintf('\\ingroupb{%s}',y), sprintf('\\ingroupa{%s}',y))}
+sam$label = 1:n
+state.plot + geom_text(aes(x = long, y = lat, label=label, color=factor(x)), alpha=.7, size=3, data=sam) +
+  guides(color='none')
+```
+
+$$
+\small{
+\begin{array}{r|rr|rr|r|rr|rrrrr}
+\text{call} &  1  & & 2  & & \dots & `r n`  & & & & & & \\
+\text{question}  & W_1 & Y_1 &  W_2 & Y_2 & \dots &  X_{`r n`} & Y_{`r n`} & \overline{X}_{`r n`} & \overline{Y}_{`r n`} &\frac{\sum_{i:W_i=0} Y_i}{\sum_{i:W_i=0} 1} & \frac{\sum_{i:W_i=1} Y_i}{\sum_{i:W_i=1} 1} & \text{difference} \\
+\text{outcome}    &  \underset{\textcolor{gray}{x_{`r J[1]`}}}{`r color(X[1])`} & \underset{\textcolor{gray}{y_{`r J[1]`}}}{`r color(X[1], Y[1])`}
+                  & \underset{\textcolor{gray}{x_{`r J[2]`}}}{`r color(X[2])`} & \underset{\textcolor{gray}{y_{`r J[2]`}}}{`r color(X[2], Y[2])`}
+                  & \dots 
+                  & \underset{\textcolor{gray}{x_{`r J[n]`}}}{`r color(X[n])`} & \underset{\textcolor{gray}{y_{`r J[n]`}}}{`r color(X[n], Y[n])`}
+                  & `r approx(mean(X))` & `r approx(mean(Y))` & \ingroupa{`r approx(mean(Y[X==0]))`} & \ingroupb{`r approx(mean(Y[X==1]))`} 
+                  & `r approx(mean(Y[X==1])-mean(Y[X==0]))` \\
+\end{array}
+}
+$$
+
+
+## [Recipients of Threatening Letters]{.groupb} vs. [Others]{.groupa} in MI
+
+```{r}
+#| label: draw-sample
+set.seed(0)
+social.pressure = read.csv('../data/social-pressure-data.csv') 
+social.pressure$age = 2006-social.pressure$yob
+
+pop = social.pressure[social.pressure$treatment %in% c(' Control', ' Neighbors'), ] 
+J = sample(1:nrow(pop), nrow(pop), replace=TRUE)
+sam = pop[J,]
+```
+
+```{r}
+#| label: plot-age-distribution
+display.frac = 1/10
+n.display = round(display.frac * nrow(pop))
+j.plot = sample(1:nrow(pop))[1:n.display]
+
+xco = function(w,x,scale=.3) { x + (scale/2)*(2*as.numeric(w) - 1) }
+
+social.pressure.plot = ggplot(pop[j.plot,], aes(x=xco(treatment==' Neighbors', age), y=as.numeric(voted=='Yes'), color=treatment, shape=p2002)) +
+  geom_point(alpha=.2, size=1, position=position_jitter(h=.1, w=.05, seed=0)) +
+  guides(color='none', shape='none') + 
+  scale_y_continuous(breaks=c(0,.5, 1), labels=c("Didn't",'',"Voted")) + 
+  scale_x_continuous(breaks=seq(20,105,5)) + labs(x="Age", y="")
+```
+
+
+```{r}
+#| label: fig-social-pressure
+#| fig-alt: "Michigan voters plotted by age and turnout, colored by whether they received the social-pressure letter and shaped by prior voting history."
+social.pressure.plot
+```
+
+- The green dots are people who received a letter pressuring them to vote. @fig-social-pressure-letter.
+- The red dots are people who didn't.
+
+## [Residents With]{.groupb} vs. [Without]{.groupa} 4-Year Degrees in CA
+
+{{< include ca-income.qmd >}}
+
+:::: columns
+
+::: column
+```{r map-sample}
+#| fig-width: 7
+#| fig-alt: "Map of California sample respondents colored by whether they have a four-year college degree; locations are illustrative rather than respondent addresses."
+ca.plot + geom_point(aes(x=long, y=lat, color=degree), data=earnings, size=.1, alpha=.5) + guides(color='none')
+```
+:::
+
+::: column
+
+```{r table}
+style.tab = function(tab, cols=c('income', 'education', 'county'), nhead=3, ntail=1) {
+  tab$income50k = 0+(tab$income > 50000)
+  tab$income = sprintf('$%dk', round(as.numeric(tab$income) / 1000))
+  tab$county = ifelse(tab$county=='los angeles', 'LA',  tab$county)
+  ellipsis.tab = tab[, cols] %>% ellipsis(nhead=nhead,ntail=ntail)
+  ellipsis.tab %>%
+    gt(rownames_to_stub = TRUE) %>%
+    tab_style(style = cell_fill(color = twocolor.green),
+              locations = cells_body(rows = which(ellipsis.tab$education >= 16))) %>%
+    tab_style(style = cell_fill(color = twocolor.red),
+              locations = cells_body(rows = which(ellipsis.tab$education <  16)))
+}
+
+style.tab(sample.tab, nhead=4)
+```
+:::
+
+::::
+
+- In these examples, our sample was drawn with replacement from some population. Or we're pretending it was.
+- In this one, it's the population of all California residents between 25 and 35 with at least an 8th grade education.
+
+::: aside
+The locations shown on the map are made up. They're not the actual locations of the people in the sample. \
+The survey includes some location information for some people, but as you can see in the table, not for everyone.
+:::
+
+## 
+```{r}
+#| label: plot-population-map
+#| fig-width: 4
+#| layout-ncol: 2 
+#| fig-alt:
+#| - "Illustrative California population map colored by four-year-degree status."
+#| - "Illustrative California sample map colored by four-year-degree status."
+ca.plot + 
+ geom_point(aes(x=long, y=lat, color=degree), data=pop.earnings, size=.02, alpha=.1) + 
+ guides(color='none')
+ca.plot + geom_point(aes(x=long, y=lat, color=degree), data=earnings, size=.1, alpha=.5) +
+  guides(color='none')
+```
+
+:::: columns
+::: column
+### Population
+```{r}
+#| label: table-population
+style.tab(pop.tab)
+```
+:::
+::: column
+### Sample
+```{r}
+#| label: table-sample
+style.tab(sample.tab)
+```
+:::
+::::
+
+For illustration, I've made up a fake population that looks like a bigger version of the sample.
+
+## Our Estimator and Target
+
+```{r}
+#| label: plot-income-by-degree
+#| layout-ncol: 2 
+#| fig-width: 7
+#| fig-alt:
+#| - "Population income distributions for people without and with four-year degrees, with group means marked."
+#| - "Sample income distributions for people without and with four-year degrees, with group means marked."
+
+
+earnings.jitter = ggplot(earnings) + 
+    geom_point(aes(x=degree, y=income, color=degree), 
+               size=dot.size, position=position_jitter(seed=0,w=.3), alpha=.1) +
+     scale_y() + guides(color='none')
+
+earnings.jitter.pop = ggplot(pop.earnings) + 
+    geom_point(aes(x=degree, y=income, color=degree), 
+               size=.2, position=position_jitter(seed=0,w=.3), alpha=.1) +
+     scale_y() + guides(color='none')
+ 
+pop.deviations = pop.earnings |> 
+  group_by(degree) |> 
+  mutate(deviation=income-mean(income))
+
+earnings.jitter.pop.deviations = ggplot(pop.deviations) + 
+    geom_point(aes(x=degree, y=deviation, color=degree), 
+               size=.2, position=position_jitter(seed=0,w=.3), alpha=.1) +
+     scale_y(limits=c(-1e5,1e5)) + guides(color='none')
+
+
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+earnings.jitter + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+```
+
+:::: columns
+::: column
+### Estimation Target
+$$
+\begin{aligned}
+\mu(1) - \mu(0) \qfor \mu(x) 
+&= \frac{1}{m_x}\sum_{j:x_j = x } y_j \\
+\qqtext{ where } \quad m_x &= \sum_{j:x_j=x} 1 
+\end{aligned}
+$$
+:::
+::: column
+### Estimator
+$$ 
+\begin{aligned} 
+\hat\mu(1) - \hat\mu(0) 
+\qfor \hat\mu(x) &= \frac{1}{N_x}\sum_{i:W_i=x} Y_i \\
+\qqtext{ where } \quad N_x &= \sum_{i:W_i=x} 1.
+\end{aligned}
+$$
+:::
+::::
+
+## Is This Estimator Good?
+
+```{r}
+#| label: build-unbiased-plot
+xx = seq(-6,6,by=.01)
+K = 100
+heights = seq(0,.4,length.out=K)
+normals = rnorm(10000)
+
+unbiased.plot = ggplot() + geom_histogram(aes(x=normals, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=0, color='blue') + 
+           geom_vline(xintercept=c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=c(-2,2), color='blue', linetype='dotted') +
+           geom_pointrange(aes(y=heights, x=normals[1:K], xmin=normals[1:K]-1.96, xmax=normals[1:K]+1.96), 
+                           color='purple', alpha=.15) + xlim(min(xx),max(xx))
+           
+biased.plot = ggplot() + geom_histogram(aes(x=normals+2, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=2+0, color='blue') + 
+           geom_vline(xintercept=2+c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=2+c(-2,2), color='blue', linetype='dotted') +
+           geom_pointrange(aes(y=heights, x=2+normals[1:K], xmin=2+normals[1:K]-1.96, xmax=2+normals[1:K]+1.96), 
+                           color='purple', alpha=.15) + xlim(min(xx),max(xx))
+
+
+```
+
+```{r}
+#| label: show-unbiased-plot
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-cap: 
+#|  - An Unbiased Estimator's Sampling Distribution
+#|  - A Biased Estimator's Sampling Distribution
+#| fig-alt:
+#| - "Unbiased sampling distribution centered on the green target, with repeated confidence intervals around simulated estimates."
+#| - "Biased sampling distribution shifted away from the green target, causing many simulated confidence intervals to miss."
+unbiased.plot
+biased.plot
+```
+
+- We want to know about our estimator's ...
+  - bias. That's the location of the sampling distribution relative to the [estimation target]{.target}.
+  - standard deviation. Roughly speaking, that determines the width of our 95% confidence intervals.
+
+# Two Ways to Get Two Groups {#sec-two-ways-two-groups}
+
+Before we answer that question, we need to think about how we got our two groups. There are (at least) two different sampling schemes that give us data like this.
+
+1. **Stratified Sampling.** We decide in advance how many people to sample from each group. We sample $n_0$ people from the [no-degree]{.groupa} subpopulation and $n_1$ people from the [degree]{.groupb} subpopulation, independently.
+
+2. **Ordinary Sampling.** We sample $n$ people from the whole population. We get whoever we get. The number of people in each group, $N_0$ and $N_1$, is random.
+
+These are different. In stratified sampling, the group sizes $n_0$ and $n_1$ are fixed numbers we choose. In ordinary sampling, the group sizes $N_0$ and $N_1$ are random variables—we don't know what they'll be until we see our sample.
+
+This matters for our analysis. Stratified sampling is simpler because we're essentially doing two separate one-sample problems and combining them. Ordinary sampling is more complicated because we have to deal with the randomness in the group sizes.
+
+We'll start with stratified sampling.
+
+# Stratified Sampling
+
+## The Setup
+
+Suppose we have two subpopulations—people [without]{.groupa} and [with]{.groupb} 4-year degrees. We sample independently from each:
+
+- From the [no-degree]{.groupa} subpopulation: draw $n_0$ people with replacement.
+- From the [degree]{.groupb} subpopulation: draw $n_1$ people with replacement.
+
+Our data looks like this:
+$$
+\begin{aligned}
+&\text{From subpopulation 0:} && Y_{0,1} \ldots Y_{0,n_0} && \text{all sampled uniformly from } y_1 \ldots y_{m_0} \text{ with } x_j=0 \\
+&\text{From subpopulation 1:} && Y_{1,1} \ldots Y_{1,n_1} && \text{all sampled uniformly from } y_1 \ldots y_{m_1} \text{ with } x_j=1
+\end{aligned}
+$$
+
+The key feature: $n_0$ and $n_1$ are **fixed numbers** that we chose in advance.
+
+## Target and Estimator
+
+Our target is still the difference in subpopulation means.
+$$
+\mu(1) - \mu(0) \qfor \mu(x) = \frac{1}{m_x}\sum_{j:x_j=x} y_j
+$$
+
+Our estimator is the difference in subsample means.
+$$
+\hat\mu(1) - \hat\mu(0) \qfor \hat\mu(x) = \frac{1}{n_x}\sum_{i=1}^{n_x} Y_{x,i}
+$$
+
+Notice the notation is a bit different. We're writing $Y_{x,i}$ for the $i$th observation from subpopulation $x$, and the denominator is $n_x$, a fixed number we chose.
+
+## Unbiasedness
+
+This is immediate from Part 1. Each subsample mean is an unbiased estimator of its subpopulation mean.
+$$
+\E[\hat\mu(x)] = \mu(x)
+$$
+
+Why? Because $\hat\mu(x)$ is just a sample mean of $n_x$ observations drawn uniformly-at-random from a subpopulation with mean $\mu(x)$. That's exactly the setup from Part 1.
+
+And by linearity:
+$$
+\E[\hat\mu(1) - \hat\mu(0)] = \E[\hat\mu(1)] - \E[\hat\mu(0)] = \mu(1) - \mu(0)
+$$
+
+## Variance
+
+The variance is equally straightforward. From Part 1, we know:
+$$
+\Var[\hat\mu(x)] = \frac{\sigma^2(x)}{n_x}
+$$
+where $\sigma^2(x)$ is the variance of the subpopulation with $W=w$.
+
+For the difference, we use the fact that the two subsample means are **independent**—we sampled from the two subpopulations separately. When random variables are independent, the variance of their difference is the sum of their variances:
+$$
+\Var[\hat\mu(1) - \hat\mu(0)] = \Var[\hat\mu(1)] + \Var[\hat\mu(0)] = \frac{\sigma^2(1)}{n_1} + \frac{\sigma^2(0)}{n_0}
+$$
+
+That's it. No conditioning tricks, no iterated expectations. Just two separate one-sample problems combined.
+
+## Estimation and Confidence Intervals
+
+We estimate the variance by plugging in subsample variances:
+$$
+\widehat{\Var}[\hat\mu(1) - \hat\mu(0)] = \frac{\hat\sigma^2(1)}{n_1} + \frac{\hat\sigma^2(0)}{n_0}
+$$
+
+And our confidence interval is:
+$$
+\hat\mu(1) - \hat\mu(0) \pm 1.96 \sqrt{\frac{\hat\sigma^2(1)}{n_1} + \frac{\hat\sigma^2(0)}{n_0}}
+$$
+
+## Summary
+
+Stratified sampling is simple because:
+
+1. Group sizes $n_0$ and $n_1$ are fixed, not random.
+2. The two subsamples are independent.
+3. Everything reduces to two separate applications of Part 1's results.
+
+But stratified sampling requires us to **decide in advance** how many people to sample from each group. That's not always possible or practical. Often we just sample from the whole population and see who we get. That's ordinary sampling, and it's more complicated.
+
+## The Forgetting Heuristic
+
+What if our population has more than two groups? Suppose instead of just [degree]{.groupb} vs. [no-degree]{.groupa}, we had data on years of education: 8, 9, 10, ..., 16, 18, 20. That's many groups. But often we want to compare just two of them.
+
+Here's the key insight: **you can "forget" the other groups exist.** If you want to compare people with 16 years of education (4-year degree) to people with 12 years (high school diploma), just ignore everyone else. Extract the two groups you care about and apply exactly what we've developed here.
+
+Why does this work? Because the math we did for comparing two groups never assumed they were the *only* two groups. We proved:
+
+- The difference in subsample means is unbiased for the difference in subpopulation means.
+- The variance of this difference is $\frac{\sigma^2(1)}{n_1} + \frac{\sigma^2(0)}{n_0}$.
+
+None of this depended on there being no other groups. The existence of people with 10 or 14 years of education doesn't affect the sampling distribution of the comparison between the 12-year and 16-year groups. You can always "coarsen" a many-group comparison into a two-group one by ignoring the groups you're not interested in.
+
+This is a useful heuristic. When faced with a complex comparison involving many groups, ask yourself: can I reframe this as a two-group comparison by "forgetting" some groups? If so, everything from this lecture applies directly.
+
+# Ordinary Sampling
+
+Now suppose we sample $n$ people from the whole population—a population where each person has both a covariate $x_j$ (degree status) and an outcome $y_j$ (income). We get whoever we get. 
+
+The data looks like this:
+$$
+(W_1, Y_1) \ldots (W_n, Y_n)
+$$
+Each pair $(W_i, Y_i)$ is drawn uniformly-at-random from the population of pairs $(x_1, y_1) \ldots (x_m, y_m)$.
+
+The group sizes are now random:
+$$
+N_x = \sum_{i=1}^n 1_{=x}(W_i)
+$$
+This is the number of sampled people with $W_i=x$. It's a random variable, not a fixed number.
+
+This randomness complicates everything. To handle it, we need some probability tools.
+
+## Probability Review {#sec-conditioning-probability-review}
+
+### Population Means and Variances as Expectations
+
+```{r}
+#| label: plot-population-income-nocolor
+#| layout-ncol: 2 
+#| fig-width: 6
+#| fig-alt:
+#| - "Population income values shown without group colors, with the overall mean and one-standard-deviation range."
+#| - "Sample income values shown without group colors, with the overall mean and one-standard-deviation range."
+
+earnings.jitter.pop.nocolor = ggplot(pop.earnings) + 
+    geom_point(aes(x=0, y=income), 
+               size=.2, position=position_jitter(seed=0,w=.3), alpha=.1) +
+     scale_y() + guides(color='none')
+
+earnings.jitter.nocolor = ggplot(earnings) + 
+    geom_point(aes(x=0, y=income), 
+               size=dot.size, position=position_jitter(seed=0,w=.3), alpha=.1) +
+     scale_y() + guides(color='none')
+
+earnings.jitter.pop.nocolor + 
+  stat_summary(aes(x=0, y=income), geom="pointrange", fun.data=mean_sd) +
+  scale_x_continuous(limits=c(-.3,.3), breaks=c()) 
+
+earnings.jitter.nocolor + 
+  stat_summary(aes(x=0, y=income), geom="pointrange", fun.data=mean_sd) + 
+  scale_x_continuous(limits=c(-.3,.3), breaks=c()) 
+```
+
+- If a random variable $Y$ is *equally likely* to be any member of a population $y_1 \ldots y_m$, ...
+- ... then its expectation is the population mean $\mu=\frac{1}{m}\sum_{j=1}^m y_j$.
+- ... and its variance is the population variance $\sigma^2 = \frac{1}{m}\sum_{j=1}^m (y_j - \mu)^2$.
+- *Terminology.* When each of our observations $Y_i$ is like this, we're *sampling uniformly-at-random*.
+    
+$$
+\begin{aligned}
+\E[Y] 
+&= \sum_{j=1}^m \underset{\text{response}}{y_j} \times \underset{\text{probability}}{\frac{1}{m}} = \frac{1}{m}\sum_{j=1}^m y_j = \mu \\
+\E[(Y-\E[Y])^2]  
+&= \sum_{j=1}^m \underset{\text{deviation}^2}{(y_j - \mu)^2} \times \underset{\text{probability}}{\frac{1}{m}} = \frac{1}{m}\sum_{j=1}^m (y_j - \mu)^2 = \sigma^2
+\end{aligned}
+$$
+
+### Subpopulations and Conditioning
+
+```{r}
+#| label: plot-population-by-degree
+#| layout-ncol: 2
+#| fig-width: 6
+#| fig-alt:
+#| - "Population income distributions split by degree status, with each conditional mean and standard deviation."
+#| - "Sample income distributions split by degree status, with each group mean and standard deviation."
+
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+earnings.jitter + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+```
+
+::: {.panel-tabset}
+### Conditioning 
+
+- **Conditioning** is, in effect, a way of thinking about sampling as a two-stage process.
+  - First, we choose the color of our dot, i.e., the value of $W_i$, according to it frequency in the population.
+  - Then, we choose a specific one of those dots, i.e. $J_i$, from those with that color---with equal probability.
+- Because this is just a way of thinking, each person still gets chosen with probability $1/m$.
+  
+$$
+\begin{aligned}
+P(J_i=j) = 
+\begin{cases}
+   \frac{m_{green}}{m} \ \times \frac{1}{m_{green}}  \ = \ \frac{1}{m} & \text{if the $j$th dot is green  ($x_j=1$) } \\
+    \frac{m_{red}}{m} \ \times \frac{1}{m_{red}}  \  = \ \frac{1}{m} & \text{otherwise}
+\end{cases}
+\end{aligned}
+$$  
+
+- The first stage is 'a coin flip' that decides whether we roll the 'red die' or the 'green die' in the second.
+
+### Conditional Probability 
+
+- The **Conditional Probability** of $Y_i$ is the probability resulting from the second stage.
+  - $P(Y_i=y \mid W_i=1)$ is the probability distribution of $Y_i$ when we're 'rolling the green die'.
+  - $P(Y_i=y \mid W_i=0)$ is the probability distribution of $Y_i$ when we're 'rolling the red die'.
+
+### Conditional Expectation
+
+- The **Conditional Expectation** of $Y_i$ is the 'second stage expected value' in the same sense.
+  - $\E[Y_i \mid W_i=1]$ is the expected value of $Y_i$ when we're 'rolling the green die'. 
+  - It's the mean value $\mu(1)$ of $y_j$ in the subpopulation drawn as little green dots.
+  - $\E[Y_i \mid W_i=0]$ is the expected value of $Y_i$ when we're 'rolling the red die'.
+  - It's the mean value $\mu(0)$ of $y_j$ in the subpopulation drawn as little red dots.
+    
+### Conditional Variance 
+
+- The **Conditional Variance** of $Y_i$ is like this too. It's the 'second stage variance.' 
+  - $\Var[Y_i \mid W_i=1]$ is the variance of $Y_i$ when we're 'rolling the green die'.
+  - It's the variance $\sigma^2(1)$ of $y_j$ in the subpopulation drawn as little green dots.
+  - $\Var[Y_i \mid W_i=0]$ is the variance of $Y_i$ when we're 'rolling the red die'.
+  - It's the variance $\sigma^2(0)$ of $y_j$ in the subpopulation drawn as little red dots.
+
+:::
+
+### About Conditional Expectations and Variances
+
+```{r}
+#| label: plot-conditional-means
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-alt:
+#| - "Population income distributions by degree status with conditional means and standard deviations."
+#| - "Sample income distributions by degree status with conditional means and standard deviations."
+
+summaries = earnings %>% group_by(degree) %>% summarize(mean=mean(income), sd=sd(income))
+pop.summaries = pop.earnings %>% group_by(degree) %>% summarize(mean=mean(income), sd=sd(income))
+
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+earnings.jitter + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+```
+
+
+::: {.panel-tabset}
+### Conditional Expectations
+
+  1.  The **conditional expectation function** $\mu(x)=E[Y \mid W=x]$.
+      - $\mu$ is a function; evaluated at $x$, it's a number. It's not random.
+      - It's the mean of the subpopulation of people with $W=w$.
+   
+  2.  The conditional expectation $\mu(W)=E[Y \mid W]$.
+      - $\mu(W)$ is the mean of a **random subpopulation** of people.
+      - It's the conditional expectation function **evaluated at** the random variable $X$.
+
+### Conditional Variance
+
+  1.  The **conditional variance function** $\sigma^2(x)=E[\{Y - \mu(x)\}^2 \mid W=x]$.
+      - $\sigma^2$ is a function; evaluated at $x$, it's a number. It's not random.
+      - It's the variance of the subpopulation of people with $W=w$.
+   
+  2.  The conditional variance $\sigma^2(W)=E[\{Y - \mu(W)\}^2 \mid W]$.
+      - $\sigma^2(W)$ is the variance of a **random subpopulation** of people.
+      - It's the conditional variance function **evaluated at** the random variable $X$.
+
+ - This is like what happens with conditional expectations because it is one. 
+ - It's the conditional expectation of some random variable. What random variable?
+
+###  Conditional Variance as a Conditional Expectation
+
+- It's the conditional expectation of the square of $\inblue{Y-\mu(W)}$, a *conditionally centered* version of $Y$. 
+
+$$
+\Var[Y \mid W] = \E[\inblue{\{Y-\mu(W)\}}^2 \mid W] \qfor \mu(W) = \E[Y \mid W]
+$$
+ 
+:::
+
+
+## Working with Expectations {#sec-working-with-conditional-expectations}
+
+### Linearity {#sec-linearity}
+$$ 
+\begin{aligned}
+E ( a Y + b Z ) 
+&= E (aY) + E (bZ) 
+= aE(Y) + bE(Z) \\ 
+&\text{ for random variables $Y, Z$ and numbers $a,b$ }
+\end{aligned}
+$$
+
+**Application**. When we sample uniformly-at-random, the sample mean is unbiased.
+
+$$
+\begin{aligned}
+\E[\hat\mu] 
+&= \E\sb*{\frac1n\sum_{i=1}^n Y_i} \\
+&= \frac1n\sum_{i=1}^n \E[Y_i]  \\
+&= \frac1n\sum_{i=1}^n \mu     \\
+&= \frac1n \times n \times \mu = \mu.
+\end{aligned}
+$$
+
+**Conditional Version**.
+$$ 
+\begin{aligned}
+E\{ a(W) Y + b(W) Z \mid W \} 
+&= E\{a(W)Y \mid W\} + E\{ b(W)Z \mid W\} \\
+&= a(W)E(Y \mid W) + b(W)E(Z \mid W) \\
+& \text{ for random variables $W, Y, Z$ and functions $a,b$ }
+\end{aligned}
+$$
+
+### Expectations of Products Factor into Products of Expectations {#sec-factorization} 
+
+$$
+\color{gray}
+\E[\inpink{Y}\inteal{Z}] = \inpink{\E[Y]}\inteal{\E[Z]} \qqtext{when $\inpink{Y}$ and $\inteal{Z}$ are independent}
+$$
+
+**Application**. When we sample with replacement, the sample mean's variance is the population variance divided by $n$.
+
+$$
+\color{gray}
+\begin{aligned}
+\Var[\hat\mu] 
+&= \E\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n Y_i - \E \sb*{ \frac{1}{n}\sum_{i=1}^n Y_i } }^2 } \\
+&= \E\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n (Y_i - \E[Y_i]) }^2 }  \\
+&= \E\sb*{ \cb*{ \frac{1}{n}\sum_{i=1}^n Z_i }^2 } 
+&& \text{ for } \ Z_i = Y_i - \E[Y_i] \\
+&= \E\sb*{ \cb*{ \inpink{\frac{1}{n}\sum_{i=1}^n Z_i }} \times \cb*{\inteal{\frac{1}{n}\sum_{j=1}^n Z_j}} } 
+&&\text{ with }  \E[ Z_i  ] =  \E[ Y_i  ] - \E[Y_i] = \mu - \mu = 0 \\
+&= \E\sb*{ \frac{1}{n^2}\inpink{\sum_{i=1}^n} \inteal{\sum_{j=1}^n} \inpink{Z_i} \inteal{Z_j} }    
+&&\text{ and } \ \E[ Z_i^2] = \E[ \{ Y_i - \E[Y_i] \}^2 ] = \Var[Y_i] = \sigma^2 \\
+&= \frac{1}{n^2} \inpink{\sum_{i=1}^n} \inteal{\sum_{j=1}^n} \E\sb*{\inpink{Z_i} \inteal{Z_j} }  \\
+&= \frac{1}{n^2} \inpink{\sum_{i=1}^n} \inteal{\sum_{j=1}^n} \begin{cases} 
+\E[Z_i^2]=\sigma^2 & \text{if } j=i \\ 
+\inpink{\E[Z_i]}\inteal{\E[Z_j]} = 0 \times 0  & \text{if } j\neq i \end{cases} \\
+&= \frac{1}{n^2} \inpink{\sum_{i=1}^n} \sigma^2 =  \frac{1}{n^2} \times n \times \sigma^2 = \frac{\sigma^2}{n} 
+\end{aligned}
+$$
+
+### The Law of Iterated Expectations 
+```{r}
+#| label: build-tiny-population-plots
+Y = c(.75,1,1.25, 1,1.25,1.5)
+X = 0 + (1:6 > 3)
+Xdodge = X + rep(.02*c(-1,0,1),2)
+mu = function(x) { mean(Y[X==x]) }
+
+tinypop.plot = ggplot(data.frame(X=X,Y=Y,Xdodge=Xdodge)) + 
+  geom_point(aes(x=Xdodge, y=Y, color=factor(X)), alpha=.5, size=3*dot.size) + 
+  guides(color='none')
+tinypop.square.plot = tinypop.plot + 
+  geom_point(aes(x=Xdodge, y=Y^2, color=factor(X)), shape=0, size=3*dot.size) + 
+  geom_segment(aes(x=Xdodge, xend=Xdodge, y=Y, yend=Y^2), alpha=.3) 
+tinypop.plot.withspread = tinypop.plot + 
+  stat_summary(aes(x=X, y=Y), geom="pointrange", fun=mean, 
+          fun.min = function(x) mean(x) - sd(x), fun.max = function(x) mean(x) + sd(x), size=.5, alpha=.5)
+earnings.jitter.pop.withspread = earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun=mean, 
+          fun.min = function(x) mean(x) - sd(x), fun.max = function(x) mean(x) + sd(x), size=.5, alpha=.5)
+
+tinylims.0 = xlim(min(Xdodge[X==0])-sd(Xdodge[X==0]), max(Xdodge[X==0] + sd(Xdodge[X==0])))
+tinylims = xlim(min(Xdodge)-sd(Xdodge), max(Xdodge + sd(Xdodge)))
+```
+
+
+::: {.panel-tabset}
+### A Tiny Example 
+```{r}
+#| label: show-tiny-population
+#| fig-alt: "Six-point toy population in two groups, with each group mean and one-standard-deviation range."
+tinypop.plot.withspread
+```
+
+### A Realistic Example 
+
+```{r}
+#| label: show-population-with-spread
+#| fig-alt: "California income population split by degree status, with each subpopulation mean and standard deviation."
+earnings.jitter.pop.withspread  
+```
+
+:::
+
+$$
+\E[Y] = \E\sb*{ \E( Y \mid X ) } \quad \text{ for any random variables $X, Y$} 
+$$
+
+::: {.panel-tabset}
+### A Tiny Example
+
+:::: columns
+::: column
+$p$ | $W_i$ | $\E[Y_i \mid W_i]$ 
+--- | --- | ---
+$\frac{`r sum(X==0)`}{`r length(Y)`}$ | $0$ | $`r mean(Y[X==0])`$ 
+$\frac{`r sum(X==1)`}{`r length(Y)`}$ | $1$ | $`r mean(Y[X==1])`$
+:::
+::: column
+What is $\E[Y_i]$?
+:::
+::::
+
+### A Realistic Example
+
+:::: columns
+::: column
+```{r}
+#| label: define-degree-labels
+no = 'no 4-year degree'
+yes = '4-year degree'
+```
+
+$p$ | $W_i$ | $\E[Y_i \mid W_i]$ 
+--- | --- | ---
+$`r mean(pop.earnings$degree==no) |> approx()`$ | 0 | $`r pop.earnings |> filter(degree==no) |> pull(income) |> mean() |> approx()`$
+$`r mean(pop.earnings$degree==yes) |> approx()`$ | 1 | $`r pop.earnings |> filter(degree==yes) |> pull(income) |> mean() |> approx()`$
+
+:::
+::: column
+
+What is $\E[Y_i]$?
+:::
+::::
+
+:::
+
+### Irrelevance of independent conditioning variables {#sec-irrelevance}
+```{r}
+#| label: show-tiny-population-independence
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-alt:
+#| - "Six-point toy population in two groups, with conditional means and spreads."
+#| - "California income population by degree group, with conditional means and spreads."
+
+tinypop.plot.withspread
+earnings.jitter.pop.withspread  
+```
+
+$$ \E[ \inteal{Y} \mid \inteal{X}, \inpink{X'} ] = \inteal{\E[ Y \mid X ]} \quad \text{ when $X'$ is independent of $X,Y$ } $$
+
+
+**Application.**
+When we sample with replacement, the conditional expectation of $Y_i$ given $W_1 \ldots W_n$ is the conditional mean of $Y_i$ given $W_i$ alone.
+
+$$
+\E[Y_i \mid W_1 \ldots W_n] = \E[Y_i \mid W_i] = \mu(W_i) \qqtext{ when $(W_1, Y_1) \ldots (W_n, Y_n)$ are independent.}
+$$
+
+### The Indicator Trick
+```{r}
+#| label: show-tiny-population-indicator
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-alt:
+#| - "Six-point toy population illustrating the indicator trick within two groups."
+#| - "California income population illustrating selection of one degree group with an indicator."
+
+tinypop.plot.withspread
+earnings.jitter.pop.withspread  
+```
+
+$$
+1_{=w}(W)\mu(W) = 
+\begin{cases} 
+1 \times \mu(W)  & \text{ when } W=w \\
+0 \times \mu(W)  & \text{ when } W \neq w
+\end{cases}
+=
+\begin{cases} 
+1 \times \mu(w) & \text{ when } W=w \\
+0 \times \mu(w) & \text{ when } W \neq w
+\end{cases}
+=
+1_{=w}(W)\mu(w)
+$$
+
+**Application.**
+
+$$
+\E[1_{=w}(W)\mu(W)] = \E[ 1_{W=w} \mu(w) ] = \mu(w) \E[1_{=w}(W)] = \mu(w) \times P(W=w) 
+$$
+
+## Unbiasedness 
+
+### A Sample Mean is Unbiased
+
+**Claim.** When we sample uniformly-at-random, the sample mean is an unbiased estimator of the population mean.
+$$ \E[\hat\mu] = \mu $$
+
+We proved this earlier today using linearity of expectations. See @sec-linearity.
+
+### A Subsample Mean is Conditionally Unbiased {#sec-conditional-subsample-mean}
+
+**Claim.** When we sample with replacement, a subsample mean is a *conditionally unbiased* estimator of the corresponding subpopulation mean as long as there's at least one person with $W_i=1$
+$$ 
+\E[\hat\mu(1) \mid W_1 \ldots W_n] = \mu(1) \quad \text{ if } \quad \sum_{i=1}^{n} 1_{=1}(W_i) > 0.
+$$
+
+::: {.callout-tip collapse="true"}
+### Proof Sketch
+
+Use the **linearity of conditional expectations** to push the conditional expectation into the sum. Then use the **irrelevance of independent conditioning variables** to write things in terms of the *random variable* $\mu(W_i)$. Then the **indicator trick**. What's $1_{=1}(W_i) \mu(W_i)$? How is it related to $\mu(1)$?
+:::
+
+::: {.callout-tip collapse="true"}
+### How to Write Subsample Means
+
+$$ 
+\hat\mu(1) = \frac{\sum_{i:W_i=1} Y_i}{\sum_{i:W_i=1} 1} = \frac{\sum_{i=1}^{n} 1_{=1}(W_i) Y_{i}}{\sum_{i=1}^{n} 1_{=1}(W_i)} 
+$$
+
+It's easy to make mistakes using *linearity of expectations* when we're summing over a subsample. Can we or can we not 'push' or 'pull' an expectation through a sum when the terms in that sum depend on the value of a random variable? 
+
+To make this a lot more obvious, we can rewrite these as sums over the whole sample. Instead of 'excluding' the terms where $W_i=0$, we 'make them zero' by multiplying in the indicator $1_{=1}(W_i)$. Then, of course we can distribute expectations through the sum. The question becomes whether we can 'pull out' the indicator. And we have a rule for that. We can do it if we're conditioning on $W_i$.
+
+When we write a subsample mean, we can do that in the numerator (the sum of observations in the subsample) and in the denominator (the number of those terms, which is a *sum of ones* over the subsample).
+:::
+
+::: {.callout-note collapse="true"}
+### Proof
+
+$$
+\begin{aligned}
+\E[\hat\mu(1) \mid W_1 \ldots W_n] 
+&=\E\sb*{\frac{\sum_{i=1}^{n} 1_{=1}(W_i) Y_{i}}{\sum_{i=1}^{n} 1_{=1}(W_i)} \mid W_1 \ldots W_n} \\
+&\explain{=}{via linearity. All the indicators (and their sum) are functions of $W_1\ldots W_n$.}
+\frac{\sum_{i=1}^{n} 1_{=1}(W_i) \E\cb*{ Y_{i} \mid W_1 \ldots W_n}}{\sum_{i=1}^{n}1_{=1}(W_i)} \\
+&\explain{=}{via irrelevance of independent conditioning variables. $(W_i,Y_i)$ are independent of the other $W$s.}
+\frac{\sum_{i=1}^{n} 1_{=1}(W_i) \E\cb*{ Y_{i} \mid W_i}}{\sum_{i=1}^{n}1_{=1}(W_i)} \\
+&\explain{=}{This is just a change of notation, as $\mu(W_i)=\E[Y_i \mid W_i]$, but it makes it easier to understand what happens next.} 
+\frac{\sum_{i=1}^{n} 1_{=1}(W_i) \mu(W_i)}{\sum_{i=1}^{n}1_{=1}(W_i)} \\
+&\explain{=}{via the indicator trick.}\frac{\sum_{i=1}^{n}1_{=1}(W_i) \mu(1)}{\sum_{i=1}^{n}1_{=1}(W_{i})} \\
+&\explain{=}{via linearity} \mu(1) \ \frac{\sum_{i=1}^{n} 1_{=1}(W_i) }{\sum_{i=1}^{n}1_{=1}(W_{i})} = \mu(1)
+\end{aligned}
+$$
+:::
+
+### Differences in Subsample Means
+
+**Claim.** A difference in subsample means is *conditionally unbiased* for the corresponding difference in subpopulation means as long as there sample includes at least one person in each group.
+
+$$ 
+\E[\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n] = \mu(1) - \mu(0) \quad \text{ if } \quad \sum_{i=1}^{n} 1_{=1}(W_i) > 0 \ \text{ and } \ \sum_{i=1}^{n} 1_{=0}(W_i) > 0.
+$$
+
+**Why?**
+
+This follows from the linearity of expectations and conditional unbiasedness of the subsample means.
+
+$$
+\E[\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n] = \E[\hat\mu(1) \mid W_1 \ldots W_n] - \E[\hat\mu(0) \mid W_1 \ldots W_n] =  \mu(1) - \mu(0) 
+$$
+
+
+### Conditional vs. Unconditional Unbiasedness 
+
+Conditional unbiasedness without the 'if' implies unconditional unbiasedness.
+That's the law of iterated expectations.
+
+$$
+\E[\hat\mu(1)] = \E\sb*{\E[\hat\mu(1) \mid W_1 \ldots W_n]} = \E[\mu(1)] = \mu(1) \qif \E[\hat\mu(1) \mid W_1 \ldots W_n] = \mu(1)
+$$
+
+But the 'if' is a problem. Fundamentally, the problem is that if there's nobody with $W_i=1$, there 
+isn't a subsample mean for that group. There's nobody in the subsample to average. The best we could do is just make something up. However, when our sample is large, it's very unlikely that there's nobody in the subsample for any group, so if we make up anything at all reasonable, we'll get an estimator that's pretty close to unbiased. 
+
+$$
+\begin{aligned}
+\E[\hat\mu(1)] 
+&= \E\sb*{\E[\hat\mu(1) \mid W_1 \ldots W_n]} \\
+&= \sum_{\substack{x_1 \ldots x_n \\ \sum_{i=1}^{n} 1_{=1}(x_i) > 0}} \mu(1) \times P(W_1=x_1, \ldots, W_n=x_n) \\
+&+ \sum_{\substack{x_1 \ldots x_n \\ \sum_{i=1}^{n} 1_{=1}(x_i) = 0}} \text{whatever} \times P(W_1=x_1, \ldots, W_n=x_n) \\
+&= (1-p_0) \ \mu(1) \ + \ p_0 \ \text{whatever} \qfor p_0 = P(W_i=0 \text{ for all } i) \\
+&\approx \mu(1) \qif p_0 \approx 0 
+\end{aligned}
+$$
+
+For this reason, we'll mostly ignore this issue from here on. We'll call subsample means unbiased estimators of subpopulation means because they're close enough, but you should be aware that there is a subtle issue here.
+
+### Why Unconditional Unbiasedness is Impossible
+
+It's not just that we haven't found an unconditionally unbiased estimator—there isn't one. No matter how clever we are about what to do when a group is empty, we can't achieve unconditional unbiasedness.
+
+Here's why. Consider estimating $\mu(1)$. Any estimator $\hat\mu(1)$ we construct is a function of our data $(W_1, Y_1) \ldots (W_n, Y_n)$. When $N_1 = 0$—when nobody in our sample has $W_i = 1$—we have no observations from the group with $W=1$. Our estimator can only depend on observations from the other group.
+
+But the subpopulation mean $\mu(1)$ could be anything. It's a feature of the [green]{.groupb} subpopulation, which we haven't seen at all when $N_1 = 0$. For our estimator to be unbiased, we'd need
+$$
+\E[\hat\mu(1)] = \mu(1) \qqtext{for all possible values of } \mu(1).
+$$
+When $N_1 = 0$, our estimator $\hat\mu(1)$ doesn't depend on $\mu(1)$ at all—it's determined entirely by the [red]{.groupa} observations. So $\E[\hat\mu(1) \mid N_1 = 0]$ is some fixed number that doesn't change with $\mu(1)$. But we need it to equal $\mu(1)$, which does change. That's impossible.
+
+More formally: let $c = \E[\hat\mu(1) \mid N_1 = 0]$. Then
+$$
+\E[\hat\mu(1)] = P(N_1 > 0) \cdot \mu(1) + P(N_1 = 0) \cdot c
+$$
+For this to equal $\mu(1)$ for all $\mu(1)$, we'd need $P(N_1 = 0) = 0$. But with ordinary sampling, there's always some chance—however small—that everyone in our sample comes from the same group.
+
+**This is why stratified sampling matters.** With stratified sampling, we *choose* to sample $n_1 > 0$ people from the [green]{.groupb} group. We guarantee $N_1 = n_1 > 0$ by design. The "what if nobody shows up" problem disappears, and we get unconditional unbiasedness for free.
+
+### Implications of Unbiasedness {#sec-implications-of-unbiasedness}
+
+```{r}
+#| label: plot-unbiasedness-implication
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-cap: 
+#|   - "Like this."
+#|   - "Not like this."
+#| fig-alt:
+#| - "Unbiased sampling distribution centered on its target, with simulated estimates spread symmetrically around zero."
+#| - "Biased sampling distribution shifted two units away from its target."
+xx = seq(-4,4,by=.01)
+heights = seq(0,.4,length.out=100)
+normals = rnorm(10000)
+
+ggplot() + geom_histogram(aes(x=normals, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=0, color='blue') + 
+           geom_vline(xintercept=c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=c(-2,2), color='blue', linetype='dotted') +
+           geom_point(aes(y=heights, x=normals[1:length(heights)]), color='purple', alpha=.3)
+
+ggplot() + geom_histogram(aes(x=normals+2, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=2+0, color='blue') + 
+           geom_vline(xintercept=2+c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=2+c(-2,2), color='blue', linetype='dotted') +
+           geom_point(aes(y=heights, x=normals[1:length(heights)]+2), color='purple', alpha=.3) +
+           xlim(-4,4)
+```
+
+- If we can estimate the width of its sampling distribution, we can get interval estimates with the coverage we want.
+- The question that remains is whether those interval estimates are narrow enough to be useful.
+
+
+## Spread
+
+### The Question
+
+```{r}
+#| label: plot-the-question
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-cap: 
+#|   - "Is it like this?" 
+#|   - "Or like this?"
+#| fig-alt:
+#| - "Narrow unbiased sampling distribution centered on the target."
+#| - "Wide unbiased sampling distribution centered on the same target."
+xx = seq(-12,12,by=.01)
+heights = seq(0,.4,length.out=100)
+normals = rnorm(10000)
+
+ggplot() + geom_histogram(aes(x=normals, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=0, color='blue') + 
+           geom_vline(xintercept=c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=c(-2,2), color='blue', linetype='dotted') +
+           geom_point(aes(y=heights, x=normals[1:length(heights)]), color='purple', alpha=.3) +
+           xlim(-12,12)
+
+ggplot() + geom_histogram(aes(x=3*normals, y=after_stat(density)), alpha=.3, bins=100) +
+           geom_vline(xintercept=0, color='green', linewidth=3, alpha=.4) + 
+           geom_vline(xintercept=0, color='blue') + 
+           geom_vline(xintercept=3*c(-1,1), color='blue', linetype='dashed') +
+           geom_vline(xintercept=6*c(-2,2), color='blue', linetype='dotted') +
+           geom_point(aes(y=heights/3, x=3*normals[1:length(heights)]), color='purple', alpha=.3) +
+           xlim(-12,12)
+```
+
+### Spread Within and Between Groups
+
+```{r}
+#| label: plot-spread-within-and-between
+#| fig-alt: "Population income distributions by degree status, with arms showing within-group standard deviations and separation showing between-group variation."
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+```
+
+- You can think of there being two kinds of variation in a population. 
+1. Within-group variation. 
+   - That's illustrated above by the 'arms' on our subpopulation means in the plot above.
+   - The arm length is, in fact, the *subpopulation standard deviation*. 
+   - That's the square root of the *conditional variance function*  $\sigma^2(x) = \Var[Y \mid W=x]$. 
+2. Between-group variation. 
+   - That's about the difference *between* those subsample means.
+   - One reasonable summary is the *standard deviation* of the subpopulation means $\mu(x) = \E[Y \mid W=x]$.
+
+### The Law of Total Variance
+
+```{r}
+#| label: plot-total-variation
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-alt:
+#| - "Toy two-group population with large within-group spread and relatively small separation between group means."
+#| - "Toy two-group population with small within-group spread and relatively large separation between group means."
+
+Y = c(.75,1,1.25, 1,1.25,1.5)
+X = 0 + (1:6 > 3)
+Xdodge = X + rep(.02*c(-1,0,1),2)
+
+mu = Vectorize(function(x) mean(Y[X==x]))
+Y.wider = mu(X) + 3*(Y - mu(X))
+
+ggplot() + geom_point(aes(x=Xdodge, y=Y.wider, color=factor(X)), alpha=.7, size=4) + 
+  scale_y_continuous(breaks=seq(0,3,by=.5), limits=c(0,3)) + guides(color='none') 
+ggplot() + geom_point(aes(x=Xdodge, y=Y+X, color=factor(X)), alpha=.7, size=4) + 
+  scale_y_continuous(breaks=seq(0,3,by=.5), limits=c(0,3)) + guides(color='none') 
+```
+
+$$
+\Var[Y] = \E\cb*{\Var( Y \mid X ) } + \Var\cb*{\E( Y \mid X ) }  
+$$
+
+- The Law of Total Variance breaks Variance into within-group and between-group terms.
+- It's like the Law of Iterated Expectations, but for Variance.
+- It's a useful way to decompose the variance of a random variable.
+- Think about where most of the variance in $Y$ is coming from in the two populations shown above.
+
+We won't prove this, but it's in the slides if you're interested. See @sec-proving-total-variance.
+
+### Check Your Understanding 
+
+```{r}
+#| label: plot-check-your-understanding
+#| out-height: 250px
+#| fig-asp: .25
+#| fig-alt: "California income population by degree status, with each group mean and standard-deviation arms for interpreting total variance."
+
+mean.has.degree = round(summaries$mean[summaries$degree=='4-year degree'] / 10000) * 10
+mean.no.degree  = round(summaries$mean[summaries$degree=='no 4-year degree'] / 10000) * 10
+degree.proportion = round(mean(earnings$degree=='4-year degree'),1)
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun=mean, 
+          fun.min = function(x) mean(x) - sd(x), fun.max = function(x) mean(x) + sd(x)) 
+```
+
+- Try to put the three terms into words.
+    - $\Var[Y]$ is the ...
+    - $\E\cb*{ \Var(Y \mid W) }$ is the ...
+    - $\Var\cb*{\E( Y \mid W)}$ is the ...
+- Do this in two ways.
+    1. Using 'Random Variables Language', 
+        - e.g. 'the expected value of the conditional variance of Y given X'
+    2. Using 'Population Language'
+        - e.g. 'the variance of income (Y) within the random subpopulation with degree status X'
+
+
+### The Variance of the Sample Mean
+
+**Claim.** When we sample w/ replacement, the variance of the sample mean \
+is the population variance divided by the number of people in the sample.
+
+$$ 
+\Var[\hat\mu] = \frac{\sigma^2}{n}  
+$$
+
+- We proved this earlier today using. See @sec-factorization.
+ - We used, among other things, the property that expectations of products factor into products of expectations. 
+- Our proof for the subsample mean will be similar with more conditioning. 
+  - We'll use a conditional version of that we can derive using the 'law of iterated iterated expectations'.
+
+###  Conditional Expectations of Products Factor {#sec-conditional-factorization .small}
+
+When we sample with replacement, the conditional expectation of products factors into a product of conditional expectations.
+
+$$
+\E[Y_i \ Y_j \mid W_1 \ldots W_n] = \E[Y_i \mid W_i]\E[Y_j \mid W_j] = \mu(W_i)\mu(W_j) \qqtext{ when $(W_1, Y_1) \ldots (W_n, Y_n)$ are independent.}
+$$
+
+This is a subtle application of two of our 'laws'.
+$$
+\begin{aligned}
+&\E[Y \mid W] = \E[ \E\sb*{Y \mid W, X} \mid W] \quad \text{ for any random variables $W, X, Y$}  
+&& \text{Law of Iterated Iterated Expectations} \\
+&\E[ \inteal{Y} \mid \inteal{X}, \inpink{X'} ] = \inteal{\E[ Y \mid X ]} \quad \text{ when $X'$ is independent of $X,Y$ } 
+&& \text{Irrelevance of Independent Conditioning Variables}
+\end{aligned}
+$$
+
+
+::: {.callout-note collapse="true"}
+### The Proof 
+
+$$
+\color{gray}
+\begin{aligned}
+\E[ \inpink{Y_i} \ \inteal{Y_j} \mid W_1 \ldots W_n] 
+&\explain{=}{Here's use the law of iterated iterated expectations to 'break the second stage into a second and third'} 
+\E[\E[\inpink{Y_i} \ \inteal{Y_j} \mid \inpink{Y_i}, W_1 \ldots W_n] \mid W_1 \ldots W_n] \\
+&\explain{=}{Here we pull $Y_i$ out of the inner expectation (stage 3). That's justified by linearity of conditional expectations because it's a function of $\inpink{Y_i}, W_1 \ldots W_n$, the stuff we chose in stages 1 and 2.}
+\E[ \inpink{Y_i} \ \E[\inteal{Y_j} \mid \inpink{Y_i}, W_1 \ldots W_n] \mid W_1 \ldots W_n] \\
+&\explain{=}{Here we drop the irrelevant conditioning variables from the inner expectation. In the notation above, $Y=Y_j$, $X=W_j$, and $X'=(Y_i, W_1 \ldots W_n \text{ except } W_j)$, which describes other 'calls', is independent of $(X,Y)=(W_j, Y_j)$.} 
+\E[\inpink{Y_i} \ \E[\inteal{Y_j} \mid W_j] \mid W_1 \ldots W_n] \\
+&\explain{=}{Here we pull $\inteal{Y_j}$ out of the outer expectation (stage 2). That's justified by linearity of conditional expectations because it's a function of $W_1 \ldots W_n$, the stuff we chose in stage 1.}
+\inteal{\E[Y_j \mid W_j]} \ \E[\inpink{Y_i} \mid W_1 \ldots W_n] \\
+&\explain{=}{Here we drop the irrelevant conditioning variables from expectation involving $\inpink{Y_i}$. In the notation above, $Y=Y_i$, $X=W_i$, and $X'=(Y_j, W_1 \ldots W_n \text{ except } W_i)$, which describes other 'calls', is independent of $(X,Y)=(W_i, Y_i)$.}
+\inteal{\E[Y_j \mid W_j]} \ \inpink{\E[Y_i \mid W_i]} \\ 
+&\explain{=}{This is the same thing in different notation.}
+\inteal{\mu(W_j)} \ \inpink{\mu(W_i)}
+\end{aligned}
+$$
+:::
+
+::: {.callout-tip collapse="true"}
+### The Idea Behind the Proof
+
+This proof is a bit stranger conceptually than it is as a matter of pushing symbols around. You don't have to get it conceptually if you don't want to. Sometimes it's not worth it. But if you do want to, here's what's going on.
+
+We start out thinking about a 'two stage' sampling process. First, we flip our 'color coin' $n$ times to choose $W_1 \ldots W_n$. Those flips together are $X$ in our iterated expectations formula. Then we roll n times to choose $Y_1 \ldots Y_n$. For $Y_i$, we roll the 'red die' if $W_i=0$ and the 'green die' if $W_i=1$. You can think of the product $Y_i Y_j$ as $Y$ in our iterated expectations formula.
+
+Then we use the 'law of iterated iterated expectations' to break that second stage into two: first we roll once to choose $Y_i$ (that's $W$ in our iterated expectations formula), then we roll $n-1$ times to choose the rest of $Y_1 \ldots Y_n$. After that, we simplify using linearity and the irrelevance of independent conditioning variables.
+:::
+
+::: {.callout-tip collapse="true"}
+### It's an Odd Idea, But It Works
+  
+It sounds a little odd because our '3 stage sampling' scheme depends on the pair $Y_i, Y_j$ we're thinking about. When we think about the pairs $Y_1 Y_3$ and $Y_2 Y_3$, we're thinking about two different ways of drawing $Y_3$. And we can't really do both. It's just one thing. We can't draw it twice.
+
+That's ok because we don't really have to sample this way. It's just a way of thinking about doing a calculation. This is a bit like how we can think of any pair $Y_i,Y_j$ as distributed like $Y_1,Y_2$ when [calculating about variance after sampling without replacement](../homework/homework-comparing-estimators.html#exr-covariance-with-replacement) in this week's homework. Ultimately, it's about linearity. When we're calculating the expectation of a sum, we only care about the marginal distribution of each term. When that term involves only two observations, like we see in variance calculations, we can think about the random mechanism that gives us each pair separately.
+:::
+
+
+### The Variance of the Subsample Mean {#sec-variance-of-the-subsample-mean}
+
+**Claim.** When we sample with replacement, the variance of a subsample mean is the \
+**expected value** of the subpopulation variance divided by the number of people in the subsample.
+Write $A_1=\{N_1>0\}$ for the event that the subsample mean exists. Then
+$$ 
+\Var[\hat\mu(1)\mid A_1] = \E\sb*{ \frac{\sigma^2(1)}{N_1} \mathrel{\Big|} A_1} \quad \text{ for } \quad N_1 = \sum_{i=1}^n 1_{=1}(W_i).
+$$
+
+- This is like what we saw in the unconditional case, but with a twist.
+- The number of people in the subsample is random, so instead of $1/n$, we have $\E[ \frac{1}{N_1} ]$.
+
+### Step 1. Total Variance
+
+```{r}
+#| label: show-tiny-population-total-variance
+#| fig-asp: .25
+#| fig-alt: "Six-point toy population in two groups used to condition the variance calculation on group membership."
+tinypop.plot + tinylims
+```
+
+- We'll start by using the Law of Total Variance, conditioning on $W_1 \ldots W_n$.
+- And then we'll have to calculate two terms.
+  1. The expected value of the conditional variance
+  2. The variance of the conditional expectation 
+$$
+\begin{aligned}
+\Var\sb*{ \hat \mu(1) \mid A_1} &= \underset{\faded \text{within-groups term}}{\E \sb*{ \Var\cb*{ \hat \mu(1) \mid W_1 \ldots W_n } \mid A_1} } + \underset{\faded \text{between-groups term}}{\Var\sb*{ \E\cb*{\hat \mu(1) \mid W_1 \ldots W_n} \mid A_1} } \\
+\end{aligned}
+$$
+
+- This is one place it helps to know our estimator is *conditionally unbiased*. 
+  - That conditional expectation is the constant $\mu(1)$.^[We showed that on @sec-linearity.]
+  - So the 'between-groups' variance term is zero. 
+
+### Step 2. Centering and Squaring  
+
+$$
+\begin{aligned}
+\Var\sb*{ \hat \mu(1) \mid W_1 \ldots W_n }
+&\explain{=}{Definitionally.} 
+\E\sb*{ \cb*{\hat \mu(1) - \mu(1) }^2 \mid W_1 \ldots W_n } \\
+&\explain{=}{Also definitionally.}
+\E\sb*{ \cb*{\frac{\sum_{i=1}^n 1_{=1}(W_i)Y_{i}}{\sum_{i=1}^n 1_{=1}(W_i)} - \mu(1)}^2 \mid W_1 \ldots W_n } \\
+&\explain{=}{Multiplying $\mu(1)$ by $N_1/N_1$ to get a common denominator}
+\E \sb*{ \cb*{ \frac{\sum_{i=1}^n 1_{=1}(W_i){\inblue{\cb*{Y_{i} - \mu(1)}}}}{\sum_{i=1}^n 1_{=1}(W_i)}}^2  \mid W_1 \ldots W_n } \\
+&\explain{=}{The indicator trick tells us the factors we've highlighted in \inblue{blue} are the same.}
+\E \sb*{ \cb*{ \frac{\sum_{i=1}^n 1_{=1}(W_i)\inblue{Z_i}}{\sum_{i=1}^n 1_{=1}(W_i)}}^2  \mid W_1 \ldots W_n } \qfor \inblue{Z_i = Y_{i} - \mu(W_i)} \\
+&\explain{=}{Expanding the square.}
+\E \sb*{ \frac{\inpink{\sum_{i=1}^n}\inteal{\sum_{j=1}^n} \inpink{1_{=1}(W_i)Z_i} \ \inteal{1_{=1}(W_j)Z_j}}{\cb*{\sum_{i=1}^n 1_{=1}(W_i) }^2} \mid W_1 \ldots W_n } \\
+&\explain{=}{Distributing the expectation. We can pull out the denominator and the indicator in each term because they're functions of $W_1 \ldots W_n$.} 
+\frac{\inpink{\sum_{i=1}^n}\inteal{\sum_{j=1}^n} \inpink{1_{=1}(W_i)} \inteal{1_{=1}(W_j)}\E\sb*{\inpink{Z_i} \inteal{Z_j} \mid W_1 \ldots W_n}  }{\cb*{\sum_{i=1}^n 1_{=1}(W_i) }^2}
+\end{aligned} 
+$$
+
+This random variable $Z_i$ is like the one we have in the unconditional case, but conditionally. 
+
+$$
+\begin{aligned}
+\E[ Z_i \mid W_i ] &= \E[ Y_i - \mu(W_i) \mid W_i ] = \E[ Y_i \mid W_i ] - \mu(W_i) = \mu(W_i) - \mu(W_i) && \explain{\ }{It has conditional expectation zero. } \\
+\E[ Z_i^2 \mid W_i] &= \E[ \{ Y_i - \E[Y_i \mid W_i] \}^2 \mid W_i] = \Var[Y_i \mid W_i]   && \explain{\ }{The conditional expectation of its square is the conditional variance of $Y_i$ }
+\end{aligned}
+$$
+
+
+### Step 3. Taking Expectations Term-by-Term
+
+#### Squared Terms  ($i=j$)
+$$
+\begin{aligned}
+\E\sb*{\inpink{Z_i}\inteal{Z_j} \mid W_1 \ldots W_n} 
+&\explain{=}{Because $i=j$}
+\E\sb*{ Z_i^2  \mid W_1 \ldots W_n}  \\
+&\explain{=}{Because $X' = (W_1 \ldots W_n \text{except} W_i)$ is independent of $W_i$ and $Y_i$.} 
+\E\sb*{ Z_i^2  \mid W_i}  \\
+&\explain{=}{Definitionally}\Var[Y_i \mid W_i] = \sigma^2(W_i)
+\end{aligned}
+$$
+
+#### Cross-Terms  ($i\neq j$)
+$$
+\begin{aligned}
+\E\sb*{\inpink{Z_i} \inteal{Z_j} \mid W_1 \ldots W_n} 
+&\explain{=}{This is the factorization identity we proved a few slides back.}\inpink{\E\sb*{Z_i \mid W_i}} \inteal{\E\sb*{Z_j \mid W_j}} \\ 
+&\explain{=}{Definitionally} 0 \times 0 
+\end{aligned}
+$$  
+
+
+### Step 4. Putting the Pieces Together
+
+$$
+\begin{aligned}
+\Var\sb*{ \hat \mu(1) \mid A_1}
+&\explain{=}{Step 1} 
+\underset{\faded \text{within-groups term}}{\E \sb*{ \Var\cb*{ \hat \mu(1) \mid W_1 \ldots W_n } \mid A_1} } + \underset{\faded \text{between-groups term}}{ 0 } \\
+&\explain{=}{Step 2} 
+\E\sb*{\frac{\inpink{\sum_{i=1}^n}\inteal{\sum_{j=1}^n} \inpink{1_{=1}(W_i)} \inteal{1_{=1}(W_j)}\E\sb*{\inpink{Z_i} \inteal{Z_j} \mid W_1 \ldots W_n}  }{\cb*{\sum_{i=1}^n 1_{=1}(W_i) }^2} \mathrel{\Big|} A_1} + 0 \\
+&\explain{=}{Step 3} 
+\E\sb*{\frac{\inpink{\sum_{i=1}^n 1_{=1}(W_i)} \ \sigma^2(W_i) }{\cb*{\sum_{i=1}^n 1_{=1}(W_i) }^2} \mathrel{\Big|} A_1} \\
+&\explain{=}{The indicator trick again.} 
+\E\sb*{\frac{\inpink{\sum_{i=1}^n 1_{=1}(W_i)} \ \sigma^2(1) }{\cb*{\sum_{i=1}^n 1_{=1}(W_i) }^2} \mathrel{\Big|} A_1} \\
+&\explain{=}{Cancelling a common factor of $N_1$ in the numerator and denominator.} 
+\E\sb*{\frac{\sigma^2(1)}{\sum_{i=1}^n 1_{=1}(W_i) } \mathrel{\Big|} A_1}
+\end{aligned}
+$$
+
+
+### The Variance of **Differences in Means** {#sec-variance-of-differences-in-means}
+
+**Claim.** The variance of the difference in subsample means is the **sum** of the variances of the subsample means. 
+Write $A=\{N_0>0,N_1>0\}$ for the event that both subsample means exist. Then
+$$ 
+\Var[\hat\mu(1) - \hat\mu(0)\mid A] = \E\sb*{ \frac{\sigma^2(1)}{N_1} +
+\frac{\sigma^2(0)}{N_0}\mathrel{\Big|} A} \quad \text{ for } \quad N_x = \sum_{i=1}^n 1_{=x}(W_i).
+$$
+
+This'll be a Homework Exercise.
+
+### Estimating the Variance {#sec-estimating-variance}
+
+```{r}
+#| label: plot-variance-estimation
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-cap: 
+#|  - The population. 
+#|  - The sample. 
+#| fig-alt:
+#| - "Population income distributions by degree status with group means and standard deviations."
+#| - "Sample income distributions by degree status with estimated group means and standard deviations."
+earnings.jitter.pop + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+earnings.jitter + 
+  stat_summary(aes(x=degree, y=income), geom="pointrange", fun.data=mean_sd) 
+```
+
+$$ 
+\Var[\hat\mu(1) - \hat\mu(0)\mid A] = \E\sb*{ \frac{\sigma^2(1)}{N_1} +
+\frac{\sigma^2(0)}{N_0}\mathrel{\Big|} A} \quad \text{ for } \quad N_x = \sum_{i=1}^n 1_{=x}(W_i).
+$$
+
+::: {.panel-tabset}
+### What We Don't Know
+- This formula includes a few things we don't know. 
+- We don't know the subpopulation standard deviations [$\sigma(0)$]{.groupa} or [$\sigma(1)$]{.groupb}. 
+  - Those are drawn in as 'arms' on the subpopulation means in the plot on the left.
+  - That's a fake-data plot. It's an illustration of data we don't really get to see.
+- We also don't know the expected values of $1/N_1$ or $1/N_0$.
+  - We'd need to know some things about the population to calculate those, too.
+  - In particular, we'd need to know the frequency that $x_j=1$ in our population.
+
+### Getting By With What We Have
+
+- What we can do is use our sample to estimate all of those tings.
+- We can use the *subsample standard deviations* [$\hat\sigma(0)$]{.groupa} or [$\hat\sigma(1)$]{.groupb}.
+  - Those are drawn in as 'arms' on the subsample means in the plot on the right.
+  - That's a plot of the data we have. Our sample. And they're about the same length.
+- We can use the $1/N_1$ and $1/N_0$ themselves to estimate their expected values.
+- And we can plug those into our variance formula to get an estimate of this variance.
+
+:::
+
+$$
+\widehat{\Var}[\hat\mu(1) - \hat\mu(0)] = \frac{\hat{\sigma}^2(1)}{N_1} + \frac{\hat{\sigma}^2(0)}{N_0}
+\qfor \hat \sigma^2(x) = \frac{1}{N_x} \sum_{i:W_i=x} (Y_i - \hat \mu(x))^2
+$$
+
+# Case Study  
+The NSW Experiment
+
+## Code  
+
+::: {.panel-tabset}
+### Load the Data
+
+```{r}
+#| label: load-nsw-data
+#| echo: true
+nsw.data = read.csv('../data/nsw.csv')
+nsw = nsw.data |> 
+  filter(dataset=='nsw') 
+
+X = as.numeric(nsw$treated)
+Y = as.numeric(nsw$income78)
+n = length(Y)
+```
+
+### Bootstrap the Difference in Means
+
+```{r}
+#| label: bootstrap-difference
+#| echo: true
+
+library(purrr)
+difference = mean(Y[X==1]) - mean(Y[X==0])
+difference.bootstrap.samples = map_vec(1:10000, function(.) {
+    I = sample(1:n, n, replace=TRUE)
+    Xstar = X[I]
+    Ystar = Y[I]
+    mean(Ystar[Xstar==1]) - mean(Ystar[Xstar==0])
+})
+```
+
+### Calculate Width
+
+```{r}
+#| label: bootstrap-width
+#| echo: true
+
+w95.boot = width(difference.bootstrap.samples, alpha=.05)
+nsw.interval = difference + c(-1,1)*w95.boot/2
+```
+
+### Visualization
+
+```{r}
+#| label: build-nsw-interval-plot
+nsw.interval.plot = ggplot() +
+  geom_histogram(aes(x=difference.bootstrap.samples), alpha=.3, bins=100) +
+  geom_vline(xintercept=difference, color='blue', alpha=.4) +
+  geom_pointrange(aes(x=difference, xmin=nsw.interval[1], xmax=nsw.interval[2], y=150), color='blue') 
+```
+
+:::
+
+
+## The National Supported Work Demonstration {#sec-national-supported-work-demonstration}
+
+:::: columns 
+::: column
+```{r}
+#| label: show-nsw-interval
+#| fig-cap: "The Bootstrap Sampling Distribution of the Difference in Means"
+#| fig-width: 7
+#| fig-alt: "Bootstrap distribution of the National Supported Work difference in mean income, with the observed difference and its 95-percent interval marked."
+nsw.interval.plot
+``` 
+
+::: 
+::: column
+
+$x$ | $N_x$ |  $\hat \mu(x)$ | $\hat \sigma(x)$
+--- | --- | --- | ---
+0  | `r sum(X==0)` | `r round(mean(Y[X==0]), -2)` | `r round(sd(Y[X==0]), -2)`
+1  | `r sum(X==1)` | `r round(mean(Y[X==1]), -2)` | `r round(sd(Y[X==1]), -2)`
+
+:::
+::::
+
+
+
+::: {.panel-tabset}
+### The Program
+
+- The National Supported Work Demonstration was an experimental program in the 1970s that provided job training and other services.
+- Here 'experimental' doesn't just mean untested. It was run as a big experiment.
+- From a population of eligible people, they drew a sample of size `r n` to participate.
+- To help estimate the impact of the program, participants were randomized into two groups.
+  - The 'treated' group received the training and services.
+  - The 'control' group did not. 
+
+### The Result 
+
+- A year or two after the program ended, they compared the incomes of the two groups.
+  - And the difference within the sample was about \$`r round(difference, -2)` per year. In 1978 dollars.
+  - That's pretty good. A dollar in 1978 was worth about what \$4.80 is today.
+  - So adjusting for inflation, that's an in-sample difference of about \$`r round(difference*4.8, -2)`. Huge impact.
+- But there's problem. It's not clear that this describes a real population-level difference.
+- The sample was relatively small. And, as a result, their interval estimate was pretty wide.
+
+$$
+\begin{aligned}
+\mu(1)-\mu(0) 
+&\in `r round(difference,-2)` \pm `r round(w95.boot/2,-2)` \approx [`r round(nsw.interval[1], -2)`, \ `r round(nsw.interval[2], -2)`] 
+&&\qqtext{is a 95\% confidence interval in 1978 dollars} \\
+&\in `r round(difference*4.8, -2)` \pm `r round(w95.boot*4.8/2, -2)` \approx [`r round(nsw.interval[1]*4.8, -2)`, \ `r sprintf("%d", round(nsw.interval[2]*4.8, -2))`] 
+&&\qqtext{adjusted for inflation}
+\end{aligned}
+$$
+
+### Interpretation: Inconclusive
+
+- This was an expensive program to run. 
+  - If the population difference were at the low end of the interval, at `r round(nsw.interval[1], -2)` 1978 dollars, 
+  it wouldn't be cost-effective.
+  - If the population difference were at the high end of the interval, at `r round(nsw.interval[2], -2)` 1978 dollars, it would be.
+- To figure out if it's worth running, we need a more conclusive result.
+
+:::
+
+
+## Activities
+
+
+:::: columns 
+::: column
+```{r}
+#| label: show-nsw-interval-activities
+#| fig-cap: "The Bootstrap Sampling Distribution of the Difference in Means"
+#| fig-width: 7
+#| fig-alt: "Bootstrap distribution of the National Supported Work difference in mean income, repeated beside the activity questions with its interval marked."
+nsw.interval.plot
+``` 
+
+::: 
+::: column
+
+$x$ | $N_x$ |  $\hat \mu(x)$ | $\hat \sigma(x)$
+--- | --- | --- | ---
+0  | `r sum(X==0)` | `r round(mean(Y[X==0]), -2)` | `r round(sd(Y[X==0]), -2)`
+1  | `r sum(X==1)` | `r round(mean(Y[X==1]), -2)` | `r round(sd(Y[X==1]), -2)`
+
+:::
+::::
+
+::: {.callout-tip collapse="true"}
+### Warm-Up 
+
+Use the information in this table to calculate a 95% interval based on normal approximation. Compare it to the interval we got using the bootstrap sampling distribution for calibration.
+:::
+
+::: {.callout-tip collapse="true"}
+### Resizing 
+  
+Suppose we want to know the population difference to within \$500 (1978 dollars). How can we resize our experiment to make that happen?
+  
+1. We could restart the experiment, running it exactly as before, to get a larger sample like the one we have. In particular, one with the same proportion of participants assigned to treated and control units. What sample size would we need to be able to get a 95% confidence interval this accurate?
+
+2. It'd be cheaper to increase the size of our control group without actually treating anyone. Suppose you can analyze the resulting 'diluted' version of our experiment exactly like the original. Same variance formula, same $N_1$, but larger $N_0$. How big do we need to make $N_0$ to get the desired level of precision? Is it even possible without increasing $N_1$? How precise can we get keeping $N_1$ as-is?
+:::
+
+::: {.callout-tip collapse="true"}
+### About Dilution
+  
+You can use a 'two stage sampling' argument to think of the 'diluted' version of our experiment as being like the one we ran orginally, but with a different coin to assign treatment. In essence, getting assigned treatment in the diluted version requires you to flip heads twice: once to be in the first part of this larger sample (our original sample), and once to be in the part of that sample assigned to treatment. We can boil those two flips down to one flip of an appropriately weighted coin.
+:::
+
+::: {.callout-solution collapse="true"}
+### Solutions and Discussion
+
+**Warm-Up.**
+```{r}
+#| label: estimate-variance
+estimate.var =  round(sd(Y[X==1])^2/sum(X==1) + sd(Y[X==0])^2/sum(X==0), -1)
+```
+
+Our interval based on normal approximation should be $\hat\theta \pm 1.96 \times \hat\sigma_{\hat\theta}$
+where $\hat\theta=\hat\mu(1) - \hat\mu(0)$ is our point estimate and $\hat\sigma_{\hat\theta}$ is an estimate of its standard deviation.
+That's roughly $\hat\theta \pm 2 \times `r round(sqrt(estimate.var), -1)`$. Pretty similar to our bootstrap interval. Using the formula from @sec-estimating-variance, we calculate it like this.
+
+$$
+\begin{aligned}
+\widehat{\Var}[\hat\mu(1) - \hat\mu(0)] 
+&= \frac{\hat\sigma^2(1)}{N_1} + \frac{\hat\sigma^2(0)}{N_0} \\
+&\approx \frac{`r approx(sd(Y[X==1])^2)`}{`r sum(X==1)`} + \frac{`r approx(sd(Y[X==0])^2)`}{`r sum(X==0)`} \\
+&\approx `r approx(estimate.var)` \approx \hat\sigma_{\hat\theta}^2 \qfor \hat\sigma_{\hat\theta} \approx `r round(sqrt(estimate.var), -1)`
+\end{aligned}
+$$
+
+**Resizing Part 1.**
+
+If we're resizing our experiment but running as before, we can think of the new subsample sizes as being roughly proportional to the old ones. That is, if our new sample size is $\alpha n$, then our subsample sizes will be $\alpha N_1$ and $\alpha N_0$. Plugging these new sample sizes in our variance formula, we get a simple formula for our our estimator's standard deviation in this new experiment relative to the old one. It's just $\sigma_{\hat\theta}/\sqrt{\alpha}$  where $\sigma_{\hat\theta}$ is the standard deviation of our estimator in our original experiment.
+
+$$
+\begin{aligned}
+\Var[\hat\mu(1) - \hat\mu(0)] 
+&= \frac{\sigma^2(1)}{\alpha N_1} + \frac{\sigma^2(0)}{\alpha N_0}  
+= \frac{1}{\alpha} \sigma_{\hat\theta}^2 = \p*{\frac{\sigma_{\hat\theta}}{\sqrt{\alpha}}}^2
+\end{aligned}
+$$
+
+That is, it's $1/\sqrt{\alpha}$ times the quantity we just estimated to be  $\hat\sigma_{\hat\theta} \approx `r round(sqrt(estimate.var), -1)`$, so it's sensible
+to estimate it by $\hat\sigma_{\hat\theta}/\sqrt{\alpha}$. We want our new interval $\hat\theta \pm 1.96\hat\sigma_{\hat\theta}/\sqrt{\alpha}$ to be $\hat\theta \pm 500$. The old one, $\hat\theta \pm 1.96\hat\sigma_{\hat\theta} \approx \hat\theta \pm `r round(1.96*sqrt(estimate.var), -1)`$, was about 3 times wider than this, so we want $\sqrt{\alpha} \approx 3$ and therefore $\alpha \approx 9$.  Since we've already got a sample of size $n$, we can run a 'second wave' of size $(\alpha-1)n \approx 8n$ to get a big enough sample.
+
+That's a back-of-the-envelope calculation. If we want to be a bit more precise, we can actually solve for $\alpha$ that equates these two interval widths.
+$$
+\begin{aligned}
+\frac{1.96\hat\sigma_{\hat\theta}}{\sqrt{\alpha}} = 500 \qfor 
+\alpha = \p*{\frac{1.96\hat\sigma_{\hat\theta}}{500}}^2 \approx `r round((1.96*sqrt(estimate.var)/500)^2, 2)`
+\end{aligned}
+$$
+
+That's a bit better than 9. It pays to be precise sometimes. 
+
+**Resizing Part 2.**
+If it's free to include more participants in our control group, we may as we'll make $N_0$ arbitrarily large. If we did, we'd have this variance.
+
+```{r}
+#| label: standard-errors-by-group
+se.1 = sd(Y[X==1])/sqrt(sum(X==1))
+```
+
+$$
+\begin{aligned}
+\widehat{\Var}[\hat\mu(1) - \hat\mu(0)] 
+&= \frac{\hat\sigma^2(1)}{N_1} + \frac{\hat\sigma^2(0)}{\infty} 
+= \p*{\frac{\hat\sigma(1)}{\sqrt{N_1}}}^2 \approx `r round(se.1, -1)`^2
+\end{aligned}
+$$
+
+The resulting interval would be $\pm 1.96 \times `r round(se.1, -1)` \approx \pm `r round(1.96*se.1, -1)`$. Roughly twice as wide as we want. So we're not getting the precision we want for free. Thinking back to Part 1, that means we'd want $N_1$ to be roughly $\alpha = 4$ times larger. And that'd mean treating roughly $(\alpha-1) = 3$ more people. That's a lot cheaper than treating $8$ (or really $`r round((1.96*sqrt(estimate.var)/500)^2, 2)-1`$) times as many people, as we would if we ran our second wave as a scaled-up version of the first. 
+:::
+   
+# Appendix: Additional Figures
+
+## The Social Pressure Letter
+::: {#fig-social-pressure-letter}
+<img src="../figs/gerber-green-larimer-neighbors.png" alt="Social-pressure treatment letter listing the recipient's and neighbors' recent voting records and stating that an updated record will be mailed after the election.">
+:::
+
+
+# Appendix: Proving the Law of Total Variance {#sec-proving-total-variance}
+
+## Starting Point: Interpreting Variance as Excess {.smaller}
+
+$$
+\small{
+\begin{aligned}
+\Var(Y) &= \E \sb*{ \cb*{ Y - \E(Y) }^2 } && \text{ the \emph{spread} idea: the mean square of a \emph{centered version} of $Y$ } \\
+&= \E\p*{Y^2} - \cb*{\E\p*{Y}}^2         && \text{ the \emph{excess} idea: the average amount $Y^2$ \emph{exceeds} the square of its mean}.
+\end{aligned}
+}
+$$
+
+```{r}
+#| label: show-tiny-squares-starting-point
+#| out-height: 250px
+#| fig-asp: .25
+#| fig-alt: "Toy two-group population showing each observed value as a dot, its square as an open square, and a segment connecting the two."
+
+tinypop.square.plot + tinylims 
+```
+
+Let's think, in terms of the plot, about why there is excess in the square.
+
+- Suppose $Y$ takes on three values --- the dots ---with equal probability.
+    - Its expectation is the average height of the black dots.
+    - And its expectation, squared, is the square of this.
+- Its square $Y^2$ takes on the the square of those values---the squares --- with equal probability.
+    - Its expectation is the average height of the squares.
+- Why is the second one bigger?
+  - Because squaring *increases big draws of Y* more than it *decreases small ones*.
+  - Visually, the line from $Y$ to $Y^2$ is longer when $Y$ is bigger than when it's smaller.
+- We'll mostly think about variance in terms of spread, but the 'excess' formula  comes up in calculations.
+
+## Equivalence Proof
+
+**Claim.** The spread and excess formulas for variance are equivalent.
+$$  
+\E \sb*{ \cb*{ Y - \E(Y) }^2 } =\E[ Y^2] - \cb*{\E(Y)}^2 
+$$
+
+$$
+\small{
+\begin{aligned}
+\E \sb*{ \cb*{ Y - \E(Y) }^2 } 
+&= \E \sb*{ Y^2 - 2 Y \E(Y) + \cb*{\E(Y)}^2 } && \text{ FOIL } \\
+&= \E[ Y^2] - \E\sb*{2 Y \E(Y)} + \E\sb*{\cb*{\E(Y)}^2} && \text{Distributing expectations (linearity)} \\
+&= \E[ Y^2] - 2\E(Y)\E\sb*{Y} + \cb*{\E(Y)}^2\E[1] && \text{Pulling constants out of expectations (linearity)} \\
+&= \E[ Y^2] - 2\cb*{\E(Y)}^2 + \cb*{\E(Y)}^2] && \text{Recognizing a product of something with itself as a square} \\
+&= \E[ Y^2] - \cancel{2}\cb*{\E(Y)}^2 + \cancel{\cb*{\E(Y)}^2}] && \text{Subtracting} 
+\end{aligned}
+}
+$$
+
+## Conditional Variance as Excess {.smaller}
+
+$$
+\small{
+\begin{aligned}
+\Var(Y \mid W) &= \E \sb*{ \cb*{ Y - \E(Y\mid W)}^2 \mid X } && \text{ the \emph{spread} idea: the mean square of a conditionally centered version of $Y$ } \\
+&= \E\p*{Y^2 \mid W} - \cb*{\E\p*{Y \mid W}}^2              && \text{ the \emph{excess} idea: the average amount $Y^2$ exceeds the square of its cond. mean}
+\end{aligned}
+}
+$$
+
+```{r}
+#| label: show-tiny-squares-conditional-variance
+#| out-height: 500px
+#| fig-asp: .5
+#| fig-alt: "The same toy population comparing each value with its square within each group, illustrating conditional variance as excess."
+tinypop.square.plot + tinylims
+```
+
+- We can think of the Conditional Variance as excess, too.
+- It's the same as the unconditional case, but *within subpopulations*.
+
+
+## Proof
+
+**Claim.**
+$$
+\Var[Y] = \textcolor{blue}{\E\sb*{\Var(Y \mid W)}} + \textcolor{green}{\Var\sb*{\E(Y \mid W)}} 
+$$
+
+1. Rewrite the variances, conditional and unconditional, in *excess* form.
+
+::: fragment
+$$
+\Var[Y]  = \textcolor{blue}{\E\sb*{ \E(Y^2 \mid W) - \cb*{\E\p*{Y \mid W}}^2}} 
+                       + \textcolor{green}{\E\cb*{ \E(Y \mid W)^2}  - \p*{\E\cb*{\E\p*{Y \mid W}}}^2} 
+$$
+
+:::
+
+2. Distribute the outer expectations in the first term.
+
+::: fragment
+$$
+\Var[Y] = \textcolor{blue}{\E\sb*{ \E(Y^2 \mid W)} - \E\sb*{\cb*{\E\p*{Y \mid W}}^2}} 
+                       + \textcolor{green}{\E \sb*{ \cb*{\E(Y \mid W)^2} } - \p*{\E\cb*{\E\p*{Y \mid W}}}^2}
+$$
+
+:::
+
+3. Cancel matching terms
+
+::: fragment
+$$
+\Var[Y]  = \textcolor{blue}{\E\sb*{ \E(Y^2 \mid W)} \cancel{- \E\sb*{\cb*{\E\p*{Y \mid W}}^2}}}  
+                       + \textcolor{green}{\cancel{\E \sb*{ \cb*{\E(Y \mid W)^2} }} -  \p*{\E\cb*{\E\p*{Y \mid W}}}^2}
+$$
+
+:::
+
+4. Use the law of iterated expectations to simplify the remaining terms.
+
+::: fragment
+$$
+\Var[Y]  = \textcolor{blue}{E[Y^2]  \cancel{- \E\sb*{\cb*{\E\p*{Y \mid W}}^2}}}
+                       + \textcolor{green}{\cancel{\E \sb*{ \cb*{\E(Y \mid W)^2} }} - (\E\cb*{Y})^2}
+$$
+
+:::

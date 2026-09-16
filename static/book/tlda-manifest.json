@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "kind": "tlda",
+  "pages": [
+    {
+      "file": "index.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "index.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-social-pressure-experiment.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-social-pressure-experiment.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-setup.html",
+      "title": "Homework: Setting Up",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-setup.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-descriptive-solutions.html",
+      "title": "Homework: Basic Descriptive Statistics",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-descriptive-solutions.qmd"
+      }
+    },
+    {
+      "file": "part1-one-sample.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "part1-one-sample.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-sampling.html",
+      "title": "Sampling",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-sampling.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-point-and-interval-estimates.html",
+      "title": "Point and Interval Estimates",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-point-and-interval-estimates.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-calibration-solutions.html",
+      "title": "Homework: The Idea of Calibration",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-calibration-solutions.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-calibration-binary.html",
+      "title": "Calibrating Interval Estimates with Binary Observations",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-calibration-binary.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-sampling-with-replacement.html",
+      "title": "Sampling with Replacement and the Binomial Distribution",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-sampling-with-replacement.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-calibration-binary.html",
+      "title": "Homework: Calibration with Binary Outcomes",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-calibration-binary.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-sampling-without-replacement.html",
+      "title": "Sampling without Replacement and the Hypergeometric Distribution",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-sampling-without-replacement.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-calibration-with-the-binomial.html",
+      "title": "Calibration using the Binomial Distribution",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-calibration-with-the-binomial.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-random-variables-and-moments.html",
+      "title": "Homework — Random Variables, Moments, and the Standard Deviation",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-random-variables-and-moments.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-bootstrap.html",
+      "title": "Calibrating Interval Estimates using the Bootstrap",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-bootstrap.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-bootstrap.html",
+      "title": "Homework: Bootstrap",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-bootstrap.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-random-variables-and-moments.html",
+      "title": "Random Variables and Moments",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-random-variables-and-moments.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-sample-size-coverage.html",
+      "title": "Homework: Sample Size Calculation and Coverage",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-sample-size-coverage.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-standard-deviation.html",
+      "title": "The Standard Deviation is Standard",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-standard-deviation.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-normal-approximation.html",
+      "title": "Normal Approximation",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-normal-approximation.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-markov-chebyshev.html",
+      "title": "Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-markov-chebyshev.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-probability-review.html",
+      "title": "Probability Review",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-probability-review.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-variance-and-sample-size.html",
+      "title": "Variance, Standard Deviation, and Sample Size",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-variance-and-sample-size.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-comparing-estimators.html",
+      "title": "Homework: Comparing Estimators",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-comparing-estimators.qmd"
+      }
+    },
+    {
+      "file": "chapters/chapter-bias-and-coverage.html",
+      "title": "Bias and Coverage",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "chapters/chapter-bias-and-coverage.qmd"
+      }
+    },
+    {
+      "file": "exams/practice-midterm-1.html",
+      "title": "Practice Midterm 1",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "exams/practice-midterm-1.qmd"
+      }
+    },
+    {
+      "file": "references.html",
+      "title": "The Social Pressure Experiment",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "references.qmd"
+      }
+    }
+  ]
+}

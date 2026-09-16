@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>24&nbsp; Practice Midterm 1 – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../references.html" rel="next">
+<link href="../chapters/chapter-bias-and-coverage.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../exams/practice-midterm-1.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#problem-1" id="toc-problem-1" class="nav-link active" data-scroll-target="#problem-1">Problem 1</a>
+  <ul class="collapse">
+  <li><a href="#problem-2" id="toc-problem-2" class="nav-link" data-scroll-target="#problem-2">Problem 2</a></li>
+  </ul></li>
+  <li><a href="#problem-3-interval-calibration" id="toc-problem-3-interval-calibration" class="nav-link" data-scroll-target="#problem-3-interval-calibration">Problem 3: Interval Calibration</a></li>
+  <li><a href="#problem-4" id="toc-problem-4" class="nav-link" data-scroll-target="#problem-4">Problem 4</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../exams/practice-midterm-1.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></h1>
+<p class="subtitle lead">QTM 285-1</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="hidden">
+<p><span class="math display">\[
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{V}
+\DeclareMathOperator{\hVar}{\widehat{V}}
+\DeclareMathOperator{\bias}{bias}
+\DeclareMathOperator*{argmin}{argmin}
+\newcommand{\model}{\mathcal{M}}
+\]</span></p>
+</div>
+<section id="problem-1" class="level1">
+<h1>Problem 1</h1>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-error-distribution-1.svg" class="img-fluid figure-img" alt="Nine sampling distributions arranged by sample size (10, 40, and 160) and estimator (a, b, and c). Estimator a stays centered at one and narrows; estimator b approaches one from below and narrows; estimator c is a point mass at zero."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Suppose we’ve drawn a sample <span class="math inline">\(Y_1 \ldots Y_n\)</span> with replacement from a population <span class="math inline">\(y_1 \ldots y_m\)</span> with mean <span class="math inline">\(\theta=\frac{1}{m}\sum_{j=1}^m y_j\)</span>. The plot above shows the sampling distributions of these three estimators of <span class="math inline">\(\theta\)</span>. <span class="math display">\[
+\begin{aligned}
+\hat \theta_1 &amp;= 0 \\
+\hat \theta_2 &amp;= \frac{1}{n}\sum_{i=1}^n Y_i \\
+\hat \theta_3 &amp;= \frac{1}{n+10}\sum_{i=1}^n Y_i  
+\end{aligned}
+\]</span></p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part A
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Match each estimator to the plot of its sampling distribution, e.g.&nbsp;<span class="math inline">\(\hat\theta_1: a\)</span>, <span class="math inline">\(\hat\theta_2: b\)</span>, etc. Of the estimators <span class="math inline">\(\hat\theta_1\)</span>, <span class="math inline">\(\hat\theta_2\)</span>, and <span class="math inline">\(\hat\theta_3\)</span>, which do you know to be consistent? Which <em>could possibly</em> be consistent?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Correction
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The x-axis ticks were mislabeled in the version of this document posted earlier. They were off by 1, so ‘estimator a’ was centered at 0, etc. This has been fixed. I apologize for any confusion this caused.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p><span class="math inline">\(\hat\theta_1\)</span> is <span class="math inline">\(c\)</span>, <span class="math inline">\(\hat\theta_2\)</span> is <span class="math inline">\(a\)</span>, and <span class="math inline">\(\hat\theta_3\)</span> is <span class="math inline">\(b\)</span>. I know <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> are consistent, whereas <span class="math inline">\(\hat\theta_1\)</span> <em>could</em> be consistent but I don’t know that.</p>
+<p><em>Explanation</em>. It’s easy to identify the sampling distribution of <span class="math inline">\(\hat\theta_1\)</span>, as it has no spread at all: it’s always <span class="math inline">\(0\)</span>. And we can differentiate between the sampling distributions of <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> by observing that <span class="math inline">\(\hat\theta_2\)</span> (the sample mean) is unbiased, so it must be the one whose center doesn’t change as <span class="math inline">\(n\)</span> does.</p>
+<p>I know <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> are consistent, as their standard deviations both go to zero as <span class="math inline">\(n\)</span> goes to infinity and the bias of <span class="math inline">\(\theta_2\)</span> is zero and that of <span class="math inline">\(\theta_3\)</span> is <span class="math inline">\(10\theta/(n+10)\)</span> which goes to zero as <span class="math inline">\(n\)</span> goes to infinity. I don’t know that <span class="math inline">\(\hat\theta_1\)</span> is, since its bias is <span class="math inline">\(-\theta\)</span> no matter what <span class="math inline">\(n\)</span> is.</p>
+<p>But — if you disconnect this part from the sampling distributions I’ve drawn — <span class="math inline">\(\hat\theta_1\)</span> <em>could</em> be consistent, since its standard deviation does go to zero as <span class="math inline">\(n\)</span> goes to infinity (it’s zero for all <span class="math inline">\(n\)</span>) and its bias would be zero if <span class="math inline">\(\theta\)</span> were <span class="math inline">\(0\)</span>. I wouldn’t take points off for saying it couldn’t be for two reasons. First, I did draw the sampling distributions for you, and what I’ve drawn is inconsistent with <span class="math inline">\(\theta\)</span> being 0. Second, it’s so rare that anything is ever <em>exactly</em> zero that I wouldn’t fault you for answering the question as if it outright never happened. But that idea—that <span class="math inline">\(\hat\theta_1\)</span> would be consistent if <span class="math inline">\(\theta\)</span> were <span class="math inline">\(0\)</span>—was what I was trying to get at with this <em>could</em> question.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part B
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>In the plot below, I’ve shown a bootstrap estimate of the sampling distribution of an estimator <span class="math inline">\(\hat\theta\)</span>. Suppose it’s a good estimate, so you can get away with thinking of it as the estimator’s actual sampling distribution. On top of it, I’ve drawn four interval estimators.</p>
+<ul>
+<li>Which are calibrated to have at least 95% coverage? Put a check next to those.</li>
+<li>Which are calibrated to have almost exactly 95% coverage? Circle your check for those.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A Clarification.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If I ask a problem like this on an exam, I’ll make it clear that ‘at least but not exactly 95% coverage’ means substantially more than 95% coverage. Maybe I’ll give you a list of choices for each interval, e.g.&nbsp;1%, 5%, 50%, 95%, 99% that are spread out enough that familiarity with the illustrations we use often in class will make it clear which is which.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>From the top, the first, third, and fourth have 95% coverage—the widest 3. The third and fourth have almost exactly 95% coverage.</p>
+<p><em>Explanation</em>. All 3 are wide enough to span at least 95% of draws from (i.e.&nbsp;probability mass of the) sampling distribution. The third and fourth, which are roughly the same, have almost exactly 95% coverage. The first is too wide for that—it spans almost all draws from the sampling distribution.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-sampling-clarification-1.svg" class="img-fluid figure-img" alt="Bootstrap sampling distribution with four horizontal intervals stacked above it: a nearly all-covering interval, a central 50 percent interval, a normal 95 percent interval, and an empirical 95 percent interval."></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="problem-2" class="level2">
+<h2 class="anchored" data-anchor-id="problem-2">Problem 2</h2>
+<p>The miracle of random sampling is that we’re able to estimate the mean of a population with a very small sample from that population. But for that to work, our observations have to be independent—or close to it. If we observe the incomes <span class="math inline">\(Y_1 \ldots Y_n\)</span> of <span class="math inline">\(n\)</span> people drawn with replacement from a population with mean income <span class="math inline">\(\mu\)</span> and income standard deviation <span class="math inline">\(\sigma\)</span>, the variance of the sample mean <span class="math inline">\(Y_1 \ldots Y_n\)</span> will be <span class="math inline">\(\sigma^2/n\)</span>. Below, I’ve shown the calculation.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\Var\sb*{\frac1n\sum_{i=1}^n Y_i}
+&amp;= \E\sb*{ \cb*{ \frac{1}{n}\sum_i Y_i - \E \p*{ \frac{1}{n}\sum_i Y_i } }^2 } &amp;&amp; \\
+&amp;= \E\sb*{ \cb*{ \frac{1}{n}\sum_i (Y_i - \E Y_i) }^2 }  &amp;&amp; \\
+&amp;= \E\sb*{ \cb*{ \frac{1}{n}\sum_i Z_i }^2 } &amp;&amp; \text{for} \ \ Z_i = Y_i - \E Y_i \\
+&amp;= \E\sb*{ \frac{1}{n^2}\sum_i \sum_j Z_i Z_j }  &amp;&amp; \\
+&amp;= \frac{1}{n^2} \sum_i \sum_j \E Z_i Z_j    &amp;&amp; \\
+&amp;= \frac{1}{n^2} \sum_i \sum_j \begin{cases} \sigma^2 &amp; \text{ when } j=i \\ 0 &amp; \text{ otherwise } \end{cases} \\
+&amp;= \frac{1}{n^2} \sum_i \sigma^2 = \frac{1}{n^2} \times n \times \sigma^2 = \frac{\sigma^2}{n}
+\end{aligned}
+\]</span></p>
+<div class="callout callout-style-simple callout-exercise no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div class="callout-exercise">
+<p>Now suppose that you’ve been lazy, and instead of calling <span class="math inline">\(n\)</span> different people, you’ve just called one and reported their income <span class="math inline">\(n\)</span> times. That is, you’ve got ‘a sample of size n’, <span class="math inline">\(\tilde Y_1 \ldots \tilde Y_n\)</span>, with <span class="math inline">\(\tilde Y_1=Y_1, \tilde Y_2 = Y_1, \tilde Y_3 = Y_1, \ldots\)</span>. What is the variance of the mean of this ‘sample’, <span class="math inline">\(\frac1n\sum_{i=1}^n \tilde Y_i\)</span>? And if it’s not <span class="math inline">\(\sigma^2/n\)</span> like we got for the mean of <span class="math inline">\(Y_1 \ldots Y_n\)</span>, explain—with reference to the calculation above—why it is not. If there’s a line or lines where something different happens, say which; say what happens instead; and explain why.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>The variance of this ‘sample mean’ is <span class="math inline">\(\sigma^2\)</span>. The problem is in the second to last line. Note that if we replace each instance of <span class="math inline">\(Y_i\)</span> with <span class="math inline">\(\tilde Y_i=Y_1\)</span>, then <span class="math inline">\(Z_i=Y_1 - \E Y_1\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(Z_iZ_j=(Y_1-\E Y_1)^2\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. This means that <span class="math inline">\(\E Z_i Z_j=\sigma^2\)</span> always instead of only when <span class="math inline">\(i=j\)</span> and, as a result, <span class="math inline">\(\frac{1}{n^2}\sum_i\sum_j \E Z_i Z_j\)</span> is an average of <span class="math inline">\(n^2\)</span> copies of <span class="math inline">\(\sigma^2\)</span> — one for each pair <span class="math inline">\((i,j)\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="problem-3-interval-calibration" class="level1">
+<h1>Problem 3: Interval Calibration</h1>
+<p>Suppose we’re estimating the proportion <span class="math inline">\(\theta\)</span> of voters in a population who support a policy, using a sample of size <span class="math inline">\(n=100\)</span> drawn with replacement. Below are three sampling distributions corresponding to three different values of <span class="math inline">\(\theta\)</span>: 0.5, 0.6, and 0.7. On each, I’ve drawn a 95% confidence interval centered at 0.6.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="3">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-interval-calibration-1.svg" class="img-fluid figure-img" alt="Normal approximation to the sampling distribution when theta is 0.5, with the true value marked green and an interval centered at 0.6; the interval does not contain 0.5."></p>
+<figcaption>θ = 0.5</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-interval-calibration-2.svg" class="img-fluid figure-img" alt="Normal approximation to the sampling distribution when theta is 0.6, with the true value marked green and an interval centered at 0.6; the interval contains 0.6."></p>
+<figcaption>θ = 0.6</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="practice-midterm-1_files/figure-html/plot-interval-calibration-3.svg" class="img-fluid figure-img" alt="Normal approximation to the sampling distribution when theta is 0.7, with the true value marked green and an interval centered at 0.6; the interval does not contain 0.7."></p>
+<figcaption>θ = 0.7</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The green vertical line marks the true value of <span class="math inline">\(\theta\)</span> in each case.</p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part A
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>For which of these three values of <span class="math inline">\(\theta\)</span> does the interval contain the true value? Looking at the sampling distributions, roughly what fraction of intervals constructed this way (centered at <span class="math inline">\(\hat\theta\)</span> with the same width) would contain <span class="math inline">\(\theta\)</span> in each case?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>The interval contains <span class="math inline">\(\theta\)</span> when <span class="math inline">\(\theta = 0.6\)</span> (the center plot) and when <span class="math inline">\(\theta = 0.7\)</span> (the right plot). It does not contain <span class="math inline">\(\theta\)</span> when <span class="math inline">\(\theta = 0.5\)</span> (the left plot).</p>
+<p>Looking at the sampling distributions:</p>
+<ul>
+<li>When <span class="math inline">\(\theta = 0.5\)</span>: Very few intervals would cover. The sampling distribution is centered at 0.5, but the intervals are centered at whatever <span class="math inline">\(\hat\theta\)</span> we get. Since <span class="math inline">\(\hat\theta\)</span> would typically be near 0.5, the intervals would usually be centered near 0.5, and they’d cover <span class="math inline">\(\theta = 0.5\)</span> about 95% of the time.</li>
+<li>When <span class="math inline">\(\theta = 0.6\)</span>: About 95% of intervals would cover since the interval width was calibrated for this case.</li>
+<li>When <span class="math inline">\(\theta = 0.7\)</span>: About 95% would cover. The sampling distribution is shifted right, but so would our estimates and thus our interval centers.</li>
+</ul>
+<p>The key insight is that coverage depends on where <span class="math inline">\(\hat\theta\)</span> falls relative to <span class="math inline">\(\theta\)</span>, not on where we’ve drawn a single fixed interval.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part B
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>If you wanted to have 95% coverage no matter which of these three <span class="math inline">\(\theta\)</span> values was true, would you need to make your interval wider, narrower, or keep it the same? Explain briefly.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Keep it the same width (or very nearly).</p>
+<p>The width of a 95% confidence interval for a proportion is approximately <span class="math inline">\(1.96\sqrt{\theta(1-\theta)/n}\)</span>. This width is largest when <span class="math inline">\(\theta = 0.5\)</span> and decreases as <span class="math inline">\(\theta\)</span> moves toward 0 or 1. So the interval calibrated for <span class="math inline">\(\theta = 0.6\)</span> has width <span class="math inline">\(1.96\sqrt{0.24/n}\)</span>, while the “correct” width for <span class="math inline">\(\theta = 0.5\)</span> would be <span class="math inline">\(1.96\sqrt{0.25/n}\)</span> and for <span class="math inline">\(\theta = 0.7\)</span> would be <span class="math inline">\(1.96\sqrt{0.21/n}\)</span>.</p>
+<p>Since <span class="math inline">\(\sqrt{0.24} \approx 0.49\)</span> is between <span class="math inline">\(\sqrt{0.25} = 0.5\)</span> and <span class="math inline">\(\sqrt{0.21} \approx 0.46\)</span>, the intervals we’ve drawn are slightly too narrow for <span class="math inline">\(\theta = 0.5\)</span> and slightly too wide for <span class="math inline">\(\theta = 0.7\)</span>, but the differences are small. In practice, since we don’t know <span class="math inline">\(\theta\)</span>, we estimate the width using <span class="math inline">\(\hat\theta\)</span>, and this gives us close to 95% coverage across a wide range of true <span class="math inline">\(\theta\)</span> values.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part C
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Suppose you wanted to achieve 99% coverage instead of 95%. By what factor would you need to multiply the interval width?</p>
+<p><em>Hint</em>: For a normal distribution, 95% of the probability is within <span class="math inline">\(\pm 1.96\)</span> standard deviations of the mean, and 99% is within <span class="math inline">\(\pm 2.58\)</span> standard deviations.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>You would multiply the width by <span class="math inline">\(2.58/1.96 \approx 1.32\)</span>.</p>
+<p>The 95% interval has width <span class="math inline">\(2 \times 1.96 \times \sigma\)</span> and the 99% interval has width <span class="math inline">\(2 \times 2.58 \times \sigma\)</span>, so the ratio is <span class="math inline">\(2.58/1.96 \approx 1.32\)</span>. The 99% interval is about 32% wider than the 95% interval.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="problem-4" class="level1">
+<h1>Problem 4</h1>
+<p>In the block of <strong>R</strong> code below, I’ve implemented the estimators <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> from Problem 1.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta.hat<span class="fl">.2</span> <span class="ot">=</span> <span class="cf">function</span>(Y) { <span class="fu">mean</span>(Y) }</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>theta.hat<span class="fl">.3</span> <span class="ot">=</span> <span class="cf">function</span>(Y) { <span class="fu">sum</span>(Y)<span class="sc">/</span>(<span class="fu">length</span>(Y)<span class="sc">+</span><span class="dv">10</span>) }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>And here is code that does a thing.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>do.thing <span class="ot">=</span> <span class="cf">function</span>(estimator) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Ystar <span class="ot">=</span> Y[I]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">estimator</span>(Ystar)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  }) </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Below, I’ve plotted the sampling distributions of <span class="math inline">\(\hat\theta_2\)</span> (left) and <span class="math inline">\(\hat\theta_3\)</span> (right) in gray with their means indicated by blue vertical lines, a histogram of the result of calling <code>do.thing(theta.hat.2)</code> (left) and <code>do.thing(theta.hat.3)</code> (right) in orange, a green vertical line indicating the value of <span class="math inline">\(\theta\)</span>, and interval estimates of the form <span class="math inline">\(\hat\theta_2 \pm 1.96\hat\sigma_2\)</span> (left) and <span class="math inline">\(\hat\theta_3 \pm 1.96\hat\sigma_3\)</span> (right) where <span class="math inline">\(\hat\sigma_2\)</span> and <span class="math inline">\(\hat\sigma_3\)</span> are the results of calling <code>sd(do.thing(theta.hat.2))</code> and <code>sd(do.thing(theta.hat.3))</code> respectively.</p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part A
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>If we take this approach to calibrating an interval estimator centered on <span class="math inline">\(\hat\theta_2\)</span>, what is the coverage probability of these intervals: roughly 95%, roughly 50%, or roughly 5%? What about the interval estimators centered on <span class="math inline">\(\hat\theta_3\)</span>?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>95% for <span class="math inline">\(\hat\theta_2\)</span> and 50% for <span class="math inline">\(\hat\theta_3\)</span>.</p>
+<p><em>Explanation</em>. The ‘thing’ <code>do.thing</code> does is draw 10,000 samples from the bootstrap sampling distribution of our estimator, so these are the intervals <span class="math inline">\(\hat\theta \pm 1.96\hat\sigma\)</span> where <span class="math inline">\(\hat\sigma\)</span> is the standard deviation of the estimator’s bootstrap sampling distributions standard deviation. But we don’t need to know that to answer this question. All we need to know is that, whatever it does, we get histograms with the same widths as our estimators’ actual sampling distributions. That gives us 95% coverage for the unbiased estimator <span class="math inline">\(\hat\theta_2\)</span>, but only about 50% coverage for the estimator <span class="math inline">\(\hat\theta_3\)</span>, which has bias roughly equal to this interval’s width. Why 50%? Because when bias and interval width are equal, we get an interval that covers when our point estimate is on the right half of its sampling distribution and one that doesn’t when it’s on the left half.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-comparison-1.svg" class="img-fluid" alt="Unbiased estimator: gray sampling distribution and orange bootstrap distribution overlap around the green target and blue sampling mean; a black bootstrap interval spans most of both."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-comparison-2.svg" class="img-fluid" alt="Biased estimator: gray sampling distribution and orange bootstrap distribution overlap below the green target; the blue sampling mean and black bootstrap interval are also below the target."></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Part B
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Below, I’ve added another interval estimate to each plot. A blue one. These are <span class="math inline">\(\hat\theta_2 \pm 1.96 \hat\sigma_2\)</span> and <span class="math inline">\(\hat\theta_3 \pm 1.96 \hat\sigma_3\)</span> where, letting <span class="math inline">\(\hat\theta_2^{(1)} \ldots \hat\theta_2^{(10,000)}\)</span> be the elements of <code>do.thing(theta.hat.2)</code> and <span class="math inline">\(\hat\theta_3^{(1)} \ldots \hat\theta_3^{(10,000)}\)</span> be the elements of <code>do.thing(theta.hat.3)</code>, <span class="math display">\[
+\begin{aligned}
+\hat\sigma_2^2 &amp;= \frac{1}{10,000}\sum_{r=1}^{10,000} (\hat\theta_2^{(r)} - \bar Y)^2  \\
+\hat\sigma_3^2 &amp;= \frac{1}{10,000}\sum_{r=1}^{10,000} (\hat\theta_3^{(r)} - \bar Y)^2.
+\end{aligned}
+\]</span></p>
+<p>Explain why the blue interval on the left looks about the same as the black one but the one on the right is wider. Why might you want to use these blue intervals instead of the black ones?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Extra Credit Problems.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This one was meant to be a little unfamiliar—something you couldn’t do on autopilot even if you had perfect recall of the lectures and homeworks. I will put something a bit like this on the exam, but it’ll be an extra credit problem and clearly identified as an extra credit problem. If want to prepare for it, you might want to think a little bit more about <span class="math inline">\(\hat\sigma_2\)</span> and its relationship to the usual estimate of the standard deviation of the sample mean <span class="math inline">\(\bar Y\)</span>, <span class="math inline">\(\hat\sigma = \sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \bar Y)^2 / n}\)</span>.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>What we’ve done is made <span class="math inline">\(\hat\sigma\)</span> the root-mean-squared distance of a draw <span class="math inline">\(\hat\theta^\star\)</span> from our estimator’s bootstrap sampling distribution from the sample’s mean <span class="math inline">\(\bar Y\)</span> instead of from the bootstrap sampling distribution’s mean. When we’re using the estimator <span class="math inline">\(\hat\theta_2\)</span>, <span class="math inline">\(\bar Y\)</span> <em>is</em> the bootstrap sampling distribution’s mean, so nothing changes. When we’re using the estimator <span class="math inline">\(\hat\theta_2\)</span>, it’s not—our draws <span class="math inline">\(\hat\theta^\star\)</span> tend to be lower—so the root-mean-squared distance to <span class="math inline">\(\bar Y\)</span> is bigger than the standard deviation of <span class="math inline">\(\hat\theta_2\)</span>. We might want to use these because, when we have a biased estimator, they get wider to account for the bias, which improves coverage.</p>
+<p><em>Detail I wouldn’t expect you to provide.</em> In fact, it gets the right amount wider. Think of a point estimate at the left edge of the middle 95% of the sampling distribution of <span class="math inline">\(\hat\theta_3\)</span>—about where the black interval ends. If you calibrated an interval estimate around it ‘the blue way’, it’d just touch the estimation target. You can see why by thinking about the analogy that motivates the bootstrap.</p>
+<p><em>About the Bootstrap</em>. When we use the bootstrap, we’re thinking of the relationship between a bootstrap sample and the sample as analogous to the relationship between the sample and population. So what we’re really doing here is calculating the root-mean-squared difference between a bootstrap version of our estimator, <span class="math inline">\(\hat\theta^\star\)</span>, to a bootstrap version of our estimation target, <span class="math inline">\(\theta^\star=\bar Y\)</span>—that’s the mean of the ‘population’ that our bootstrap sample is drawn from. When <span class="math inline">\(\hat\theta^\star\)</span> an an unbiased estimator of <span class="math inline">\(\theta^\star\)</span>, this is just its standard deviation. But when <span class="math inline">\(\hat\theta^*\)</span> is a <em>biased estimator</em> of <span class="math inline">\(\theta^\star\)</span>, it’s a bootstrap version of root-mean-squared-error. <span class="math display">\[
+\text{bootstrap rmse} = \sqrt{\text{bootstrap bias}^2 + \text{bootstrap sd}^2}.
+\]</span> Often, the bootstrap analogy works and the bootstrap bias and bootstrap sd are about the same as the actual bias and actual sd. This mean we’ll get 95% coverage from our biased estimator, as we’re inflating the width of our intervals just enough that that happens. That is not, however, necessarily the best way to take advantage of our ability to use the bootstrap to anticipate our estimator’s bias. Instead of using it to inflate the width of our intervals, we can use it to correct the bias of our estimator so we don’t have to inflate them. More on this later in the semester.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-intervals-1.svg" class="img-fluid" alt="Unbiased-estimator plot with an added blue root-mean-squared-error interval, nearly identical to the black standard-deviation interval."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="practice-midterm-1_files/figure-html/plot-bootstrap-intervals-2.svg" class="img-fluid" alt="Biased-estimator plot with an added blue root-mean-squared-error interval, wider than the black standard-deviation interval and reaching the green target."></p>
+</div>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../exams";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/chapter-bias-and-coverage.html" class="pagination-link" aria-label="Bias and Coverage">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

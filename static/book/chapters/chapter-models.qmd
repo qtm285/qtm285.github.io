@@ -1,0 +1,229 @@
+---
+title: "Models"
+---
+
+<!-- Sources:
+  lectures/enrichment-models.qmd (53 lines, outline only)
+  Discussion from syllabus planning session (April 29-30, 2026)
+-->
+
+<!-- DESIGN NOTES:
+
+This is the endpoint of Part 2 and the endpoint of semester 1.
+
+The arc that leads here:
+1. Part 1: one-sample inference. One source of randomness (sampling).
+2. Part 2: two-sample + causality. Two sources of randomness (sampling + randomization).
+   Different designs (stratified, blocked, simple) → same answer.
+3. This lecture: MODELS. Why do blatantly false descriptions of data still give the right answer?
+
+Key ideas:
+
+- We've seen concrete designs: random sampling, randomized experiments, blocked randomization.
+- People without designed randomness still do inference.
+- They assume their data behaves *as if* it came from a designed process. That's a model.
+- Models can be wrong about how data was generated and still give the right answer.
+- Why: if the model gets the relevant summary statistics right, the inference works.
+- Different designs gave the same answer → models capture what's common across designs.
+- A model is a bet that certain details don't matter.
+
+This sets up semester 2:
+- Semester 2 works with models directly (regression, linear models).
+- Students will understand WHY models work because they've seen the specific designs that justify them.
+- The "imagined randomization" idea: pretending you got your data from a designed process.
+
+Connection to "Why Do Models Work?" enrichment:
+- Two roles of models (population description vs. approximation for calibration)
+- Homoskedastic vs. heteroskedastic
+- What the bootstrap is actually doing
+- When models break down
+- The pragmatic view
+-->
+
+<!-- GAP: Write the lecture content -->
+
+# From Designs to Models
+
+This semester we started with mechanisms we could name.
+
+- A random sample told us how observations entered a study.
+- A randomized experiment told us how treatment was assigned.
+- Conditioning let us separate two random stages and put them back together.
+
+Those mechanisms supplied probability distributions for our estimators. They told
+us what would change if we repeated the study and what would remain fixed.
+
+In many applications nobody literally rolls a die to sample a person, and nobody
+randomizes the variables we want to compare. Statistical analysis still proceeds
+by describing the data **as if** a repeatable random process had generated them.
+That description is a model.
+
+A model is not a claim that every detail of the world is random. It is a claim
+that a particular imagined repetition preserves the features that matter for the
+question and reproduces the estimator's uncertainty well enough to calibrate it.
+
+# Two Jobs a Model Can Do
+
+Consider
+$$
+Y_i=m(X_i)+\epsilon_i,
+\qquad \E[\epsilon_i\mid X_i]=0.
+$$
+
+The same notation can be used for two different jobs.
+
+1. **Description.** The function $m(x)$ is the actual conditional mean
+   $\E[Y_i\mid X_i=x]$. We use it to describe or predict the population.
+2. **Approximation for inference.** A simpler function $m$ stands in for a more
+   complicated relationship so we can calculate an estimate and its uncertainty.
+
+Those jobs should not be confused. A line can be a poor literal description of a
+curve and still provide a useful summary. But an interval around the line's slope
+is calibrated for that summary only if the imagined random process gets the
+relevant variation right.
+
+# A Deliberately Wrong Line
+
+The black curve in the next figures is $\sin(w)$. The red line is a linear fit.
+The purple and green ribbons show two different covariate distributions. The
+dashed red line is fitted from the displayed sample; the solid red line is the
+large-sample best linear approximation.
+
+:::: {.columns}
+::: {.column}
+![A linear fit with 100 observations.](../figs/least-squares-linear-sin-n100.pdf){#fig-model-n100}
+:::
+::: {.column}
+![A linear fit with 10,000 observations.](../figs/least-squares-linear-sin-n10000.pdf){#fig-model-n10000}
+:::
+::::
+
+With 100 observations, the fitted line moves noticeably from sample to sample.
+With 10,000 observations, the dashed fitted line is close to the solid best line.
+More data removed **fitting error**: uncertainty about which line is best.
+
+More data did not make a line equal a sine curve. The gap between the best line
+and the curve is **modeling error**. It remains even when the sample is enormous.
+
+Write the total error schematically as
+$$
+\widehat\theta-\theta
+=\underbrace{(\widehat\theta-\theta_{\mathcal M})}_{\text{fitting error}}
++\underbrace{(\theta_{\mathcal M}-\theta)}_{\text{modeling error}},
+$$
+where $\theta_{\mathcal M}$ is the answer supplied by the best approximation in
+the chosen model $\mathcal M$.
+
+Fitting error usually shrinks with sample size. Modeling error need not.
+Consequently an interval can become very narrow around the wrong answer.
+
+::: {.callout-note}
+### Figure Provenance
+The two panels reproduce the plotting path in the older Lab 10 source. The source
+did not set a seed; this reconstruction uses seed 285. The $n=10{,}000$ run
+continues the random-number stream after the $n=100$ run. No plotted layer was
+added, removed, or restyled.
+:::
+
+# Bias Does Not Shrink Like Standard Error
+
+![A reconstructed comparison of fixed misspecification bias and shrinking standard errors.](../figs/error-vs-n.pdf){#fig-model-error-vs-n}
+
+In @fig-model-error-vs-n, the blue and green series are standard errors. They fall
+as the sample grows. The red series is the absolute bias of an unweighted fit for
+a target population whose covariate distribution differs from the sampling
+population. It does not fall toward zero.
+
+This candidate reconstructs a missing older figure from the preserved simulation
+ingredients. The original generator is absent. The eight sample sizes, 500
+replications, logarithmic axes, and styling are therefore disclosed reconstruction
+choices rather than recovered course-source facts. The qualitative comparison is
+the source-backed point: more data can make random error small while systematic
+error stays put.
+
+::: {.callout-exercise}
+### More Certain About What?
+Suppose an estimator has bias $0.10$ for every sample size, while its standard
+error falls from $0.08$ to $0.01$. What improves with more data, and what does not?
+:::
+
+::: {.callout-solution}
+The estimator becomes more repeatable: its sampling distribution gets narrower.
+Its center remains $0.10$ away from the target. More data increases precision but
+does not repair the modeling error.
+:::
+
+# Variance Models and Calibration
+
+Even when the mean description is useful, the spread can change with the
+covariates:
+$$
+Y_i=m(X_i)+\sigma(X_i)\epsilon_i.
+$$
+
+A homoskedastic calculation replaces $\sigma(X_i)$ by one constant $\sigma$.
+If the actual spread differs greatly across $X$, that shortcut can give the wrong
+standard error even when the fitted mean is the summary we want.
+
+This is why point estimation and calibration are separate obligations.
+
+- A point estimator asks which population summary the fitted object approaches.
+- A standard-error estimator asks whether the reported spread matches repeated
+  estimates under the relevant random process.
+
+Robust standard errors and design-based variance formulas try to preserve the
+second obligation without claiming constant variance.
+
+# The Bootstrap Is Also a Model
+
+The bootstrap treats the empirical distribution---the sample with probability
+$1/n$ on each observed row---as a stand-in for the population. A bootstrap sample
+is a random sample from that empirical population.
+
+This does not make the bootstrap assumption-free. It assumes that resampling rows
+recreates the variation relevant to the estimator.
+
+- For independent sampling units, resampling units can reproduce sampling
+  variability.
+- If treatment was randomized while the sample was fixed, rerandomizing treatment
+  represents a different mechanism from resampling rows.
+- If observations arrive in households, classrooms, or time series, resampling
+  individual rows can destroy dependence that the real repetition would preserve.
+
+The question is never merely “did we bootstrap?” It is “what population and what
+repetition did this bootstrap imagine?”
+
+# When the Model Breaks
+
+A useful model deliberately ignores detail. It fails when an ignored detail
+controls the answer or its uncertainty.
+
+- **Selection:** the observed units do not represent the target population.
+- **Confounding:** treatment groups differ in their untreated potential outcomes.
+- **Dependence:** units move together, so row-by-row variation is too small.
+- **Heavy tails or rare events:** a modest sample does not reveal the events that
+  dominate the estimator.
+- **Misspecified structure:** a line, constant effect, or common variance erases a
+  feature the target depends on.
+
+Checking calibration by simulation is useful only when the simulation includes
+the failure one is worried about. Simulating from the fitted model and recovering
+the fitted model checks the calculation under its own assumptions; it does not
+test those assumptions against the world.
+
+# The Pragmatic View
+
+A model is a bet that certain details do not matter for a stated purpose.
+
+To evaluate that bet, ask four questions:
+
+1. What is fixed and what is random in the imagined repetition?
+2. Which population quantity does the estimator approach?
+3. Which features determine its standard error?
+4. What real feature, if omitted, would change the target or the calibration?
+
+The first semester built answers from explicit sampling and randomization designs.
+The next semester will work with regression models directly. The designs remain
+the reference point: a model earns an inferential interpretation by reproducing
+the part of a credible design that the question needs, not by being literally true
+in every detail.

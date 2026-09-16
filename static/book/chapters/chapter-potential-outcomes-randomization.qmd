@@ -1,0 +1,226 @@
+---
+title: "Potential Outcomes and Randomization"
+---
+
+{{< include shared-code.qmd >}}
+
+```{r}
+#| label: ggl-setup
+#| include: false
+set.seed(285)
+social.pressure = read.csv('../data/social-pressure-data.csv') |>
+  mutate(age=2006-yob,
+         W=as.numeric(treatment==' Neighbors'),
+         Y=as.numeric(voted=='Yes'))
+
+ggl = social.pressure |>
+  filter(treatment %in% c(' Control', ' Neighbors'))
+
+# Treatment was assigned by household, so the household is the unit here.
+ggl.households = ggl |>
+  group_by(hh_id, treatment, W) |>
+  summarize(Y=mean(Y), age=mean(age), prior=mean(p2002=='yes'), .groups='drop')
+
+observed.effect = with(ggl.households, mean(Y[W==1])-mean(Y[W==0]))
+```
+
+# The Michigan Experiment
+
+In 2006, Gerber, Green, and Larimer started with a list of registered-voter
+households in Michigan. They randomly assigned the households to a control group or
+to one of four letters. Eleven days before the primary, they mailed the assigned
+letters. Then they checked the public record to see who voted.
+
+We will compare two of those groups:
+
+- [Control households]{.groupa} received no letter.
+- [Neighbors households]{.groupb} received a letter that displayed the household's
+  voting record and promised to report the household's turnout to its neighbors.
+
+The file contains real records from the experiment. Treatment was assigned by
+household, so one row in our analysis is one household. Its outcome is the fraction
+of listed household members who voted.
+
+```{r}
+#| label: fig-ggl-observed
+#| fig-cap: "Observed household turnout in the real social-pressure experiment."
+#| fig-alt: "A jittered scatterplot of household turnout against age, colored by randomized Neighbors-letter assignment, shows substantial overlap between treatment groups."
+#| fig-width: 8
+display = ggl.households |> slice_sample(n=12000)
+ggplot(display, aes(x=age, y=Y, color=factor(W))) +
+  geom_point(alpha=.08, size=.5, position=position_jitter(width=.25, height=.03, seed=285)) +
+  stat_smooth(method='loess', se=FALSE, linewidth=.8) +
+  scale_color_manual(values=c(twocolor.red, twocolor.green),
+                     labels=c('Control','Neighbors')) +
+  labs(x='Mean age in household', y='Fraction who voted', color='Assignment')
+```
+
+The observed difference in household turnout is
+$$
+\hat\tau
+=\frac{1}{M_1}\sum_{j:W_j=1}Y_j
+-\frac{1}{M_0}\sum_{j:W_j=0}Y_j
+=`r sprintf('%0.3f', observed.effect)`.
+$$
+
+That is a comparison we can calculate. The causal question asks what the same
+households would have done under the other assignment.
+
+# Potential Outcomes {#sec-ggl-potential-outcomes}
+
+For household $j$, define two fixed values:
+
+- $y_j(1)$ is the household turnout fraction if it receives the Neighbors letter.
+- $y_j(0)$ is the household turnout fraction if it receives no letter.
+
+The household-level treatment effect is
+$$
+\tau_j=y_j(1)-y_j(0).
+$$
+The average treatment effect among the households in these two arms is
+$$
+\bar\tau=\frac1m\sum_{j=1}^m\tau_j
+=\frac1m\sum_{j=1}^m\{y_j(1)-y_j(0)\}.
+$$
+
+## The Fundamental Problem
+
+Each household received one assignment. Therefore we observe one potential outcome:
+$$
+Y_j=y_j(W_j).
+$$
+For a Neighbors household we observe $y_j(1)$ but not $y_j(0)$. For a control
+household we observe $y_j(0)$ but not $y_j(1)$. We do not observe
+$\tau_j=y_j(1)-y_j(0)$ for any household.
+
+This is the fundamental problem of causal inference. The pair
+$(y_j(0),y_j(1))$ defines the causal comparison, but the experiment reveals only
+one member of the pair.
+
+::: {.callout-warning}
+### What the Real Data Contain
+The GGL file contains real assignments, observed turnout, age, and prior-voting
+variables. It does not contain both potential outcomes for anyone. Any picture that
+shows both outcomes must therefore be a schematic or an explicitly simulated
+population, not additional observed GGL data.
+:::
+
+## A Small Simulated Population
+
+The next six households are simulated solely to make the missing pairs visible.
+
+```{r}
+#| label: simulated-potential-outcomes
+simulated = data.frame(
+  household=1:6,
+  y0=c(.25,0,.50,.75,.25,.50),
+  y1=c(.50,.25,.50,1,.75,.50)
+)
+simulated$tau=simulated$y1-simulated$y0
+gt::gt(simulated, rownames_to_stub = TRUE) |> gt::fmt_number(decimals = 2)
+```
+
+If we could see this complete table, we could calculate every treatment effect and
+their average. In an experiment we instead see either the `y0` entry or the `y1`
+entry in each row.
+
+# Why Randomization Works {#sec-ggl-randomization}
+
+Randomization does not reveal the missing potential outcome for any household. It
+makes the observed treatment and control groups comparable in expectation.
+
+For the clean calculation, fix the numbers $M_1$ and $M_0$ assigned to the two
+arms, with $M_1+M_0=m$. Randomly choose which $M_1$ households receive the
+Neighbors letter. Conditional on the two-arm counts, this is the symmetry used by
+the GGL assignment: every household has probability $M_1/m$ of being in the
+Neighbors arm and probability $M_0/m$ of being in control.
+
+The observed group means are
+$$
+\hat\mu(w)=\frac1{M_w}\sum_{j=1}^m1_{=w}(W_j)Y_j.
+$$
+By the indicator trick,
+$$
+1_{=w}(W_j)Y_j=1_{=w}(W_j)y_j(w).
+$$
+Therefore
+$$
+\begin{aligned}
+\E[\hat\mu(w)]
+&=\frac1{M_w}\sum_{j=1}^m y_j(w)\E[1_{=w}(W_j)]\\
+&=\frac1{M_w}\sum_{j=1}^m y_j(w)\frac{M_w}{m}\\
+&=\frac1m\sum_{j=1}^m y_j(w)=\bar\mu(w).
+\end{aligned}
+$$
+Linearity then implies
+$$
+\E[\hat\tau]
+=\E[\hat\mu(1)-\hat\mu(0)]
+=\bar\mu(1)-\bar\mu(0)
+=\bar\tau.
+$$
+
+The result is about repeated random assignment of the same fixed households and
+their same fixed potential outcomes. It is not a sampling argument.
+
+## Seeing Repeated Assignment
+
+The next plot returns to the six-household simulated population. The connected
+dots are fixed potential-outcome pairs. Each panel changes only the assignment.
+
+```{r}
+#| label: fig-repeated-assignment
+#| layout-ncol: 3
+#| fig-cap:
+#|   - "Assignment 1"
+#|   - "Assignment 2"
+#|   - "Assignment 3"
+#| fig-alt:
+#|   - "First random assignment of six households. Open red and green points show both fixed potential outcomes; filled points show the outcome revealed by assignment."
+#|   - "Second random assignment of the same six households reveals a different selection of their fixed potential outcomes."
+#|   - "Third random assignment of the same six households again changes only which fixed potential outcome is revealed."
+#| fig-width: 5
+assignment.plot = function(seed) {
+  set.seed(seed)
+  d=simulated
+  d$W=sample(c(rep(0,3),rep(1,3)))
+  d$observed=ifelse(d$W==1,d$y1,d$y0)
+  ggplot(d) +
+    geom_segment(aes(x=household, xend=household, y=y0, yend=y1), color='gray75') +
+    geom_point(aes(x=household, y=y0), color=twocolor.red, shape=1, size=2) +
+    geom_point(aes(x=household, y=y1), color=twocolor.green, shape=1, size=2) +
+    geom_point(aes(x=household, y=observed, color=factor(W)), size=2.5) +
+    scale_color_manual(values=c(twocolor.red,twocolor.green)) +
+    coord_cartesian(ylim=c(-.05,1.05)) +
+    labs(x='Simulated household',y='Turnout fraction') + guides(color='none')
+}
+assignment.plot(1)
+assignment.plot(2)
+assignment.plot(3)
+```
+
+Different assignments reveal different halves of the same fixed pairs and produce
+different estimates. Across all assignments, the estimates center on $\bar\tau$.
+
+::: {.callout-exercise}
+### What Randomization Does
+Randomization does not make $y_j(0)$ and $y_j(1)$ equal. What equality in the proof
+would fail if households with larger $y_j(1)$ were deliberately more likely to
+receive the Neighbors letter?
+:::
+
+::: {.callout-solution}
+The assignment probability would depend on the household. We could not replace
+$\E[1_{=1}(W_j)]$ by the same value $M_1/m$ for every $j$, so the observed treated
+mean would not generally average the $y_j(1)$ values equally.
+:::
+
+# What This Establishes
+
+- Potential outcomes define the causal question household by household.
+- The real experiment reveals one potential outcome per household, never both.
+- Random assignment makes the difference in observed group means unbiased for the
+  average treatment effect across repeated assignments.
+- The actual GGL estimate is calculated from real assignments and real turnout.
+  The completed potential-outcome pairs used in the visualization are simulated.
+- Sampling introduces a second source of randomness. That is the next chapter.

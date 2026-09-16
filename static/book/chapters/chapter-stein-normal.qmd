@@ -1,0 +1,266 @@
+---
+title: "Why the CLT Works --- Stein's Method"
+subtitle: "Th Oct 15"
+---
+
+<!-- Sources:
+  Overview + Planned Content: lectures/enrichment-clt-proof.qmd lines 1-48 (full file)
+  GAPs: 7 (see inline comments)
+-->
+
+::: {.callout-note}
+## Enrichment Content
+This is a post-midterm-1 "breather" lecture. The goal is not exam material---it's to demystify the Central Limit Theorem that students have been relying on throughout Unit 1.
+:::
+
+# Overview
+
+Throughout this unit, we've used the Central Limit Theorem as a black box: sample means are approximately normal when $n$ is large enough. But why? And what does "large enough" mean?
+
+This lecture opens up the black box. We'll prove the CLT using Stein's method---an approach that:
+
+- Shows *why* a particular distribution is close to normal (not just that it converges)
+- Gives actual bounds on the approximation error
+- Uses an intuitive idea: if swapping observations doesn't change the distribution much, you're close to normal
+
+You won't be tested on this. But knowing that the CLT is a real theorem with a real proof---one you could understand if you sat with it---is valuable.
+
+# The Setup
+
+<!-- GAP: Formal statement of the CLT as used in this course, with notation matching earlier lectures -->
+
+<!-- GAP: Explanation of what "convergence in distribution" means, with examples or simulation to illustrate -->
+
+Let $X_1 \ldots X_n$ be independent copies of a random variable with mean $\mu$ and
+finite, positive variance $\sigma^2$. Their standardized mean is
+$$
+W_n
+= \frac{\bar X_n-\mu}{\sigma/\sqrt n}
+= \frac{1}{\sqrt n}\sum_{i=1}^n \frac{X_i-\mu}{\sigma}.
+$$
+
+The Central Limit Theorem says that the distribution of $W_n$ approaches the standard
+normal distribution as $n$ increases.
+
+The finite-variance assumption is enough for this Central Limit Theorem. The quantitative
+Stein bound proved later in this lecture uses the stronger assumption that the fourth moment
+is finite.
+
+This statement has two important parts.
+
+1. We center by the actual mean $\mu$ and measure distance in the actual standard error
+   $\sigma/\sqrt n$.
+2. For every fixed number $x$, $\Pr(W_n\leq x)$ approaches $\Pr(Z\leq x)$, where $Z$ is
+   standard normal.
+
+The second part is called *convergence in distribution*.
+
+::: {.callout-exercise}
+### Reading the Claim
+Suppose $\Pr(W_n\leq 1)$ is $.80$, $.82$, and $.835$ at three increasing sample sizes.
+The corresponding standard normal probability is $\Pr(Z\leq 1)\approx .841$.
+
+What is converging: the random variables, their possible values, or the probabilities to
+the left of a fixed cutoff?
+:::
+
+::: {.callout-solution}
+The probabilities are converging. The claim at the cutoff $1$ is
+$\Pr(W_n\leq 1)\to\Pr(Z\leq 1)$.
+:::
+
+The theorem says the error vanishes eventually. It does not tell us whether $n=30$ or
+$n=3{,}000$ is enough. To answer that question, we need a result that measures error.
+
+# Stein's Characterization of the Normal
+
+<!-- GAP: Statement and explanation of the characterization: a distribution is normal if and only if E[f'(Z) - Zf(Z)] = 0 for all smooth f. Why this characterization is useful. Motivating example before the formula. -->
+
+Start with a fact about a standard normal random variable $Z$. Its density is
+$\phi(z)=\exp(-z^2/2)/\sqrt{2\pi}$, so $\phi'(z)=-z\phi(z)$. Integration by parts implies
+$$
+\E[Zf(Z)]=\E[f'(Z)]
+$$
+for every smooth function $f$ for which the expectations exist.
+
+The useful part is the converse: this identity characterizes the standard normal
+distribution. A mean-zero, variance-one random variable $W$ is standard normal if
+$$
+\E[f'(W)-Wf(W)]=0
+$$
+for every suitable function $f$.
+
+That turns a shape question into a calculation. If
+$\E[f'(W)-Wf(W)]$ is small for a sufficiently rich collection of functions $f$, then the
+distribution of $W$ is close to standard normal. Stein's method is the practice of finding
+a useful way to rewrite and bound that difference.
+
+::: {.callout-exercise}
+### The Target
+If $W$ were exactly standard normal, what value would
+$\E[f'(W)-Wf(W)]$ have? If it is not exactly zero but is uniformly small over the relevant
+functions $f$, what should we expect?
+:::
+
+::: {.callout-solution}
+It would be zero. If it is uniformly small, we should expect the distribution of $W$ to be
+close to standard normal. A theorem is still needed to translate “small” into a numerical
+distance between distributions.
+:::
+
+# The Exchangeable Pairs Approach
+
+<!-- GAP: Definition of exchangeable pairs. Statement of the key idea: if (W, W') are exchangeable and W' - W is small, then W is approximately normal. Intuition: swapping doesn't change much implies normal. Concrete example to illustrate. -->
+
+A pair $(W,W')$ is *exchangeable* when swapping its order does not change its joint
+distribution:
+$$
+(W,W')\ \stackrel{d}{=}\ (W',W).
+$$
+
+For a sample mean, there is a natural way to make such a pair. Choose one observation at
+random and replace it with an independent copy. It does not matter which member of the
+pair we call the original and which we call the replacement, so the pair is exchangeable.
+
+Exchangeability alone is not enough. The replacement must also pull predictably toward
+zero. A pair is an $a$-*Stein pair* when
+$$
+\E[W'-W\mid W]=-aW
+$$
+for some number $0<a\leq 1$. The expected change points back toward zero,
+and its size is proportional to the current value of $W$.
+
+For a mean-zero, variance-one random variable $W$, Ross's exchangeable-pairs theorem
+bounds the distance to a standard normal random variable $Z$ by
+$$
+d_W(W,Z)
+\leq
+\frac{\sqrt{\Var\!\left(\E[(W'-W)^2\mid W]\right)}}{\sqrt{2\pi}\,a}
++\frac{\E|W'-W|^3}{3a}.
+$$
+
+Here $d_W$ measures the largest error in expectations of functions that cannot change
+faster than their input. The two terms say what can go wrong:
+
+1. the squared step size can depend too much on the current value of $W$; or
+2. one replacement can move $W$ too far.
+
+“Swapping one observation does not change the mean much” is therefore not the theorem.
+It is the mechanism that makes both error terms small.
+
+# Applying to Sample Means
+
+<!-- GAP: Constructing the exchangeable pair for sample means. Computing the bound. What the bound tells us about "large enough n". This is the core proof section. -->
+
+Two facts about conditional expectation will be used below. Let $S$ denote the whole sample,
+and let $W$ be a function of $S$.
+
+1. Iterated conditioning implies
+   $\E[\E[U\mid S]\mid W]=\E[U\mid W]$.
+2. Conditional expectation reduces variance:
+   $\Var(\E[U\mid W])\leq\Var(\E[U\mid S])$. To see this, set
+   $V=\E[U\mid S]$. Then $\E[V\mid W]=\E[U\mid W]$, and the conditional-variance
+   identity gives
+   $\Var(V)=\Var(\E[V\mid W])+\E[\Var(V\mid W)]$.
+
+To keep the calculation visible, suppose $X_1 \ldots X_n$ are independent copies with
+$$
+\E[X_i]=0,\qquad \Var(X_i)=1,\qquad \E[X_i^4]<\infty,
+$$
+and define
+$$
+W=\frac{1}{\sqrt n}\sum_{i=1}^n X_i.
+$$
+
+Choose an index $I$ uniformly from $1 \ldots n$, independently draw a new copy $X_I'$, and
+replace only that observation:
+$$
+W'=W-\frac{X_I}{\sqrt n}+\frac{X_I'}{\sqrt n}.
+$$
+
+The pair $(W,W')$ is exchangeable. Conditional on the whole original sample,
+$$
+\begin{aligned}
+\E[W'-W\mid X_1 \ldots X_n]
+&=\frac{1}{n}\sum_{i=1}^n \frac{\E[X_i'-X_i\mid X_1 \ldots X_n]}{\sqrt n}\\
+&=-\frac{1}{n}\frac{1}{\sqrt n}\sum_{i=1}^n X_i\\
+&=-\frac{W}{n}.
+\end{aligned}
+$$
+Conditioning only on $W$ leaves the same result, so this is a $1/n$-Stein pair.
+
+Now look at the two errors in the theorem.
+
+One replacement changes $W$ by $(X_I'-X_I)/\sqrt n$, so
+$$
+\frac{\E|W'-W|^3}{3a}
+=\frac{\E|X_1'-X_1|^3}{3\sqrt n}.
+$$
+
+For the squared step, conditioning on the whole sample implies
+$$
+\E[(W'-W)^2\mid X_1 \ldots X_n]
+=\frac{1}{n^2}\sum_{i=1}^n(1+X_i^2).
+$$
+Conditioning on the whole sample can only make its conditional expectation more variable
+than conditioning on $W$ alone. Independence therefore implies
+$$
+\Var\!\left(\E[(W'-W)^2\mid W]\right)
+\leq \frac{\Var(X_1^2)}{n^3}.
+$$
+
+Substituting these two calculations and $a=1/n$ into the theorem produces the concrete
+bound
+$$
+d_W(W,Z)
+\leq
+\frac{\sqrt{\Var(X_1^2)}}{\sqrt{2\pi n}}
++\frac{\E|X_1'-X_1|^3}{3\sqrt n}.
+$$
+
+Therefore
+$$
+d_W(W,Z)=O(n^{-1/2}).
+$$
+
+This is a quantitative Central Limit Theorem for the finite-fourth-moment case. It proves
+that the approximation improves with $n$ and identifies the features that govern the
+constant: large third and fourth moments make the improvement slower.
+
+::: {.callout-exercise}
+### Why the Square Root?
+Replacing one $X_i$ changes the unscaled sum by an amount of order one. Why does it change
+$W$ by an amount of order $1/\sqrt n$ rather than $1/n$?
+:::
+
+::: {.callout-solution}
+$W$ is the sum divided by $\sqrt n$, not the sum divided by $n$ (the sample mean). Standardization turns
+$\bar X_n$ into $\sqrt n\,\bar X_n$, so replacing one observation changes the standardized
+mean by $(X_I'-X_I)/\sqrt n$.
+:::
+
+# Takeaways
+
+<!-- GAP: Wrap-up connecting back to course themes. The CLT isn't magic---it's a theorem with a proof. The normal approximation has quantifiable error. This explains why bootstrap calibration works. -->
+
+The normal approximation is not magic and “large $n$” is not a universal number.
+
+- The normal distribution is characterized by the identity
+  $\E[f'(Z)-Zf(Z)]=0$.
+- Replacing one summand creates an exchangeable pair whose expected motion points toward
+  zero.
+- If the replacement step is small and its squared size is stable, the standardized sum is
+  close to normal.
+- For independent copies with a finite fourth moment, the bound above shrinks at rate
+  $n^{-1/2}$.
+
+This result explains the normal approximation itself. Bootstrap calibration is a separate
+approximation: it also requires the distribution made by resampling the observed data to
+track the sampling distribution made by drawing from the population.
+
+# References
+
+<!-- GAP: Accessible references appropriate for undergraduates on Stein's method and CLT proofs -->
+
+- Nathan Ross, [“Fundamentals of Stein's method”](https://arxiv.org/abs/1109.1880),
+  especially Section 3.3 and Example 3.6.

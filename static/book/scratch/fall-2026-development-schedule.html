@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QTM 285 · Fall 2026 development schedule</title>
+  <style>
+    :root { color-scheme: light; --ink:#19222c; --muted:#647180; --line:#d9e0e7; --paper:#fff; --page:#f4f6f8; --existing:#16705b; --candidate:#a45b00; --decision:#7a4ab0; --gap:#b23434; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--page); color:var(--ink); font:16px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(1180px,calc(100% - 32px)); margin:32px auto 80px; }
+    h1 { margin:0 0 6px; font-size:clamp(1.8rem,4vw,3rem); line-height:1.05; }
+    .lede { color:var(--muted); max-width:78ch; margin:0 0 24px; }
+    .summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:20px 0; }
+    .summary div { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:14px; }
+    .summary strong { display:block; font-size:1.55rem; }
+    .summary span { color:var(--muted); font-size:.9rem; }
+    .tools { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:28px 0; }
+    .tool { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:15px 18px; }
+    .tool h3 { margin:0 0 6px; font-size:1rem; }
+    .tool p { margin:0; color:var(--muted); font-size:.92rem; }
+    .tool p + p { margin-top:6px; }
+    .controls { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0; }
+    button { border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:999px; padding:8px 13px; font:inherit; cursor:pointer; }
+    button[aria-pressed="true"] { background:var(--ink); color:white; border-color:var(--ink); }
+    .legend { display:flex; flex-wrap:wrap; gap:12px 18px; color:var(--muted); font-size:.9rem; margin:10px 0 18px; }
+    .dot { display:inline-block; width:.72rem; height:.72rem; border-radius:50%; margin-right:5px; }
+    .schedule { display:grid; gap:30px; }
+    .unit { display:grid; gap:14px; }
+    .unit-heading { margin:12px 0 0; font-size:1.65rem; }
+    .unit-summary { margin:-8px 0 2px; color:var(--muted); }
+    .week { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:16px; }
+    .week-heading { margin:0 0 12px; font-size:1.2rem; }
+    .week-table { width:100%; border-collapse:collapse; }
+    .week-table th,.week-table td { padding:10px 8px; border-top:1px solid var(--line); text-align:left; vertical-align:top; }
+    .week-table th { width:115px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+    .week-table tr:first-child th,.week-table tr:first-child td { border-top:0; }
+    .meeting-state { width:29%; }
+    .errata { margin-top:42px; }
+    .errata h2 { margin-bottom:4px; font-size:1.55rem; }
+    .errata-list { display:grid; gap:10px; margin-top:16px; }
+    .erratum { background:var(--paper); border:1px solid var(--line); border-left:7px solid var(--candidate); border-radius:12px; padding:15px 18px; }
+    .erratum h3 { margin:0 0 7px; font-size:1.03rem; }
+    .erratum p { margin:0; }
+    .erratum .source { color:var(--muted); font-size:.87rem; margin-bottom:7px; }
+    .erratum ul { margin:7px 0 0; padding-left:1.25rem; }
+    .erratum li + li { margin-top:5px; }
+    tr[data-status="existing"] { --status:var(--existing); }
+    tr[data-status="candidate"] { --status:var(--candidate); }
+    tr[data-status="decision"] { --status:var(--decision); }
+    tr[data-status="gap"] { --status:var(--gap); }
+    .date { font-weight:750; font-variant-numeric:tabular-nums; margin-bottom:7px; }
+    .topic { font-weight:750; font-size:1.05rem; }
+    .book-link { display:inline-block; margin-top:5px; font-size:.86rem; }
+    .kind { color:var(--muted); font-size:.86rem; margin-top:3px; }
+    .provenance { font-size:.88rem; margin-top:10px; }
+    .provenance strong { display:block; margin-bottom:3px; }
+    .source-tag { display:inline-block; margin-top:5px; border:1px solid #b8c5cf; border-radius:7px; padding:3px 7px; background:#f1f3f5; color:#38434d; font-size:.84rem; }
+    .work { margin-top:10px; }
+    .state { font-weight:750; color:var(--status); }
+    .remaining { margin-top:4px; font-size:.92rem; }
+    [hidden] { display:none !important; }
+    footer { margin-top:24px; color:var(--muted); font-size:.86rem; }
+    @media (max-width:850px) { .summary,.tools { grid-template-columns:repeat(2,1fr); } .meeting-state { width:auto; } }
+    @media (max-width:520px) { main { width:min(100% - 18px,1180px); margin-top:18px; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Fall 2026 development schedule</h1>
+  <p class="lede">The semester is organized by unit, then by week, using the course-site structure: every dated meeting appears in order and the week's homework sits beneath the meetings. Breaks and exams occupy their actual calendar slots. Each item carries its own source and readiness disposition.</p>
+  <section class="summary" aria-label="Course readiness summary">
+    <div><strong>46</strong><span>dated meeting rows</span></div>
+    <div><strong>27 / 27</strong><span>teaching days usable now</span></div>
+    <div><strong>11 / 11</strong><span>homework packages usable now</span></div>
+    <div><strong>0</strong><span>open required errata</span></div>
+  </section>
+  <section aria-labelledby="tools-heading">
+    <h2 id="tools-heading">Course-tool readiness</h2>
+    <div class="tools">
+      <div class="tool"><h3>Student registration</h3><p><strong>The registration form and one-time classroom-token path exist, but the current PIC deployment cannot prove student-role separation.</strong> On <code>db646dc94</code>, unauthenticated classroom requests receive instructor-level access, and the deployed classroom store contains no course or assignments. A role-separated registration-to-assignment journey therefore cannot yet be exercised there.</p></div>
+      <div class="tool"><h3>Homework hand-in and return</h3><p><strong>The upload, render, mark, return, retrieval, and export mechanics completed a deployed testing round trip.</strong> The student-facing ZIP extension is available from the public link in Homework 0 and its downloaded bytes match the packaged VSIX. The current PIC deployment has no provisioned classroom assignment and does not separate instructor and student authority, so it cannot yet supply the corresponding PIC round trip.</p></div>
+      <div class="tool"><h3>Homework content</h3><p><strong>Every scheduled homework package is usable now.</strong> The <a href="fall-2026-homework-render-readiness-2026-08-12.md">homework render matrix</a> records the course renders. The Random Variables and Moments corrections and five answer blocks are applied; the two-group and GGL packages render and convert their included solutions to answer boxes.</p><p>The optional timing survey has no single correct answer and does not require an answer-key solution.</p></div>
+      <div class="tool"><h3>Accessibility</h3><p><strong>Semantic HTML is the viable linear course surface, but it is not yet certified for screen-reader use.</strong> The <a href="course-artifact-accessibility-readiness-2026-08-11.md">accessibility audit</a> preserves the instructional color system. The clean 71-file root-book render completes, and the corrected <code>Lecture5b</code> WebR cell is present. HTML iframe titles are included in the current PIC deployment <code>db646dc94</code>.</p><p>All 243 rendered figures in the audited Fall block now have verified source-written alternatives in the decks and linear book. All 24 data tables have programmatic headers; the eight custom poll tables also have explicit captions. The other 26 rendered table elements are mathematical layout, not data tables.</p></div>
+      <div class="tool"><h3>Recording and playback</h3><p><strong>Private recovery branch only.</strong> The <a href="playback-accessibility-readiness-2026-08-11.md">implementation and accessibility audit</a> records the current recovery state. Raw capture, candidate boundaries, clipped event/transcript data, and bounded-audio command behavior exist on <code>fall-class/recording-workflow</code>; nothing is merged or deployed.</p><p>Publication remains blocked because HTTP auth proves shared read/write level, not the individual approving caller.</p></div>
+      <div class="tool"><h3>Course website</h3><p><strong>This development site contains the complete calendar in Parts, weeks, and individual meeting rows.</strong> Each homework package appears once beneath its week, and dated meetings link to their actual book sections.</p><p>The student-facing PIC destination is being verified separately from this development artifact.</p></div>
+      <div class="tool"><h3>Slides</h3><p><strong>The book and slides share the same QMD sources.</strong> Standalone files under <code>lectures/</code> use <code>r-wasm/live-revealjs</code>, while the root project renders those sources as linear book chapters.</p><p>All 13 reconciled Fall lecture sources in the final pass render successfully as RevealJS; the exact section counts are in the linked <a href="fall-2026-slide-render-readiness-2026-08-12.md">render matrix</a>.</p></div>
+    </div>
+  </section>
+  <div class="controls" aria-label="Filter schedule">
+    <button data-filter="all" aria-pressed="true">All days</button>
+    <button data-filter="existing" aria-pressed="false">Existing source</button>
+    <button data-filter="candidate" aria-pressed="false">Candidate / corrections</button>
+    <button data-filter="decision" aria-pressed="false">Selection decisions</button>
+    <button data-filter="gap" aria-pressed="false">Conversion gap</button>
+  </div>
+  <div class="legend"><span><i class="dot" style="background:var(--existing)"></i>existing source</span><span><i class="dot" style="background:var(--candidate)"></i>candidate corrections</span><span><i class="dot" style="background:var(--decision)"></i>selection decision</span><span><i class="dot" style="background:var(--gap)"></i>conversion gap</span></div>
+  <section class="schedule" id="schedule" aria-live="polite"></section>
+  <section class="errata" aria-labelledby="errata-heading">
+    <h2 id="errata-heading">Known errata</h2>
+    <p class="lede">No required correction from the completed audits remains unapplied.</p>
+    <div class="errata-list" id="errata-list"></div>
+  </section>
+  <footer>Source: <code>scratch/fall-2026-day-by-day-readiness-2026-08-11.md</code>. Update the <code>days</code> array in this file when a correction, approval, or meeting allocation changes.</footer>
+</main>
+<script>
+const days = [
+['Week 0','Aug 27','Statistics / causality','Social-pressure introduction','existing','all','Skip-directed existing material','Usable now; no known mathematical gap.'],
+['Week 0','Aug 28','Homework','Homework discussion and prerequisite review','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 1','Sep 1','Probability / statistics','Sampling','existing','all','Existing source','Existing lab.'],
+['Week 1','Sep 3','Statistics','Point and interval estimates','existing','all','Skip-directed existing material','Usable now; no known mathematical gap.'],
+['Week 1','Sep 4','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 2','Sep 8','Probability','Calibration and sampling with replacement: Binomial I','existing','all','Existing source','First half of the two-day exact-distribution block.'],
+['Week 2','Sep 10','Probability','Exact distributions and calibration, day 2','existing','all','Skip-directed existing material','One chapter budgeted for two meetings; no fixed Binomial/Hypergeometric boundary is imposed.'],
+['Week 2','Sep 11','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 3','Sep 15','Statistics','Bootstrap','existing','all','Existing source','Existing lecture.'],
+['Week 3','Sep 17','Probability','Random variables and moments','candidate','majority','Mostly Skip-directed existing material with agent-written connective material','Usable now; the required mathematical corrections are applied and the chapter renders.'],
+['Week 3','Sep 18','Homework','Homework discussion','candidate','majority','Usable now','The week's homework package is listed once below.'],
+['Week 4','Sep 22','Probability','Standard deviation, Markov, and Chebyshev','candidate','majority','Usable now','The four required mathematical corrections are applied and the chapter renders.'],
+['Week 4','Sep 24','Probability / statistics','Normal approximation and its sample-size payoff','candidate','mostly','Skip-directed material with an agent-assembled bridge','Usable now; this is one lecture, and both component chapters render.'],
+['Week 4','Sep 25','Homework','Homework discussion','candidate','majority','Usable now','The week's homework package is listed once below.'],
+['Week 5','Sep 29','Statistics','Bias and coverage','existing','all','Existing source','Silent agent mathematical changes were restored.'],
+['Week 5','Oct 1','Assessment','Exam 1 review','existing','all','Skip-directed existing review material','Align with the completed Sep 17–24 corrections.'],
+['Week 5','Oct 2','Homework / assessment','Homework and practice-exam discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 6','Oct 6','Assessment','Practice Exam 1 review','existing','all','Existing artifact','Final alignment follows the Part 1 corrections.'],
+['Week 6','Oct 8','Assessment','Exam 1','existing','all','Skip-directed existing exam and key','Final alignment follows the completed Part 1 corrections.'],
+['Week 6','Oct 9','Homework / assessment','Exam and homework discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 7','Oct 13','No meeting','Fall Break','existing','all','No meeting','No content obligation.'],
+['Week 7','Oct 15','Probability enrichment','Stein normal approximation','candidate','small','Usable now','The five required corrections are applied, the seven protected GAP comments are restored, and the chapter renders.'],
+['Week 7','Oct 16','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 8','Oct 20','Probability enrichment','Poisson approximation','candidate','half','Usable now','The inherited probability typo is corrected, the five protected GAP comments are restored, and the chapter renders.'],
+['Week 8','Oct 22','Probability enrichment','Stein Poisson approximation','candidate','small','Agent-written enrichment using Skip-directed existing examples','Usable now; the coupling omissions are corrected and the chapter renders.'],
+['Week 8','Oct 23','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now.'],
+['Week 9','Oct 27','Statistics / probability','Comparing two groups: block-sampling designs','candidate','almost','Usable now','Mostly Skip-directed existing material in an agent-assembled chapter route; rendered chapter and homework verification complete.'],
+['Week 9','Oct 29','Statistics / probability','Randomization as a basis for inference: one fixed value per person','candidate','mostly','Skip-directed existing examples with agent-written connective material','Usable now; noncausal comparison only, with no potential outcomes yet.'],
+['Week 9','Oct 30','Homework','Homework workshop','existing','all','Skip-directed existing meeting material','Usable now; the homework package is listed once below.'],
+['Week 10','Nov 3','Probability / statistics','Conditioning for two-group comparisons','candidate','mostly','Usable now','The routed Skip-directed conditioning chapter renders after the Oct 27–29 design setup.'],
+['Week 10','Nov 5','Statistics','Variance of the difference in means','candidate','mostly','Skip-directed existing material with an agent-assembled two-group route','Usable now; formulas condition explicitly on nonempty groups and the chapter renders.'],
+['Week 10','Nov 6','Homework','Homework workshop','existing','all','Skip-directed existing meeting material','Usable now; the homework package is listed once below.'],
+['Week 11','Nov 10','Statistics / causality','Potential outcomes in the GGL experiment','candidate','mostly','Usable now','The routed two-day chapter uses the real household-level experiment and labels completed potential-outcome pairs as simulated.'],
+['Week 11','Nov 12','Statistics / causality','Why randomization identifies a causal effect','candidate','mostly','Skip-directed existing material with an agent-written two-day chapter','Usable now; the fixed-count proof and repeated-assignment visualization render.'],
+['Week 11','Nov 13','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now; the homework package is listed once below.'],
+['Week 12','Nov 17','Statistics / causality','Randomization and sampling: two sources of randomness','candidate','mostly','Usable now','The GGL-based chapter renders; it separates real covariates from simulated potential outcomes and compares both mechanisms on one scale.'],
+['Week 12','Nov 19','Statistics / causality','Observational studies and confounding','candidate','mostly','Skip-directed existing ideas with an agent-written GGL-based chapter','Usable now; real randomization remains distinct from the constructed selection mechanism.'],
+['Week 12','Nov 20','Homework','Homework discussion','existing','all','Skip-directed existing meeting material','Usable now; the homework package is listed once below.'],
+['Week 13','Nov 24','No meeting','Course cancellation for Thanksgiving week','existing','all','No meeting','Course syllabus cancellation; Emory recess begins Nov 25.'],
+['Week 13','Nov 26','No meeting','Thanksgiving','existing','all','No meeting','No content obligation.'],
+['Week 13','Nov 27','No meeting','Thanksgiving recess','existing','all','No meeting','No content obligation.'],
+['Week 14','Dec 1','Statistics','Models','candidate','mostly','Usable now','The chapter renders with two source-faithful figure reconstructions and one explicitly disclosed reconstruction whose original generator is missing.'],
+['Week 14','Dec 3','Assessment','Practice Exam 2 review; Practice Exam 2 out','existing','all','Usable now','The rendered assessment covers bootstrap intervals, bias and coverage, confounding, and finite-population randomization after those meetings.'],
+['Week 14','Dec 4','Assessment / homework','Practice-exam discussion','existing','all','Skip-directed existing meeting material','Usable now; the practice-exam package is listed once below.'],
+['Week 15','Dec 8','Assessment','Final review','existing','all','Usable now','Practice Exam 2 and Exam 2 are aligned with the completed Part 2 sequence.'],
+['Week 15','Dec 10–19','Assessment period','Exam 2; exact slot pending','existing','all','Content-aligned and rendering','The exam covers two-group sampling, bias and coverage, confounding, and model misspecification. Ordinary 4:00 TTh slot: Dec 15, 3:00–5:30 p.m. QTM group slot: Dec 16, 6:30–9:00 p.m.; only the department assignment remains.']
+];
+const labels={all:'all existing / recovered',almost:'almost all existing',mostly:'mostly existing',majority:'majority existing',half:'mixed existing and agent',small:'small existing base; agent-heavy','conditional-mostly':'mostly existing if the source route is selected',available:'existing source is available; day not allocated'};
+const statusLabel={existing:'Existing source',candidate:'Candidate / corrections',decision:'Selection decision',gap:'Conversion gap'};
+const sourceLinks={
+  'Aug 27':'book/Lecture0-prose.md',
+  'Sep 1':'book/Lab1-prose.md#sec-our-population',
+  'Sep 3':'book/Lecture2-prose.md',
+  'Sep 8':'book/Lecture3-prose.md#sec-calibration',
+  'Sep 10':'book/Lecture3-prose.md#sec-sampling-without-replacement',
+  'Sep 15':'book/Lecture4-prose.md#sec-bootstrap',
+  'Sep 17':'book/rvs-and-moments-prose.md#sec-random-variables',
+  'Sep 22':'book/sd-is-standard-prose.md',
+  'Sep 24':'book/Lecture5-normalapprox-prose.md#sec-normal-approximation',
+  'Sep 29':'book/Lecture5b-prose.md#sec-bias-coverage',
+  'Oct 1':'book/practice-midterm-1.md',
+  'Oct 6':'book/practice-midterm-1.md',
+  'Oct 8':'book/midterm-1.md',
+  'Oct 15':'book/meeting-14-stein-normal.md',
+  'Oct 20':'book/meeting-15-poisson.md',
+  'Oct 22':'book/meeting-16-stein-poisson.md',
+  'Oct 27':'book/Lecture6-prose.md#sec-two-ways-two-groups',
+  'Oct 29':'book/Lecture10a-prose.md#sec-classroom-experiment',
+  'Nov 3':'book/Lecture6-prose.md#sec-conditioning-probability-review',
+  'Nov 5':'book/Lecture6-prose.md#sec-conditioning-probability-review',
+  'Nov 10':'book/ggl-potential-outcomes-randomization.md#sec-ggl-potential-outcomes',
+  'Nov 12':'book/ggl-potential-outcomes-randomization.md#sec-ggl-randomization',
+  'Nov 17':'book/ggl-sampling-and-randomization.md',
+  'Nov 19':'book/ggl-observational-confounding.md',
+  'Dec 1':'book/meeting-25-models.md',
+  'Dec 3':'book/practice-midterm-2.md',
+  'Dec 8':'book/practice-midterm-2.md',
+  'Dec 10–19':'book/midterm-2.md'
+};
+const errata = [];
+const host=document.querySelector('#schedule');
+const units = [
+  {title:'Part 1 · One-Sample Inference', summary:'', weeks:['Week 0','Week 1','Week 2','Week 3','Week 4','Week 5','Week 6']},
+  {title:'The Breather', summary:'', weeks:['Week 7','Week 8']},
+  {title:'Part 2 · Two-Sample Problems, Randomization, and Models', summary:'', weeks:['Week 9','Week 10','Week 11','Week 12','Week 13','Week 14','Week 15']}
+];
+const homeworkByWeek = {
+  'Week 0':'Homework 0 · course setup, submission practice, and prerequisite review',
+  'Week 1':'Calibration concept',
+  'Week 2':'Binary calibration and exact distributions',
+  'Week 3':'Random variables and moments',
+  'Week 4':'Sample size and coverage',
+  'Week 5':'Practice Exam 1',
+  'Week 6':'Comparing estimators · released Oct 8, due Oct 22',
+  'Week 9':'Block sampling and two-group bias',
+  'Week 10':'Difference in means',
+  'Week 11':'GGL causality · released Nov 12, due Nov 19',
+  'Week 14':'Practice Exam 2'
+};
+const homeworkLinks = {
+  'Week 0':'book/week0-homework.md',
+  'Week 1':'book/week1-homework.md',
+  'Week 2':'book/week2-homework.md',
+  'Week 3':'book/rvs-and-moments-homework.md',
+  'Week 4':'book/hw4-sample-size-coverage.md',
+  'Week 5':'book/practice-midterm-1.md',
+  'Week 6':'book/week3-homework.md',
+  'Week 9':'book/hw7-bias-two-groups.md',
+  'Week 10':'book/hw8-sample-size-two-sample.md',
+  'Week 11':'book/hw9-causality.md',
+  'Week 14':'book/practice-midterm-2.md'
+};
+function render(filter='all'){
+  host.innerHTML='';
+  for(const unit of units){
+    const unitRows=days.filter(row=>unit.weeks.includes(row[0]) && (filter==='all' || row[4]===filter));
+    if(!unitRows.length) continue;
+    const section=document.createElement('section'); section.className='unit';
+    section.innerHTML=`<h2 class="unit-heading">${unit.title}</h2><p class="unit-summary">${unit.summary}</p>`;
+    for(const week of unit.weeks){
+      const weekRows=unitRows.filter(row=>row[0]===week);
+      if(!weekRows.length) continue;
+      const weekCard=document.createElement('section'); weekCard.className='week';
+      weekCard.innerHTML=`<h3 class="week-heading">${week}</h3><table class="week-table"><tbody></tbody></table>`;
+      const slots=weekCard.querySelector('tbody');
+      for(const [,date,kind,topic,status,share,state,remaining] of weekRows){
+        const a=document.createElement('tr'); a.dataset.status=status;
+        const bookLink=sourceLinks[date] ? `<a class="book-link" href="${sourceLinks[date]}">Book section</a>` : '';
+        a.innerHTML=`<th scope="row">${date}</th><td><div class="topic">${topic}</div><div class="kind">${kind}</div>${bookLink}</td><td class="meeting-state"><div class="state">${state}</div><div class="remaining">${remaining}</div><span class="source-tag">${labels[share]}</span></td>`;
+        slots.appendChild(a);
+      }
+      if(homeworkByWeek[week]) {
+        const hw=document.createElement('tr');
+        const homeworkLink=homeworkLinks[week] ? `<a class="book-link" href="${homeworkLinks[week]}">Homework</a>` : '';
+        hw.innerHTML=`<th scope="row">Homework</th><td colspan="2"><div class="topic">${homeworkByWeek[week]}</div>${homeworkLink}</td>`;
+        slots.appendChild(hw);
+      }
+      section.appendChild(weekCard);
+    }
+    host.appendChild(section);
+  }
+}
+document.querySelectorAll('button[data-filter]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('button[data-filter]').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');render(b.dataset.filter);}));
+render();
+const errataHost=document.querySelector('#errata-list');
+if(errata.length === 0) errataHost.textContent='No open errata.';
+for(const [title,bookHref,source,items] of errata){
+  const section=document.createElement('article');
+  section.className='erratum';
+  section.innerHTML=`<h3><a href="${bookHref}">${title}</a></h3><p class="source">${source}</p><ul>${items.map(item=>`<li>${item}</li>`).join('')}</ul>`;
+  errataHost.appendChild(section);
+}
+</script>
+</body>
+</html>

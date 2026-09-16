@@ -1,0 +1,231 @@
+---
+title: "When Normal Breaks Down --- Poisson Approximation and Quality Control"
+subtitle: "T Oct 20"
+---
+
+{{< include shared-code.qmd >}}
+
+<!-- Sources:
+  Brewery/QA problem: git show acfd961:exams/practice-midterm-1.qmd, Problem 3 (lines 205-397)
+  GAPs: 5 (see inline comments)
+-->
+
+<!-- GAP: Motivating example needed. Why does the normal approximation sometimes fail? Set up the idea that when counts are small relative to sample size, the normal approximation is unreliable. Connect to the CLT bounds from Meeting 14: what "large enough n" depends on. -->
+
+The Central Limit Theorem describes what happens as the number of observations grows while
+the distribution of each observation stays fixed. It does not say every count based on a
+large sample is already close to normal.
+
+Rare events create the important failure. If each observation is one with probability
+$\theta=.01$, then a sample of $n=100$ has an expected count of only $n\theta=1$. The count
+cannot be negative, most of its probability sits on the first few integers, and its
+distribution is strongly skewed. A symmetric normal curve has the wrong geometry.
+
+The brewery problem makes that failure consequential: the approximation determines
+whether a million-bottle delivery gets rejected.
+
+# Quality Control: The Brewery Problem
+
+A brewer delivers a batch of a million bottles to its distributor.
+The distributor has recently been getting complaints, so they've instituted a new quality control process to try to ensure that the proportion of bad bottles is 2% or less. They set aside a hundred bottles, drawn without replacement from that million, for testing. And they find that 3 of them---3%---is bad. Having done this, they claim that the batch doesn't meet its standards and refuse to pay. The brewer has called you in to consult.
+
+::: {.callout-exercise}
+### Part A
+The distributor is claiming that, on the basis of their test, they're confident that the
+proportion of bad bottles in the million delivered exceeds 2%. Are you? Explain why
+or why not.
+
+You'll probably want to use the plots below. These are plots of the
+sampling distribution of the sample proportion $\hat\theta=\frac{1}{100}\sum_{i=1}^{100} Y_i$
+when $Y_1 \ldots Y_{100}$ are sampled without replacement from a binary population of size
+1 million in which the proportion $\theta$ of 1s is $.02$, $.015$, and $.01$.
+:::
+::: {.callout-solution}
+I am not confident that it exceeds 2%. If the proportion of bad bottles in the million were exactly 2%, and I drew 100 bottles without replacement like this repeatedly, almost 20% of the time I'd get a sample with exactly 3 bad bottles. And over 30% of the time, I'd get a sample with *at least* 3 bad bottles. We can see that in the plot on the left, which shows how frequently the proportion of bad bottles set aside for testing would be 0/100, 1/100, 2/100, ...
+
+*That's enough, but I'd say a bit more if I were actually in this situation. I'd say this.*
+Even if it were lower, this would happen pretty often. From the plot in the center, we see that if the proportion of bad bottles in the million were 1.5%, we'd have at least 3 bad bottles in the sample we test about 20% of the time. And from the one on the right, we see that even if the proportion in the million were 1%, we'd see at least 3 bad ones in our test about 10% of the time.
+:::
+
+```{r}
+#| label: part-a-population
+#| layout-ncol: 3
+#| fig-width: 3.5
+#| fig-cap:
+#|   - "for θ=.02"
+#|   - "for θ=.015"
+#|   - "for θ=.01"
+#| fig-alt:
+#|   - "Sampling distribution of the bad-bottle proportion in a sample of 100 when the population proportion is 2 percent. Three or more bad bottles occurs with substantial probability."
+#|   - "Sampling distribution of the bad-bottle proportion in a sample of 100 when the population proportion is 1.5 percent. Three or more bad bottles remains fairly common."
+#|   - "Sampling distribution of the bad-bottle proportion in a sample of 100 when the population proportion is 1 percent. Most samples contain zero or one bad bottle, but three or more still occurs."
+m = 1000000
+n = 100
+x=(0:n)/n
+
+scale = list(scale_x_continuous(limits=c(-.01, .08), breaks=seq(0, .07, by=.02)),
+             scale_y_continuous(limits=c(0, .45)),
+             labs(x='', y=''),
+             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)))
+
+theta = .02
+pmf = dhyper(x*n, m*theta, m*(1-theta), n)
+ggplot() + geom_col(aes(x=x, y=pmf)) + scale
+
+theta = .015
+pmf = dhyper(x*n, m*theta, m*(1-theta), n)
+ggplot() + geom_col(aes(x=x, y=pmf)) + scale
+
+theta = .01
+pmf = dhyper(x*n, m*theta, m*(1-theta), n)
+ggplot() + geom_col(aes(x=x, y=pmf)) + scale
+```
+
+## Choosing a Sample Size
+
+::: {.callout-exercise}
+### Part B
+The brewer claims, based on its own testing, that the proportion of bad bottles in their deliveries will be no more than 1%. You learn that the distributor will be rejecting deliveries whenever the proportion of bad ones in the sample they test exceeds 2% and, after consulting with the brewer, you decide that the best course of action is to ask them to adjust the size of their sample so they'll reject no more than 5% of deliveries. Assuming the brewer is correct about their proportion of bad bottles, which of the following is a good sample size to ask for: 100, 400, or 1600?
+:::
+
+::: {.callout-solution}
+400.
+
+*The Simple Explanation*.
+Our delivery will be rejected when the sample proportion $\hat\theta$ is greater than $.02$. To ensure our delivery is rejected no more than 5% of the time, we want to choose $n$ so 95% of draws from $\hat\theta$'s sampling distribution are less than or equal to $.02$. Now we're going to make 3 guesses/approximations that make this simpler.
+
+1. We'll choose $n$ to ensure that the *middle 95%* of draws from our sampling distribution are less than or equal to $.02$. This is overkill. Having the *smallest 95%* of draws be less than or equal to $.02$ is enough.
+2. We'll assume the worst about the brewer's actual proportion of bad bottles. They say $\theta \le .01$, so let's assume $\theta=.01$.
+3. We'll assume assume that the sampling distribution of our sample proportion $\hat\theta$ will be approximately normal no matter which sample size we choose.
+
+The mean and standard deviation of our estimator $\hat\theta$ are $\theta$ and $\sqrt{\theta(1-\theta)/n}$ respectively.^[Almost. Since we're sampling without replacement, the actual standard deviation is $\sqrt{(m-n)/(m-1)}$ times smaller, as we saw [in a recent homework](../homework/homework-comparing-estimators.html#exr-covariance-with-replacement). But since $m$ is a million and $n$ is 100, this is so close to 1 it makes no practical difference.] Given our guesses/approximations, this means that roughly 95% of draws from its sampling distribution will be in the interval $\theta \pm 1.96 \sqrt{\theta(1-\theta)/n}$ for $\theta=.01$ and we want to choose $n$ so that the upper bound on this interval is no larger than $.02$. When we do this, we find we want roughly $n=20^2=400$ observations.
+$$
+.01 + 1.96 \sqrt{\frac{.01 \times .99}{n}} \le .02
+\qqtext{ when } 1.96 \sqrt{\frac{.01 \times .99}{n}} \le .01
+$$
+i.e. when
+$$
+\sqrt{n} \ge 1.96 \frac{\sqrt{.01 \times .99}}{.01} \approx 2 \frac{\sqrt{.01}}{.01} = 2 \frac{.1}{.01} = 20.
+$$
+:::
+
+## The Normal Approximation Breaks Down
+
+<!-- GAP: Discussion of why the normal approximation is poor in the brewery problem (small counts, discrete distribution, skewness). Use the plots from Part B's subtler explanation to show the sawtooth pattern and the mismatch between normal and hypergeometric. Connect to the need for a better approximation. -->
+
+<!-- GAP: Introduction of the Poisson distribution as a better approximation for rare events. State: when n is large and theta is small, the number of defective items is approximately Poisson with mean n*theta. Show this matches the hypergeometric plots above much better than the normal. -->
+
+Write $K=n\hat\theta$ for the number of bad bottles in the sample. If sampling from the
+million-bottle batch were replaced by independent sampling with replacement, then $K$
+would be Binomial with parameters $n$ and $\theta$.
+
+For $n=100$ and $\theta=.01$, its mean is $1$ and its standard deviation is about $1$.
+That means the lower end of a two-standard-deviation normal interval is negative, even
+though a count cannot be. The problem is not that $100$ sounds small. The problem is that
+the expected count $n\theta$ is small.
+
+```{r}
+#| label: normal-approximation-breakdown
+#| fig-width: 6
+#| fig-cap: "Exact and approximate probabilities for the number of bad bottles when n=100 and θ=.01."
+#| fig-alt: "Probabilities for zero through eight bad bottles under the exact Binomial distribution and Poisson and normal approximations. The Poisson curve nearly overlaps the Binomial curve, while the normal approximation differs most near zero."
+k = 0:8
+mu = 1
+sigma = sqrt(.99)
+
+approximation.data = bind_rows(
+  data.frame(k=k, probability=dbinom(k, size=100, prob=.01), distribution='Binomial'),
+  data.frame(k=k, probability=dpois(k, lambda=1), distribution='Poisson'),
+  data.frame(k=k,
+             probability=pnorm(k+.5, mean=mu, sd=sigma)-pnorm(k-.5, mean=mu, sd=sigma),
+             distribution='Normal')
+)
+
+ggplot(approximation.data,
+       aes(x=k, y=probability, color=distribution, shape=distribution)) +
+  geom_point(size=2) +
+  geom_line() +
+  scale_x_continuous(breaks=k) +
+  labs(x='number of bad bottles', y='probability', color='', shape='')
+```
+
+The normal approximation puts too little probability at zero and too much around the
+middle. If we approximate $\Pr(K>2)$ directly by the normal tail beyond $2$, we get about
+16%, twice the Binomial probability of about 8%. A continuity correction moves the normal
+cutoff from $2$ to $2.5$ and brings the answer down to about 7%. That rescue depends on
+remembering that a continuous curve is standing in for discrete bars.
+
+The Poisson approximation keeps the features the normal approximation loses. It is a
+distribution on nonnegative integer counts, and it can be strongly skewed. When $n$ is
+large, $\theta$ is small, and the expected count $n\theta$ is moderate, a Binomial count is
+approximately Poisson with mean $\lambda=n\theta$.
+
+In the plot, the Poisson and Binomial points are nearly on top of each other. The Poisson
+estimate of the rejection probability is about 8%, matching the Binomial calculation to
+the displayed precision.
+
+# The Poisson Distribution
+
+<!-- GAP: Properties of the Poisson distribution. Mean, variance, shape. Simulation showing Poisson vs. hypergeometric vs. normal for the brewery example. When and why Poisson is the right tool. -->
+
+A Poisson random variable $P$ with mean $\lambda$ has probabilities
+$$
+\Pr(P=k)=e^{-\lambda}\frac{\lambda^k}{k!},
+\qquad k=0,1,2,\ldots.
+$$
+Its mean and variance are both $\lambda$, so its standard deviation is $\sqrt\lambda$.
+The single number $\lambda$ therefore determines both its location and its spread.
+
+::: {.callout-exercise}
+### The Three Candidate Sample Sizes
+If the true bad-bottle proportion is $.01$, rejection occurs when the observed proportion
+is greater than $.02$. Compare the three candidate sample sizes using the Poisson
+approximation. Which is the smallest with rejection probability below 5%?
+
+```{r}
+#| label: three-candidate-sample-sizes
+#| echo: false
+candidate.n = c(100, 400, 1600)
+candidate.results = data.frame(
+  n=candidate.n,
+  expected.count=.01*candidate.n,
+  first.rejected.count=floor(.02*candidate.n)+1,
+  poisson.rejection=ppois(floor(.02*candidate.n), lambda=.01*candidate.n,
+                          lower.tail=FALSE)
+)
+knitr::kable(candidate.results, digits=3,
+             col.names=c('sample size', 'expected bad', 'first rejected count',
+                         'Poisson rejection probability'))
+```
+:::
+
+::: {.callout-solution}
+The smallest is $n=400$. Its Poisson rejection probability is about 2.1%. At $n=100$ the
+probability is about 8.0%, while at $n=1600$ it is far below 1%.
+:::
+
+The choice between approximations is about the shape of the random quantity, not a slogan
+about sample size.
+
+- For a rare-event count with moderate $n\theta$, Poisson preserves discreteness and
+  skewness.
+- When both $n\theta$ and $n(1-\theta)$ are large, the count is far from either boundary
+  and a normal approximation becomes more plausible.
+- Sampling without replacement adds dependence. Here the population is so much larger
+  than the sample that the Binomial and Hypergeometric distributions are practically the
+  same, but that need not be true when the sampling fraction is large.
+
+# Takeaways
+
+<!-- GAP: Summary connecting the brewery problem to the broader theme: the CLT/normal approximation is powerful but has limits. When counts are small, Poisson is better. This sets up Meeting 16, where we'll see Stein's method applied to prove Poisson approximation bounds. -->
+
+The normal approximation can fail even when the raw sample size sounds large. For rare
+events, the expected count $n\theta$ is the more useful scale.
+
+The Poisson distribution is designed for this geometry: nonnegative integer counts with
+mean and variance $\lambda=n\theta$. In the brewery example it tracks the exact count
+probabilities much better than the normal approximation.
+
+Next we will return to Stein's method. The normal and Poisson distributions have different
+characterizing equations, but the same strategy turns each equation into a quantitative
+approximation bound.

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<!-- Basic Page Needs
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta charset="utf-8">
+<title>Prediction, Inference, and Causality I (Fall 2026)</title>
+<meta name="class page" content="">
+<meta name="David A. Hirshberg" content="">
+
+<!-- Mobile Specific Metas
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- FONT
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+<!-- CSS
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+
+<!-- Favicon
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<link rel="icon" href="images/favicon.ico">
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="row" style="text-align:center">
+<object data="images/example-plot.svg" style="width:50%"></object>
+</div>
+
+<div class="row" style="text-align:center">
+<h3> Prediction, Inference, and Causality I (Fall 2026) </h3>
+<h6> DATASCI 285 with <a href="https://davidahirshberg.bitbucket.io">David A. Hirshberg</a> </h6>
+<p><a href="book/index.html">book</a> &middot; <a href="/app">app</a></p>
+</div>
+
+
+<div class="row">
+
+<p>
+<h4> Description </h4>
+This is the first semester of a <b>two-semester integrated introduction to probability and statistical data analysis</b> that provides a foundation for upper-level classes in the department. We will focus on prediction (using data we have to tell us something about data we don't), statistical inference (characterizing the uncertainty we have about the accuracy of these predictions), and causal inference (understanding what the relationships we see in the data tell us about the impact of actions we might take). Probability concepts&mdash;random variables, expected values, conditional distributions&mdash;are introduced as they're needed to understand the statistical methods we're developing, rather than as a separate prerequisite. While the class will emphasize the intuitive and mathematical foundations of these concepts, we will also cover the implementation of these techniques in applications using the statistical programming language <b>R</b>.
+</p>
+
+<p>
+This semester covers one-sample inference and two-sample comparisons, including causal inference in randomized experiments. The second semester covers regression analysis using linear models and concludes with an extended application to causal inference in observational studies.
+</p>
+
+<p>
+This two-semester sequence will be accepted in place of the QTM 210&ndash;220 sequence as a prerequisite and there is substantial overlap in content. There will be a greater emphasis on the precision with which we move from stories and intuition to formal mathematical reasoning (and back) in this course. Data visualization, including sketching by hand and plotting in <b>R</b>, will be emphasized as a tool for making this connection. Being precise about how and why our methods work makes it easier to adapt them to answer new questions and work with new types of data.
+</p>
+
+<p>
+<h5> Meeting Times </h5>
+Lectures are on Tuesdays and Thursdays from 4:00-5:15pm. Fridays from 2:30-3:20pm are for homework review &mdash; going over solutions to the previous week's homework and taking questions on the current one. Room TBD.
+</p>
+<p>
+I will hold office hours weekly on Fridays at 1:00 PM in PAIS 583.
+</p>
+
+<p>
+<h5> Goals </h5>
+<span>
+By the end of this course, students will be able to:
+</span>
+
+<ol>
+<li>
+    Formulate research questions in plain language and mathematical terms,
+    expressing clearly what they want to know (the <em>estimand</em>) and what group they want to know it about (the <em>population</em>).
+    For questions about causality, this will involve <em>potential outcomes</em>, a formalism for thinking about populations
+    that differ in some way&mdash;e.g. in who received what <em>treatment</em>&mdash;from the population that actually exists.
+</li><li>
+    Estimate the estimand by training a <em>predictive model</em> using a <em>random sample</em> from the population
+    and appropriately combining its predictions, relying&mdash;where necessary&mdash;on <em>randomization</em> of treatment to
+    get estimates with meaningful causal interpretations.
+</li><li>
+    Characterize the error of this estimate, using <em>confidence intervals</em> to quantify uncertainty due to random sampling
+     and discussing, in plain language, possible sources of bias and what both mean for the <em>accuracy</em> of their estimate and the <em>coverage</em> of their
+     confidence interval.
+</li><li>
+    Interpret others' work in the same terms, e.g. identifying the estimand, population, and sample;
+    describing the predictive model used and how its predictions are combined to form an estimate;
+    summarizing their claims about accuracy; finding possible sources of error; and describing how these errors
+    might affect the validity of the study's conclusions in mathematical terms and in plain language.
+</li><li>
+    Demonstrate proficiency in statistics-relevant programming skills in the <b>R</b> language, including data simulation, modeling, and visualization.
+</li><li>
+    Demonstrate proficiency in the skills of statistical communication with both expert and lay audiences,
+    including the use of mathematical terminology or analogies as appropriate and
+    sketches and approximations to capture the essence of what's happening in a complex analysis.
+</li>
+
+</ol>
+</p>
+
+<p>
+<h5> Background Knowledge </h5>
+No prior exposure to probability or statistics is assumed. This class builds those up from scratch. What you will need is calculus (Math 210 or 211 or equivalent) and some basic <b>R</b> programming skills (QTM 150 or equivalent). You'll be reading and reusing code rather than writing it from scratch, so if you're not familiar with <b>R</b> but have experience programming in another language, you should be fine. The second semester will additionally draw on linear algebra (Math 221 or equivalent).
+</p><p>
+If you're interested but not sure if you're prepared, reach out and we'll talk.
+</p>
+
+<h5> Should You Take This Sequence or QTM 210&ndash;220? </h5>
+<p>
+The core content and organization of this sequence and QTM 210&ndash;220 are similar, but this one will be more tightly integrated, more mathematically rigorous, and a bit broader in scope. In particular, in addition to using the homework to get some practice working with the methods we're covering in lecture, we'll use it to explore some variations on them. The intention is to develop skills and confidence that'll help you tackle new problems by adapting what you already know. As a result, this class will probably be a bit more work than QTM 210&ndash;220 at times.
+</p><p>
+If you're planning to learn more about machine learning or causal inference methods or work in an area that uses them, you'll probably find that there are some gaps between what you'll need there and what you'd learn in QTM 210&ndash;220. Or in this class. Gaps are inevitable. What's intended is that, with this one, you'll have a bit of a head start. You'll have the kind of understanding and practice that makes it easy to identify the gaps and to work through them. The time you'd save then might be worth the extra time you'd put in now taking this class. It might be more fun, too.
+</p>
+</div>
+
+
+<div class="row" id="schedule">
+<h4> Tentative Schedule </h4>
+
+<p>
+Homework is assigned Thursday and due the following Thursday. Fridays are for reviewing the previous homework and taking questions on the current one.
+</p>
+
+<h5> Part 1: One-Sample Inference </h5>
+
+<table><tbody>
+<tr><td>Th&nbsp;Aug&nbsp;27,&nbsp;4:00</td><td> <a href="book/chapters/chapter-social-pressure-experiment.html">Introduction: The Social Pressure Experiment</a> <a href="decks/chapter-social-pressure-experiment-slides.html">[slides]</a> </td></tr>
+<tr><td>Th&nbsp;Aug&nbsp;27,&nbsp;11:59</td><td> <a href="book/homework/homework-setup.html">HW −1</a> out <a href="book/homework/handouts/homework-setup-handout.zip">[download zip]</a> &middot; <a href="book/homework/homework-descriptive.html">HW 0</a> out <a href="book/homework/handouts/homework-descriptive-handout.zip">[download zip]</a> </td></tr>
+<tr><td>F&nbsp;Aug&nbsp;28,&nbsp;2:30</td><td> HW 0 questions and prerequisite review </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;1,&nbsp;4:00</td><td> <a href="book/chapters/chapter-sampling.html">Sampling</a> <a href="decks/chapter-sampling-slides.html">[slides]</a> </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;3,&nbsp;4:00</td><td> <a href="book/chapters/chapter-point-and-interval-estimates.html">Point and Interval Estimates</a> <a href="decks/chapter-point-and-interval-estimates-slides.html">[slides]</a> </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;3,&nbsp;11:59</td><td> HW 0 due &middot; <a href="book/homework/homework-calibration.html">HW 1</a> out <a href="book/homework/handouts/homework-calibration-handout.zip">[download zip]</a> </td></tr>
+<tr><td>F&nbsp;Sep&nbsp;4,&nbsp;2:30</td><td> Review HW 0; questions on HW 1 </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;8,&nbsp;4:00</td><td> <a href="book/chapters/chapter-calibration-binary.html">Calibrating Interval Estimates</a> <a href="decks/chapter-calibration-binary-slides.html">[slides]</a> </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;10,&nbsp;4:00</td><td> <a href="book/chapters/chapter-sampling-with-replacement.html">Sampling with Replacement and the Binomial Distribution</a> </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;10,&nbsp;11:59</td><td> HW 1 due &middot; <a href="book/homework/homework-calibration-binary.html">HW 2</a> out <a href="book/homework/handouts/homework-calibration-binary-handout.zip">[download zip]</a> </td></tr>
+<tr><td>F&nbsp;Sep&nbsp;11,&nbsp;2:30</td><td> Review HW 1; questions on HW 2 </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;15,&nbsp;4:00</td><td> <a href="book/chapters/chapter-sampling-without-replacement.html">Sampling without Replacement and the Hypergeometric Distribution</a> </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;17,&nbsp;4:00</td><td> Bootstrap </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;17,&nbsp;11:59</td><td> HW 2 due &middot; HW 3 out </td></tr>
+<tr><td>F&nbsp;Sep&nbsp;18,&nbsp;2:30</td><td> Review HW 2; questions on HW 3 </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;22,&nbsp;4:00</td><td> Random Variables and Moments </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;24,&nbsp;4:00</td><td> Standard Deviation, Markov, and Chebyshev </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;24,&nbsp;11:59</td><td> HW 3 due &middot; HW 4 out </td></tr>
+<tr><td>F&nbsp;Sep&nbsp;25,&nbsp;2:30</td><td> Review HW 3; questions on HW 4 </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;29,&nbsp;4:00</td><td> Normal Approximation and its Sample-Size Payoff </td></tr>
+<tr><td>Th&nbsp;Oct&nbsp;1,&nbsp;4:00</td><td> Bias and Coverage </td></tr>
+<tr><td>Th&nbsp;Oct&nbsp;1,&nbsp;11:59</td><td> HW 4 due </td></tr>
+<tr><td>F&nbsp;Oct&nbsp;2,&nbsp;2:30</td><td> Review HW 4; Practice Exam 1 questions </td></tr>
+<tr><td>T&nbsp;Oct&nbsp;6,&nbsp;4:00</td><td> Review </td></tr>
+<tr><td>Th&nbsp;Oct&nbsp;8,&nbsp;4:00</td><td> Practice Exam Review </td></tr>
+<tr><td>F&nbsp;Oct&nbsp;9,&nbsp;2:30</td><td> Practice Exam 1 questions </td></tr>
+<tr><td>T&nbsp;Oct&nbsp;13,&nbsp;4:00</td><td> <em>No class (Fall Break)</em> </td></tr>
+<tr><td>Th&nbsp;Oct&nbsp;15,&nbsp;4:00</td><td> <b>Exam 1</b> </td></tr>
+</tbody></table>
+
+
+</div>
+
+
+
+<div class="row" id="practices">
+    <h4> Practices </h4>
+
+    <h5>Communication</h5>
+    <p>
+    I prefer to speak with students in real time rather than via email. That helps us get to know each other better and tends to lead to more efficient communication. The office hours listed above are set aside entirely for you; you don't need to make an appointment and can come and go as you please. I prefer that you attend in person, but if you can't make it to campus, I'm happy to talk via zoom. If you'd like to meet outside of these hours, please email me to set up an appointment. I'll do my best to respond to emails within 48 hours.
+    </p>
+    <p>
+    Please bring a laptop with an updated version of <b>R</b> to every meeting, as you'll need it for some in-class activities. It may be worth bringing a tablet, too, as the lecture slides on this website embed a little whiteboard app. You can take notes, do calculations, and draw sketches right on top of them. That's what I'm doing when I'm presenting the slides.
+    </p>
+
+    <h5>Homework</h5>
+
+    <p>
+    Homework will be assigned weekly, posted Thursday and due the following Thursday at 11:59pm. In the week before each exam, a practice exam replaces the regular homework. These will be a mix of calculations by hand and computer, often accompanied by sketches or plots to illustrate what's going on visually; structured data analysis tasks; and communication tasks that address the methods and results of some data analysis (your own or somebody else's) using a mix of sketching and writing. Collaboration on homework is encouraged, whether with classmates or with AI tools. I prefer that you use these as you would a good study partner: discuss problems, talk through ideas, get unstuck. And then write your solutions yourself, in your own words. The homework is where you learn, and the writing is how you and I both know you've learned it.
+    </p><p>
+    Readings, assignments, and course materials will be available through our class website. Homework will be submitted via Canvas.
+    </p><p>
+    Please submit your work as a single PDF or HTML file with answers to each question in order and clearly labeled. And please try to keep your submissions concise. In particular, include code only if it's asked for explicitly and plots only if asked for explicitly <em>or</em> you're using them to illustrate a point you're making in your answer. In that case, your text should refer to the plot explicitly and explain where to look and what we're meant to see. In short, write your answers knowing that somebody is going to read them and would prefer not to work harder than necessary to understand what you're saying. I'm not asking for beautiful formatting. It's fine, for example, to write answers by hand, take photos, and stick them in a PDF as long as everything is legible, labeled, and in the right order.
+    </p>
+
+    <p><h5>Accessibility and Accommodations</h5>
+        As the instructor of this course I endeavor to provide an inclusive learning environment. I want every
+        student to succeed. The Department of Accessibility Services (DAS) works with students who have
+        disabilities to provide reasonable accommodations. It is your responsibility to request accommodations.
+        In order to receive consideration for reasonable accommodations, you must register with the DAS
+        <a href="https://accessibility.emory.edu/students-accommodations/index.html">here</a>. Accommodations cannot be retroactively applied so you need
+        to contact DAS as early as possible and contact me as early as possible in the semester to discuss the
+        plan for implementation of your accommodations. For additional information about accessibility and accommodations, please contact the Department of
+        Accessibility Services at <a href="tel:14047279877">(404) 727-9877</a> or <a href="mailto:accessibility@emory.edu">accessibility@emory.edu</a>.
+        </p>
+
+        <p><h5>Writing Center</h5>
+        Tutors in the Emory Writing Center and the ESL Program are available to support Emory College students as they work on any type of writing assignment, at any stage of the composing process. Tutors can assist with a range of projects, from traditional papers and presentations to websites and other multimedia projects. Writing Center and ESL tutors take a similar approach as they work with students on concerns including idea development, structure, use of sources, grammar, and word choice. They do not proofread for students. Instead, they discuss strategies and resources students can use as they write, revise, and edit their own work. Students who are non-native speakers of English are welcome to visit either Writing Center tutors or ESL tutors. All other students in the college should see Writing Center tutors. Learn more, view hours, and make appointments by visiting the websites of the ESL Program and the Writing Center. Please review the Writing Center's tutoring policies before your visit.
+        </p>
+
+        <p><h5>Honor Code</h5>
+
+            The Honor Code is in effect throughout the semester. By taking this course, you affirm that it is a violation of the code to cheat on exams, to plagiarize, to deviate from the teacher's instructions about collaboration on work that is submitted for
+            grades, to give false information to a faculty member, and to undertake any other form of academic misconduct. You agree that the instructor is entitled to move you to another seat during examinations, without explanation. You also affirm that if you witness others violating the code you have a duty to report them to the honor council.
+        </p>
+
+    </div>
+
+
+    <div class="row" id="assessment">
+    <h4> Assessment </h4>
+
+    <p>
+    Final grades will be a weighted average of scores on Homework (40&percnt;) and Two Exams (30&percnt; each). Each exam covers one unit.
+    </p>
+
+    <p><h5>Homework</h5>
+    We'll have homework weekly as described above.
+    Your homework score will be the average of your scores on the homework assignments after dropping the lowest three.
+    This is meant to allow some slack for busy weeks, illness, or other circumstances that might keep you from doing your best work.
+    I will not be granting extensions, but if you find yourself burning through this slack due to circumstances that make it difficult
+    to complete multiple assignments, talk to me. We can work something out. I'm here to help you learn, not to make your life difficult.
+    </p>
+
+    <p><h5>Exams</h5>
+    There will be two exams, one per unit. Exam 1 will be during a lecture meeting time. Exam 2 will be held during the assigned final exam period (Dec 10&ndash;19). These exams will be closed-notes, but I will provide whatever formulas I think are relevant and will try to provide additional ones if you ask for them during the exam. Collaboration is not allowed on the exams. Nor is the use of any electronic devices other than a calculator.
+    </p>
+
+    <p><h5>The Curve</h5>
+    Grades will be curved at the end of the semester. While I can't tell you the exact curve in advance because there's
+    a lot to learn about what is and isn't challenging when we write a new exam, averages above 75&percnt; in my classes have historically been curved to an A or an A-
+    and averages about 60&percnt; to a B or a B+. I'll provide additional guidance on the interpretation of your exam scores during the semester.
+    You are not in competition with your classmates for a limited number of A's. I'm not curving to get any particular distribution of grades.
+    I'm curving so I can ask interesting questions to help you learn and solidify your understanding instead of calibrating the exam
+    so it's easy enough to get 90&percnt; of them correct. This is a tradition in upper-level math classes and, while it can take a little
+    getting used to, I think it's ultimately a good one.
+    </p>
+
+    <p><h5>Appeals</h5>
+    In order to appeal a grade, students must submit a written appeal by email no sooner than 24 hours after receipt of the graded assessment
+    and no more than 2 weeks after the grade was posted/returned. I may regrade the sub-portion of the assessment being appealed and the regrade is final.
+    The regrade may result in a higher, lower, or the same score. Please limit appeals to cases where you believe I've made a mistake or misunderstood what
+    you've written.
+    </p>
+
+    <p><h5>Incompletes</h5>
+    Incomplete grades are now handled by Emory's Office of Undergraduate Education, with permission of instructors. The College's general policy on Incompletes can be found <a href="https://catalog.college.emory.edu/policies/incompletes.html">here</a>; further questions can be directed to your OUE Academic Advisor. There must be an agreement between the instructor and the student prior to the end of the course for approval of an Incomplete, in addition to the approval from OUE.
+    </p>
+
+</div>
+
+</div>
+
+<!-- End Document
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

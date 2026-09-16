@@ -1,0 +1,2334 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>9&nbsp; Homework: Calibration with Binary Outcomes – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/chapter-sampling-without-replacement.html" rel="next">
+<link href="../chapters/chapter-sampling-with-replacement.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-calibration-binary.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#the-point" id="toc-the-point" class="nav-link" data-scroll-target="#the-point">The Point</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data">The Data</a></li>
+  <li><a href="#warm-up" id="toc-warm-up" class="nav-link" data-scroll-target="#warm-up">Warm Up</a></li>
+  <li><a href="#sec-improving-speed-and-precision" id="toc-sec-improving-speed-and-precision" class="nav-link" data-scroll-target="#sec-improving-speed-and-precision">Improving Speed and Precision at The Same Time</a></li>
+  <li><a href="#visualizing-calibration" id="toc-visualizing-calibration" class="nav-link" data-scroll-target="#visualizing-calibration">Visualizing Calibration</a></li>
+  <li><a href="#extra-credit-sampling-without-replacement" id="toc-extra-credit-sampling-without-replacement" class="nav-link" data-scroll-target="#extra-credit-sampling-without-replacement">Extra Credit: Sampling without Replacement</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-calibration-binary.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout-handout">
+<p><a href="handouts/homework-calibration-binary-handout.zip" download="homework-calibration-binary-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-calibration-binary.qmd</code> in Positron, and answer inside the answer blocks.</p>
+</div>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This week, we’re going to get into the details of real-world calibration. The kind that doesn’t require that you know your estimator’s actual sampling distribution. We’ll start simple. In <a href="#exr-your-interval-estimate" class="quarto-xref">Exercise&nbsp;<span>9.1</span></a> and <a href="#exr-your-coverage" class="quarto-xref">Exercise&nbsp;<span>9.2</span></a>, you’ll implement a calibrated interval estimator for a population proportion and calculate its actual coverage probability. Then, after a detour on how exactly we go from an estimate of the sampling distribution to an interval width (<a href="#exr-exact-vs-approx-width" class="quarto-xref">Exercise&nbsp;<span>9.3</span></a>), we’ll really get into how using an estimate affects the calibration of our interval estimates.</p>
+<p>Here we take advantage of a very nice feature of the sampling distributions we get when we’re estimating a proportion <span class="math inline">\(\theta\)</span>. after sampling with or without replacement. They’re determined by our estimation target <span class="math inline">\(\theta\)</span>, i.e.&nbsp;it’s Binomial or Hypergeometric with success probability <span class="math inline">\(\theta\)</span>. As a result, once we have a point estimate <span class="math inline">\(\hat\theta\)</span>, we’ve essentially determined our estimate of the sampling distribution estimate, i.e., it’s Binomial or Hypergeometric with success probability <span class="math inline">\(\hat\theta\)</span>. This means we can think of properties of our interval, e.g.&nbsp;its width or its upper and lower bounds, as functions of <span class="math inline">\(\hat\theta\)</span>. And we can visualize these functions. That’s what <a href="#fig-calibration-width" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> and <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> are about, and you’ll be using them in <a href="#exr-calibration-width" class="quarto-xref">Exercise&nbsp;<span>9.4</span></a> through <a href="#exr-calibration-width-turnout-2" class="quarto-xref">Exercise&nbsp;<span>9.6</span></a> to understand a phenomeon we saw on the <a href="https://qtm285-1.github.io/assets/lectures/Lecture3.html#/the-estimate-works.-why-does-it-work">last slide</a> of Lecture 3: around some point estimates, we get a wider-than-perfectly-calibrated interval, which effectively helps it cover the estimation target, and around others we get a narrower-than-perfectly-calibrated interval, which does the opposite. By looking at the width of the sampling distribution as a function of <span class="math inline">\(\theta\)</span>, we can understand where and why this happens—no programming required.</p>
+<p>We’ll conclude by using our visualizations to calculate the <em>actual coverage probability</em> of our imperfectly-calibrated interval estimates. First, in <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>, we’ll do it at a single value of <span class="math inline">\(\theta\)</span>—effectively repeating <a href="#exr-your-coverage" class="quarto-xref">Exercise&nbsp;<span>9.2</span></a> using our understanding of what these intervals look like rather than brute-force simulation. Then, in <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a>, we’ll repeat the process for a range of <span class="math inline">\(\theta\)</span> values, allowing us to plot the actual coverage probability of our real-world interval estimates as a function of <span class="math inline">\(\theta\)</span>.</p>
+<p>This is all for the case of sampling with replacement. Some extra credit exercises, <a href="#exr-coverage-plot-hyper" class="quarto-xref">Exercise&nbsp;<span>9.10</span></a> through <a href="#exr-coverage-calc-hyper-but-with-replacement" class="quarto-xref">Exercise&nbsp;<span>9.12</span></a>, repeat this process for the case of sampling without replacement.</p>
+</section>
+<section id="the-point" class="level2">
+<h2 class="anchored" data-anchor-id="the-point">The Point</h2>
+<p>For a lot of estimators, calibration is a bit more complicated than it is here. For example, that the width of the sampling distribution of a difference of two proportions depends on more than that difference—it depends on the two proportions themselves. We lose our one-to-one mapping between the point estimate and the sampling distribution, so there’s more to the question of how estimating this sampling distribution affects calibration. My hope is that, having some shared visual intuition for how calibration works in this simple case, we’ll have an easier time talking about how it works more generally.</p>
+</section>
+<section id="the-data" class="level2">
+<h2 class="anchored" data-anchor-id="the-data">The Data</h2>
+<p>We’ll be using the NBA data from last week’s homework. Last week, our binary indicator was whether a player scored at least 1,000 points. This week, we’ll use a different one: whether a player’s team wins more than half of the games they play in.</p>
+<p>You may have caught on that ‘your sample’ from last week’s homework probably isn’t sampled with replacement from the population after all. So we’ll work with ‘my sample’. Here’s some code you can run to get the data set up. Just like in class, we’ll use (little) <code>y</code> for the population and (big) <code>Y</code> for the sample.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sam <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://qtm285-1.github.io/assets/data/nba_sample_1.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"https://qtm285-1.github.io/assets/data/nba_population.csv"</span>) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>indicator <span class="ot">=</span> <span class="cf">function</span>(W,L,...) { W <span class="sc">/</span> (W<span class="sc">+</span>L) <span class="sc">&gt;</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span> }</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> sam <span class="sc">|&gt;</span> <span class="fu">pmap_vec</span>(indicator)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> pop <span class="sc">|&gt;</span> <span class="fu">pmap_vec</span>(indicator)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(Y)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">length</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pink     <span class="ot">=</span> <span class="st">'#ef476f'</span>  <span class="co"># rgb(239,71,111)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>teal     <span class="ot">=</span> <span class="st">'#118ab2'</span>  <span class="co"># rgb(17,138,178)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="warm-up" class="level2">
+<h2 class="anchored" data-anchor-id="warm-up">Warm Up</h2>
+<p>To get started, we’ll redo a few exercises from last week with a few modifications. First, we’ll use this new binary indicator instead of the indicator for scoring at least 1,000 points. And second, we’ll calibrate our intervals using <em>estimates</em> of our sampling distribution rather than the actual sampling distribution.</p>
+<p>To remind you of the notation, here’s how we write out our estimation target and estimator again. <span class="math display">\[
+\begin{aligned}
+\underset{\text{estimation target}}{\theta} &amp;= \frac{1}{m}\sum_{j=1}^m y_j \\
+\underset{\text{estimate}}{\hat\theta} &amp;= \frac{1}{n}\sum_{i=1}^n Y_i
+\end{aligned}
+\]</span></p>
+<p>The first one is a version of last week’s <a href="homework-calibration.html#exr-your-estimate">exercise on your estimate</a>.</p>
+<div id="exr-your-interval-estimate" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Using only my sample, calculate a 95% confidence interval for <span class="math inline">\(\theta\)</span>, the proportion of players in our population whose team won more than half of the games they played in. Assume that the sample is drawn with replacement from the population.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Your confidence interval should be <span class="math inline">\(\hat\theta \pm \hat{w}/2\)</span> where <span class="math inline">\(\hat{w}\)</span> is the width of the middle 95% of your estimate of the sampling distribution. You can use the function <code>width</code> from last week’s homework, but you’ll need draws from your estimate of the sampling distribution to pass to it. <a href="https://qtm285-1.github.io/assets/lectures/Lecture3.html#/payoff">This lecture slide</a> should help.</p>
+<section id="that-function-width-from-last-weeks-homework" class="level3">
+<h3 class="anchored" data-anchor-id="that-function-width-from-last-weeks-homework">That function <code>width</code> from last week’s homework</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>width <span class="ot">=</span> <span class="cf">function</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(draws), <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        actual <span class="ot">=</span> <span class="fu">mean</span>(center <span class="sc">-</span> w <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> w <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        nominal <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> alpha</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        actual <span class="sc">-</span> nominal</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">uniroot</span>(covg.dif, <span class="at">interval =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> <span class="fu">max</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center))))<span class="sc">$</span>root</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>theta.hat <span class="ot">=</span> <span class="fu">mean</span>(Y)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>theta.hat.draws <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="dv">10000</span>, n, theta.hat)<span class="sc">/</span>n</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="fu">width</span>(theta.hat.draws)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>interval <span class="ot">=</span> <span class="fu">c</span>(theta.hat <span class="sc">-</span> w<span class="sc">/</span><span class="dv">2</span>, theta.hat <span class="sc">+</span> w<span class="sc">/</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>My interval estimate is <span class="math inline">\(0.48 \pm 0.10\)</span> or equivalently <span class="math inline">\([0.38, 0.58]\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<p>The second one is a version of last week’s <a href="homework-calibration.html#exr-sampling-distribution">sampling-distribution exercise</a>.</p>
+<div id="exr-your-coverage" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Report the coverage probability of your interval estimator. To do this, draw 10,000 samples of size <span class="math inline">\(n=100\)</span> with replacement from the population, calculate an interval estimate based on each of these samples just like you did in <a href="#exr-your-interval-estimate" class="quarto-xref">Exercise&nbsp;<span>9.1</span></a>, and report the fraction of these intervals that contain the population mean.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>coverage.probability <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">=</span> y[J]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  theta.hat <span class="ot">=</span> <span class="fu">mean</span>(Y)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  theta.hat.draws <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="dv">10000</span>, n, theta.hat)<span class="sc">/</span>n</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">width</span>(theta.hat.draws)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  interval <span class="ot">=</span> <span class="fu">c</span>(theta.hat <span class="sc">-</span> w<span class="sc">/</span><span class="dv">2</span>, theta.hat <span class="sc">+</span> w<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  covers <span class="ot">=</span> interval[<span class="dv">1</span>] <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> interval[<span class="dv">2</span>]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  covers</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>My interval estimator’s coverage probability is approximately 95%.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="nte-bootstrap-equivalence" class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note&nbsp;9.1
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In <a href="https://qtm285-1.github.io/assets/lectures/Lecture4.html">Lecture 4</a>, we talked about an equivalence between the Binomial estimate of the sampling distribution used in the code above and the <em>bootstrap sampling distribution</em>—the distribution of the mean of samples of size <span class="math inline">\(n\)</span> drawn with replacement from our sample <span class="math inline">\(Y_1 \ldots Y_n\)</span>. We’ll be using the bootstrap sampling distribution to calibrate interval estimates around more complicated point estimators later in the semester, so for reference, here’s code that does exactly that in this context.</p>
+<p>For this particular estimator, <code>bootstrap.samples(Y, 10000)</code> is just a very slow way of drawing 10,000 samples from the Binomial distribution with success probability <span class="math inline">\(\hat\theta\)</span>—its output has exactly the same distribution as <code>rbinom(10000, n, theta.hat)/n</code>, the line of code from <a href="#exr-your-interval-estimate" class="quarto-xref">Exercise&nbsp;<span>9.1</span></a> that we’ve replaced. It’s slow enough that I’m going to use 1000 samples instead of 10,000.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-10"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-10-1"><a href="#annotated-cell-10-1" aria-hidden="true" tabindex="-1"></a>point.estimate <span class="ot">=</span> <span class="cf">function</span>(Y) { <span class="fu">mean</span>(Y) }</span>
+<span id="annotated-cell-10-2"><a href="#annotated-cell-10-2" aria-hidden="true" tabindex="-1"></a>bootstrap.samples <span class="ot">=</span> <span class="cf">function</span>(Y, replications) {  </span>
+<span id="annotated-cell-10-3"><a href="#annotated-cell-10-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">length</span>(Y)</span>
+<span id="annotated-cell-10-4"><a href="#annotated-cell-10-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span>replications <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="annotated-cell-10-5"><a href="#annotated-cell-10-5" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="annotated-cell-10-6"><a href="#annotated-cell-10-6" aria-hidden="true" tabindex="-1"></a>    Y.star <span class="ot">=</span> Y[J]</span>
+<span id="annotated-cell-10-7"><a href="#annotated-cell-10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">point.estimate</span>(Y.star)</span>
+<span id="annotated-cell-10-8"><a href="#annotated-cell-10-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="annotated-cell-10-9"><a href="#annotated-cell-10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-10-10"><a href="#annotated-cell-10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-10-11"><a href="#annotated-cell-10-11" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="annotated-cell-10-12"><a href="#annotated-cell-10-12" aria-hidden="true" tabindex="-1"></a>coverage.probability <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="annotated-cell-10-13"><a href="#annotated-cell-10-13" aria-hidden="true" tabindex="-1"></a>  J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="annotated-cell-10-14"><a href="#annotated-cell-10-14" aria-hidden="true" tabindex="-1"></a>  Y <span class="ot">=</span> y[J]</span>
+<span id="annotated-cell-10-15"><a href="#annotated-cell-10-15" aria-hidden="true" tabindex="-1"></a>  theta.hat <span class="ot">=</span> <span class="fu">mean</span>(Y)</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-10" data-target-annotation="1">1</button><span id="annotated-cell-10-16" class="code-annotation-target"><a href="#annotated-cell-10-16" aria-hidden="true" tabindex="-1"></a>  theta.hat.draws <span class="ot">=</span> <span class="fu">bootstrap.samples</span>(Y, <span class="dv">1000</span>)</span>
+<span id="annotated-cell-10-17"><a href="#annotated-cell-10-17" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">width</span>(theta.hat.draws)</span>
+<span id="annotated-cell-10-18"><a href="#annotated-cell-10-18" aria-hidden="true" tabindex="-1"></a>  interval <span class="ot">=</span> <span class="fu">c</span>(theta.hat <span class="sc">-</span> w<span class="sc">/</span><span class="dv">2</span>, theta.hat <span class="sc">+</span> w<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="annotated-cell-10-19"><a href="#annotated-cell-10-19" aria-hidden="true" tabindex="-1"></a>  covers <span class="ot">=</span> interval[<span class="dv">1</span>] <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> interval[<span class="dv">2</span>]</span>
+<span id="annotated-cell-10-20"><a href="#annotated-cell-10-20" aria-hidden="true" tabindex="-1"></a>  covers</span>
+<span id="annotated-cell-10-21"><a href="#annotated-cell-10-21" aria-hidden="true" tabindex="-1"></a>}) <span class="sc">|&gt;</span> <span class="fu">mean</span>()</span>
+<span id="annotated-cell-10-22"><a href="#annotated-cell-10-22" aria-hidden="true" tabindex="-1"></a>coverage.probability</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-10" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-10" data-code-lines="16" data-code-annotation="1">This is the one line in the calculation of <code>coverage.probability</code> that’s changed from the solution to <a href="#exr-your-coverage" class="quarto-xref">Exercise&nbsp;<span>9.2</span></a> above.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.944</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-improving-speed-and-precision" class="level2">
+<h2 class="anchored" data-anchor-id="sec-improving-speed-and-precision">Improving Speed and Precision at The Same Time</h2>
+<p>So far, to calculate our interval widths, we’ve used a ‘dot counting’ method. We’ve sampled 10,000 times from our (estimated) sampling distribution, then tried drawing arms of different lengths around the sampling distribution’s mean until we go one that included 9500 (95%) of those dots. You can think of it as an iterative process like this.</p>
+<div id="fig-dot-counting" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dot-counting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell quarto-layout-panel" data-layout-ncol="4">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-on-scatter-1.svg" class="img-fluid figure-img" alt="Simulated sampling-distribution dots with an interval that covers 80 percent of them."></p>
+<figcaption>Too narrow. Only 8000 dots are covered.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-on-scatter-2.svg" class="img-fluid figure-img" alt="Simulated sampling-distribution dots with an interval that covers 99.9 percent of them."></p>
+<figcaption>Too wide. 9990 dots are covered.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-on-scatter-3.svg" class="img-fluid figure-img" alt="Simulated sampling-distribution dots with an interval that covers 97.5 percent of them."></p>
+<figcaption>Getting there. 9750 dots.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-on-scatter-4.svg" class="img-fluid figure-img" alt="Simulated sampling-distribution dots with an interval that covers 95 percent of them."></p>
+<figcaption>Just right. 9500 dots.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-dot-counting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.1
+</figcaption>
+</figure>
+</div>
+<p>That’s really what the code is doing. What I’m leaving out is a clever way of choosing the next width to try given what’s happened so far. That’s baked into <strong>R</strong>’s built-in function <code>uniroot</code>, which is being used in <code>width</code> to find the solution to this equation.</p>
+<p><span class="math display">\[
+\hat f(x) = 0   \qqtext{ where }   \hat f(x) = \text{the fraction of dots covered at width } x - .95
+\]</span></p>
+<p>What’s imprecise about this is that we’re using 10,000 dots instead of infinitely many. We don’t really want to know the fraction of 10,000 dots that we’re going to cover—we want to know the fraction of the sampling distribution that we’re going to cover. To do this, we can make a slight modification to our code. We’ll swap our dot counting function <span class="math inline">\(\hat f(x)\)</span>, which was called <code>covg.dif</code> in the code, with a version <span class="math inline">\(f(x)\)</span> that actually calculates probability. Here’s the code. It’s a bit faster than the dot-counting version too.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>width.binom <span class="ot">=</span> <span class="cf">function</span>(theta, n, <span class="at">alpha=</span>.<span class="dv">05</span>) {</span>
+<span id="annotated-cell-3-2"><a href="#annotated-cell-3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
+<span id="annotated-cell-3-3"><a href="#annotated-cell-3-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-3" data-target-annotation="1">1</button><span id="annotated-cell-3-4" class="code-annotation-target"><a href="#annotated-cell-3-4" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   n, theta) <span class="sc">-</span></span>
+<span id="annotated-cell-3-5"><a href="#annotated-cell-3-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, n, theta)</span>
+<span id="annotated-cell-3-6"><a href="#annotated-cell-3-6" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
+<span id="annotated-cell-3-7"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="sc">-</span> nominal  </span>
+<span id="annotated-cell-3-8"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="annotated-cell-3-9"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
+<span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-3" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-3" data-code-lines="4,5" data-code-annotation="1">This uses the built-in function <code>pbinom</code>, which calculates the probability that a binomial random variable is less than or equal to <span class="math inline">\(x\)</span>. To calculate the probability that it’s between two values <span class="math inline">\(a&lt;b\)</span>, we take the probability it’s less than or equal to <span class="math inline">\(b\)</span> and subtract the probability it’s less than <span class="math inline">\(a\)</span>: <span class="math inline">\(P(a \le X \le b) = P(X \le b) - P(X &lt; a)\)</span>. And the probability that this average—which is some fraction of <span class="math inline">\(n\)</span>—is <em>less than</em> <span class="math inline">\(a\)</span> is, of course, the probability that it’s <em>less than or equal</em> to <span class="math inline">\(a-1/n\)</span>.</span>
+</dd>
+</dl>
+</div>
+</div>
+<p>You can interpret the ‘dot counting’ method as doing is exactly this, except using a histogram of 10,000 draws from the sampling distribution in place of the sampling distribution itself. Remember <a href="https://qtm285-1.github.io/assets/lectures/Lecture2.html#/coverage-probability-and-sampling-distributions">the exercise</a> from class last week where we thought about twins in neon-green shirts? That’s what <code>width</code> is doing. It’s using the <span class="pink">histogram I’ve shaded pink</span> instead of the <span class="teal">sampling distribution I’ve outlined on top of it in teal</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-pmf-on-scatter-1.svg" class="img-fluid figure-img" alt="A pink histogram of 10,000 simulated sample proportions overlaid with the teal-outlined binomial sampling distribution."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this exercise, you’re going to compare the two approaches. You’re going to work with your estimate of the sampling distribution from <a href="#exr-your-interval-estimate" class="quarto-xref">Exercise&nbsp;<span>9.1</span></a> and plot two functions of interval width <span class="math inline">\(x\)</span>: the fraction of the sampling distribution that’s covered by the interval <span class="math inline">\(\hat\theta \pm x/2\)</span> and the fraction of your 10,000 draws that is.</p>
+<div id="exr-exact-vs-approx-width" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Plot these two functions on the same axes. Add the horizontal lines <span class="math inline">\(y=.8\)</span> and <span class="math inline">\(y=.95\)</span>. Then explain how, using this plot, you can find the widths of the 95% confidence intervals calculated by <code>width</code> and <code>width.binom</code>. And report an 80% confidence interval centered on your estimate <span class="math inline">\(\hat\theta\)</span>. You should be able to read the width for that off the plot.</p>
+</div>
+</div>
+</div>
+<p>To reduce the amount of code you’ll have to write, I’ll give you most of what you need. All you’ll need to do is replace the <code>NaN</code> in <code>probability.covered</code> with the fraction of the sampling distribution that’s covered by the interval <span class="math inline">\(\hat\theta \pm x/2\)</span>. If you want a hint, mouse over the (1) and (2) below.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rbinom</span>(<span class="dv">10000</span>, n, theta.hat)<span class="sc">/</span>n</span>
+<span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>center <span class="ot">=</span> <span class="fu">mean</span>(draws)</span>
+<span id="annotated-cell-4-3"><a href="#annotated-cell-4-3" aria-hidden="true" tabindex="-1"></a>dots.covered <span class="ot">=</span> <span class="cf">function</span>(x) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="1">1</button><span id="annotated-cell-4-4" class="code-annotation-target"><a href="#annotated-cell-4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(center <span class="sc">-</span> x <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> x <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="annotated-cell-4-5"><a href="#annotated-cell-4-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-4-6"><a href="#annotated-cell-4-6" aria-hidden="true" tabindex="-1"></a>probability.covered <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-4" data-target-annotation="2">2</button><span id="annotated-cell-4-7" class="code-annotation-target"><a href="#annotated-cell-4-7" aria-hidden="true" tabindex="-1"></a>  <span class="cn">NaN</span></span>
+<span id="annotated-cell-4-8"><a href="#annotated-cell-4-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-4-9"><a href="#annotated-cell-4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-4-10"><a href="#annotated-cell-4-10" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="annotated-cell-4-11"><a href="#annotated-cell-4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="annotated-cell-4-12"><a href="#annotated-cell-4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(dots.covered)), <span class="at">color=</span>pink) <span class="sc">+</span></span>
+<span id="annotated-cell-4-13"><a href="#annotated-cell-4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(probability.covered)), <span class="at">color=</span>teal) <span class="sc">+</span></span>
+<span id="annotated-cell-4-14"><a href="#annotated-cell-4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">8</span>,.<span class="dv">95</span>,<span class="dv">1</span>), <span class="at">minor_breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span> </span>
+<span id="annotated-cell-4-15"><a href="#annotated-cell-4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">125</span>), <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">5</span>)) <span class="sc">+</span> </span>
+<span id="annotated-cell-4-16"><a href="#annotated-cell-4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>) </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-4" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="4" data-code-annotation="1">I’ve borrowed this code from the function <code>width</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-4" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-4" data-code-lines="7" data-code-annotation="2">Is there something analogous you should be borrowing from <code>width.binom</code>?</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-coverage-vs-width-template-1.svg" class="img-fluid figure-img" alt="Covered fraction versus interval width, comparing the simulated dot-counting calculation with the exact binomial probability calculation."></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-12"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-12-1"><a href="#annotated-cell-12-1" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rbinom</span>(<span class="dv">10000</span>, n, theta.hat)<span class="sc">/</span>n</span>
+<span id="annotated-cell-12-2"><a href="#annotated-cell-12-2" aria-hidden="true" tabindex="-1"></a>center <span class="ot">=</span> <span class="fu">mean</span>(draws)</span>
+<span id="annotated-cell-12-3"><a href="#annotated-cell-12-3" aria-hidden="true" tabindex="-1"></a>dots.covered <span class="ot">=</span> <span class="cf">function</span>(x) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="1">1</button><span id="annotated-cell-12-4" class="code-annotation-target"><a href="#annotated-cell-12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(center <span class="sc">-</span> x <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> x <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="annotated-cell-12-5"><a href="#annotated-cell-12-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-12-6"><a href="#annotated-cell-12-6" aria-hidden="true" tabindex="-1"></a></span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="3">3</button><span id="annotated-cell-12-7" class="code-annotation-target"><a href="#annotated-cell-12-7" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="annotated-cell-12-8"><a href="#annotated-cell-12-8" aria-hidden="true" tabindex="-1"></a>probability.covered <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-12" data-target-annotation="2">2</button><span id="annotated-cell-12-9" class="code-annotation-target"><a href="#annotated-cell-12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>x<span class="sc">/</span><span class="dv">2</span>),   n, theta) <span class="sc">-</span></span>
+<span id="annotated-cell-12-10"><a href="#annotated-cell-12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>x<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, n, theta)</span>
+<span id="annotated-cell-12-11"><a href="#annotated-cell-12-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-12-12"><a href="#annotated-cell-12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-12-13"><a href="#annotated-cell-12-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="annotated-cell-12-14"><a href="#annotated-cell-12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="annotated-cell-12-15"><a href="#annotated-cell-12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(dots.covered)), <span class="at">color=</span>pink) <span class="sc">+</span></span>
+<span id="annotated-cell-12-16"><a href="#annotated-cell-12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y =</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(probability.covered)), <span class="at">color=</span>teal) <span class="sc">+</span></span>
+<span id="annotated-cell-12-17"><a href="#annotated-cell-12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">8</span>,.<span class="dv">95</span>,<span class="dv">1</span>), <span class="at">minor_breaks =</span> <span class="cn">NULL</span>) <span class="sc">+</span> </span>
+<span id="annotated-cell-12-18"><a href="#annotated-cell-12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">125</span>), <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">5</span>)) <span class="sc">+</span> </span>
+<span id="annotated-cell-12-19"><a href="#annotated-cell-12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>) </span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-12" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="4" data-code-annotation="1">I’ve borrowed this code from the function <code>width</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="9,10" data-code-annotation="2">And I’ve borrowed this from <code>width.binom</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-12" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-12" data-code-lines="7" data-code-annotation="3">I needed this for what I borrowed from <code>width.binom</code> to work.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-coverage-vs-width-worked-1.svg" class="img-fluid figure-img" alt="Covered fraction versus interval width; the simulated and exact binomial curves nearly coincide and cross the 80 and 95 percent reference levels."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The height of the two lines at a given <span class="math inline">\(x\)</span>-coordinate, which should be and are roughly the same, shows the fraction of our estimate of the sampling distribution that we cover with an interval of width <span class="math inline">\(x\)</span>. The <span class="math inline">\(x\)</span>-coordinate where these lines cross the horizontal lines <span class="math inline">\(y=.8\)</span> and <span class="math inline">\(y=.95\)</span> are the widths we need for 80% and 95% coverage respectively. They cross <span class="math inline">\(y=.8\)</span> at <span class="math inline">\(x \approx  .125\)</span>, so the interval <span class="math inline">\(\hat\theta \pm .125/2\)</span> for <span class="math inline">\(\hat\theta \approx 0.48\)</span> (i.e.&nbsp;the interval <span class="math inline">\([0.42 , 0.54]\)</span> ) is an 80% confidence interval.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizing-calibration" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-calibration">Visualizing Calibration</h2>
+<p>In this problem, we’re going to try to understand how calibration works by visualizing it. This turns out to be pretty straightforward when we’re talking about estimating a frequency after sampling with replacement. That’s because we know exactly what the sampling distribution of the sample frequency looks like except for one thing: we don’t know the population frequency <span class="math inline">\(\theta\)</span>. Here’s what they look like for population frequencies <span class="math inline">\(\theta\)</span> from 10% to 90% in 10% increments at our sample size of n=100.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-intervals-across-thetas-1.svg" class="img-fluid figure-img" alt="Nine binomial sampling distributions for population proportions from 0.1 through 0.9, each with its calibrated 95 percent interval shown as a horizontal belt."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It follows that the width we should be using to calibrate our interval estimates—the width of the middle 95% of a distribution like this—is also determined by the population frequency <span class="math inline">\(\theta\)</span>. I’ve drawn it on as a ‘belt’ on the each distribution above. And we already have a function to calculate it: <code>width.binom</code>. And if we want to understand how these widths depend on <span class="math inline">\(\theta\)</span>, we can do the obvious thing: plot the width as a function of <span class="math inline">\(\theta\)</span>.</p>
+<div id="fig-calibration-width" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-calibration-width-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">01</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>widths<span class="fl">.100</span> <span class="ot">=</span> thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { <span class="fu">width.binom</span>(theta, <span class="at">n=</span>n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>widths<span class="fl">.625</span> <span class="ot">=</span> thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { <span class="fu">width.binom</span>(theta, <span class="at">n=</span><span class="dv">625</span>, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span>widths<span class="fl">.100</span>)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'theta'</span>, <span class="at">y=</span><span class="st">'width'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span>widths<span class="fl">.625</span>)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'theta'</span>, <span class="at">y=</span><span class="st">'width'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-width-vs-theta-1.svg" class="img-fluid figure-img" alt="Calibrated interval width versus population proportion for sample size 100; width is largest near one half and narrows toward zero and one."></p>
+<figcaption>The width of a calibrated 95% confidence interval as a function of the population frequency theta when <span class="math inline">\(n=100\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-width-vs-theta-2.svg" class="img-fluid figure-img" alt="Calibrated interval width versus population proportion for sample size 625; the same arch-shaped curve is uniformly narrower than for sample size 100."></p>
+<figcaption>The width of a calibrated 95% confidence interval as a function of the population frequency theta when <span class="math inline">\(n=625\)</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-calibration-width-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.2
+</figcaption>
+</figure>
+</div>
+<p>We can even plot the interval itself as a function of <span class="math inline">\(\theta\)</span>. Here’s two slightly different ways of doing it. On the left, we have a visualization that focuses on the interval’s <span class="fg" style="color:blue">upper</span> and <span class="fg" style="color:red">lower bounds</span> as functions of <span class="math inline">\(\theta\)</span>. The <span class="fg" style="color:blue">blue line</span> shows the upper bound and the <span class="fg" style="color:red">red line</span> shows the lower bound. On the right, we have a visualization that focuses on what the intervals themselves look like. We’re plotting the intervals themselves, laid out vertically, as a function of <span class="math inline">\(\theta\)</span>.</p>
+<p>These are really just different ways of styling the same plot. On the left, the upper and lower bounds are styled as two lines. On the right, maybe a bit more evocatively, they’re styled as the edges of actual intervals.</p>
+<div id="fig-calibration-width-intervals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-calibration-width-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-evocative-1.svg" class="img-fluid figure-img" alt="Lower and upper endpoints of the calibrated interval plotted as red and blue functions of the estimated proportion."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="homework-calibration-binary_files/figure-html/plot-interval-evocative-2.svg" class="img-fluid figure-img" alt="Calibrated intervals plotted vertically at each possible estimated proportion, forming a narrow band around the diagonal."></p>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-calibration-width-intervals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.3
+</figcaption>
+</figure>
+</div>
+<p>Here’s a few quick exercises to solidify your understanding of what these plots are saying.</p>
+<div id="exr-calibration-width" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Let’s use the notation <span class="math inline">\(w(\theta)\)</span> to refer to the function from <a href="#fig-calibration-width" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>, the width of a calibrated 95% confidence interval when the population frequency is <span class="math inline">\(\theta\)</span>. And let’s call the lower and upper bounds of the corresponding interval, which we see in <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>, <span class="math inline">\(\ell(\theta)\)</span> and <span class="math inline">\(u(\theta)\)</span> respectively. Write out formulas for <span class="math inline">\(\ell(\theta)\)</span> and <span class="math inline">\(u(\theta)\)</span> in terms of <span class="math inline">\(\theta\)</span> and <span class="math inline">\(w(\theta)\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p><span class="math display">\[
+\begin{aligned}
+\ell(\theta) &amp;= \theta - \frac{w(\theta)}{2} \\
+u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-calibration-width-turnout" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Let’s think about the ‘confidence interval for our estimate of the sampling distribution’ we talked about at the end of class. The one from <a href="https://qtm285-1.github.io/assets/lectures/Lecture3.html#/the-estimate-works.-why-does-it-work">the last slide</a>. On that slide, I showed interval estimates <span class="math inline">\(\hat\theta \pm w(\hat\theta)/2\)</span> calibrated by plugging a point estimate <span class="math inline">\(\hat\theta\)</span> into the binomial formula to estimate the sampling distribution, like you did in <a href="#exr-your-interval-estimate" class="quarto-xref">Exercise&nbsp;<span>9.1</span></a>. In particular, I showed these intervals for point estimates <span class="math inline">\(\hat\theta\)</span> at the two ends of the sampling distribution’s middle 95%: a red one centered at <span class="math inline">\(\theta-w(\theta)/2\)</span> and a blue one centered at <span class="math inline">\(\theta+w(\theta)/2\)</span> where <span class="math inline">\(\theta\)</span> was the population frequency. These intervals had different widths because they were calibrated using different estimates of the sampling distribution. Write out formulas these two intervals in terms of <span class="math inline">\(\theta\)</span> and the functions <span class="math inline">\(\ell\)</span> and <span class="math inline">\(u\)</span> you defined in <a href="#exr-calibration-width" class="quarto-xref">Exercise&nbsp;<span>9.4</span></a>. Then, using your solution to <a href="#exr-calibration-width" class="quarto-xref">Exercise&nbsp;<span>9.4</span></a>, write an equivalent formula in terms of <span class="math inline">\(\theta\)</span> and the function <span class="math inline">\(w\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p><span class="math display">\[
+\begin{aligned}
+\sb*{\ell\p*{\theta-\frac{w(\theta)}{2}},\  u\p*{\theta-\frac{w(\theta)}{2}}}
+&amp;= \p*{\theta - \frac{w(\theta)}{2}} \pm \frac{w\p*{\theta-\frac{w(\theta)}{2}}}{2}
+&amp;&amp; \text{ is the \textcolor[RGB]{248,118,109}{red} one } \\
+\sb*{\ell\p*{\theta+\frac{w(\theta)}{2}},\  u\p*{\theta+\frac{w(\theta)}{2}}}
+&amp;= \p*{\theta + \frac{w(\theta)}{2}} \pm \frac{w\p*{\theta+\frac{w(\theta)}{2}}}{2}
+&amp;&amp; \text{ is the \textcolor[RGB]{0,0,255}{blue} one } \\
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-calibration-width-turnout-2" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.6</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Using <a href="#fig-calibration-width" class="quarto-xref">Figure&nbsp;<span>9.2</span></a>, think about why the red interval, centered on an underestimate of the population frequency, covers the population frequency but the blue interval, centered on an overestimate, does not. No need to turn anything in as evidence that you’ve done the thinking.</p>
+<p>Now suppose that, instead of being roughly 70%, turnout was roughly 30%. Maybe we’re thinking about a midterm primary like we talked about in <a href="https://qtm285-1.github.io/assets/lectures/Lecture1.html">our first class of the semester</a>. Suppose we’ve calibrated interval estimates exactly the same way, using widths calibrated using estimates of the sampling distribution. And we’re thinking about two particular point estimates that could happen: a new version of the red one, at the lower end of the actual sampling distribution’s middle 95%, and a new version of the blue one, at the upper end of the actual sampling distribution’s middle 95%. Which of the two—if any—would cover the population frequency of 30%? What about in the case that the population frequency is 50%?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>If turnout were roughly 30%, the blue interval at the upper end would cover and the red interval at the lower end would not. If it were 50%, neither would cover.</p>
+<p>I’ll explain why. Looking at the <span class="math inline">\(x \pm w(x)/2\)</span> formulas from <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>, we see that intervals centered at <span class="math inline">\(x=\textcolor[RGB]{248,118,109}{\theta-w(\theta)/2}\)</span> and <span class="math inline">\(x=\textcolor[RGB]{0,0,255}{\theta+w(\theta)/2}\)</span> cover <span class="math inline">\(\theta\)</span> if and only if <span class="math inline">\(w(x) \ge w(\theta)\)</span>. That’s the point of these centers: perfectly calibrated intervals centered at those points would <em>just</em> touch <span class="math inline">\(\theta\)</span>. If we replace the ‘perfectly calibrated’ width <span class="math inline">\(w(\theta)\)</span> with one that’s <em>greater</em> than <span class="math inline">\(w(\theta)\)</span>, then the interval will cover <span class="math inline">\(\theta\)</span>; if we replace it with one that’s <em>less</em> than <span class="math inline">\(w(\theta)\)</span>, then the interval will not.</p>
+<p>When <span class="math inline">\(\theta\)</span> is roughly 70%, the red interval’s actual width is the height of the width function <span class="math inline">\(w(x)\)</span> at <span class="math inline">\(x = \theta-\frac{w(\theta)}{2}\)</span>, a point between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(.5\)</span>,and it is greater than <span class="math inline">\(w(\theta)\)</span> because the width function increases as we move from <span class="math inline">\(\theta\approx .7\)</span> toward its maximum at <span class="math inline">\(.5\)</span>. On the other hand, the blue interval’s actual width is smaller than <span class="math inline">\(w(\theta)\)</span> because we move away from <span class="math inline">\(.5\)</span> as we go from <span class="math inline">\(\theta\)</span> to its center. The situation is reversed when <span class="math inline">\(\theta\)</span> is roughly 30%, as the blue interval’s center is between <span class="math inline">\(\theta\)</span> and <span class="math inline">\(.5\)</span> and the red interval’s center is not. When <span class="math inline">\(\theta=.5\)</span>, width at <span class="math inline">\(\theta\)</span> is maximal, so the widths we get for both the red and blue intervals are smaller than <span class="math inline">\(w(\theta)\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Now here’s where we start to put it all together. Let’s write out <em>an indicator</em> that tells us whether, when our point estimate is <span class="math inline">\(x\)</span>, our interval estimate covers the population frequency <span class="math inline">\(\theta\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p><span class="math display">\[
+1_{\ell(\cdot) \le \theta \le u(\cdot)}(x) =
+\begin{cases} 1 &amp; \text{if } \ell(x) \le \theta \le u(x) \\ 0 &amp; \text{otherwise} \end{cases}
+\]</span></p>
+<div id="exr-coverage-plot" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.7</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Draw this indicator function, like you did in <a href="https://qtm285-1.github.io/book/homework/homework-0-descriptive.html#introduction">Homework 0</a>, on top of the plot of your estimator’s actual sampling distribution below. Describe how, assuming you were willing to get out a ruler and spend a lot of time measuring plots, you could calculate the coverage of the <span class="math inline">\(\hat\theta \pm w(\hat\theta)/2\)</span> interval estimates we’ve been talking about this week without writing any code.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span><em>Hint</em>. Understanding Your Indicator Function
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To draw your indicator function, you need to know where it’s one and where it’s zero. You can use <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a> to do this. At which <span class="math inline">\(x\)</span>-coordinate does the interval’s upper bound <span class="math inline">\(u(x)\)</span> cross the population frequency <span class="math inline">\(\theta \approx 0.49\)</span>? What happens to your indicator function there? What about the interval’s lower bound <span class="math inline">\(\ell(x)\)</span>?</p>
+<p>It’s fine to do this approximately, just by looking at the figure. But if you want to get the exact <span class="math inline">\(x\)</span>-coordinates, you should be able to use <code>widths.100</code> from the code used to draw <a href="#fig-calibration-width" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> in combination with your answer to <a href="#exr-calibration-width" class="quarto-xref">Exercise&nbsp;<span>9.4</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rbinom</span>(<span class="dv">1000</span>, n, theta)<span class="sc">/</span>n</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, theta)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>(<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n, <span class="at">y=</span>prob), <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>draws, <span class="at">y=</span><span class="fu">max</span>(prob)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span>), <span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">size=</span>.<span class="dv">5</span>, <span class="at">color=</span><span class="st">'purple'</span>) <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>theta, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">1</span>), <span class="at">limits=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">75</span>)) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-sampling-distribution-1.svg" class="img-fluid figure-img" alt="Binomial sampling distribution at the true population proportion, shown by bars and simulated purple dots with the true value marked by a green vertical line."></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Let’s figure out where our indicator function is one. Here’s an easy way to do it visually. Take your pick of the two plots in <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>, which show the upper and lower bounds of our interval estimates, <span class="math inline">\(\ell(\cdot)\)</span> and <span class="math inline">\(u(\cdot)\)</span>, as functions of <span class="math inline">\(x\)</span>. Add a horizontal line at <span class="math inline">\(y=\theta \approx 0.49\)</span>. I drew a green line on top of both.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="homework-calibration-binary_files/figure-html/plot-intervals-with-estimand-1.svg" class="img-fluid" alt="Interval endpoint curves crossed by a horizontal green line at the true population proportion, identifying estimates whose intervals cover."></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="homework-calibration-binary_files/figure-html/plot-intervals-with-estimand-2.svg" class="img-fluid" alt="Vertical calibrated intervals crossed by a horizontal green line at the true population proportion, identifying the covering intervals."></p>
+</div>
+</div>
+</div>
+<p>The plot on the right is a bit more evocative but the one on the left is a bit easier to read precisely. Our indicator is one at <span class="math inline">\(x\)</span>s where <span class="math inline">\(\theta\)</span> is between the upper bound <span class="math inline">\(\textcolor[RGB]{0,0,255}{u(x)}\)</span> and lower bound <span class="math inline">\(\textcolor[RGB]{248,118,109}{\ell(x)}\)</span>. So the edges of the region we should be shading—the <span class="math inline">\(x\)</span>-coordinates where our indicator switches from zero to one—are the <span class="math inline">\(x\)</span>-coordinates where the green line crosses the bounds from ‘outside’ to ‘inside’. Visually, what I’m seeing that it crosses ‘in’ at roughly <span class="math inline">\(x=.4\)</span> and ‘back out’ at roughly <span class="math inline">\(x=.59\)</span>.</p>
+<p>I can get the exact <span class="math inline">\(x\)</span> coordinates the green line is inside the bounds by actually calculating them. I can do that using <code>widths.100</code> vector used to draw <a href="#fig-calibration-width" class="quarto-xref">Figure&nbsp;<span>9.2</span></a> and <a href="#fig-calibration-width-intervals" class="quarto-xref">Figure&nbsp;<span>9.3</span></a>. In the code below, <code>inside</code> is my indicator function evaluated at each possible value of <span class="math inline">\(\hat\theta\)</span>, i.e.&nbsp;the ones with denominator <span class="math inline">\(n\)</span>. To find the boundaries, I just take the minimum and maximum of these possible values..</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>lower.edge <span class="ot">=</span> <span class="fu">min</span>(x[inside])</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>upper.edge <span class="ot">=</span> <span class="fu">max</span>(x[inside])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To draw the indicator function, I’ll use <code>annotate</code> to draw a rectangle as in the Week 0 Homework.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>binomial.indicator <span class="ot">=</span> <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">'rect'</span>, <span class="at">xmin=</span>lower.edge, <span class="at">xmax=</span>upper.edge, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">ymin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill=</span><span class="st">'blue'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot <span class="sc">+</span> binomial.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-indicator-1.svg" class="img-fluid figure-img" alt="Binomial sampling distribution with a blue shaded rectangle marking estimated proportions whose calibrated intervals cover the true value."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our coverage probability is just the expected value of this indicator function. It’s the fraction of the sampling distribution contained in our rectangle. I didn’t actually ask you to calculate it, but it’s easy enough when we know our boundaries.</p>
+<p>It’s 92.8%.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Our final question is a little more open-ended in how you do it. You could, for example, generalize your solution to <a href="#exr-your-coverage" class="quarto-xref">Exercise&nbsp;<span>9.2</span></a> or translate your solution to <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> into code. What we’re going to do is think of the coverage probability of these interval estimates as a function—a function of the actual population frequency <span class="math inline">\(\theta\)</span>—and plot it.</p>
+<div id="exr-coverage-calc" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.8</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Suppose we’re estimating <span class="math inline">\(\theta\)</span>, the frequency of ones in some population <span class="math inline">\(y_1 \ldots y_m\)</span>, based on a sample of size n=100 drawn with replacement. Plot, as a function of <span class="math inline">\(\theta\)</span>, the coverage probability of the interval estimate <span class="math inline">\(\hat\theta \pm w(\hat\theta)/2\)</span>. Repeat for a sample of size n=625.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A Better <code>width.binom</code>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>When I was writing my solution, I found that my precision was a bit limited if I used the version of <code>width.binom</code> above because it bounces around a little. The problem is that, due to the discreteness of the binomial distribution, there’s a range of widths that yield the same coverage probability. The smart thing to do would be to choose the smallest one, of course, but <code>uniroot</code> doesn’t know to do that. Within that range, <code>uniroot</code> doesn’t know what to pick and the choices it makes look a bit odd, as they can bounce up and down a little as we make small changes to the width—even as those changes are all in the same direction. I haven’t implemented the smart thing, but I have done something that breaks these ties and fixes the bouncing. What I’ve done is to ‘smooth’ the actual binomial probabilities by mixing them with a bit of the probabilities we get using its normal approximation.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>width.binom <span class="ot">=</span> <span class="cf">function</span>(theta, n, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">smooth.fraction=</span>.<span class="dv">001</span>) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    actual.normal.approx <span class="ot">=</span>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)) <span class="sc">-</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n))     </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   n, theta) <span class="sc">-</span>  </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, n, theta)   </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>smooth.fraction)<span class="sc">*</span>actual<span class="sc">+</span>smooth.fraction<span class="sc">*</span>actual.normal.approx        </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="sc">-</span> nominal </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>I’ll do this by extending the approach from <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>, where I wrote code to calculate coverage at a single value of <span class="math inline">\(\theta\)</span>. All I need to do now is do the same thing repeatedly, looping over a grid of values of <span class="math inline">\(\theta\)</span>.</p>
+<p>For a small population like our NBA one, we can try every possible value of <span class="math inline">\(\theta\)</span>: <span class="math inline">\(0, 1/m, 2/m, \ldots, 1\)</span>. For a population like our GA voters, that’s too many. We’ll just count from 0 to 1 by thousandths, which should be good enough for a plot.</p>
+<p>Note that there’s a bit of bouncing up and down in this curve. To make this a little more palatable visually, I’ve plotted it as a sequence of points instead of a line. It’s a useful trick. I haven’t had time to think through whether the actual curve bounces a little or it’s an artifact introduced by my code. <em>Extra Credit</em>. Figure out which it is and make a convincing argument. Let’s make it worth something: 10 points on Midterm 1.</p>
+<p>I’ve drawn a green line at <span class="math inline">\(y=.95\)</span>, our <em>nominal coverage probability</em>, i.e.&nbsp;the coverage probability we’re trying for.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, theta)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.625</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.625</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">625</span>,thetas<span class="fl">.625</span>)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span> </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-coverage-curves-1.svg" class="img-fluid figure-img" alt="Actual coverage probability versus population proportion for sample size 100, with a green horizontal line at nominal 95 percent coverage."></p>
+<figcaption>n=100</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-coverage-curves-2.svg" class="img-fluid figure-img" alt="Actual coverage probability versus population proportion for sample size 625, with a green horizontal line at nominal 95 percent coverage."></p>
+<figcaption>n=625</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-timing" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.9</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p><em>Optional</em>. Knowing a bit about your experience doing this homework will help me write better-calibrated assignments in the future. If you’d like, please tell me this.</p>
+<ol type="1">
+<li>Roughly how long it took you.</li>
+<li>Whether that was the time you want to spend on homework for this class, too much, or too little.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p><em>(Nothing to solve — this one is for me.)</em></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="extra-credit-sampling-without-replacement" class="level2">
+<h2 class="anchored" data-anchor-id="extra-credit-sampling-without-replacement">Extra Credit: Sampling without Replacement</h2>
+<p>Remember <a href="https://qtm285-1.github.io/assets/lectures/Lecture3.html#/sampling-without-replacement">from class</a> that if we sample <em>without replacement</em>, the sample frequency has a hypergeometric distribution, not a binomial distribution? That means that if we want to calibrate interval estimates for sampling without replacement, we need to make a very small change to the function <code>width.binom</code> to switch out the binomial distribution for the hypergeometric distribution. You are, of course, welcome to look up the documentation on the <strong>R</strong> function <code>phyper</code> and code that up yourself, but I’ve done it for you and provided the code below in case you’d rather not.</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Calibration based on the Hypergeometric Distribution: Code
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>width.hyper <span class="ot">=</span> <span class="cf">function</span>(theta, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) { </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n) <span class="sc">-</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="sc">-</span> nominal  </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>What we’re going to do here are versions of <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> and <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a> for a version of our NBA survey where we’ve collected a sample of size n=100 from our population of size m=539 players, but this time sampling without replacement. Here’s a plot of our sample frequency’s sampling distribution when we do this.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rhyper</span>(<span class="dv">1000</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)<span class="sc">/</span>n</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>(<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n, <span class="at">y=</span>prob), <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>draws, <span class="at">y=</span><span class="fu">max</span>(prob)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span>), <span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">size=</span>.<span class="dv">5</span>,<span class="at">color=</span><span class="st">'purple'</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>theta, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span>  </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">1</span>), <span class="at">limits=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">75</span>)) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-hypergeometric-sampling-distribution-1.svg" class="img-fluid figure-img" alt="Hypergeometric sampling distribution for sampling without replacement, shown by bars and simulated purple dots with the true value marked in green."></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="exr-coverage-plot-hyper" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.10</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Draw the indicator for coverage of a 95% interval, <span class="math inline">\(1_{\ell(\cdot) \le \theta \le u(\cdot)}\)</span>, on the plot above. Remember to use the width of the hypergeometric distribution rather than the binomial when calculating <span class="math inline">\(\ell\)</span> and <span class="math inline">\(u\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>I’ll do this the same way I did it in <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>. But this time I’ll use the hypergeometric width function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-21"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1">1</button><span id="annotated-cell-21-1" class="code-annotation-target"><a href="#annotated-cell-21-1" aria-hidden="true" tabindex="-1"></a>widths<span class="fl">.100</span> <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">101</span>)</span>
+<span id="annotated-cell-21-2"><a href="#annotated-cell-21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="annotated-cell-21-3"><a href="#annotated-cell-21-3" aria-hidden="true" tabindex="-1"></a>  widths<span class="fl">.100</span>[ii<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> <span class="fu">width.hyper</span>(ii<span class="sc">/</span>n, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>)</span>
+<span id="annotated-cell-21-4"><a href="#annotated-cell-21-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-21-5"><a href="#annotated-cell-21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-21-6"><a href="#annotated-cell-21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-21-7"><a href="#annotated-cell-21-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="annotated-cell-21-8"><a href="#annotated-cell-21-8" aria-hidden="true" tabindex="-1"></a>lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-21-9"><a href="#annotated-cell-21-9" aria-hidden="true" tabindex="-1"></a>ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-21-10"><a href="#annotated-cell-21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-21-11"><a href="#annotated-cell-21-11" aria-hidden="true" tabindex="-1"></a>inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-21-12"><a href="#annotated-cell-21-12" aria-hidden="true" tabindex="-1"></a>lower.edge <span class="ot">=</span> <span class="fu">min</span>(x[inside])</span>
+<span id="annotated-cell-21-13"><a href="#annotated-cell-21-13" aria-hidden="true" tabindex="-1"></a>upper.edge <span class="ot">=</span> <span class="fu">max</span>(x[inside])</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-21" data-code-lines="1,2,3,4" data-code-annotation="1">Here’s the change. The intended change was to swap out <code>width.binom</code> for <code>width.hyper</code>. I also replaced the call to ‘map_vec’ with a ‘for’ loop because I was getting errors when I mapped and they vanished when I made exactly the same calls in a loop. I don’t know why that happened.</span>
+</dd>
+</dl>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hypergeometric.indicator <span class="ot">=</span> <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">'rect'</span>, <span class="at">xmin=</span>lower.edge, <span class="at">xmax=</span>upper.edge, </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">ymin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill=</span><span class="st">'blue'</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> hypergeometric.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-hypergeometric-indicator-1.svg" class="img-fluid figure-img" alt="Hypergeometric sampling distribution with a blue shaded rectangle marking estimates whose hypergeometric-calibrated intervals cover the true value."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s calculate the coverage probability.</p>
+<p>It’s 92.4%.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-coverage-calc-hyper" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.11</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Suppose we’re estimating <span class="math inline">\(\theta\)</span>, the frequency of ones in some population <span class="math inline">\(y_1 \ldots y_m\)</span>, based on a sample of size n=100 drawn <em>without replacement</em> from a population of size 539. Plot, as a function of <span class="math inline">\(\theta\)</span>, the coverage probability of the interval estimate <span class="math inline">\(\hat\theta \pm w(\hat\theta)/2\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A Better <code>width.hyper</code>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-27" class="callout-27-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>While writing the solution, I implemented a smoothed version of this width function,too.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>width.hyper <span class="ot">=</span> <span class="cf">function</span>(theta, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">smooth.fraction=</span>.<span class="dv">001</span>) { </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    actual.normal.approx <span class="ot">=</span>  </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">sqrt</span>((m<span class="sc">-</span>n)<span class="sc">/</span>(m<span class="dv">-1</span>))) <span class="sc">-</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">sqrt</span>((m<span class="sc">-</span>n)<span class="sc">/</span>(m<span class="dv">-1</span>)))     </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n) <span class="sc">-</span> </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>smooth.fraction)<span class="sc">*</span>actual<span class="sc">+</span>smooth.fraction<span class="sc">*</span>actual.normal.approx        </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="sc">-</span> nominal  </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>The function <code>coverage.curve</code> differs from the one in solution to <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a> in two lines. They’re marked.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-24"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-24-1"><a href="#annotated-cell-24-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="annotated-cell-24-2"><a href="#annotated-cell-24-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="1">1</button><span id="annotated-cell-24-3" class="code-annotation-target"><a href="#annotated-cell-24-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.hyper</span>(x, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="annotated-cell-24-4"><a href="#annotated-cell-24-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-24-5"><a href="#annotated-cell-24-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-24-6"><a href="#annotated-cell-24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-24-7"><a href="#annotated-cell-24-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="2">2</button><span id="annotated-cell-24-8" class="code-annotation-target"><a href="#annotated-cell-24-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="annotated-cell-24-9"><a href="#annotated-cell-24-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-24-10"><a href="#annotated-cell-24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="annotated-cell-24-11"><a href="#annotated-cell-24-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="annotated-cell-24-12"><a href="#annotated-cell-24-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="annotated-cell-24-13"><a href="#annotated-cell-24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-24-14"><a href="#annotated-cell-24-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="annotated-cell-24-15"><a href="#annotated-cell-24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="annotated-cell-24-16"><a href="#annotated-cell-24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-24-17"><a href="#annotated-cell-24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-24-18"><a href="#annotated-cell-24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-24" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-24" data-code-lines="3" data-code-annotation="1">Calculate width using the hypergeometric instead of the binomial.</span>
+</dd>
+<dt data-target-cell="annotated-cell-24" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-24" data-code-lines="8" data-code-annotation="2">Calculate the expectation of our indicator using the hypergeometric probabilities rather than the binomial.</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-hypergeometric-coverage-curve-1.svg" class="img-fluid figure-img" alt="Actual coverage probability versus population proportion for hypergeometric intervals with sample size 100, compared with nominal 95 percent coverage."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Finally, let’s look into what would happen if we analyzed data that was sampled without replacement — as a real poll is — as if it were sampled with replacement.</p>
+<div id="exr-coverage-calc-hyper-but-with-replacement" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9.12</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Draw your indicator from <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> on top of your plot of the sampling distribution from <a href="#exr-coverage-plot-hyper" class="quarto-xref">Exercise&nbsp;<span>9.10</span></a>. Then calculate and plot, as a function of the population frequency <span class="math inline">\(\theta\)</span>, the coverage probability it illustrates. That is, the coverage probability of the interval estimator <span class="math inline">\(\hat\theta \pm w(\hat\theta)/2\)</span> calibrated as if you’d drawn a sample of size 100 with replacement from a population of 539, when you’ve actually drawn that sample without replacement.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>So what we’re going to see here is how much we <em>over-cover</em>, i.e.&nbsp;exceed our nominal coverage probability of 95%, when we calibrate using the wider binomial distribution. The degree of over-coverage isn’t huge because <span class="math inline">\(n=100\)</span> is not a huge fraction of <span class="math inline">\(m=539\)</span>. There’s some, because it’s not tiny in comparison, but I’ll show the coverage plot for <span class="math inline">\(n=(m-1)/2\)</span> to see what happens in that case too.</p>
+<p>It’s the same binomial indicator and width calculation function as in <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> and <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a>, but we calculate the expected value of the indicator using the hypergeometric probabilities as in <a href="#exr-coverage-calc-hyper" class="quarto-xref">Exercise&nbsp;<span>9.11</span></a>.</p>
+<p>We already have the indicator from <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>, so we can just overlay it on our new sampling distribution plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> binomial.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-indicator-on-hypergeometric-1.svg" class="img-fluid figure-img" alt="Hypergeometric sampling distribution overlaid with the wider blue coverage region obtained from binomial calibration."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This time we make <em>one</em> change to <code>coverage.curve</code> from <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a>. I’ll mark the changes we do and don’t make.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-26"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-26-1"><a href="#annotated-cell-26-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="annotated-cell-26-2"><a href="#annotated-cell-26-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="1">1</button><span id="annotated-cell-26-3" class="code-annotation-target"><a href="#annotated-cell-26-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="annotated-cell-26-4"><a href="#annotated-cell-26-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-26-5"><a href="#annotated-cell-26-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-26-6"><a href="#annotated-cell-26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-26-7"><a href="#annotated-cell-26-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="2">2</button><span id="annotated-cell-26-8" class="code-annotation-target"><a href="#annotated-cell-26-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="annotated-cell-26-9"><a href="#annotated-cell-26-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-26-10"><a href="#annotated-cell-26-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="annotated-cell-26-11"><a href="#annotated-cell-26-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="annotated-cell-26-12"><a href="#annotated-cell-26-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="annotated-cell-26-13"><a href="#annotated-cell-26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-26-14"><a href="#annotated-cell-26-14" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="annotated-cell-26-15"><a href="#annotated-cell-26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-26-16"><a href="#annotated-cell-26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="annotated-cell-26-17"><a href="#annotated-cell-26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-26-18"><a href="#annotated-cell-26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-26-19"><a href="#annotated-cell-26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-hidden code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-26" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-26" data-code-lines="3" data-code-annotation="1">Here’s the change we don’t make that we did in <a href="#exr-coverage-calc-hyper" class="quarto-xref">Exercise&nbsp;<span>9.11</span></a>. We’re calibrating using the binomial.</span>
+</dd>
+<dt data-target-cell="annotated-cell-26" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-26" data-code-lines="8" data-code-annotation="2">Here’s the change we do make. We’re calculating the coverage probability using the hypergeometric.</span>
+</dd>
+</dl>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>((m<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>, thetas)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-calibration-without-replacement-1.svg" class="img-fluid figure-img" alt="Coverage from binomial calibration under sampling without replacement at sample size 100, compared with nominal 95 percent coverage."></p>
+<figcaption>n=100</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-calibration-binary_files/figure-html/plot-binomial-calibration-without-replacement-2.svg" class="img-fluid figure-img" alt="Coverage from binomial calibration under sampling without replacement when the sample is about half the population, showing stronger overcoverage."></p>
+<figcaption>n=(m-1)/2</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>If you’re getting an error about <code>pmap_vec</code> not being found, you’ve probably got a pretty old version of <strong>purrr</strong> installed. That function, like <code>map_vec</code> from last week’s homework, was added in <a href="https://www.tidyverse.org/blog/2022/12/purrr-1-0-0"><strong>purrr</strong> version 1.0 in December 2022</a>. You can update it by running <code>install.packages("purrr")</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You’ll have to forgive the notation here. Sometimes when we want to write out a function, but don’t want to gives its argument a name, we’ll use the symbol <span class="math inline">\(\cdot\)</span> instead of a real argument name like <span class="math inline">\(x\)</span>. What this notation is saying is that, when you pass the function an argument <span class="math inline">\(x\)</span>, you should substitute it for the <span class="math inline">\(\cdot\)</span>. Perhaps it makes more sense when you see it compared to the alternative in action. Which looks more like an indicator variable for the interval estimate around <span class="math inline">\(\hat\theta\)</span> covering the population frequency <span class="math inline">\(\theta\)</span>: <span class="math inline">\(1_{\ell(\cdot) \le \theta \le u(\cdot)}(\hat\theta)\)</span> or <span class="math inline">\(1_{\ell(x) \le \theta \le u(x)}(\hat\theta)\)</span>?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../homework";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/chapter-sampling-with-replacement.html" class="pagination-link" aria-label="Sampling with Replacement and the Binomial Distribution">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/chapter-sampling-without-replacement.html" class="pagination-link" aria-label="Sampling without Replacement and the Hypergeometric Distribution">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

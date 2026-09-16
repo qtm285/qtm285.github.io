@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>22&nbsp; Homework: Comparing Estimators – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/chapter-bias-and-coverage.html" rel="next">
+<link href="../chapters/chapter-variance-and-sample-size.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-comparing-estimators.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#the-point" id="toc-the-point" class="nav-link" data-scroll-target="#the-point">The Point</a></li>
+  </ul></li>
+  <li><a href="#variance-when-sampling-without-replacement" id="toc-variance-when-sampling-without-replacement" class="nav-link" data-scroll-target="#variance-when-sampling-without-replacement">Variance when Sampling Without Replacement</a></li>
+  <li><a href="#bias-variance-and-tradeoffs" id="toc-bias-variance-and-tradeoffs" class="nav-link" data-scroll-target="#bias-variance-and-tradeoffs">Bias, Variance, and Tradeoffs</a>
+  <ul class="collapse">
+  <li><a href="#review-prior-based-estimators" id="toc-review-prior-based-estimators" class="nav-link" data-scroll-target="#review-prior-based-estimators">Review: Prior-Based Estimators</a></li>
+  <li><a href="#the-biasvariance-tradeoff" id="toc-the-biasvariance-tradeoff" class="nav-link" data-scroll-target="#the-biasvariance-tradeoff">The Bias/Variance Tradeoff</a></li>
+  <li><a href="#consistency" id="toc-consistency" class="nav-link" data-scroll-target="#consistency">Consistency</a></li>
+  </ul></li>
+  <li><a href="#convergence-in-probability" id="toc-convergence-in-probability" class="nav-link" data-scroll-target="#convergence-in-probability">Convergence in Probability</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-comparing-estimators.html"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout-handout">
+<p><a href="handouts/homework-comparing-estimators-handout.zip" download="homework-comparing-estimators-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-comparing-estimators.qmd</code> in Positron, and answer inside the answer blocks.</p>
+</div>
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<div class="hidden">
+<p><span class="math display">\[
+\DeclareMathOperator{\RMSE}{RMSE}
+\DeclareMathOperator{\mathop{\mathrm{E}}}{E}
+\DeclareMathOperator{\mathop{\mathrm{\mathop{\mathrm{V}}}}}{V}
+\DeclareMathOperator{\mathop{\mathrm{sd}}}{sd}
+\DeclareMathOperator{\mathop{\mathrm{\widehat{V}}}}{\widehat{V}}
+\DeclareMathOperator{\mathop{\mathrm{bias}}}{bias}
+\newcommand{\thetaprior}{\theta^{\text{prior}}}
+\newcommand{\nprior}{n^{\text{prior}}}
+\newcommand{\yprior}{y^{\text{prior}}}
+\]</span></p>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>This homework continues where the last one left off. You’ve now seen that biased estimators can mess up coverage, and you’ve learned exactly how: coverage depends on the ratio bias/se. Now we’ll dig into the tradeoffs involved in choosing an estimator.</p>
+<p>We’ll start with the <em>bias/variance tradeoff</em>. An estimator can be bad in multiple ways: too much bias, too much variance, or both. We’ll use <em>root-mean-squared error</em> to summarize overall accuracy.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Then we’ll talk about <em>consistency</em>—the one property that almost everyone agrees they want an estimator to have. It’s really the bare minimum: if you’re willing to collect enough data, you can get as close to the estimation target as you want. We’ll see which of our prior-based estimators are consistent and which aren’t.</p>
+<p>We’ll also finish a calculation from Lecture 5: the variance of a sample proportion when sampling without replacement.</p>
+<p>Finally, we’ll look at a conservative approach to interval calibration using Markov’s inequality. This gives intervals that are guaranteed to have <em>at least</em> 95% coverage, even if we’re wrong about the sampling distribution being normal.</p>
+</section>
+<section id="the-point" class="level2">
+<h2 class="anchored" data-anchor-id="the-point">The Point</h2>
+<p>Knowing this stuff will help you choose between estimators yourself, think about the choices others make, and communicate about these decisions and their implications. It’ll help us think about calibration later on, too, because when we know our point estimators are close to the estimation target, we can get away with using approximations like Taylor series to understand their sampling distributions.</p>
+</section>
+</section>
+<section id="variance-when-sampling-without-replacement" class="level1">
+<h1>Variance when Sampling Without Replacement</h1>
+<p>In <a href="https://qtm285-1.github.io/assets/lectures/Lecture3#/marginalization">Lecture 3</a>, we talked about the distribution of a sample proportion when we sample <em>without replacement</em>. This is, admittedly, a long read. But one thing we can take away from it—and I’ll just tell here rather than asking you to work it out — is the probability distribution of <span class="math inline">\(Y_1\)</span> when we make a single call and the joint distribution of <span class="math inline">\(Y_1, Y_2\)</span> when we make two calls. Those are just special cases of the ‘Partially Marginalized’ distribution described in Lecture 3. Letting <span class="math inline">\(m_0\)</span> and <span class="math inline">\(m_1\)</span> be the number of zeros and ones in our binary population <span class="math inline">\(y_1 \ldots y_m\)</span>, these are the distributions.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\frac{m_0}{m}\)</span></td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\frac{m_1}{m}\)</span></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\frac{m_0(m_0-1)}{m(m-1)}\)</span></td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\frac{m_0m_1}{m(m-1)}\)</span></td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\frac{m_0m_1}{m(m-1)}\)</span></td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\frac{m_1(m_1-1)}{m(m-1)}\)</span></td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>You can go ahead and cross out the <span class="math inline">\(Y_1\)</span> in the first table and write in <span class="math inline">\(Y_i\)</span>, because this is the marginal distribution of every individual observation <span class="math inline">\(Y_i\)</span> when we draw a sample without replacement of <em>any size</em> <span class="math inline">\(n\)</span>. You can cross out <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> in the second table and write in <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> for the same reason: it’s the joint distribution of any pair <span class="math inline">\((Y_i, Y_j)\)</span> for <span class="math inline">\(i\neq j\)</span> when we draw a sample without replacement of any size <span class="math inline">\(n\)</span>. This makes them a lot more useful.</p>
+<p>To justify this, we can do a simple two-step thought experiment. We’ll think of drawing a sample without replacement as the process of shuffling a deck of cards labeled 1 … m, then drawing the first <span class="math inline">\(n\)</span> cards off the top. Letting <span class="math inline">\(J_1\)</span> be what the first card says, <span class="math inline">\(J_2\)</span> what the second one says, and so on, our sample <span class="math inline">\(Y_1 \ldots Y_n\)</span> is <span class="math inline">\(y_{J_1} \ldots y_{J_n}\)</span>. Here’s our argument.</p>
+<ol type="1">
+<li><p>No matter how many cards we’re going to draw, the distribution of the first card is the same. Same with the first two cards. Thus, what we’ve written above is the marginal distribution of <span class="math inline">\(Y_1\)</span> and the joint distribution of <span class="math inline">\((Y_1,Y_2)\)</span> when we make any number of calls <span class="math inline">\(n\)</span>.</p></li>
+<li><p>If we’d pulled off the first <span class="math inline">\(n\)</span> cards and then counted from the bottom instead of the top, we’d get the same distribution. They’re shuffled, after all. So the marginal distributions of <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_n\)</span> are the same and so are the joint distributions of <span class="math inline">\((Y_1,Y_2)\)</span> and <span class="math inline">\((Y_n,Y_{n-1})\)</span>. The same thing would be true if we went through our top <span class="math inline">\(n\)</span> cards in any order. Thus, the marginal distributions of <span class="math inline">\(Y_i\)</span> are the same for all <span class="math inline">\(i\)</span> and the joint distributions of <span class="math inline">\((Y_i,Y_j)\)</span> are the same for all <span class="math inline">\(i \neq j\)</span>.</p></li>
+</ol>
+<p>Now let’s use this to calculate the variance of our sample proportion <span class="math inline">\(\hat\theta=\frac{1}{n}\sum_{i=1}^{n}Y_i\)</span>. Most of the work is already done on <a href="https://qtm285-1.github.io/assets/lectures/Lecture5.html#/the-standard-deviation-of-a-proportion-1">this slide</a> from Lecture 5.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> In that calculation, I used the following identity. It’s colored blue there to highlight it.</p>
+<p><span class="math display">\[
+\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = -\frac{\theta(1-\theta)}{m-1} \qfor i\neq j
+\]</span></p>
+<p>But I didn’t actually show that it’s true. That’s what we’re going to do now. Let’s start by rewriting this expression so it’s a little easier to work with. Like this.</p>
+<p><span class="math display">\[
+\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \mathop{\mathrm{E}}[Y_i Y_j] - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
+\]</span></p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Proof of Equivalence
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>To show that these two expressions are equivalent, we ‘multiply out’ <span class="math inline">\((Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j])\)</span> to get four terms, distribute the expectation and pull out constants, and cancel some equal-and-opposite terms in the result.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) }
+&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j - Y_i\mathop{\mathrm{E}}[Y_j] - Y_j\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
+&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}\sb*{ Y_i\mathop{\mathrm{E}}[Y_j] } - \mathop{\mathrm{E}}\sb*{ Y_j\mathop{\mathrm{E}}[Y_i] } + \mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
+&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] - \mathop{\mathrm{E}}[Y_j]\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] \\
+&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+<p>What’s nice about this second form is that using our tables above to calculate these expectations is easy. We actually have a row for <span class="math inline">\(Y_i\)</span> in our marginal table and can easily add a row to our joint table for <span class="math inline">\(Y_i Y_j\)</span>. I’d like to ask you to calculate the thing, but since it’d probably take a litte arithmetic to manipulate what you get into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> we used in lecture, I’m going to ask you to verify my calculation instead.</p>
+<div id="exr-covariance-with-replacement" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 24.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Using this equivalent form, and the tables above, show that the following identity is true. <span class="math display">\[
+\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
+\]</span></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p><span class="math inline">\(Y_iY_j\)</span> is 1 if both <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are 1 and otherwise zero, so <span class="math inline">\(\mathop{\mathrm{E}}[Y_iY_j]\)</span> is the probability that both <span class="math inline">\(Y_i\)</span> and <span class="math inline">\(Y_j\)</span> are 1. Referring to our joint distribution table above, that’s <span class="math inline">\(\frac{m_1(m_1-1)}{m(m-1)}\)</span>. That’s our first term. And because we’ve sampled uniformly-at-random, expected value of <span class="math inline">\(Y_i\)</span> (and <span class="math inline">\(Y_j\)</span>) is <span class="math inline">\(\theta=m_1/m\)</span>, the population mean, so the product of the expectations is <span class="math inline">\(\theta^2=(m_1/m)^2\)</span>. Subtracting these, as in our new ‘equivalent formula’ for the cross term, gives us the result we’re looking for.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Simplifying this into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> is a little bit of work. As usual, the trick is to give your two terms a common denominator and see what cancels.</p>
+<p>I’ll save you the trouble, but I’ll ‘fold’ it like I usually do solutions, so if you’d like to try it on your own, you can without the solution staring you in the face. If you do just want to read it, expand the box by clicking on it.</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Simplifying our Cross-Term
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[
+\begin{aligned}
+\frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
+&amp;= \frac{m_1(m_1-1)m - m_1^2(m-1)}{m^2(m-1)} &amp;&amp; \text{ getting a common denominator} \\
+&amp;= \frac{ (m_1^2 - m_1m) - (m_1^2 m - m_1^2)}{m^2(m-1)} &amp;&amp; \text{ expanding products} \\
+&amp;= \frac{ m_1^2 - m_1m}{m^2(m-1)} &amp;&amp; \text{ canceling equal and opposite terms} \\
+&amp;= \frac{ m_1(m_1 - m)}{m^2(m-1)} &amp;&amp; \text{ pulling out common factors} \\
+&amp;= \frac{m_1}{m} \cdot \frac{m_1-m}{m} \times \frac{1}{m-1} &amp;&amp; \text{ grouping factors in the numerator and denominator} \\
+&amp;= \theta (\theta - 1) \times \frac{1}{m-1} &amp;&amp; \text{ for } \  \theta = \frac{m_1}{m} \\
+&amp;= -\frac{\theta(1-\theta)}{m-1} &amp;&amp; \text{ as desired }
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="bias-variance-and-tradeoffs" class="level1">
+<h1>Bias, Variance, and Tradeoffs</h1>
+<section id="review-prior-based-estimators" class="level2">
+<h2 class="anchored" data-anchor-id="review-prior-based-estimators">Review: Prior-Based Estimators</h2>
+<p>In the last homework, we worked with estimators that incorporate prior information. Recall the general form: if we have <span class="math inline">\(\nprior\)</span> prior observations with mean <span class="math inline">\(\thetaprior\)</span>, we can combine them with our sample to get <span class="math display">\[
+\tilde{Y}_{\nprior} = \frac{1}{\nprior + n}  \left\{ * \right\}{ \nprior\thetaprior + n\bar Y }.
+\]</span> You calculated the bias and standard deviation of this estimator: <span class="math display">\[
+\begin{aligned}
+\text{bias} &amp;= \frac{\nprior( \thetaprior - \theta)}{\nprior + n} \\
+\mathop{\mathrm{sd}}(\tilde Y_{\nprior}) &amp;= \sqrt{\frac{n\theta(1-\theta)}{(\nprior + n)^2}}
+\end{aligned}
+\]</span> And you saw, both in the sampling distribution plots and in the coverage simulation, that bias causes problems for interval estimation. The lecture gave us the precise relationship: coverage depends on the ratio bias/se.</p>
+<p>Now we’ll dig deeper into the tradeoffs involved in choosing an estimator.</p>
+</section>
+<section id="the-biasvariance-tradeoff" class="level2">
+<h2 class="anchored" data-anchor-id="the-biasvariance-tradeoff">The Bias/Variance Tradeoff</h2>
+<p>Here’s the figure from last homework showing three estimators at three sample sizes. Recall that estimator ‘a’ is the sample mean (unbiased), estimator ‘b’ uses a fixed number of prior observations (bias shrinks with <span class="math inline">\(n\)</span>), and estimator ‘c’ scales the prior observations with sample size (constant bias).</p>
+<div id="fig-3-sampling-distributions" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-bias-variance-grid-1.svg" class="img-fluid figure-img" alt="A three-by-three grid of sampling distributions compares three estimators at sample sizes 10, 40, and 160. Green lines mark the target; blue solid and dotted lines mark each estimator's mean and two-standard-deviation range."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;25.1: Sampling distributions of three estimators at three sample sizes.
+</figcaption>
+</figure>
+</div>
+<p>As the figure shows, there are multiple ways to be a not-so-great estimator. You can have no bias—or small bias—but so much variance that in many surveys (i.e.&nbsp;many draws from the sampling distribution) you’re way off. That’s what we see happening with ‘estimator a’ at sample size <span class="math inline">\(n=10\)</span>. You can have low variance but comparatively high bias, like we see with ‘estimator c’ at sample sizes <span class="math inline">\(n=40\)</span> and <span class="math inline">\(n=160\)</span>. We often use <em>root-mean-squared-error</em> to summarize the typical magnitude of an estimator’s error.</p>
+<p><span class="math display">\[
+\RMSE(\hat\theta) = \sqrt{ \mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{\hat \theta - \theta}^2 } }
+\]</span></p>
+<p>Famously, we can decompose its square into a sum of squared bias and variance.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{\hat\theta - \theta}^2 }
+&amp;= \mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{ \p*{\hat\theta - \mathop{\mathrm{E}}[\hat\theta]} + \p*{\mathop{\mathrm{E}}[\hat\theta] - \theta} }^2 } \\
+&amp;= \mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{ \hat\theta - \mathop{\mathrm{E}}[\hat\theta]}^2 } + 2\mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{ \hat\theta - \mathop{\mathrm{E}}[\hat\theta]} \cdot \left\{ * \right\}{\mathop{\mathrm{E}}[\hat\theta] - \theta} } + \mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{ \mathop{\mathrm{E}}[\hat\theta] - \theta }^2 } \\
+&amp;= \mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\theta] + 2 \times 0 + \underset{\text{bias}(\hat\theta)^2}{\left\{ * \right\}{ \mathop{\mathrm{E}}[\hat\theta] - \theta }^2} \\
+\end{aligned}
+\]</span></p>
+<p>Just to check that you’re following the math, do this quick exercise.</p>
+<div id="exr-linearity-of-expectation" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 25.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Explain why <span class="math inline">\(\mathop{\mathrm{E}}\sb*{ \left\{ * \right\}{ \hat\theta - \mathop{\mathrm{E}}[\hat\theta]} \cdot \left\{ * \right\}{\mathop{\mathrm{E}}[\hat\theta] - \theta} } = 0\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>It’s the expected value of a mean-zero random variable <span class="math inline">\(\left\{ * \right\}{ \hat\theta - \mathop{\mathrm{E}}[\hat\theta]}\)</span> times a constant <span class="math inline">\(\left\{ * \right\}{\mathop{\mathrm{E}}[\hat\theta] - \theta}\)</span>. Linearity of expectations justifies rewriting this as that constant times the expectation of the mean-zero random variable, i.e., times <span class="math inline">\(0\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<p>Now here’s a real one. For the first time this semester, we’re talking about different estimators for the same estimation target. This exercise is an opportunity to think about how you might choose between them. I’ve asked you to answer a few questions and sketch a few things to help you think through the issues, but I’ve tried to leave this pretty open-ended because this really is a question without a single right answer. To some extent, it’s about what you think is important. You don’t have to stand by this choice for the rest of your life, so it’s okay if you miss something important and wind up changing your mind later, e.g.&nbsp;when you talk with your classmates or read the solution. It’s really just to get you started thinking about these kinds of choices and what you might want to consider when making them.</p>
+<div id="exr-bias-variance-rmse" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 25.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Suppose we increase our number of prior observations, <span class="math inline">\(\nprior\)</span>, without changing their mean <span class="math inline">\(\thetaprior\)</span>. What happens to the bias of the estimator <span class="math inline">\(\tilde{Y}_{\nprior}\)</span>? E.g. does it stay the same, increase, decrease, increase then decrease, decrease then increase, etc.? What happens to its standard deviation? And what happens to its root-mean-squared-error, <span class="math inline">\(\RMSE(\tilde{Y}_{\nprior})\)</span>? Is there a <em>bias/variance tradeoff</em> going on?</p>
+<p>Thinking of bias, standard deviation, and root-mean-squared error as a functions of <span class="math inline">\(\nprior\)</span>, sketch all three on the same axes. This sketch doesn’t have to be super precise, but try to convey the general shape of each function and do identify precisely the location (value of <span class="math inline">\(\nprior\)</span>) and value (height of the function at the location) of any important features, e.g.&nbsp;minima or maxima of one curve, points where two curves cross, etc.</p>
+<p>Having done all this, propose a choice for <span class="math inline">\(\nprior\)</span> and explain why you’d make it. Your choice can depend on <span class="math inline">\(n\)</span>, <span class="math inline">\(\thetaprior\)</span>, and <span class="math inline">\(\nprior\)</span>, because you know all that stuff. But it can’t depend on <span class="math inline">\(\theta\)</span>. That’s something you don’t know.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Let’s recall our formulas for the bias and standard deviation of <span class="math inline">\(\tilde{Y}_{\nprior}\)</span> and sum their squares to get its mean squared error.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text{bias} &amp;= \frac{\nprior(\thetaprior-\theta)}{\nprior+n} \\
+\text{sd} &amp;=\frac{\sqrt{n\theta(1-\theta)}}{\nprior+n} \\
+\text{rmse}  &amp;= \sqrt{\frac{ (\nprior)^2 (\thetaprior-\theta)^2 + n\theta(1-\theta)}{(\nprior+n)^2}}
+\end{aligned}
+\]</span></p>
+<p>The bias of this estimator increases in magnitude as <span class="math inline">\(\nprior\)</span> grows. In particular, it grows more or less linearly when <span class="math inline">\(\nprior\)</span> is small relative to <span class="math inline">\(n\)</span> and level off then slows, taking the value <span class="math inline">\((\thetaprior-\theta)/2\)</span> for <span class="math inline">\(\nprior=n\)</span> and converging to <span class="math inline">\(\thetaprior-\theta\)</span> as <span class="math inline">\(\nprior\)</span> goes to infinity. The standard deviation of this estimator decreases as <span class="math inline">\(\nprior\)</span> grows, taking on half the value it has for <span class="math inline">\(\nprior=0\)</span> when <span class="math inline">\(\nprior=n\)</span> and converging to zero as <span class="math inline">\(\nprior\)</span> goes to infinity. The root-mean-squared error of this estimator, decreases then increases as <span class="math inline">\(\nprior\)</span> grows.</p>
+<p>I’m going to give you a long, detailed answer for the rest of this question. I wasn’t expecting anything like it from you, but I thought it might interest you and maybe clarify a few things you might’ve thought about when you approached the question yourself. I’ll start with precise plots of the bias, sd, and rmse curves for <span class="math inline">\(\thetaprior=.5\)</span> and three values of <span class="math inline">\(\theta\)</span>: <span class="math inline">\(.6\)</span>, <span class="math inline">\(.55,\)</span> and <span class="math inline">\(.525\)</span>. So that we can compare across different values of <span class="math inline">\(\theta\)</span>, I’ll plot each twice: once on a common set of axes (left) and once with the minimums of <span class="math inline">\(\text{rmse}\)</span> aligned (right).</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-60-1.svg" class="img-fluid figure-img" alt="Absolute bias, standard deviation, and RMSE versus number of prior observations when theta is 0.6, on a common horizontal scale; a dotted line marks minimum RMSE."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.6, and n=100</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-60-2.svg" class="img-fluid figure-img" alt="The same bias, standard deviation, and RMSE curves rescaled around the RMSE minimum."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.6, and n=100</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-55-1.svg" class="img-fluid figure-img" alt="Absolute bias, standard deviation, and RMSE versus number of prior observations when theta is 0.55, on a common horizontal scale; a dotted line marks minimum RMSE."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.55, and n=100</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-55-2.svg" class="img-fluid figure-img" alt="The same curves rescaled around the more distant RMSE minimum for theta 0.55."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.55, and n=100</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-525-1.svg" class="img-fluid figure-img" alt="Absolute bias, standard deviation, and RMSE versus number of prior observations when theta is 0.525, on a common horizontal scale; RMSE continues decreasing across most of the view."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.525, and n=100</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-tradeoff-theta-525-2.svg" class="img-fluid figure-img" alt="The same curves on a much wider scale that includes the distant RMSE minimum."></p>
+<figcaption>bias (red), sd (blue), and rmse (green) as a function of nprior when thetaprior=.5, theta=.525, and n=100</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>One salient feature is the minimum of the rmse curve, which I’ll indicate with a dotted line. We can find it by setting the mean squared error with respect to <span class="math inline">\(\nprior\)</span> to zero and solving for <span class="math inline">\(\nprior\)</span>. We use the quotient rule <span class="math inline">\([f(x)/g(x)]' = [f'(x)g(x) - f(x)g'(x)]/g(x)^2\)</span>. Since we’re looking for a minimum, we can ignore the denominator. We want <span class="math inline">\(x=\nprior\)</span> where <span class="math inline">\(f'(x)g(x) - f(x)g'(x) = 0\)</span> for <span class="math inline">\(f(x) = x^2 (\thetaprior-\theta)^2 + n\theta(1-\theta)\)</span> and <span class="math inline">\(g(x) = (x + n)^2\)</span>. <span class="math display">\[
+\begin{aligned}
+0 &amp;= f'(x)g(x) - f(x)g'(x) \\
+&amp;= 2x(\thetaprior-\theta)^2(x+n)^2 - 2x^2(\thetaprior-\theta)^2(x+n) - 2n\theta(1-\theta)(x+n) \\
+&amp;= 2x(\thetaprior-\theta)^2 (x+n)\left\{ * \right\}{(x+n) - x} - 2n\theta(1-\theta)(x+n) \\
+\end{aligned}
+\]</span> which happens, cancelling the common factor of <span class="math inline">\(2n(x+n)\)</span>, for <span class="math inline">\(x=\theta(1-\theta)/(\thetaprior-\theta)^2\)</span>.</p>
+<p>Another salient feature is the point where bias and standard deviation are equal, which is indicated by a crossing of the red and blue lines in the plots. We can solve for this as follows. <span class="math display">\[
+\frac{\nprior(\thetaprior-\theta)}{\nprior+n} = \frac{\sqrt{n\theta(1-\theta)}}{\nprior+n}
+\qqtext { where }
+\nprior = \sqrt{n\theta(1-\theta)} / (\thetaprior-\theta)
+\]</span></p>
+<p>One interesting thing to notice is that, while both of these points shift to the right as <span class="math inline">\(\thetaprior\)</span> gets closer to <span class="math inline">\(\theta\)</span>, the point where rmse is minimized shifts to the right <em>faster</em>. An implication of this that we can see in the plots is that choosing <span class="math inline">\(\nprior\)</span> to minimize rmse will result in an estimator with a larger <span class="math inline">\(\text{bias}/\text{sd}\)</span> ratio when <span class="math inline">\(\thetaprior\)</span> is close to <span class="math inline">\(\theta\)</span> than when it is far away. Why does this matter? Because the bigger the ratio of <span class="math inline">\(\text{bias}/\text{sd}\)</span>, the worse our interval estimators’ coverage probability will be. When this ratio is roughly 1.96, we’ll get about 50% coverage. We see that <a href="../chapters/chapter-comparing-two-groups.qmd#sec-implications-of-unbiasedness">here in the slides</a> when discussing implications of bias. So it tells us that choosing <span class="math inline">\(\nprior\)</span> to minimize <span class="math inline">\(\rmse\)</span> is not necessarily a good idea from an inferential perspective. When we do this, poor coverage isn’t a price we pay for choosing <span class="math inline">\(\thetaprior\)</span> badly—it’s our ‘reward’ for choosing it well. In light of this, I think choosing <span class="math inline">\(\nprior\)</span> to minimize <span class="math inline">\(\rmse\)</span> is a bad idea. We could try to do something a bit more complicated like choosing <span class="math inline">\(\nprior\)</span> to minimize <span class="math inline">\(\rmse\)</span> subject to a constraint on the bias/sd ratio, e.g., <span class="math inline">\(\text{bias}/\text{sd} \le 1/2\)</span>, to ensure close-to-nominal coverage. But what I’d suggest is simpler: just set <span class="math inline">\(\nprior=0\)</span> and use the sample mean.</p>
+<p>All of this assumes we can actually choose <span class="math inline">\(\nprior\)</span> to minimize <span class="math inline">\(\rmse\)</span>. It isn’t obvious that we can given that our <span class="math inline">\(\rmse\)</span> formula involves the unknown population proportion <span class="math inline">\(\theta\)</span>, but you can do something a lot like that by minimizing an <em>estimate</em> of <span class="math inline">\(\text{rmse}\)</span>. People do this often, although typically in more complex estimation problems. The most popular technique for this is probably <a href="https://en.wikipedia.org/wiki/Cross-validation_(statistics)">Cross-Validation</a>, which we’ll talk about later in the semester. <a href="https://en.wikipedia.org/wiki/Stein's_unbiased_risk_estimate">Stein’s Unbiased Risk Estimate</a> is an interesting alternative. We won’t get there this semester, but it doesn’t require all that much background to understand, so take a look at the wikipedia page if you’re curious.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="consistency" class="level2">
+<h2 class="anchored" data-anchor-id="consistency">Consistency</h2>
+<p>We say an estimator is <em>consistent</em> if it converges to the estimation target as sample size increases to infinity. That’s being vague. There are a couple ways this is imprecise.</p>
+<p>First, what does it mean to be the same estimator at different sample sizes? E.g., the definition of estimator ‘c’ in <a href="#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>25.1</span></a> depends on <span class="math inline">\(n\)</span>, so is that ‘an estimator’? The resolution for this one is easy—if we really want to be precise, we explicitly specify an estimator for each sample size: we say ‘an estimator sequence’ is consistent instead of ‘an estimator’. When we say ‘an estimator’ is consistent, we expect the person we’re talking about understands what sequence of estimators we actually mean. This is just a language thing.</p>
+<p>The second thing that’s imprecise is what it actually means for a random variable, like an estimator, to converge to something. It turns out that there are a lot of different, useful ways to think about this happening. One of the simpler versions is called <em>convergence in mean square</em>. A sequence of random variables <span class="math inline">\(Z_1,Z_2,Z_3,\ldots\)</span> converges in mean square to a a random variable <span class="math inline">\(Z\)</span>, which is often but not necessarily a constant, if the root mean square difference between them, <span class="math inline">\(\sqrt{E[(Z_n - Z)^2]}\)</span>, gets arbitrarily small (i.e., converges to zero) as <span class="math inline">\(n \to \infty\)</span>. And we say an estimator <span class="math inline">\(\hat\theta\)</span> is <em>consistent in mean-square</em> if it converges in mean square to the estimation target <span class="math inline">\(\theta\)</span> as <em>sample size</em> <span class="math inline">\(n\)</span> goes to infinity.</p>
+<p>Here are a few exercises to get you thinking about what consistency can and can’t look like.</p>
+<div id="exr-mean-square-convergence-and-rmse" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 25.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>If we know that an estimator <span class="math inline">\(\hat\theta\)</span> is mean-square consistent, do we know that its root-mean-squared error goes to zero? What about its bias and standard deviation?</p>
+<p>If we know that an estimator <span class="math inline">\(\hat\theta\)</span> is <em>not</em> consistent in mean square, what does that tell us about its root-mean-squared error, bias, and standard deviation?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>As a matter of definition, an estimator is consistent if (and only if) its root-mean-squared error goes to zero. And because mean squared error is the sum of its squared bias and squared standard deviation, this implies that both its bias and standard deviation go to zero.</p>
+<p>If an estimator is not consistent in mean square, then its root-mean-squared error does not go to zero, so <em>at least one of</em> its bias or its standard deviation does not go to zero.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-mean-square-convergence" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 25.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Of the three estimators depicted in <a href="#fig-3-sampling-distributions" class="quarto-xref">Figure&nbsp;<span>25.1</span></a> — estimators ‘a’, ‘b’, and ‘c’ — which are mean-square consistent? Using the figure, explain your reasoning.</p>
+<p>Because consistency is about what happens as <span class="math inline">\(n\to\infty\)</span>, it’s not really possible to know whether an estimator is consistent by looking at what happens at 3 sample sizes, like we have in the figure. You’d have to guess what the next row would look like, and the next, etc. But you don’t need to guess. You have the actual estimator definitions in the review section at the start of this homework. That said, rather than phrasing your explanation in terms of any formulas, talk about what you see in the figure and what the formulas tell you that <em>you would see</em> if we were to add rows for <span class="math inline">\(n\)</span> increasing to <span class="math inline">\(\infty\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Estimators ‘a’ and ‘b’ are mean-square consistent. The bias of ‘a’ is zero at all sample sizes and the bias of ‘b’ is decreasing to zero as sample size increases. And both have standard deviations that go to zero as sample size increases. Estimator ‘c’ is not mean-square consistent because its bias isn’t improving with sample size.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="convergence-in-probability" class="level1">
+<h1>Convergence in Probability</h1>
+<p>Now let’s think about another notion of convergence. If an estimator’s sampling distribution ends up in the right location (<span class="math inline">\(\text{bias} \to 0\)</span>) with arbitrarily little spread (<span class="math inline">\(\text{standard deviation} \to 0\)</span>), then it makes sense that <em>every draw from that sampling distribution</em> will be close to the estimation target. Or almost every draw, anyway.</p>
+<p>We tend to visualize our estimate as a single dot, e.g.&nbsp;the black dot below. That’s what it is. One number. But when we want to think about what estimates we could have plausibly gotten, we tend to think about the dots we’d get if we were to repeat our survey a hundred times or a billion, each time calculating an estimate the same way. The sampling distribution of our estimator. We can plot actual dots, like the purple ones below, or histogram them, to get a sense of what this looks like. Hopefully all this is familiar-verging-on-boring to you by now.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-comparing-estimators_files/figure-html/plot-convergence-in-probability-1.svg" class="img-fluid figure-img" alt="Sampling distribution shown simultaneously as a histogram and as repeated purple estimate dots, with one observed estimate emphasized in black and the distribution mean marked by a vertical line."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Whereas convergence in mean square is about the <em>typical distance</em> between these dots and our estimation target, <em>convergence in probability</em> is about the fraction of these dots that falls within a small distance <span class="math inline">\(\epsilon\)</span>. We say a random variable <span class="math inline">\(\hat\theta\)</span> converges in probability to <span class="math inline">\(\theta\)</span> if, for anyone’s idea of ‘sufficiently close’, the probability that <span class="math inline">\(\hat\theta\)</span> is sufficiently close to <span class="math inline">\(\theta\)</span> goes to one. <span class="math display">\[
+P(\lvert\hat\theta - \theta\rvert \le \epsilon) \to 1 \qqtext{ as } n \to \infty \qqtext{ for any } \epsilon &gt; 0
+\]</span> Or equivalently, the probability that it isn’t sufficiently close goes to zero. That is, if <span class="math display">\[
+P(\lvert\hat\theta - \theta\rvert &gt; \epsilon) \to 0 \qqtext{ as } n \to \infty \qqtext{ for any } \epsilon &gt; 0
+\]</span></p>
+<p>If <span class="math inline">\(\hat \theta\)</span> is an estimator and <span class="math inline">\(\theta\)</span> is our estimation target, we say <span class="math inline">\(\hat\theta\)</span> is <em>consistent in probability</em> if it converges in probability to <span class="math inline">\(\theta\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Convergence in Probability and Interval Estimation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can rephrase consistency in probability as a question about what happens to the coverage probability of a sequence of interval estimates <span class="math inline">\(\hat\theta \pm \epsilon\)</span> as sample size <span class="math inline">\(n\)</span> goes to infinity. <span class="math inline">\(\hat\theta\)</span> is consistent in probability if, for every <span class="math inline">\(\epsilon &gt; 0\)</span>, the coverage probability of the interval estimate <span class="math inline">\(\hat\theta \pm \epsilon\)</span> goes to one as <span class="math inline">\(n\)</span> goes to infinity. Why? Because <span class="math inline">\(\theta\)</span> is in the interval <span class="math inline">\(\hat\theta \pm \epsilon\)</span> if and only if <span class="math inline">\(\lvert\hat\theta - \theta\rvert \le \epsilon\)</span>, so the probability that interval covers is same as the probability that <span class="math inline">\(\lvert\hat\theta - \theta\rvert \le \epsilon\)</span>.</p>
+</div>
+</div>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>I like to say ‘typical distance’ and ‘typical error’ instead of ‘root-mean-squared distance’ and ‘root-mean-squared error’ because it’s shorter, gets the essential idea across, and doesn’t have a technical meaning that might conflict with my use of it this way like ‘average distance’ would.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Look at the ‘Sampling without Replacement’ tab.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>This is nonstandard terminology. What I’m calling ‘consistency in probability’ is usually called <em>weak consistency</em> for reasons that are a little hard to explain without a fair amount of background in topology and measure-theoretic probability. If you say ‘consistent in probability’, people who usually say <em>weak consistency</em> will know what you mean and maybe even follow your lead, but it may take them a second. ‘Convergence in probability’ is standard terminology, for what it’s worth.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../homework";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/chapter-variance-and-sample-size.html" class="pagination-link" aria-label="Variance, Standard Deviation, and Sample Size">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/chapter-bias-and-coverage.html" class="pagination-link" aria-label="Bias and Coverage">
+        <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

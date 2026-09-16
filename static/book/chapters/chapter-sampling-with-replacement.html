@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Sampling with Replacement and the Binomial Distribution – Prediction, Inference, and Causality</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../homework/homework-calibration-binary.html" rel="next">
+<link href="../chapters/chapter-calibration-binary.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script>
+  window.MathJax = {
+    options : {
+      menuOptions: {
+        settings: {
+          assistiveMml: false,
+          collapsible: false,
+          explorer: false
+        }
+      }
+    },
+    loader: {load: ['[tex]/physics', '[tex]/unicode']},
+    tex: {packages: {'[+]': ['physics', 'unicode']}}
+  }
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-sampling-with-replacement.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">One-Sample Problems</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-sampling-with-replacement" id="toc-sec-sampling-with-replacement" class="nav-link active" data-scroll-target="#sec-sampling-with-replacement">Sampling with Replacement</a>
+  <ul class="collapse">
+  <li><a href="#finding-the-distribution-of-y_1-in-a-small-population" id="toc-finding-the-distribution-of-y_1-in-a-small-population" class="nav-link" data-scroll-target="#finding-the-distribution-of-y_1-in-a-small-population">Finding the Distribution of <span class="math inline">\(Y_1\)</span> in a Small Population</a>
+  <ul class="collapse">
+  <li><a href="#index-sets-and-summands" id="toc-index-sets-and-summands" class="nav-link" data-scroll-target="#index-sets-and-summands">Index Sets and Summands</a></li>
+  <li><a href="#generalizing-to-larger-populations" id="toc-generalizing-to-larger-populations" class="nav-link" data-scroll-target="#generalizing-to-larger-populations">Generalizing to Larger Populations</a></li>
+  </ul></li>
+  <li><a href="#finding-the-distribution-of-y_1-in-a-large-population" id="toc-finding-the-distribution-of-y_1-in-a-large-population" class="nav-link" data-scroll-target="#finding-the-distribution-of-y_1-in-a-large-population">Finding the Distribution of <span class="math inline">\(Y_1\)</span> in a Large Population</a></li>
+  <li><a href="#sec-two-calls-to-small" id="toc-sec-two-calls-to-small" class="nav-link" data-scroll-target="#sec-two-calls-to-small">Two Calls to A Small Population</a></li>
+  <li><a href="#sec-two-calls-to-large" id="toc-sec-two-calls-to-large" class="nav-link" data-scroll-target="#sec-two-calls-to-large">Two Calls to A Large Population</a>
+  <ul class="collapse">
+  <li><a href="#ten-voters" id="toc-ten-voters" class="nav-link" data-scroll-target="#ten-voters">Ten Voters</a></li>
+  <li><a href="#checking-your-answer" id="toc-checking-your-answer" class="nav-link" data-scroll-target="#checking-your-answer">Checking Your Answer</a></li>
+  <li><a href="#any-number-of-voters" id="toc-any-number-of-voters" class="nav-link" data-scroll-target="#any-number-of-voters">Any Number of Voters</a></li>
+  </ul></li>
+  <li><a href="#sec-three-calls" id="toc-sec-three-calls" class="nav-link" data-scroll-target="#sec-three-calls">Three Calls to A Large Population</a></li>
+  <li><a href="#sec-n-calls" id="toc-sec-n-calls" class="nav-link" data-scroll-target="#sec-n-calls"><span class="math inline">\(n\)</span> Calls to A Large Population</a></li>
+  <li><a href="#using-r" id="toc-using-r" class="nav-link" data-scroll-target="#using-r">Using <strong>R</strong></a></li>
+  <li><a href="#the-binomial-distribution" id="toc-the-binomial-distribution" class="nav-link" data-scroll-target="#the-binomial-distribution">The Binomial Distribution</a></li>
+  <li><a href="#getting-the-same-picture-by-calling-people" id="toc-getting-the-same-picture-by-calling-people" class="nav-link" data-scroll-target="#getting-the-same-picture-by-calling-people">Getting the Same Picture by Calling People</a></li>
+  <li><a href="#what-changes-if-you-change-this" id="toc-what-changes-if-you-change-this" class="nav-link" data-scroll-target="#what-changes-if-you-change-this">What Changes If You Change This</a></li>
+  <li><a href="#appendix-throwing-rolls-away" id="toc-appendix-throwing-rolls-away" class="nav-link" data-scroll-target="#appendix-throwing-rolls-away">Appendix: Throwing Rolls Away</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-sampling-with-replacement.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<section id="sec-sampling-with-replacement" class="level1">
+<h1>Sampling with Replacement</h1>
+<p>To calibrate our intervals, we need to understand the sampling distribution of our estimator. That means doing some probability calculations. The machinery isn’t complicated—we’ll count equally likely configurations and add up probabilities—but it gets notationally heavy when we apply it to the polling problem. So let’s warm up on something simpler first.</p>
+<p>You’ve done this already, near enough. In <a href="../homework/homework-calibration.html">the first homework</a> you took six die sides, added a column for whether each was 3 or more—free, because the roll determines it—and added up the rows that agreed. What follows isn’t quite that. It’s a version of it, with people instead of sides and their answers instead of an indicator.</p>
+<section id="finding-the-distribution-of-y_1-in-a-small-population" class="level2">
+<h2 class="anchored" data-anchor-id="finding-the-distribution-of-y_1-in-a-small-population">Finding the Distribution of <span class="math inline">\(Y_1\)</span> in a Small Population</h2>
+<p>Let’s start with the distribution of <span class="math inline">\(Y_1\)</span>, the response to <em>one call</em>, when we sample with replacement. And to keep things concrete, let’s suppose we’re polling a population of size <span class="math inline">\(m=4\)</span>. We’re rolling a 4-sided die.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you have a deck of cards
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can put this on the table instead of reading it.</p>
+<p>Lay your population out: a red card for each voter who’ll vote, a black one for each who won’t. Four cards here, two of each. Roll a die to pick who you call — or just imagine rolling it — and turn that card over.</p>
+<p>Red or black is what you heard. There are two reds, so there are two rolls that get you a Yes, and that is the whole of the <span class="math inline">\(2/4\)</span>.</p>
+</div>
+</div>
+<div class="grid">
+<section id="the-population" class="level4 g-col-4">
+<h4 class="anchored" data-anchor-id="the-population">The Population</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(j\)</span></th>
+<th>name</th>
+<th><span class="math inline">\(y_j\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(1\)</span></td>
+<td>Rush</td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(2\)</span></td>
+<td>Mitt</td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(3\)</span></td>
+<td>Al</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(4\)</span></td>
+<td>Newt</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-joint" class="level4 g-col-4">
+<h4 class="anchored" data-anchor-id="the-joint">The Joint</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(J_1\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac14\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(\color{#EF476F}0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{#EF476F}\frac14\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(\color{#EF476F}0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(\color{\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(\color{\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-marginal" class="level4 g-col-4">
+<h4 class="anchored" data-anchor-id="the-marginal">The Marginal</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac24\)</span></td>
+<td><span class="math inline">\(\color{#EF476F}0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(\color{\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<p>We have two Nos (0s) and two Yeses (1s). The ‘Yes’ frequency in the population is <span class="math inline">\(\theta_1 = 2/4\)</span>. Here’s how we find the distribution of <span class="math inline">\(Y_1\)</span>.</p>
+<ol type="1">
+<li><p>We write the probability distribution of our die roll in a table. It has two columns: one for the roll <span class="math inline">\(J_1\)</span> and another for its probability <span class="math inline">\(p\)</span>. It has <span class="math inline">\(m=4\)</span> rows, one for each possible outcome of the roll. Each roll is equally likely, so the probability in each row is <span class="math inline">\(1/4\)</span>.</p></li>
+<li><p>We add a column for the response to our call, <span class="math inline">\(Y_1\)</span>. Adding this column is ‘free’—it doesn’t change the row’s probability—because what we hear is determined by the roll. E.g. if we roll a 1, we’re going to hear Rush say ‘No’. So the probability we roll a 1 <em>and</em> hear a ‘No’ is the same as the probability we roll a 1.</p></li>
+<li><p>We <em>marginalize</em> over rolls to find the distribution of our call’s outcome. We can color each row according to the call’s outcome <span class="math inline">\(Y_1\)</span>, then sum the probabilities in each color. The probability of hearing ‘No’ is the probability that we roll a 1 or 2: <span class="math inline">\(1/4+1/4 = 2/4\)</span>. The probability of hearing ‘Yes’ is the probability that we roll a 3 or 4: <span class="math inline">\(2/4\)</span>. These probabilities match the frequencies of ‘Yes’ and ‘No’ in our population.</p></li>
+</ol>
+<section id="index-sets-and-summands" class="level3">
+<h3 class="anchored" data-anchor-id="index-sets-and-summands">Index Sets and Summands</h3>
+<p>A sum has two parts. There’s the set of things you walk over, and there’s what you write down for each one.</p>
+<p><span class="math display">\[
+\sum_{j \,\in\, 1 \ldots 4} \frac{1}{4}
+\qquad\longrightarrow\qquad
+\sum_{j \,\in\, \{\,j \,:\, y_j = 0\,\}} \frac{1}{4}
+\]</span></p>
+<p>Both have the same summand, <span class="math inline">\(1/4\)</span>. What changed is the index set: on the left it’s everybody, <span class="math inline">\(1 \ldots 4\)</span>; on the right it’s the ones who said No, which here is <span class="math inline">\(\{1, 2\}\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>So the right-hand sum is <span class="math inline">\(1/4 + 1/4\)</span>, and the marginal we just wrote down is that sum.</p>
+<p>The size of an index set is worth a name of its own, because we’ll be counting them from here on.</p>
+<p><span class="math display">\[
+m_y = \sum_{j \,\in\, \{\,j \,:\, y_j = y\,\}} 1
+\]</span></p>
+<p>That’s the number of voters who’d say <span class="math inline">\(y\)</span>. Here <span class="math inline">\(m_0 = 2\)</span> and <span class="math inline">\(m_1 = 2\)</span>, and <span class="math inline">\(m_0 + m_1 = m = 4\)</span>.</p>
+</section>
+<section id="generalizing-to-larger-populations" class="level3">
+<h3 class="anchored" data-anchor-id="generalizing-to-larger-populations">Generalizing to Larger Populations</h3>
+<p>Nothing we just did used the fact that there were four voters. So let’s do it again without a number in it, for a binary population <span class="math inline">\(y_1 \ldots y_m\)</span> of any size <span class="math inline">\(m\)</span>. To ground us while we do it, we’ll think about our population of <span class="math inline">\(m=7.23M\)</span> registered voters in Georgia. But we’ll handle the general case. Plugging in 7.23M ones and zeros wouldn’t exactly make things easier.</p>
+</section>
+</section>
+<section id="finding-the-distribution-of-y_1-in-a-large-population" class="level2">
+<h2 class="anchored" data-anchor-id="finding-the-distribution-of-y_1-in-a-large-population">Finding the Distribution of <span class="math inline">\(Y_1\)</span> in a Large Population</h2>
+<div class="grid">
+<section id="the-population-1" class="level3 g-col-4">
+<h3 class="anchored" data-anchor-id="the-population-1">The Population</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(j\)</span></th>
+<th><span class="math inline">\(y_j\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(1\)</span></td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(2\)</span></td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(3\)</span></td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(4\)</span></td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(m\)</span></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-joint-1" class="level3 g-col-4">
+<h3 class="anchored" data-anchor-id="the-joint-1">The Joint</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(J_1\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(1/m\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1/m\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(1/m\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1/m\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(1/m\)</span></td>
+<td><span class="math inline">\(m\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="the-marginal-1" class="level3 g-col-4">
+<h3 class="anchored" data-anchor-id="the-marginal-1">The Marginal</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 40%">
+<col style="width: 60%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\underset{\color{gray}\approx 0.30}{\sum\limits_{j:y_j=0} \frac{1}{m}}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\underset{\color{gray}\approx 0.70}{\sum\limits_{j:y_j=1}  \frac{1}{m}}\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<ol type="1">
+<li><p>We start by writing the probability distribution of our dice rolls. The person we call, <span class="math inline">\(J_1\)</span>, is equally likely to be anyone in the population of <span class="math inline">\(m \approx 7.23M\)</span> people. It takes on each value <span class="math inline">\(1 \ldots m\)</span> with probability <span class="math inline">\(1/m\)</span>.</p></li>
+<li><p>We add a column for the response to our call, <span class="math inline">\(Y_1\)</span>. This is ‘for free’. The roll determines what we hear, so the probabilities don’t change. Still <span class="math inline">\(1/m\)</span>.</p></li>
+<li><p>And we <em>marginalize</em> to find the distribution of <span class="math inline">\(Y_1\)</span>. We sum the probabilities in rows where <span class="math inline">\(Y_1=0\)</span> and <span class="math inline">\(Y_1=1\)</span>. What we saw in our small population does generalize. The <em>probability</em> of hearing a response <span class="math inline">\(y \in \{0,1\}\)</span> is the <em>frequency</em> of that response in the population. We’ll call these frequencies <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_1\)</span>. This is a little redundant because <span class="math inline">\(\theta_0 = 1 - \theta_1\)</span>. Our estimation target is just the ‘Yes’ frequency <span class="math inline">\(\theta_1\)</span>. Some people call it the <em>success rate</em>.</p></li>
+</ol>
+<p>To find the distribution of a sum of <span class="math inline">\(Y_1+Y_2\)</span>, we can follow the same steps. There’s a bit more to it, so we’ll break down the marginalization step to make it a little more tractable.</p>
+</section>
+<section id="sec-two-calls-to-small" class="level2">
+<h2 class="anchored" data-anchor-id="sec-two-calls-to-small">Two Calls to A Small Population</h2>
+<div class="grid">
+<div class="g-col-5">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(j\)</span></th>
+<th>name</th>
+<th><span class="math inline">\(y_j\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(1\)</span></td>
+<td>Rush</td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(2\)</span></td>
+<td>Mitt</td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(3\)</span></td>
+<td>Al</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(4\)</span></td>
+<td>Newt</td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="g-col-7">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-sampling-with-replacement_files/figure-html/plot-toy-sample-1.svg" class="img-fluid figure-img" alt="Four-person binary population: outcomes zero at indices one and two, one at indices three and four."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Two calls now. We make a table for the joint distribution of two rolls, add the response columns for free as before, and marginalize twice — once to get the responses, once to get their sum.</p>
+<p>There are <span class="math inline">\(4 \times 4 = 16\)</span> equally likely pairs of rolls, each with probability <span class="math inline">\(1/16\)</span>. Few enough to write down, so let’s write them all down. The response columns come along for free, same as before, and so does their sum.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you have a deck of cards
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Deal the whole thing out. Turn up two cards, left one first, write down what you heard, put them back, and go again until you have all sixteen pairs.</p>
+<p>Keep the ones that sound the same together and you’ll finish with four piles of four, which is the table below in the order it’s written.</p>
+</div>
+</div>
+<section id="the-joint-2" class="level4">
+<h4 class="anchored" data-anchor-id="the-joint-2">The Joint</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(J_1\)</span></th>
+<th><span class="math inline">\(J_2\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{1}{16}\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{#EF476F}\frac{1}{16}\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{1}{16}\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{#EF476F}\frac{1}{16}\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>They’re in an order that makes them easy to count: the rows where you’d hear No-No, then No-Yes, then Yes-No, then Yes-Yes. Four rows in each group.</p>
+<p>Add them up by colour and you have the distribution of <span class="math inline">\(Y_1+Y_2\)</span>: <span class="math inline">\(4/16\)</span> for a sum of <span class="math inline">\(0\)</span>, <span class="math inline">\(8/16\)</span> for a sum of <span class="math inline">\(1\)</span> because two of the groups give that sum, and <span class="math inline">\(4/16\)</span> for a sum of <span class="math inline">\(2\)</span>.</p>
+</section>
+</section>
+<section id="sec-two-calls-to-large" class="level2">
+<h2 class="anchored" data-anchor-id="sec-two-calls-to-large">Two Calls to A Large Population</h2>
+<section id="ten-voters" class="level3">
+<h3 class="anchored" data-anchor-id="ten-voters">Ten Voters</h3>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Two Calls to Ten Voters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Ten voters now, <span class="math inline">\(m_1\)</span> of whom will vote and <span class="math inline">\(m_0\)</span> of whom won’t. We make the same two calls.</p>
+<p>Find the distribution of <span class="math inline">\(Y_1 + Y_2\)</span>.</p>
+<p>There are a hundred pairs of rolls this time. You can write all hundred out the way we just did, and it will work, but see whether you can get the answer without writing them out.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you have a deck of cards
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Deal yourself ten, however many red you like, and that’s your population — <span class="math inline">\(m_1\)</span> reds and <span class="math inline">\(m_0\)</span> blacks. Roll a ten-sided die twice, or point at two cards without looking, and that’s your pair of calls.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Writing out a hundred rows works and it’s horrible. What makes it horrible is that you’re doing the whole thing in one go, so let’s do it in two stages instead.</p>
+<p>The first stage collapses the rolls into what you’d hear. Every pair of rolls that sounds the same becomes one row, and the probability of that row is the probability of the whole group. That’s <em>partial</em> marginalization — partial because you still have <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_2\)</span> in front of you, not their sum. The second stage collapses those into the sum, adding the rows that agree. That’s <em>full</em> marginalization.</p>
+<p>Here’s the four voters again, done in those two stages.</p>
+<div class="grid">
+<section id="partially-marginalized" class="level4 g-col-6">
+<h4 class="anchored" data-anchor-id="partially-marginalized">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{4}{16}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fully-marginalized" class="level4 g-col-6">
+<h4 class="anchored" data-anchor-id="fully-marginalized">Fully Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{4}{16}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<p>The <span class="math inline">\(8\)</span> is <span class="math inline">\(2 \times 4\)</span>, because ‘No,Yes’ and ‘Yes,No’ are two different things to hear that happen to give the same sum.</p>
+<p>And the four rows of the first table don’t need the sixteen underneath them either. Take ‘Yes,No’. Al and Newt are the two who’d say Yes, so two rolls give you the Yes on the first call. Rush and Mitt are the two who’d say No, so whichever of those you got, two rolls give you the No on the second. Two choices and then two choices, <span class="math inline">\(2 \times 2 = 4\)</span>, and you never wrote a pair down.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you have a deck of cards
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Put down a red then a black, a Yes then a No.&nbsp;Swap that red for the other red: you called somebody else and heard the same thing. Swap the black for the other black and the same happens again.</p>
+<p>Two reds to choose from, two blacks, and you can lay all four of those pairs out at once and look at them.</p>
+</div>
+</div>
+<p>Now you do this one.</p>
+<section id="partially-marginalized-1" class="level4">
+<h4 class="anchored" data-anchor-id="partially-marginalized-1">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&nbsp;</td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td>&nbsp;</td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td>&nbsp;</td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td>&nbsp;</td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Then collapse it by the last column.</p>
+</section>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Take ‘Yes,No’. There are <span class="math inline">\(m_1\)</span> rolls that give you the Yes and <span class="math inline">\(m_0\)</span> that give you the No, so <span class="math inline">\(m_1 m_0\)</span> pairs sound like that — out of <span class="math inline">\(10 \times 10 = 100\)</span> pairs in all.</p>
+<div class="grid">
+<section id="partially-marginalized-2" class="level4 g-col-7">
+<h4 class="anchored" data-anchor-id="partially-marginalized-2">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0 m_0}{100}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fully-marginalized-1" class="level4 g-col-5">
+<h4 class="anchored" data-anchor-id="fully-marginalized-1">Fully Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0 m_0}{100}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<p>Only the counts moved. Four voters, two of each, gave <span class="math inline">\(2 \times 2\)</span> over <span class="math inline">\(16\)</span>. Ten gives <span class="math inline">\(m_1 m_0\)</span> over <span class="math inline">\(100\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="checking-your-answer" class="level3">
+<h3 class="anchored" data-anchor-id="checking-your-answer">Checking Your Answer</h3>
+<p>Put your own numbers in and run it. It works for any of the exercises in this chapter — change <code>n</code> to three or to six hundred and it still answers.</p>
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEiOnRydWV9LCJjb2RlIjoibTEgPSA1ICAgICMgaG93IG1hbnkgb2YgeW91ciB2b3RlcnMgd2lsbCB2b3RlXG5tMCA9IDUgICAgIyBob3cgbWFueSB3b24ndFxubiAgPSAyICAgICMgaG93IG1hbnkgY2FsbHMgeW91IG1ha2Vcblxucm91bmQoZGJpbm9tKDA6biwgbiwgbTEvKG0xICsgbTApKSwgNCkifQ==
+</script>
+</div>
+</section>
+<section id="any-number-of-voters" class="level3">
+<h3 class="anchored" data-anchor-id="any-number-of-voters">Any Number of Voters</h3>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Generalize It
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Now <span class="math inline">\(m\)</span> voters. <span class="math inline">\(m_1\)</span> of them will vote, <span class="math inline">\(m_0\)</span> won’t. Same two calls.</p>
+<p>Don’t do it again from scratch. Take the answer you just wrote for the ten and cross out every number that came from there being ten of them and write the general thing in its place.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<div class="grid">
+<section id="partially-marginalized-3" class="level4 g-col-7">
+<h4 class="anchored" data-anchor-id="partially-marginalized-3">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0 m_0}{m^2}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fully-marginalized-2" class="level4 g-col-5">
+<h4 class="anchored" data-anchor-id="fully-marginalized-2">Fully Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1 + Y_2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0 m_0}{m^2}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<p>Dividing each count by <span class="math inline">\(m\)</span> as you go, these are products of the frequencies: <span class="math inline">\(\theta_0\theta_0\)</span>, <span class="math inline">\(\theta_0\theta_1\)</span>, <span class="math inline">\(\theta_1\theta_0\)</span>, <span class="math inline">\(\theta_1\theta_1\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-three-calls" class="level2">
+<h2 class="anchored" data-anchor-id="sec-three-calls">Three Calls to A Large Population</h2>
+<p>By now we’ve got our steps down. First partial marginalization, from rolls to responses. Then full marginalization, from responses to their sum.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>If you have a deck of cards
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ten cards, <span class="math inline">\(m_1\)</span> of which are red and <span class="math inline">\(m_0\)</span> black. Three calls is three rolls of the die, and the three cards you turn up, left to right, are one row of your table: the colours are what you heard and the position is which call you heard it on.</p>
+<p>Two things you can do to a row like that, and they are the two stages.</p>
+<p><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
+<p><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>Three Calls
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Three calls to the same ten voters. Same question: the distribution of the sum.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Give a row a name. What you hear on three calls is a sequence of three answers <span class="math inline">\(a_1 a_2 a_3\)</span>, each one a <span class="math inline">\(0\)</span> or a <span class="math inline">\(1\)</span>, and there are eight such sequences.</p>
+<p>The probability of hearing <span class="math inline">\(a_1 a_2 a_3\)</span> is the number of roll sequences that produce it over the number of roll sequences there are, and you count it the way you counted pairs.</p>
+<p><span class="math display">\[
+p(a_1 a_2 a_3) = \frac{m_{a_1} m_{a_2} m_{a_3}}{10^3}
+\qqtext{where} m_y = \sum_{j \,\in\, \{\,j \,:\, y_j = y\,\}} 1
+\]</span></p>
+<p>Now put the same answers in a different order. Hearing <span class="math inline">\(1 0 0\)</span>, hearing <span class="math inline">\(0 1 0\)</span> and hearing <span class="math inline">\(0 0 1\)</span> are three different things, three different rows of your table, and their probabilities are <span class="math inline">\(m_1 m_0 m_0\)</span>, <span class="math inline">\(m_0 m_1 m_0\)</span> and <span class="math inline">\(m_0 m_0 m_1\)</span> over <span class="math inline">\(10^3\)</span>. Moving the Yes moves a factor. It does not change the product.</p>
+<p>Collapsing by the sum means summing over the sequences that give that sum.</p>
+<p><span class="math display">\[
+\sum_{\substack{a_1 a_2 a_3 \\ a_1 + a_2 + a_3 \,=\, s}} \frac{m_{a_1} m_{a_2} m_{a_3}}{10^3}
+\]</span></p>
+<p>The index set is the sequences with <span class="math inline">\(s\)</span> Yeses. The summand is the same for every one of them, by what you just noticed. And a sum of a constant is that constant times the size of the index set, so the only thing left to find is how big that index set is.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">\(10 \times 10 \times 10 = 10^3\)</span> roll sequences in all.</p>
+<div class="grid">
+<section id="partially-marginalized-4" class="level4 g-col-7">
+<h4 class="anchored" data-anchor-id="partially-marginalized-4">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Y_3\)</span></th>
+<th><span class="math inline">\(Y_1+Y_2+Y_3\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0^3}{10^3}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{#FFD166}\frac{m_1^3}{10^3}\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fully-marginalized-3" class="level4 g-col-5">
+<h4 class="anchored" data-anchor-id="fully-marginalized-3">Fully Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1+Y_2+Y_3\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\frac{m_0^3}{10^3}\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(2\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{#FFD166}\frac{m_1^3}{10^3}\)</span></td>
+<td><span class="math inline">\(3\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+<p>The left-hand column of the second table carries the multipliers <span class="math inline">\(1, 3, 3, 1\)</span>.</p>
+<p>The counts adapted from two calls exactly as you’d expect: two factors became three. The <span class="math inline">\(1,3,3,1\)</span> didn’t adapt from anything. With two calls there were two ways to hear one Yes and you could see both at once; with three there are three, and you had to write them out to be sure.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-n-calls" class="level2">
+<h2 class="anchored" data-anchor-id="sec-n-calls"><span class="math inline">\(n\)</span> Calls to A Large Population</h2>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span><span class="math inline">\(n\)</span> Calls
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Two calls gave you four things you could hear. Now make <span class="math inline">\(n\)</span> calls to the same <span class="math inline">\(m\)</span> voters.</p>
+<p>Work out the distribution of <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>. Use the same approach: partial marginalization first, from rolls to responses, then full marginalization, from responses to their sum.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The first stage is the multiplication you’ve done three times now, run <span class="math inline">\(n\)</span> times instead of two or three. A row with <span class="math inline">\(s\)</span> Yeses and <span class="math inline">\(n-s\)</span> Nos has <span class="math inline">\(m_1^s m_0^{n-s}\)</span> roll sequences under it, out of <span class="math inline">\(m^n\)</span>.</p>
+<p>The second stage is the one that stops you. There are <span class="math inline">\(2^n\)</span> things you could hear and you are not going to write them down. You don’t need to. Every one of them with <span class="math inline">\(s\)</span> Yeses carries the same probability, so the only thing the second stage asks of you is <strong>how many of them have <span class="math inline">\(s\)</span> Yeses</strong>.</p>
+<p>You don’t have to be able to work that number out to finish the calculation. Give it a name and carry it.</p>
+<p>Stop half way and fill this in first.</p>
+<section id="partially-marginalized-5" class="level4">
+<h4 class="anchored" data-anchor-id="partially-marginalized-5">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(\ldots\)</span></th>
+<th><span class="math inline">\(Y_n\)</span></th>
+<th><span class="math inline">\(Y_1 + \ldots + Y_n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&nbsp;</td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td>&nbsp;</td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td>&nbsp;</td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(2^n\)</span> rows, one per thing you could hear. Then collapse <em>that</em> by the last column.</p>
+</section>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>To find the distribution of a sum <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>, we do the same thing. We start by writing out the joint distribution of <span class="math inline">\(n\)</span> dice rolls. We’re equally likely to roll any sequence of <span class="math inline">\(n\)</span> numbers in <span class="math inline">\(1\ldots m\)</span>. And there are <span class="math inline">\(m^n\)</span> sequences, so the probability is <span class="math inline">\(1/m^n\)</span> for each sequence. Then we add columns for the corresponding responses ‘for free’. And the sums.</p>
+<p>Then we marginalize in two steps.</p>
+<ol type="1">
+<li>Sum over roll sequences leading to the same response sequence <span class="math inline">\(a_1 \ldots a_n\)</span>.</li>
+<li>Sum over response sequences leading to the same sum <span class="math inline">\(s=a_1+\ldots+a_n\)</span>.</li>
+</ol>
+<section id="step-1.-partial-marginalization" class="level3">
+<h3 class="anchored" data-anchor-id="step-1.-partial-marginalization">Step 1. Partial Marginalization</h3>
+<p>Here’s the table we stopped at half way, with the probability column filled in. Every row is a product of <span class="math inline">\(n\)</span> frequencies, one per call, and which product it is depends only on how many of the calls were Yeses.</p>
+<section id="partially-marginalized-6" class="level4">
+<h4 class="anchored" data-anchor-id="partially-marginalized-6">Partially Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1\)</span></th>
+<th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(\ldots\)</span></th>
+<th><span class="math inline">\(Y_n\)</span></th>
+<th><span class="math inline">\(Y_1 + \ldots + Y_n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\theta_0^n\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+<td>⋮</td>
+<td>⋱</td>
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+<td><span class="math inline">\(n-1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{#FFD166}\theta_1^n\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(\ldots\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\(n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>To sum over roll sequences, we sum over one roll after another. This is exactly like what we did for one response. Except over and over. You can think of this sum ‘inside out.’</p>
+<p>Suppose we’re calculating the probability of the response sequence <span class="math inline">\(a_1 \ldots a_n = 0,0,...,0,0\)</span>.</p>
+<ol type="1">
+<li>We consider any ‘head’ <span class="math inline">\(j_1\ldots j_{n-1}\)</span> where <span class="math inline">\(y_{j_1} \ldots y_{j_{n-1}}=0,0,...0\)</span> and think about choosing the last element. No matter what the head is, there are <span class="math inline">\(m_0\)</span> ways to complete it by choosing <span class="math inline">\(j_{n}\)</span> with <span class="math inline">\(y_{j_n}=0\)</span>.</li>
+<li>We repeat with shortened ‘head’ <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> to consider the choice of <span class="math inline">\(j_{n-1}\)</span>. We have <span class="math inline">\(m_0\)</span> choices and our last step tells us that each choice results in <span class="math inline">\(m_0\)</span> call sequences, so there are <span class="math inline">\(m_0^2\)</span> sequences with head <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> ending in <span class="math inline">\(0,0\)</span>.</li>
+<li>Repeat <span class="math inline">\(n-2\)</span> more times.</li>
+</ol>
+<p>What we get is pretty similar to the two-response case. The probability of observing the sequence is determined by the frequency of Yeses and Nos in the population. It’s the <em>product</em> of the frequencies of those responses. For ‘Yes,Yes,…,Yes’ it’s <span class="math inline">\(\theta_1^n\)</span>. For ‘No,No,…,No’ it’s <span class="math inline">\(\theta_0^n\)</span>. And if we have <span class="math inline">\(s\)</span> Yeses and therefore <span class="math inline">\(n-s\)</span> Nos, it’s <span class="math inline">\(\theta_1^s\theta_0^{n-s}\)</span>.</p>
+<p>This is, again, the <em>product</em> of the marginal probabilities of those <span class="math inline">\(n\)</span> responses.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum_{\substack{j_1 \ldots j_n  \\ y_{j_1} \ldots y_{j_n} = a_1 \ldots a_n}} \frac{1}{m^n}
+&amp;= \sum_{\substack{j_1 \ldots j_{n-1} \\ y_{j_1} \ldots y_{j_{n-1}} = a_1 \ldots a_{n-1}}} \sum_{\substack{j_n \\ y_n=a_n}} \frac{1}{m^n} \\
+&amp;= \sum_{\substack{j_1 \ldots j_{n-1} \\ y_{j_1} \ldots y_{j_{n-1}} = a_1 \ldots a_{n-1}}} \sum_{\substack{j_n \\ y_n=a_n}} m_{a_n} \times \frac{1}{m^n} \\
+&amp;= \sum_{\substack{j_1 \ldots j_{n-2} \\ y_{j_1} \ldots y_{j_{n-2}} = a_1 \ldots a_{n-2}}} \sum_{\substack{j_{n-1} \\ y_n=a_{n-1}}} m_{a_n} \times \frac{1}{m^n} \\
+&amp;= \sum_{\substack{j_1 \ldots j_{n-2} \\ y_{j_1} \ldots y_{j_{n-2}} = a_1 \ldots a_{n-2}}} \sum_{\substack{j_{n-1} \\ y_n=a_{n-1}}} m_{a_{n-1}} m_{a_n} \times \frac{1}{m^n} \\
+&amp;= m_{a_1} \ldots m_{a_{n}} \times \frac{1}{m^n} \qqtext{after repeating $n-2$ more times} \\
+&amp;= \theta_{a_1} \ldots \theta_{a_n} \\
+&amp;= \prod_{i:a_i=1} \theta_1 \prod_{i:a_i=0} \theta_0 = \theta_1^{s} \theta_0^{n-s} \qfor s = a_1 + \ldots + a_n
+\end{aligned}
+\]</span></p>
+</section>
+</section>
+<section id="step-2.-full-marginalization" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.-full-marginalization">Step 2. Full Marginalization</h3>
+<p>Collapsing that table by its last column, every sum from <span class="math inline">\(0\)</span> to <span class="math inline">\(n\)</span> gets one row, and the multiplier on each is the number of response sequences with that many Yeses, written <span class="math inline">\(\binom{n}{s}\)</span> and spoken ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(s\)</span>’.</p>
+<section id="fully-marginalized-4" class="level4">
+<h4 class="anchored" data-anchor-id="fully-marginalized-4">Fully Marginalized</h4>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th><span class="math inline">\(Y_1 + \ldots + Y_n\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\color{#EF476F}\binom{n}{0} \theta_0^n\)</span></td>
+<td><span class="math inline">\(0\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(1\)</span></td>
+</tr>
+<tr class="odd">
+<td>⋮</td>
+<td>⋮</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\color{\)</span></td>
+<td><span class="math inline">\(n-1\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\color{#FFD166}\binom{n}{n} \theta_1^n\)</span></td>
+<td><span class="math inline">\(n\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The full marginalization step is a bit trickier. But we can take advantage of our partial marginalization. To calculate the probability that the sum takes on the value <span class="math inline">\(s\)</span>, we order our sum of probabilities thoughtfully. We sum over response sequences <span class="math inline">\(a_1 \ldots a_n\)</span> with <span class="math inline">\(s\)</span> Yeses and <span class="math inline">\(n-s\)</span> Nos. And within that, we sum over calls where we’d hear those responses.</p>
+<p>The inner sum we’ve done. That was our partial marginalization. And the outer sum boils down to counting the number of sequences with <span class="math inline">\(s\)</span> Yeses. The probability of all these sequences is the same: <span class="math inline">\(\theta_1^s\theta_0^{n-s}\)</span>. So summing is counting and multiplying. You may have done the counting part in high school in a unit on ‘permutations and combinations’. In any case, that count has a name. It’s spoken ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(s\)</span>’ and written <span class="math inline">\(\binom{n}{s}\)</span>.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\sum\limits_{\substack{j_1 \ldots j_n \\ y_{j_1} + \ldots + y_{j_n} = s}} \frac{1}{m^n}
+&amp;= \sum\limits_{\substack{a_1 \dots a_n \\ a_1 + \ldots + a_n = s}} \ \ \sum_{\substack{j_1 \ldots j_n \\ y_{j_1} \ldots y_{j_n} = a_1 \ldots a_n}} \frac{1}{m^n} \\
+&amp; =\sum\limits_{\substack{a_1 \dots a_n \\ a_1 + \ldots + a_n = s}} \theta_1^{s}\theta_0^{n-s} \\
+&amp;= \binom{n}{s} \theta_1^{s} \theta_0^{n-s} \qqtext{ where } \binom{n}{s} = \sum\limits_{\substack{a_1 \dots a_n \\ a_1 + \ldots + a_n = s}} 1
+\end{aligned}
+\]</span></p>
+</section>
+</section>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-r" class="level2">
+<h2 class="anchored" data-anchor-id="using-r">Using <strong>R</strong></h2>
+<p><span class="math display">\[
+P\left(\sum_{i=1}^n Y_i = s\right) =  \binom{n}{s} \theta_1^{s}\theta_0^{n-s}
+\ \ \text{ where } \ \ \binom{n}{s} \text{ is the number of binary sequences $a_1 \ldots a_n$ summing to $s$.}
+\]</span></p>
+<p>We don’t actually have to do all this sequence-summing-to-<span class="math inline">\(s\)</span> counting ourselves. The <code>choose</code> function in <strong>R</strong> will do it for us: <span class="math inline">\(\binom{n}{s}\)</span> is <code>choose(n,s)</code>. The <code>dbinom</code> function will give us the whole probability: <span class="math inline">\(\binom{n}{s}\theta_1^s\theta_0^{n-s}\)</span> is <code>dbinom(s, n, theta_1)</code>. And the <code>rbinom</code> function will draw samples from this distribution: <code>rbinom(10000, n, theta_1)</code> gives us 10,000.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>theta_1 <span class="ot">=</span> .<span class="dv">7</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">625</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, theta_1)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="dv">10000</span>, n, theta_1)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span><span class="sc">:</span>n,   <span class="at">y=</span>p), <span class="at">color=</span>pollc, <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>S, <span class="at">y=</span><span class="fu">after_stat</span>(prop)), <span class="at">alpha=</span>.<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>S[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>],   <span class="at">y=</span><span class="fu">max</span>(p)<span class="sc">*</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">length.out=</span><span class="dv">100</span>)), </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color=</span><span class="st">'purple'</span>, <span class="at">alpha=</span>.<span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-sampling-with-replacement_files/figure-html/plot-binomial-exact-and-simulated-1.svg" class="img-fluid figure-img" alt="Exact Binomial probability curve for a count with 625 trials and success probability .7, overlaid with a simulated histogram and 100 simulated counts."></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-binomial-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="the-binomial-distribution">The Binomial Distribution</h2>
+<div class="grid">
+<div class="g-col-6">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-sampling-with-replacement_files/figure-html/plot-binomial-across-thetas-1.svg" class="img-fluid figure-img" alt="Three overlapping Binomial count distributions for success probabilities .68, .70, and .72; increasing the probability shifts the distribution right."></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="g-col-6">
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\overset{\color{gray}=P\left(\frac{1}{n}\sum_{i=1}^n Y_i = \frac{s}{n}\right)}{P\left(\sum_{i=1}^n Y_i = s\right)} =  \binom{n}{s} \theta_1^{s}\theta_0^{n-s} \\
+&amp;\qfor n =625 \\
+&amp;\qand \theta_1 \in \{\textcolor[RGB]{239,71,111}{0.68}, \textcolor[RGB]{17,138,178}{0.7}, \textcolor[RGB]{6,214,160}{0.72} \}
+\end{aligned}
+\]</span></p>
+</div>
+</div>
+<p>These functions have ‘binom’ in their name because we call this distribution the <em>Binomial distribution</em>. The Binomial distribution on <span class="math inline">\(n\)</span> <em>trials</em> with <em>success probability</em> <span class="math inline">\(\theta\)</span> is our name for the distribution of the sum of <span class="math inline">\(n\)</span> binary random variables with probability <span class="math inline">\(\theta\)</span> of being <span class="math inline">\(1\)</span>. E.g. the number of heads in <span class="math inline">\(n\)</span> coin flips is Binomial with <span class="math inline">\(n\)</span> trials and success probability <span class="math inline">\(1/2\)</span>.</p>
+<p>We’ve shown that’s the sampling distribution of the <em>sum of responses</em>, <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>, when we sample with replacement from a population of binary responses <span class="math inline">\(y_1 \ldots y_m\)</span> in which <span class="math inline">\(\theta\)</span> is the frequency of ones. We’re interested in the <em>mean of responses</em>, so we divide by <span class="math inline">\(n\)</span>: <span class="math inline">\(\color{gray} \sum_{i=1}^n Y_i = s \ \text{ when } \ \frac{1}{n}\sum_{i=1}^n Y_i = s/n\)</span>.</p>
+<p>It’s easy to estimate—and talk about estimating—this sampling distribution. It depends only on one thing we don’t know: the population frequency <span class="math inline">\(\theta\)</span>. And that’s exactly the thing we’re trying to estimate anyway. That’s why we’ve started here—the case of sampling with replacement from a population of binary responses.</p>
+</section>
+<section id="getting-the-same-picture-by-calling-people" class="level2">
+<h2 class="anchored" data-anchor-id="getting-the-same-picture-by-calling-people">Getting the Same Picture by Calling People</h2>
+<p>We got that curve by counting. You can also get it by calling people. Draw <span class="math inline">\(n\)</span> callees with replacement, look up what each one says, add them up, and do that ten thousand times.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>one.sample.sum <span class="ot">=</span> <span class="cf">function</span>() <span class="fu">sum</span>(y[<span class="fu">sample</span>(m, n, <span class="at">replace=</span><span class="cn">TRUE</span>)])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>S <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">one.sample.sum</span>())</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>S, <span class="at">y=</span><span class="fu">after_stat</span>(prop)), <span class="at">alpha=</span>.<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="dv">0</span><span class="sc">:</span>n, <span class="at">y=</span><span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, <span class="fu">mean</span>(y))), <span class="at">color=</span>pollc, <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>           <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(.<span class="dv">6</span>,.<span class="dv">8</span>)<span class="sc">*</span>n)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-sampling-with-replacement_files/figure-html/plot-sum-by-replication-1.svg" class="img-fluid figure-img" alt="Simulated histogram of the response sum from ten thousand samples of 625 calls, with the exact Binomial curve drawn over it."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The histogram is what happened when we called people; the curve is <span class="math inline">\(\binom{n}{s}\theta_1^s\theta_0^{n-s}\)</span> with <span class="math inline">\(\theta_1\)</span> read off the population. Nothing in the code knows about the curve and nothing in the curve knows about the code.</p>
+</section>
+<section id="what-changes-if-you-change-this" class="level2">
+<h2 class="anchored" data-anchor-id="what-changes-if-you-change-this">What Changes If You Change This</h2>
+<p>The derivation had two stages, and each one needed something to be true. Stage 1 needed every roll sequence to be equally likely, so that adding them up was counting them. Stage 2 needed every response sequence with the same sum to carry the same probability, so that adding those was counting too. Change the setup and you can ask which of those two survives.</p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>The Only Die You Have Is A d12
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Ten voters, and no ten-sided die in the drawer. So you roll a twelve-sided one and agree that an <span class="math inline">\(11\)</span> or a <span class="math inline">\(12\)</span> counts as a <span class="math inline">\(10\)</span>. Every call is still made the same way, independently of the ones before it.</p>
+<p>Which of the two stages still works, and what happens to the answer?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Stage 1 stops being counting. There are twelve equally likely rolls but only ten people, and the tenth of them owns three of those rolls, so the call sequences under one response sequence no longer weigh the same as each other. You can’t get their total by counting them; you have to add up their weights.</p>
+<p>But adding up those weights still gives you a probability that depends only on what you heard, one factor per call. The factor for ‘Yes’ is the share of the twelve rolls that reach somebody who’d say Yes — so if the tenth voter is a Yes it’s <span class="math inline">\((m_1 + 2)/12\)</span>, and if not it’s <span class="math inline">\(m_1/12\)</span>. Call that <span class="math inline">\(\theta_1\)</span> and everything downstream is untouched: rows with the same sum still match each other, stage 2 is still counting, and the answer is still <span class="math inline">\(\binom{n}{s}\theta_1^s\theta_0^{n-s}\)</span>.</p>
+<p>So the machinery changed and the shape of the answer didn’t. What moved is <em>which</em> number <span class="math inline">\(\theta_1\)</span> is. You get a perfectly good estimate of the frequency in a population where the tenth voter has been counted three times, and nothing in the data tells you that’s what you did.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>A Third Answer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Now suppose people can say Yes, No, or Undecided, and you’re still after the number of Yeses.</p>
+<p>Which of the two stages still works?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution">
+<p>Stage 1 is fine. The die is unloaded, every roll sequence is still equally likely, and the count under a response sequence is still one factor per call — there are just three kinds of factor now instead of two.</p>
+<p>Stage 2 breaks, and it’s worth seeing exactly where. Hearing ‘Yes,No,No’ and hearing ‘Yes,Undecided,Undecided’ both give you one Yes, so they belong to the same row of the collapsed table. Their probabilities are <span class="math inline">\(\theta_1\theta_0^2\)</span> and <span class="math inline">\(\theta_1\theta_{\text{u}}^2\)</span>, which are not the same number. The summand isn’t constant on the group any more, so adding is no longer counting.</p>
+<p>The fix is to group by more: not by how many Yeses, but by how many of each. Then the summand is constant again and you’re counting once more — a different count, because there are more ways to arrange three symbols than two.</p>
+<p>And if all you wanted was the number of Yeses, there’s a shorter way. Call Undecided a No.&nbsp;Every call is then a Yes or a not-Yes, which is the problem you already solved, and the number of Yeses is Binomial with <span class="math inline">\(\theta_1\)</span> the frequency of Yeses in the population. What you lose is everything the third answer was telling you.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="appendix-throwing-rolls-away" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-throwing-rolls-away">Appendix: Throwing Rolls Away</h2>
+<p>The d12 has a fix, and it’s the obvious one. Instead of counting an <span class="math inline">\(11\)</span> or a <span class="math inline">\(12\)</span> as a ten, roll again. Keep rolling until you get a number you can use.</p>
+<p>Every roll you keep is equally likely to be any of the ten, because the rule for throwing one away treats all ten usable faces alike — an <span class="math inline">\(11\)</span> and a <span class="math inline">\(12\)</span> go in the bin no matter who you were about to call. So stage 1 is counting again, <span class="math inline">\(\theta_1\)</span> is the population frequency again, and the answer is the one we derived.</p>
+<p>You’ve paid for it in rolls rather than in bias: a sixth of them go in the bin. That trade has a name — <em>rejection sampling</em> — and it’s how you draw from a distribution you want using a tool that gives you a different one. Keep what fits, discard what doesn’t, and the ones you keep come out right.</p>
+
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjgvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImdncGxvdDIiLCJwdXJyciIsImRwbHlyIiwidGlkeXIiXSwicmVwb3MiOltdfSwicmVuZGVyX2RmIjoiZGVmYXVsdCJ9
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJ2aWV3b2YgX3dlYnJfZWRpdG9yXzEgPSB7XG4gIGNvbnN0IHsgV2ViUkV4ZXJjaXNlRWRpdG9yLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0xLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oeyBpZDogYHdlYnItMS1jb250ZW50c2AgfSwgYmxvY2suYXR0cik7XG4gIGNvbnN0IGVkaXRvciA9IG5ldyBXZWJSRXhlcmNpc2VFZGl0b3Iod2ViUk9qcy53ZWJSUHJvbWlzZSwgYmxvY2suY29kZSwgb3B0aW9ucyk7XG5cbiAgcmV0dXJuIGVkaXRvci5jb250YWluZXI7XG59XG5fd2Vicl92YWx1ZV8xID0gd2ViUk9qcy5wcm9jZXNzKF93ZWJyX2VkaXRvcl8xLCB7fSk7XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItZGF0YVxcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGRhdGEgPSBKU09OLnBhcnNlKGI2NERlY29kZShkYXRhQ29udGVudCkpO1xuXG4gIC8vIEdyYWIgbGlzdCBvZiByZXNvdXJjZXMgdG8gYmUgZG93bmxvYWRlZFxuICBjb25zdCBmaWxlc0NvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwidmZzLWZpbGVcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBmaWxlcyA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGZpbGVzQ29udGVudCkpO1xuXG4gIC8vIEluaXRpYWxpc2Ugd2ViUiBhbmQgc2V0dXAgZm9yIFIgY29kZSBldmFsdWF0aW9uXG4gIGxldCB3ZWJSUHJvbWlzZSA9IChhc3luYyAod2ViUikgPT4ge1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICAvLyBJbnN0YWxsIHByb3ZpZGVkIGxpc3Qgb2YgcGFja2FnZXNcbiAgICAvLyBFbnN1cmUgd2ViUiBkZWZhdWx0IHJlcG8gaXMgaW5jbHVkZWRcbiAgICBkYXRhLnBhY2thZ2VzLnJlcG9zLnB1c2goXCJodHRwczovL3JlcG8uci13YXNtLm9yZ1wiKVxuICAgIGF3YWl0IGRhdGEucGFja2FnZXMucGtncy5tYXAoKHBrZykgPT4gKCkgPT4ge1xuICAgICAgc3RhdHVzVGV4dC50ZXh0Q29udGVudCA9IGBEb3dubG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBcbiAgICAgICAgd2Vicjo6aW5zdGFsbChwa2csIHJlcG9zID0gcmVwb3MpXG4gICAgICAgIGxpYnJhcnkocGtnLCBjaGFyYWN0ZXIub25seSA9IFRSVUUpXG4gICAgICBgLCB7IGVudjoge1xuICAgICAgICBwa2c6IHBrZyxcbiAgICAgICAgcmVwb3M6IGRhdGEucGFja2FnZXMucmVwb3MsXG4gICAgICB9fSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9KShuZXcgV2ViUihkYXRhLm9wdGlvbnMpKTtcblxuICAvLyBLZWVwIHRyYWNrIG9mIGluaXRpYWwgT0pTIGJsb2NrIHJlbmRlclxuICBjb25zdCByZW5kZXJlZE9qcyA9IHt9O1xuXG4gIGNvbnN0IHByb2Nlc3MgPSBhc3luYyAoY29udGV4dCwgaW5wdXRzKSA9PiB7XG4gICAgY29uc3Qgd2ViUiA9IGF3YWl0IHdlYlJQcm9taXNlO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICB3ZWJSUHJvbWlzZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script>
+function toggleDrawable(id) {
+  var overlay = document.getElementById(id);
+  var btn = overlay.nextElementSibling;
+  var resetBtn = overlay.resetBtn;
+  
+  // Lazy init on first click
+  if (!overlay.dataset.drawableInit) {
+    initDrawable(id);
+  }
+  
+  var isDrawing = overlay.dataset.drawing === 'true';
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  if (!isDrawing) {
+    // Enable drawing mode
+    overlay.dataset.drawing = 'true';
+    overlay.style.pointerEvents = 'auto';
+    // Reveal walks up from the touch target looking for this attribute, so it
+    // covers every touch landing on the tldraw surface. Without it a pen stroke
+    // across the figure swipes the slide.
+    overlay.setAttribute('data-prevent-swipe', '');
+    btn.textContent = '✕';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'auto';
+    }
+    // Add drawing-active class after a delay to let TLDraw mount
+    setTimeout(function() {
+      overlay.classList.add('drawing-active');
+    }, 100);
+    Drawable.setDrawingMode(id, true);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, true);
+    }
+  } else {
+    // Disable drawing mode (but keep canvas visible)
+    overlay.dataset.drawing = 'false';
+    overlay.style.pointerEvents = 'none';
+    overlay.removeAttribute('data-prevent-swipe');
+    overlay.classList.remove('drawing-active');
+    btn.textContent = '✏️';
+    if (resetBtn) {
+      resetBtn.style.pointerEvents = 'none';
+    }
+    Drawable.setDrawingMode(id, false);
+    if (syncCamera) {
+      Drawable.setCameraActive(id, false);
+    }
+  }
+}
+
+// Initialize drawable lazily when first clicked
+function initDrawable(id) {
+  var overlay = document.getElementById(id);
+  if (!overlay || overlay.dataset.drawableInit) return;
+  
+  var syncCamera = overlay.dataset.syncCamera === 'true';
+  var isScrolly = overlay.dataset.scrolly === 'true';
+  overlay.dataset.drawableInit = 'true';
+  overlay.dataset.drawing = 'false';
+  
+  // For scrolly, find the image-toggle container
+  var scrollyContainer = null;
+  if (isScrolly) {
+    var figureCol = overlay.closest('.image-toggle-figure');
+    scrollyContainer = figureCol?.querySelector('.image-toggle');
+  }
+  
+  Drawable.mount(overlay, { 
+    persist: overlay.dataset.persist === 'true', 
+    id: id,
+    syncCamera: syncCamera,
+    scrolly: isScrolly,
+    scrollyContainer: scrollyContainer
+  });
+  
+  // Register linked camera group if specified
+  var linkedGroup = overlay.dataset.linkedGroup;
+  if (linkedGroup) {
+    // Small delay to ensure editor is mounted
+    setTimeout(function() {
+      Drawable.registerLinkedCamera(id, linkedGroup);
+    }, 100);
+  }
+}
+
+// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
+// Run after a delay to let image-toggle do its work first
+setTimeout(function() {
+  // Check if image-toggle has run yet
+  if (!document.querySelector('.image-toggle-sidebar')) {
+    setTimeout(arguments.callee, 500);
+    return;
+  }
+  var figCounter = 0;
+  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
+    figCounter++;
+    var id = 'drawable-toggle-' + figCounter;
+    
+    // For sidebar layout, find the figure column; otherwise use the toggle itself
+    var sidebar = toggle.closest('.image-toggle-sidebar');
+    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
+    
+    // Make the target position:relative if not already
+    figureCol.style.position = 'relative';
+    
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'drawable-overlay';
+    overlay.id = id;
+    overlay.dataset.drawable = '';
+    overlay.dataset.persist = 'false';
+    overlay.dataset.syncCamera = 'true';
+    overlay.dataset.scrolly = 'true';
+    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+    figureCol.appendChild(overlay);
+    
+    // Create toggle button
+    var btn = document.createElement('button');
+    btn.className = 'drawable-toggle';
+    btn.textContent = '✏️';
+    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+    btn.onclick = function(e) { 
+      e.stopPropagation();
+      toggleDrawable(id); 
+    };
+    figureCol.appendChild(btn);
+    
+    // Create reset button
+    var resetBtn = document.createElement('button');
+    resetBtn.className = 'drawable-reset';
+    resetBtn.textContent = '⟲';
+    resetBtn.title = 'Reset view';
+    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+    resetBtn.onclick = function(e) {
+      e.stopPropagation();
+      Drawable.resetCamera(id);
+    };
+    figureCol.appendChild(resetBtn);
+    
+    // Show reset button when drawing is active
+    overlay.resetBtn = resetBtn;
+  });
+  
+  // Handle linked-cameras groups
+  var linkedGroupCounter = 0;
+  document.querySelectorAll('.linked-cameras').forEach(function(group) {
+    linkedGroupCounter++;
+    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
+    var figCounter = 0;
+    
+    // Find all figures/plots inside this group
+    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
+      if (cell.closest('.image-toggle')) return; // Skip scrolly images
+      if (!cell.querySelector('svg, img')) return; // No image
+      
+      figCounter++;
+      var id = 'linked-' + groupName + '-' + figCounter;
+      
+      // Make cell position relative
+      cell.style.position = 'relative';
+      
+      // Create overlay
+      var overlay = document.createElement('div');
+      overlay.className = 'drawable-overlay';
+      overlay.id = id;
+      overlay.dataset.drawable = '';
+      overlay.dataset.persist = 'false';
+      overlay.dataset.syncCamera = 'true';
+      overlay.dataset.linkedGroup = groupName;
+      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
+      cell.appendChild(overlay);
+      
+      // Create toggle button
+      var btn = document.createElement('button');
+      btn.className = 'drawable-toggle';
+      btn.textContent = '✏️';
+      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
+      btn.onclick = function(e) { 
+        e.stopPropagation();
+        // Init all drawables in this linked group first
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          if (!o.dataset.drawableInit) {
+            initDrawable(o.id);
+          }
+        });
+        toggleDrawable(id); 
+      };
+      cell.appendChild(btn);
+      
+      // Create reset button
+      var resetBtn = document.createElement('button');
+      resetBtn.className = 'drawable-reset';
+      resetBtn.textContent = '⟲';
+      resetBtn.title = 'Reset view';
+      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
+      resetBtn.onclick = function(e) {
+        e.stopPropagation();
+        // Reset all cameras in the group
+        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
+          Drawable.resetCamera(o.id);
+        });
+      };
+      cell.appendChild(resetBtn);
+      
+      overlay.resetBtn = resetBtn;
+    });
+  });
+}, 100);
+</script>
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>You’ll also see the left-hand one written <span class="math inline">\(\sum_{j=1}^{4}\)</span>. Same meaning—it’s naming the index set by its first and last element instead of writing the set out.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../chapters";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+        for (let i=0; i<annoteTargets.length; i++) {
+          const annoteTarget = annoteTargets[i];
+          const targetCell = annoteTarget.getAttribute("data-target-cell");
+          const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+          const contentFn = () => {
+            const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+            if (content) {
+              const tipContent = content.cloneNode(true);
+              tipContent.classList.add("code-annotation-tip-content");
+              return tipContent.outerHTML;
+            }
+          }
+          const config = {
+            allowHTML: true,
+            content: contentFn,
+            onShow: (instance) => {
+              selectCodeLines(instance.reference);
+              instance.reference.classList.add('code-annotation-active');
+              window.tippy.hideAll();
+            },
+            onHide: (instance) => {
+              unselectCodeLines();
+              instance.reference.classList.remove('code-annotation-active');
+            },
+            maxWidth: 300,
+            delay: [50, 0],
+            duration: [200, 0],
+            offset: [5, 10],
+            arrow: true,
+            appendTo: function(el) {
+              return el.parentElement.parentElement.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'quarto',
+            placement: 'right',
+            popperOptions: {
+              modifiers: [
+              {
+                name: 'flip',
+                options: {
+                  flipVariations: false, // true by default
+                  allowedAutoPlacements: ['right'],
+                  fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                },
+              },
+              {
+                name: 'preventOverflow',
+                options: {
+                  mainAxis: false,
+                  altAxis: false
+                }
+              }
+              ]        
+            }      
+          };
+          window.tippy(annoteTarget, config); 
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/chapter-calibration-binary.html" class="pagination-link" aria-label="Calibrating Interval Estimates with Binary Observations">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../homework/homework-calibration-binary.html" class="pagination-link" aria-label="Homework: Calibration with Binary Outcomes">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
