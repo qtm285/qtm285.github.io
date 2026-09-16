@@ -495,14 +495,22 @@ window.Quarto = {
 <section id="that-function-width-from-last-weeks-homework" class="level3">
 <h3 class="anchored" data-anchor-id="that-function-width-from-last-weeks-homework">That function <code>width</code> from last week’s homework</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>width <span class="ot">=</span> <span class="cf">function</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(draws), <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        actual <span class="ot">=</span> <span class="fu">mean</span>(center <span class="sc">-</span> w <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> w <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        nominal <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> alpha</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        actual <span class="sc">-</span> nominal</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">uniroot</span>(covg.dif, <span class="at">interval =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> <span class="fu">max</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center))))<span class="sc">$</span>root</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>upper.bracket <span class="ot">=</span> <span class="cf">function</span>(f, limits, <span class="at">steps =</span> <span class="dv">50</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>steps) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        middle <span class="ot">=</span> <span class="fu">mean</span>(limits)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="fu">f</span>(middle) <span class="sc">&lt;</span> <span class="dv">0</span>) limits[<span class="dv">1</span>] <span class="ot">=</span> middle <span class="cf">else</span> limits[<span class="dv">2</span>] <span class="ot">=</span> middle</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    limits[<span class="dv">2</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>width <span class="ot">=</span> <span class="cf">function</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(draws), <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        actual <span class="ot">=</span> <span class="fu">mean</span>(center <span class="sc">-</span> w <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> w <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        nominal <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> alpha</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        actual <span class="sc">-</span> nominal</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">upper.bracket</span>(covg.dif, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> <span class="fu">max</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center))))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </div>
@@ -682,10 +690,7 @@ Figure&nbsp;9.1
 </figcaption>
 </figure>
 </div>
-<p>That’s really what the code is doing. What I’m leaving out is a clever way of choosing the next width to try given what’s happened so far. That’s baked into <strong>R</strong>’s built-in function <code>uniroot</code>, which is being used in <code>width</code> to find the solution to this equation.</p>
-<p><span class="math display">\[
-\hat f(x) = 0   \qqtext{ where }   \hat f(x) = \text{the fraction of dots covered at width } x - .95
-\]</span></p>
+<p>That’s really what the code is doing. In last week’s homework, you tried every possible distance from the center and took the first one that covered enough of the sampling distribution. We could do that again here. Instead, <code>upper.bracket</code> uses the “too narrow / too wide / just right” logic in the pictures: it keeps one width that is too narrow and one that is wide enough, tries the width halfway between them, and then replaces the appropriate end of the bracket. After 50 steps, it takes the upper end—the narrowest width it knows covers at least 95%. This is equivalent to what you did last week, but it also works for the probability calculations below.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>What’s imprecise about this is that we’re using 10,000 dots instead of infinitely many. We don’t really want to know the fraction of 10,000 dots that we’re going to cover—we want to know the fraction of the sampling distribution that we’re going to cover. To do this, we can make a slight modification to our code. We’ll swap our dot counting function <span class="math inline">\(\hat f(x)\)</span>, which was called <code>covg.dif</code> in the code, with a version <span class="math inline">\(f(x)\)</span> that actually calculates probability. Here’s the code. It’s a bit faster than the dot-counting version too.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-3"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-3-1"><a href="#annotated-cell-3-1" aria-hidden="true" tabindex="-1"></a>width.binom <span class="ot">=</span> <span class="cf">function</span>(theta, n, <span class="at">alpha=</span>.<span class="dv">05</span>) {</span>
@@ -697,7 +702,7 @@ Figure&nbsp;9.1
 <span id="annotated-cell-3-7"><a href="#annotated-cell-3-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="sc">-</span> nominal  </span>
 <span id="annotated-cell-3-8"><a href="#annotated-cell-3-8" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="annotated-cell-3-9"><a href="#annotated-cell-3-9" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
+<span id="annotated-cell-3-10"><a href="#annotated-cell-3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">upper.bracket</span>(covg.dif, limits)</span>
 <span id="annotated-cell-3-11"><a href="#annotated-cell-3-11" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
@@ -1029,7 +1034,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 </div>
-<p>Now here’s where we start to put it all together. Let’s write out <em>an indicator</em> that tells us whether, when our point estimate is <span class="math inline">\(x\)</span>, our interval estimate covers the population frequency <span class="math inline">\(\theta\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Now here’s where we start to put it all together. Let’s write out <em>an indicator</em> that tells us whether, when our point estimate is <span class="math inline">\(x\)</span>, our interval estimate covers the population frequency <span class="math inline">\(\theta\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p><span class="math display">\[
 1_{\ell(\cdot) \le \theta \le u(\cdot)}(x) =
 \begin{cases} 1 &amp; \text{if } \ell(x) \le \theta \le u(x) \\ 0 &amp; \text{otherwise} \end{cases}
@@ -1158,41 +1163,8 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>A Better <code>width.binom</code>
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-19" class="callout-19-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>When I was writing my solution, I found that my precision was a bit limited if I used the version of <code>width.binom</code> above because it bounces around a little. The problem is that, due to the discreteness of the binomial distribution, there’s a range of widths that yield the same coverage probability. The smart thing to do would be to choose the smallest one, of course, but <code>uniroot</code> doesn’t know to do that. Within that range, <code>uniroot</code> doesn’t know what to pick and the choices it makes look a bit odd, as they can bounce up and down a little as we make small changes to the width—even as those changes are all in the same direction. I haven’t implemented the smart thing, but I have done something that breaks these ties and fixes the bouncing. What I’ve done is to ‘smooth’ the actual binomial probabilities by mixing them with a bit of the probabilities we get using its normal approximation.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>width.binom <span class="ot">=</span> <span class="cf">function</span>(theta, n, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">smooth.fraction=</span>.<span class="dv">001</span>) {</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    actual.normal.approx <span class="ot">=</span>  </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)) <span class="sc">-</span> </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n))     </span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   n, theta) <span class="sc">-</span>  </span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">pbinom</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, n, theta)   </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>smooth.fraction)<span class="sc">*</span>actual<span class="sc">+</span>smooth.fraction<span class="sc">*</span>actual.normal.approx        </span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="sc">-</span> nominal </span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1201,37 +1173,37 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>I’ll do this by extending the approach from <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>, where I wrote code to calculate coverage at a single value of <span class="math inline">\(\theta\)</span>. All I need to do now is do the same thing repeatedly, looping over a grid of values of <span class="math inline">\(\theta\)</span>.</p>
 <p>For a small population like our NBA one, we can try every possible value of <span class="math inline">\(\theta\)</span>: <span class="math inline">\(0, 1/m, 2/m, \ldots, 1\)</span>. For a population like our GA voters, that’s too many. We’ll just count from 0 to 1 by thousandths, which should be good enough for a plot.</p>
 <p>Note that there’s a bit of bouncing up and down in this curve. To make this a little more palatable visually, I’ve plotted it as a sequence of points instead of a line. It’s a useful trick. I haven’t had time to think through whether the actual curve bounces a little or it’s an artifact introduced by my code. <em>Extra Credit</em>. Figure out which it is and make a convincing argument. Let’s make it worth something: 10 points on Midterm 1.</p>
 <p>I’ve drawn a green line at <span class="math inline">\(y=.95\)</span>, our <em>nominal coverage probability</em>, i.e.&nbsp;the coverage probability we’re trying for.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, theta)</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>} </span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.625</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.625</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">625</span>,thetas<span class="fl">.625</span>)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span> </span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, theta)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.625</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.625</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">625</span>,thetas<span class="fl">.625</span>)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span> </span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
@@ -1277,7 +1249,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1286,7 +1258,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p><em>(Nothing to solve — this one is for me.)</em></p>
@@ -1299,7 +1271,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 <h2 class="anchored" data-anchor-id="extra-credit-sampling-without-replacement">Extra Credit: Sampling without Replacement</h2>
 <p>Remember <a href="https://qtm285-1.github.io/assets/lectures/Lecture3.html#/sampling-without-replacement">from class</a> that if we sample <em>without replacement</em>, the sample frequency has a hypergeometric distribution, not a binomial distribution? That means that if we want to calibrate interval estimates for sampling without replacement, we need to make a very small change to the function <code>width.binom</code> to switch out the binomial distribution for the hypergeometric distribution. You are, of course, welcome to look up the documentation on the <strong>R</strong> function <code>phyper</code> and code that up yourself, but I’ve done it for you and provided the code below in case you’d rather not.</p>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-23-contents" aria-controls="callout-23" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1308,37 +1280,37 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-23" class="callout-23-contents callout-collapse collapse">
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>width.hyper <span class="ot">=</span> <span class="cf">function</span>(theta, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) { </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n) <span class="sc">-</span> </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="sc">-</span> nominal  </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>width.hyper <span class="ot">=</span> <span class="cf">function</span>(theta, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) { </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n) <span class="sc">-</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="sc">-</span> nominal  </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">upper.bracket</span>(covg.dif, limits)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 </div>
 <p>What we’re going to do here are versions of <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> and <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a> for a version of our NBA survey where we’ve collected a sample of size n=100 from our population of size m=539 players, but this time sampling without replacement. Here’s a plot of our sample frequency’s sampling distribution when we do this.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rhyper</span>(<span class="dv">1000</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)<span class="sc">/</span>n</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>(<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n, <span class="at">y=</span>prob), <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>draws, <span class="at">y=</span><span class="fu">max</span>(prob)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span>), <span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">size=</span>.<span class="dv">5</span>,<span class="at">color=</span><span class="st">'purple'</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>theta, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span>  </span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">1</span>), <span class="at">limits=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">75</span>)) <span class="sc">+</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>)</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>draws <span class="ot">=</span>  <span class="fu">rhyper</span>(<span class="dv">1000</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)<span class="sc">/</span>n</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>prob <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="ot">=</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">x=</span>(<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n, <span class="at">y=</span>prob), <span class="at">alpha=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>draws, <span class="at">y=</span><span class="fu">max</span>(prob)<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)<span class="sc">/</span><span class="dv">1000</span>), <span class="at">alpha=</span>.<span class="dv">1</span>, <span class="at">size=</span>.<span class="dv">5</span>,<span class="at">color=</span><span class="st">'purple'</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>theta, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span><span class="fl">1.5</span>) <span class="sc">+</span>  </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span>.<span class="dv">1</span>), <span class="at">limits=</span><span class="fu">c</span>(.<span class="dv">25</span>,.<span class="dv">75</span>)) <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">''</span>, <span class="at">y=</span><span class="st">''</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1364,7 +1336,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-25-contents" aria-controls="callout-25" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1373,38 +1345,38 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-25" class="callout-25-contents callout-collapse collapse">
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>I’ll do this the same way I did it in <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>. But this time I’ll use the hypergeometric width function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-21"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1">1</button><span id="annotated-cell-21-1" class="code-annotation-target"><a href="#annotated-cell-21-1" aria-hidden="true" tabindex="-1"></a>widths<span class="fl">.100</span> <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">101</span>)</span>
-<span id="annotated-cell-21-2"><a href="#annotated-cell-21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>) {</span>
-<span id="annotated-cell-21-3"><a href="#annotated-cell-21-3" aria-hidden="true" tabindex="-1"></a>  widths<span class="fl">.100</span>[ii<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> <span class="fu">width.hyper</span>(ii<span class="sc">/</span>n, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>)</span>
-<span id="annotated-cell-21-4"><a href="#annotated-cell-21-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="annotated-cell-21-5"><a href="#annotated-cell-21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-21-6"><a href="#annotated-cell-21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-21-7"><a href="#annotated-cell-21-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
-<span id="annotated-cell-21-8"><a href="#annotated-cell-21-8" aria-hidden="true" tabindex="-1"></a>lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-21-9"><a href="#annotated-cell-21-9" aria-hidden="true" tabindex="-1"></a>ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-21-10"><a href="#annotated-cell-21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-21-11"><a href="#annotated-cell-21-11" aria-hidden="true" tabindex="-1"></a>inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
-<span id="annotated-cell-21-12"><a href="#annotated-cell-21-12" aria-hidden="true" tabindex="-1"></a>lower.edge <span class="ot">=</span> <span class="fu">min</span>(x[inside])</span>
-<span id="annotated-cell-21-13"><a href="#annotated-cell-21-13" aria-hidden="true" tabindex="-1"></a>upper.edge <span class="ot">=</span> <span class="fu">max</span>(x[inside])</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-20"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><button class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="1">1</button><span id="annotated-cell-20-1" class="code-annotation-target"><a href="#annotated-cell-20-1" aria-hidden="true" tabindex="-1"></a>widths<span class="fl">.100</span> <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">101</span>)</span>
+<span id="annotated-cell-20-2"><a href="#annotated-cell-20-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(ii <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">100</span>) {</span>
+<span id="annotated-cell-20-3"><a href="#annotated-cell-20-3" aria-hidden="true" tabindex="-1"></a>  widths<span class="fl">.100</span>[ii<span class="sc">+</span><span class="dv">1</span>] <span class="ot">=</span> <span class="fu">width.hyper</span>(ii<span class="sc">/</span>n, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>)</span>
+<span id="annotated-cell-20-4"><a href="#annotated-cell-20-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-20-5"><a href="#annotated-cell-20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-20-6"><a href="#annotated-cell-20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-20-7"><a href="#annotated-cell-20-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="annotated-cell-20-8"><a href="#annotated-cell-20-8" aria-hidden="true" tabindex="-1"></a>lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-20-9"><a href="#annotated-cell-20-9" aria-hidden="true" tabindex="-1"></a>ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="fl">.100</span><span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-20-10"><a href="#annotated-cell-20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-20-11"><a href="#annotated-cell-20-11" aria-hidden="true" tabindex="-1"></a>inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-20-12"><a href="#annotated-cell-20-12" aria-hidden="true" tabindex="-1"></a>lower.edge <span class="ot">=</span> <span class="fu">min</span>(x[inside])</span>
+<span id="annotated-cell-20-13"><a href="#annotated-cell-20-13" aria-hidden="true" tabindex="-1"></a>upper.edge <span class="ot">=</span> <span class="fu">max</span>(x[inside])</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-20" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="1,2,3,4" data-code-annotation="1">Here’s the change. The intended change was to swap out <code>width.binom</code> for <code>width.hyper</code>. I also replaced the call to ‘map_vec’ with a ‘for’ loop because I was getting errors when I mapped and they vanished when I made exactly the same calls in a loop. I don’t know why that happened.</span>
+<span data-code-cell="annotated-cell-20" data-code-lines="1,2,3,4" data-code-annotation="1">Here’s the change. The intended change was to swap out <code>width.binom</code> for <code>width.hyper</code>. I also replaced the call to ‘map_vec’ with a ‘for’ loop because I was getting errors when I mapped and they vanished when I made exactly the same calls in a loop. I don’t know why that happened.</span>
 </dd>
 </dl>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>hypergeometric.indicator <span class="ot">=</span> <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">'rect'</span>, <span class="at">xmin=</span>lower.edge, <span class="at">xmax=</span>upper.edge, </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">ymin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill=</span><span class="st">'blue'</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> hypergeometric.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>hypergeometric.indicator <span class="ot">=</span> <span class="fu">annotate</span>(<span class="at">geom=</span><span class="st">'rect'</span>, <span class="at">xmin=</span>lower.edge, <span class="at">xmax=</span>upper.edge, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">ymin=</span><span class="sc">-</span><span class="cn">Inf</span>, <span class="at">ymax=</span><span class="cn">Inf</span>, <span class="at">alpha=</span>.<span class="dv">2</span>, <span class="at">fill=</span><span class="st">'blue'</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> hypergeometric.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1435,41 +1407,8 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-27-contents" aria-controls="callout-27" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>A Better <code>width.hyper</code>
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-27" class="callout-27-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>While writing the solution, I implemented a smoothed version of this width function,too.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>width.hyper <span class="ot">=</span> <span class="cf">function</span>(theta, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>, <span class="at">smooth.fraction=</span>.<span class="dv">001</span>) { </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    actual.normal.approx <span class="ot">=</span>  </span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">sqrt</span>((m<span class="sc">-</span>n)<span class="sc">/</span>(m<span class="dv">-1</span>))) <span class="sc">-</span> </span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pnorm</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>, theta, <span class="fu">sqrt</span>(theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta)<span class="sc">/</span>n)<span class="sc">*</span><span class="fu">sqrt</span>((m<span class="sc">-</span>n)<span class="sc">/</span>(m<span class="dv">-1</span>)))     </span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    actual <span class="ot">=</span> <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">+</span>w<span class="sc">/</span><span class="dv">2</span>),   m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n) <span class="sc">-</span> </span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">phyper</span>(n<span class="sc">*</span>(theta<span class="sc">-</span>w<span class="sc">/</span><span class="dv">2</span>)<span class="sc">-</span><span class="dv">1</span>, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="ot">=</span> (<span class="dv">1</span><span class="sc">-</span>smooth.fraction)<span class="sc">*</span>actual<span class="sc">+</span>smooth.fraction<span class="sc">*</span>actual.normal.approx        </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    nominal <span class="ot">=</span> <span class="dv">1</span><span class="sc">-</span>alpha </span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    smoothed.actual <span class="sc">-</span> nominal  </span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  limits <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uniroot</span>(covg.dif, <span class="at">interval=</span>limits)<span class="sc">$</span>root</span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1478,38 +1417,38 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>The function <code>coverage.curve</code> differs from the one in solution to <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a> in two lines. They’re marked.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-24"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-24-1"><a href="#annotated-cell-24-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
-<span id="annotated-cell-24-2"><a href="#annotated-cell-24-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="1">1</button><span id="annotated-cell-24-3" class="code-annotation-target"><a href="#annotated-cell-24-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.hyper</span>(x, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
-<span id="annotated-cell-24-4"><a href="#annotated-cell-24-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-24-5"><a href="#annotated-cell-24-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-24-6"><a href="#annotated-cell-24-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-24-7"><a href="#annotated-cell-24-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="2">2</button><span id="annotated-cell-24-8" class="code-annotation-target"><a href="#annotated-cell-24-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
-<span id="annotated-cell-24-9"><a href="#annotated-cell-24-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
-<span id="annotated-cell-24-10"><a href="#annotated-cell-24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
-<span id="annotated-cell-24-11"><a href="#annotated-cell-24-11" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="annotated-cell-24-12"><a href="#annotated-cell-24-12" aria-hidden="true" tabindex="-1"></a>} </span>
-<span id="annotated-cell-24-13"><a href="#annotated-cell-24-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-24-14"><a href="#annotated-cell-24-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
-<span id="annotated-cell-24-15"><a href="#annotated-cell-24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="annotated-cell-24-16"><a href="#annotated-cell-24-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
-<span id="annotated-cell-24-17"><a href="#annotated-cell-24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="annotated-cell-24-18"><a href="#annotated-cell-24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-22"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-22-1"><a href="#annotated-cell-22-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="annotated-cell-22-2"><a href="#annotated-cell-22-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="1">1</button><span id="annotated-cell-22-3" class="code-annotation-target"><a href="#annotated-cell-22-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.hyper</span>(x, n, m, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="annotated-cell-22-4"><a href="#annotated-cell-22-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-22-5"><a href="#annotated-cell-22-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-22-6"><a href="#annotated-cell-22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-22-7"><a href="#annotated-cell-22-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="2">2</button><span id="annotated-cell-22-8" class="code-annotation-target"><a href="#annotated-cell-22-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="annotated-cell-22-9"><a href="#annotated-cell-22-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-22-10"><a href="#annotated-cell-22-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="annotated-cell-22-11"><a href="#annotated-cell-22-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="annotated-cell-22-12"><a href="#annotated-cell-22-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="annotated-cell-22-13"><a href="#annotated-cell-22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-22-14"><a href="#annotated-cell-22-14" aria-hidden="true" tabindex="-1"></a>thetas<span class="fl">.100</span> <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="annotated-cell-22-15"><a href="#annotated-cell-22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="annotated-cell-22-16"><a href="#annotated-cell-22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas<span class="fl">.100</span>, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas<span class="fl">.100</span>)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-22-17"><a href="#annotated-cell-22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-22-18"><a href="#annotated-cell-22-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-24" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-22" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-24" data-code-lines="3" data-code-annotation="1">Calculate width using the hypergeometric instead of the binomial.</span>
+<span data-code-cell="annotated-cell-22" data-code-lines="3" data-code-annotation="1">Calculate width using the hypergeometric instead of the binomial.</span>
 </dd>
-<dt data-target-cell="annotated-cell-24" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-22" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-24" data-code-lines="8" data-code-annotation="2">Calculate the expectation of our indicator using the hypergeometric probabilities rather than the binomial.</span>
+<span data-code-cell="annotated-cell-22" data-code-lines="8" data-code-annotation="2">Calculate the expectation of our indicator using the hypergeometric probabilities rather than the binomial.</span>
 </dd>
 </dl>
 </div>
@@ -1543,7 +1482,7 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-30-contents" aria-controls="callout-30" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1552,14 +1491,14 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-30" class="callout-30-contents callout-collapse collapse">
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>So what we’re going to see here is how much we <em>over-cover</em>, i.e.&nbsp;exceed our nominal coverage probability of 95%, when we calibrate using the wider binomial distribution. The degree of over-coverage isn’t huge because <span class="math inline">\(n=100\)</span> is not a huge fraction of <span class="math inline">\(m=539\)</span>. There’s some, because it’s not tiny in comparison, but I’ll show the coverage plot for <span class="math inline">\(n=(m-1)/2\)</span> to see what happens in that case too.</p>
 <p>It’s the same binomial indicator and width calculation function as in <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a> and <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a>, but we calculate the expected value of the indicator using the hypergeometric probabilities as in <a href="#exr-coverage-calc-hyper" class="quarto-xref">Exercise&nbsp;<span>9.11</span></a>.</p>
 <p>We already have the indicator from <a href="#exr-coverage-plot" class="quarto-xref">Exercise&nbsp;<span>9.7</span></a>, so we can just overlay it on our new sampling distribution plot.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> binomial.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sampling.dist.plot.hyper <span class="sc">+</span> binomial.indicator</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1569,41 +1508,41 @@ u(\theta) &amp;= \theta + \frac{w(\theta)}{2}
 </div>
 </div>
 <p>This time we make <em>one</em> change to <code>coverage.curve</code> from <a href="#exr-coverage-calc" class="quarto-xref">Exercise&nbsp;<span>9.8</span></a>. I’ll mark the changes we do and don’t make.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-26"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-26-1"><a href="#annotated-cell-26-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
-<span id="annotated-cell-26-2"><a href="#annotated-cell-26-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="1">1</button><span id="annotated-cell-26-3" class="code-annotation-target"><a href="#annotated-cell-26-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
-<span id="annotated-cell-26-4"><a href="#annotated-cell-26-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-26-5"><a href="#annotated-cell-26-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
-<span id="annotated-cell-26-6"><a href="#annotated-cell-26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-26-7"><a href="#annotated-cell-26-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
-<button class="code-annotation-anchor" data-target-cell="annotated-cell-26" data-target-annotation="2">2</button><span id="annotated-cell-26-8" class="code-annotation-target"><a href="#annotated-cell-26-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
-<span id="annotated-cell-26-9"><a href="#annotated-cell-26-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
-<span id="annotated-cell-26-10"><a href="#annotated-cell-26-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
-<span id="annotated-cell-26-11"><a href="#annotated-cell-26-11" aria-hidden="true" tabindex="-1"></a>  })</span>
-<span id="annotated-cell-26-12"><a href="#annotated-cell-26-12" aria-hidden="true" tabindex="-1"></a>} </span>
-<span id="annotated-cell-26-13"><a href="#annotated-cell-26-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-26-14"><a href="#annotated-cell-26-14" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
-<span id="annotated-cell-26-15"><a href="#annotated-cell-26-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-26-16"><a href="#annotated-cell-26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="annotated-cell-26-17"><a href="#annotated-cell-26-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
-<span id="annotated-cell-26-18"><a href="#annotated-cell-26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="annotated-cell-26-19"><a href="#annotated-cell-26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-24"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-24-1"><a href="#annotated-cell-24-1" aria-hidden="true" tabindex="-1"></a>coverage.curve <span class="ot">=</span> <span class="cf">function</span>(n, thetas) {</span>
+<span id="annotated-cell-24-2"><a href="#annotated-cell-24-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="1">1</button><span id="annotated-cell-24-3" class="code-annotation-target"><a href="#annotated-cell-24-3" aria-hidden="true" tabindex="-1"></a>  widths <span class="ot">=</span> x <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(x) { <span class="fu">width.binom</span>(x, n, <span class="at">alpha=</span>.<span class="dv">05</span>) })</span>
+<span id="annotated-cell-24-4"><a href="#annotated-cell-24-4" aria-hidden="true" tabindex="-1"></a>  lx <span class="ot">=</span> x <span class="sc">-</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-24-5"><a href="#annotated-cell-24-5" aria-hidden="true" tabindex="-1"></a>  ux <span class="ot">=</span> x <span class="sc">+</span> widths<span class="sc">/</span><span class="dv">2</span></span>
+<span id="annotated-cell-24-6"><a href="#annotated-cell-24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-24-7"><a href="#annotated-cell-24-7" aria-hidden="true" tabindex="-1"></a>  thetas <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(theta) { </span>
+<button class="code-annotation-anchor" data-target-cell="annotated-cell-24" data-target-annotation="2">2</button><span id="annotated-cell-24-8" class="code-annotation-target"><a href="#annotated-cell-24-8" aria-hidden="true" tabindex="-1"></a>    probs <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, m<span class="sc">*</span>theta, m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>theta), n)</span>
+<span id="annotated-cell-24-9"><a href="#annotated-cell-24-9" aria-hidden="true" tabindex="-1"></a>    inside <span class="ot">=</span> lx <span class="sc">&lt;=</span> theta <span class="sc">&amp;</span> theta <span class="sc">&lt;=</span> ux</span>
+<span id="annotated-cell-24-10"><a href="#annotated-cell-24-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(probs[inside])</span>
+<span id="annotated-cell-24-11"><a href="#annotated-cell-24-11" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="annotated-cell-24-12"><a href="#annotated-cell-24-12" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="annotated-cell-24-13"><a href="#annotated-cell-24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-24-14"><a href="#annotated-cell-24-14" aria-hidden="true" tabindex="-1"></a>thetas <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>m)<span class="sc">/</span>m</span>
+<span id="annotated-cell-24-15"><a href="#annotated-cell-24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-24-16"><a href="#annotated-cell-24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="annotated-cell-24-17"><a href="#annotated-cell-24-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>(<span class="dv">100</span>, thetas)), <span class="at">color=</span>pink, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-24-18"><a href="#annotated-cell-24-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-24-19"><a href="#annotated-cell-24-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-26" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-24" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="3" data-code-annotation="1">Here’s the change we don’t make that we did in <a href="#exr-coverage-calc-hyper" class="quarto-xref">Exercise&nbsp;<span>9.11</span></a>. We’re calibrating using the binomial.</span>
+<span data-code-cell="annotated-cell-24" data-code-lines="3" data-code-annotation="1">Here’s the change we don’t make that we did in <a href="#exr-coverage-calc-hyper" class="quarto-xref">Exercise&nbsp;<span>9.11</span></a>. We’re calibrating using the binomial.</span>
 </dd>
-<dt data-target-cell="annotated-cell-26" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-24" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-26" data-code-lines="8" data-code-annotation="2">Here’s the change we do make. We’re calculating the coverage probability using the hypergeometric.</span>
+<span data-code-cell="annotated-cell-24" data-code-lines="8" data-code-annotation="2">Here’s the change we do make. We’re calculating the coverage probability using the hypergeometric.</span>
 </dd>
 </dl>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>((m<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>, thetas)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>thetas, <span class="at">y=</span><span class="fu">coverage.curve</span>((m<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>, thetas)), <span class="at">color=</span>teal, <span class="at">size=</span>.<span class="dv">25</span>) <span class="sc">+</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept=</span>.<span class="dv">95</span>, <span class="at">color=</span><span class="st">'green'</span>, <span class="at">alpha=</span>.<span class="dv">7</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x=</span><span class="st">'θ'</span>, <span class="at">y=</span><span class="st">'coverage'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
@@ -1859,7 +1798,8 @@ setTimeout(function() {
 <hr>
 <ol>
 <li id="fn1"><p>If you’re getting an error about <code>pmap_vec</code> not being found, you’ve probably got a pretty old version of <strong>purrr</strong> installed. That function, like <code>map_vec</code> from last week’s homework, was added in <a href="https://www.tidyverse.org/blog/2022/12/purrr-1-0-0"><strong>purrr</strong> version 1.0 in December 2022</a>. You can update it by running <code>install.packages("purrr")</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>You’ll have to forgive the notation here. Sometimes when we want to write out a function, but don’t want to gives its argument a name, we’ll use the symbol <span class="math inline">\(\cdot\)</span> instead of a real argument name like <span class="math inline">\(x\)</span>. What this notation is saying is that, when you pass the function an argument <span class="math inline">\(x\)</span>, you should substitute it for the <span class="math inline">\(\cdot\)</span>. Perhaps it makes more sense when you see it compared to the alternative in action. Which looks more like an indicator variable for the interval estimate around <span class="math inline">\(\hat\theta\)</span> covering the population frequency <span class="math inline">\(\theta\)</span>: <span class="math inline">\(1_{\ell(\cdot) \le \theta \le u(\cdot)}(\hat\theta)\)</span> or <span class="math inline">\(1_{\ell(x) \le \theta \le u(x)}(\hat\theta)\)</span>?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The version of this homework initially posted used <code>uniroot</code>, which tries to find a width with exactly 95% coverage. Coverage for a discrete sampling distribution changes in jumps, so it can jump from below 95% to above 95% without ever equaling 95%. Later callouts tried to stabilize that search by adding a small amount of a continuous normal approximation. The bracket search replaces both versions and makes the intended conservative choice directly.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>You’ll have to forgive the notation here. Sometimes when we want to write out a function, but don’t want to gives its argument a name, we’ll use the symbol <span class="math inline">\(\cdot\)</span> instead of a real argument name like <span class="math inline">\(x\)</span>. What this notation is saying is that, when you pass the function an argument <span class="math inline">\(x\)</span>, you should substitute it for the <span class="math inline">\(\cdot\)</span>. Perhaps it makes more sense when you see it compared to the alternative in action. Which looks more like an indicator variable for the interval estimate around <span class="math inline">\(\hat\theta\)</span> covering the population frequency <span class="math inline">\(\theta\)</span>: <span class="math inline">\(1_{\ell(\cdot) \le \theta \le u(\cdot)}(\hat\theta)\)</span> or <span class="math inline">\(1_{\ell(x) \le \theta \le u(x)}(\hat\theta)\)</span>?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
