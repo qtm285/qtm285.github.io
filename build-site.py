@@ -4,10 +4,10 @@ import datetime
 import re
 import shutil
 from pybars import Compiler
-import subprocess
 import yaml
 
-COURSE_DIR = Path('../teaching/qtm285-materials').resolve()
+COURSE_DIR = None
+SCHEDULE_SOURCE = None
 
 # The schedule, from the book project
 #
@@ -20,8 +20,6 @@ COURSE_DIR = Path('../teaching/qtm285-materials').resolve()
 # The link rule is Skip's: a session that has happened or is happening today
 # links into the book; a future one is text. Applied here, at generation, so it
 # is a consequence of the date rather than something anyone has to remember.
-
-SCHEDULE_SOURCE = COURSE_DIR / 'index.qmd'
 
 MONTHS = {m: i + 1 for i, m in enumerate(
   ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])}
@@ -119,20 +117,18 @@ def cell_html(cell, linked):
 
 
 def declared_homeworks():
-  config_text = subprocess.run(
-    ['git', '-C', COURSE_DIR, 'show', 'HEAD:_quarto_book.yml'],
-    check=True, capture_output=True, text=True).stdout
+  config_text = (COURSE_DIR / '_quarto_book.yml').read_text()
   config = yaml.safe_load(config_text)
   result = []
   for part in config['book']['chapters']:
     for chapter in part.get('chapters', []) if isinstance(part, dict) else []:
-      if chapter.startswith('homework/'):
+      if chapter.startswith('homework/') and not chapter.endswith('.solutions.qmd'):
         result.append(COURSE_DIR / chapter)
   return iter(result)
 
 
 def homework_html(path, number, linked):
-  stem = path.stem
+  stem = path.stem.removesuffix('.handout')
   if not linked:
     return f'HW {number} out'
   page = Path('book/homework') / f'{stem}.html'
@@ -251,13 +247,11 @@ def assemble_static(book_dir, site_dir):
     shutil.rmtree(site_dir)
   site_dir.mkdir(parents=True)
   shutil.copytree(book_dir, site_dir / 'book')
-  shutil.copytree(COURSE_DIR / 'homework/handouts',
-                  site_dir / 'book/homework/handouts', dirs_exist_ok=True)
   for name in ('css', 'images'):
     shutil.copytree(Path('site-assets') / name, site_dir / name)
   deck_dir = site_dir / 'decks'
   deck_dir.mkdir()
-  for html in (COURSE_DIR / 'decks').glob('*-slides.html'):
+  for html in (book_dir.parent / 'decks').glob('*-slides.html'):
     shutil.copy2(html, deck_dir / html.name)
     support = html.with_name(f'{html.stem}_files')
     if support.exists():
@@ -268,9 +262,12 @@ def assemble_static(book_dir, site_dir):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
+  parser.add_argument('--course-dir', type=Path, required=True)
   parser.add_argument('--book-dir', type=Path)
   parser.add_argument('--site-dir', type=Path, default=Path('_site'))
   args = parser.parse_args()
+  COURSE_DIR = args.course_dir.resolve()
+  SCHEDULE_SOURCE = COURSE_DIR / 'index.qmd'
   ACTIVE_SITE = args.site_dir
   if args.book_dir:
     assemble_static(args.book_dir, args.site_dir)
