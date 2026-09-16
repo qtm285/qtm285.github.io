@@ -496,13 +496,8 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="that-function-width-from-last-weeks-homework">That function <code>width</code> from last week’s homework</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>width <span class="ot">=</span> <span class="cf">function</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(draws), <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    covg.dif <span class="ot">=</span> <span class="cf">function</span>(w) {</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        actual <span class="ot">=</span> <span class="fu">mean</span>(center <span class="sc">-</span> w <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&lt;=</span> draws <span class="sc">&amp;</span> draws <span class="sc">&lt;=</span> center <span class="sc">+</span> w <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        nominal <span class="ot">=</span> <span class="dv">1</span> <span class="sc">-</span> alpha</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        actual <span class="sc">-</span> nominal</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">uniroot</span>(covg.dif, <span class="at">interval =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> <span class="fu">max</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center))))<span class="sc">$</span>root</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span> <span class="sc">*</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center), <span class="dv">1</span> <span class="sc">-</span> alpha, <span class="at">type =</span> <span class="dv">1</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 </div>
@@ -636,7 +631,7 @@ Note&nbsp;9.1
 </section>
 <section id="sec-improving-speed-and-precision" class="level2">
 <h2 class="anchored" data-anchor-id="sec-improving-speed-and-precision">Improving Speed and Precision at The Same Time</h2>
-<p>So far, to calculate our interval widths, we’ve used a ‘dot counting’ method. We’ve sampled 10,000 times from our (estimated) sampling distribution, then tried drawing arms of different lengths around the sampling distribution’s mean until we got one that included 9500 (95%) of those dots. You can think of it as an iterative process like this.</p>
+<p>Last week, <code>width</code> literally tried every candidate width: it put all 10,000 distances from the center in order and took the first one that covered at least 95% of the draws. That works, but it does more than we need. Once a width covers at least 95%, every wider interval does too. So we can home in on the cutoff by keeping one width that is too narrow and one that is wide enough. The four pictures show the idea.</p>
 <div id="fig-dot-counting" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-dot-counting-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -696,7 +691,7 @@ Figure&nbsp;9.1
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    limits[<span class="dv">2</span>]</span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>What remains imprecise is the coverage function: it counts 10,000 simulated dots, so it only approximates the fraction of the sampling distribution covered by an interval. We can improve the precision without changing the search. Instead of giving <code>binary.search</code> the dot-counting coverage function, we’ll give it a function that calculates the exact Binomial coverage probability. Here’s the code. It’s faster than the dot-counting version too.</p>
+<p>Binary search avoids sorting all the candidate widths. But covering 95% of 10,000 simulated dots is still only an approximation to covering 95% of the sampling distribution. To get the exact width, we give <code>binary.search</code> a function that calculates the exact Binomial coverage probability. Here’s the code. It’s faster than the dot-counting version too.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-4"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-4-1"><a href="#annotated-cell-4-1" aria-hidden="true" tabindex="-1"></a>width.binom <span class="ot">=</span> <span class="cf">function</span>(theta, n, <span class="at">alpha=</span>.<span class="dv">05</span>) {</span>
 <span id="annotated-cell-4-2"><a href="#annotated-cell-4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(theta <span class="sc">==</span> <span class="dv">0</span> <span class="sc">||</span> theta <span class="sc">==</span> <span class="dv">1</span>) { <span class="fu">return</span>(<span class="dv">0</span>) }</span>
