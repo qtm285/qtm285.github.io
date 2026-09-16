@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -78,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -133,38 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  
-<script>
-(function() {
-  var prev = window.MathJax || {};
-  var prevTex = prev.tex || {};
-  var prevMacros = prevTex.macros || {};
-  window.MathJax = Object.assign({}, prev, {
-    tex: Object.assign({}, prevTex, {
-      inlineMath: [['\\(', '\\)'], ['$', '$']],
-      displayMath: [['\\[', '\\]'], ['$$', '$$']],
-      processEscapes: true,
-      macros: Object.assign({}, prevMacros, {
-        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
-        qty: ['\\left(#1\\right)', 1],
-        qfor: ['\\quad\\text{for}\\quad', 0],
-        qand: ['\\quad\\text{and}\\quad', 0],
-        qwhere: ['\\quad\\text{where}\\quad', 0],
-        E: '\\operatorname{E}',
-        Var: '\\operatorname{V}',
-        Cov: '\\operatorname{Cov}',
-        bias: '\\operatorname{bias}',
-        RMSE: '\\operatorname{RMSE}',
-        sd: '\\operatorname{sd}',
-        hVar: '\\widehat{\\operatorname{V}}',
-        nprior: 'n_0',
-        ind: '\\perp\\!\\!\\!\\perp'
-      })
-    })
-  });
-})();
-</script>
-<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -196,24 +166,6 @@ window.Quarto = {
 </head>
 
 <body class="floating quarto-light">
-<div class="tlda-chapter-title">
-  <div class="tlda-chapter-title-text">Homework 0: Basic Descriptive Statistics</div>
-</div>
-<style>
-.tlda-chapter-title {
-  padding: 40px 0 32px;
-  text-align: center;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 32px;
-}
-.tlda-chapter-title-text {
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  font-size: 28px;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  color: #222;
-}
-</style>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -789,43 +741,33 @@ window.Quarto = {
 <p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
 <p>$$</p>
 </div>
-<p data-source-line="10">This assignment is about summarizing a dataset numerically and visually: the mean, the standard deviation, and the frequency that something happens. You’ll calculate them by hand and in <strong>R</strong>, draw them, and ask each time whether the summary is a fair picture of what’s there.</p>
+<p>This assignment is about summarizing a dataset numerically and visually: the mean, the standard deviation, and the frequency that something happens. You’ll calculate them by hand and in <strong>R</strong>, draw them, and ask each time whether the summary is a fair picture of what’s there.</p>
 <section id="mean-and-standard-deviation" class="level1">
-<h1 data-source-line="15">Mean and Standard Deviation</h1>
+<h1>Mean and Standard Deviation</h1>
 <section id="definitions" class="level2">
-<h2 class="anchored" data-anchor-id="definitions" data-source-line="18">Definitions</h2>
-<p data-source-line="20">Below is a list of a thousand numbers, drawn as dots, with the two things we are about to define marked on it: their mean, and one standard deviation either side of it.</p>
+<h2 class="anchored" data-anchor-id="definitions">Definitions</h2>
+<p>Below is a list of a thousand numbers, drawn as dots, with the two things we are about to define marked on it: their mean, and one standard deviation either side of it.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-poisson-sample-1.svg?v=1789407483430" class="img-fluid figure-img" alt="One thousand purple observations shown with their histogram, a solid blue mean line, and dashed lines one standard deviation below and above the mean."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-poisson-sample-1.svg" class="img-fluid figure-img" alt="One thousand purple observations shown with their histogram, a solid blue mean line, and dashed lines one standard deviation below and above the mean."></p>
 </figure>
 </div>
 </div>
-<details class="tlda-output-source" data-source-file="homework/homework-descriptive.qmd" data-source-line="24"><summary>Show plotting code</summary><pre class="sourceCode"><code>#| label: plot-poisson-sample
-#| echo: false
-#| fig-alt: "One thousand purple observations shown with their histogram, a solid blue mean line, and dashed lines one standard deviation below and above the mean."
-Y = rpois(1000,20)/20
-ggplot(data.frame(x=1:length(Y), y=Y)) + 
-  geom_point(aes(y=x,x=y), alpha=.2, size=1/2, color='purple') + 
-  geom_vline(aes(xintercept=mean(y)), color='blue', alpha=.5) + 
-  geom_vline(aes(xintercept=mean(y)-sd(y)), color='blue', alpha=.5, linetype='dashed') + 
-  geom_vline(aes(xintercept=mean(y)+sd(y)), color='blue', alpha=.5, linetype='dashed') +
-  geom_histogram(aes(x=y, y=300*after_stat(density)), bins=20, alpha=.15) + 
-  xlab('') + ylab('') + theme(axis.text.y=element_blank(), axis.text.x=element_blank())</code></pre></details></div>
+</div>
 <p>If you have a list of numbers <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span>, the <strong>mean</strong> (which we call <span class="math inline">\(\bar X\)</span>), is the sum of the numbers divided by the number of numbers. <span class="math display">\[
 \bar X = \frac{1}{n}\sum_{i=1}^n X_i
 \]</span></p>
-<p data-source-line="45">The <strong>standard deviation</strong> (which we call <span class="math inline">\(\hat\sigma\)</span>) is a measure of how spread out the numbers are. It’s meant to be what it sounds like: the standard (usual) deviation (distance) of number in the list from the list’s mean.</p>
+<p>The <strong>standard deviation</strong> (which we call <span class="math inline">\(\hat\sigma\)</span>) is a measure of how spread out the numbers are. It’s meant to be what it sounds like: the standard (usual) deviation (distance) of number in the list from the list’s mean.</p>
 <p><span class="math display">\[
 \hat \sigma^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar X)^2
 \]</span></p>
-<p data-source-line="51">Here to come up with one number describing what’s ‘standard’, instead of just taking the average, we do something different. We square our deviations, take the average of squares, and use the square root of the result. This still gives us a number that measures the size of ‘a deviation’ instead of ‘a squared deviation’ because we’ve taken the square root after averaging. But by averaging the squares, we’re effectively making bigger deviations ‘count more’ than smaller ones.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p data-source-line="54">In the figure above, we visualize a list of n=1000 numbers as purple dots. The x-coordinates are their values <span class="math inline">\(X_i\)</span> and their y-coordinates are their index <span class="math inline">\(i\)</span> in the list. The solid blue line indicates their mean <span class="math inline">\(\bar X\)</span> and the dashed lines one standard deviation away from the mean in either direction, i.e., <span class="math inline">\(\bar X \pm \hat\sigma\)</span>. We also include a histogram of the numbers to show the density of dots near different values of <span class="math inline">\(x\)</span>. As you think about the following exercises, it might make sense to think about what a visualization like this might look like for the lists you’re working with.</p>
+<p>Here to come up with one number describing what’s ‘standard’, instead of just taking the average, we do something different. We square our deviations, take the average of squares, and use the square root of the result. This still gives us a number that measures the size of ‘a deviation’ instead of ‘a squared deviation’ because we’ve taken the square root after averaging. But by averaging the squares, we’re effectively making bigger deviations ‘count more’ than smaller ones.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>In the figure above, we visualize a list of n=1000 numbers as purple dots. The x-coordinates are their values <span class="math inline">\(X_i\)</span> and their y-coordinates are their index <span class="math inline">\(i\)</span> in the list. The solid blue line indicates their mean <span class="math inline">\(\bar X\)</span> and the dashed lines one standard deviation away from the mean in either direction, i.e., <span class="math inline">\(\bar X \pm \hat\sigma\)</span>. We also include a histogram of the numbers to show the density of dots near different values of <span class="math inline">\(x\)</span>. As you think about the following exercises, it might make sense to think about what a visualization like this might look like for the lists you’re working with.</p>
 </section>
 <section id="calculations" class="level2">
-<h2 class="anchored" data-anchor-id="calculations" data-source-line="57">Calculations</h2>
+<h2 class="anchored" data-anchor-id="calculations">Calculations</h2>
 <div id="exr-calculations-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 5.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -838,11 +780,11 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="60">Each of the following lists has a mean of 50. For which is the standard deviation biggest? Smallest?</p>
+<p>Each of the following lists has a mean of 50. For which is the standard deviation biggest? Smallest?</p>
 <ol type="1">
-<li data-source-line="62">0, 20, 40, 50, 60, 80, 100.</li>
-<li data-source-line="63">0, 48, 49, 50, 51, 52, 100</li>
-<li data-source-line="64">0, 1, 2, 50, 98, 99, 100</li>
+<li>0, 20, 40, 50, 60, 80, 100.</li>
+<li>0, 48, 49, 50, 51, 52, 100</li>
+<li>0, 1, 2, 50, 98, 99, 100</li>
 </ol>
 </div>
 </div>
@@ -857,7 +799,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p data-source-line="360"><em>(your answer here)</em></p>
+<p><em>(your answer here)</em></p>
 </div>
 </div>
 <div id="exr-calculations-2" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
@@ -1022,14 +964,14 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 </div>
 </section>
 <section id="visualization" class="level2">
-<h2 class="anchored" data-anchor-id="visualization" data-source-line="594">Visualization</h2>
+<h2 class="anchored" data-anchor-id="visualization">Visualization</h2>
 <p>Consider the three histograms below.</p>
 <div class="cell quarto-layout-panel" data-layout-nrow="3">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Left-skewed beta-sample histogram concentrated near .7."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-1.svg" class="img-fluid figure-img" alt="Left-skewed beta-sample histogram concentrated near .7."></p>
 <figcaption>Histogram 1</figcaption>
 </figure>
 </div>
@@ -1039,7 +981,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-2.svg?v=1789407483430" class="img-fluid figure-img" alt="Right-skewed beta-sample histogram concentrated near .3."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-2.svg" class="img-fluid figure-img" alt="Right-skewed beta-sample histogram concentrated near .3."></p>
 <figcaption>Histogram 2</figcaption>
 </figure>
 </div>
@@ -1049,7 +991,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 <div class="quarto-layout-cell" style="flex-basis: 100.0%;justify-content: flex-start;">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-3.svg?v=1789407483430" class="img-fluid figure-img" alt="Symmetric beta-sample histogram centered near .5."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-beta-histograms-3.svg" class="img-fluid figure-img" alt="Symmetric beta-sample histogram centered near .5."></p>
 <figcaption>Histogram 3</figcaption>
 </figure>
 </div>
@@ -1175,7 +1117,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-histogram-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Histogram of Supreme Court justices' percentages of liberal civil-liberties votes, with the mean marked by a blue vertical line."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-histogram-1.svg" class="img-fluid figure-img" alt="Histogram of Supreme Court justices' percentages of liberal civil-liberties votes, with the mean marked by a blue vertical line."></p>
 </figure>
 </div>
 </div>
@@ -1241,7 +1183,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-histogram-with-sd-1.svg?v=1789407483430" class="img-fluid figure-img"></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-histogram-with-sd-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1338,7 +1280,7 @@ ggplot(data.frame(x=1:length(Y), y=Y)) +
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-by-party-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party, with individual justices jittered and each party mean plus or minus two standard deviations."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-civil-liberties-by-party-1.svg" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party, with individual justices jittered and each party mean plus or minus two standard deviations."></p>
 </figure>
 </div>
 </div>
@@ -1455,8 +1397,8 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </section>
 <section id="visualization-1" class="level2">
 <h2 class="anchored" data-anchor-id="visualization-1">Visualization</h2>
-<p data-source-line="596">Drawing indicator functions into our data visualizations can help us get a sense of what they mean in the context of the data. In particular, it helps us identify cases where a lot of observations are just outside the region where the indicator is 1. Or just inside. This matters because coarsening loses that distinction: after we’ve merged the rows, the result doesn’t tell us who was just inside and who was far in. It also matters because it’s often effective to talk about frequencies—they’re simple and a lot of people feel comfortable with them—but saying things like ‘only 15% of people in Georgia live below the poverty line’ can be a way of concealing the truth if another 35% are just above it. We’ll be working with income data a few weeks from now. We’ll get a chance to see whether it’s possible to use frequencies to tell two different stories about the same reality.</p>
-<p data-source-line="608">In the plot below, the dots show the sample <span class="math inline">\(Y_1 \ldots Y_5 = 1 \ldots 5\)</span> we were talking about earlier. And the blue-shaded rectangle shows the indicator function <span class="math inline">\(1_{\ge 3}\)</span>. The indicator values <span class="math inline">\(1_{\ge 3}(Y_1)  \ldots 1_{\ge 3}(Y_5)\)</span> are 1 for the points inside the rectangle and 0 for the points outside. The frequency we’ve been talking about is represented visually by the proportion of points inside this rectangle.</p>
+<p>Drawing indicator functions into our data visualizations can help us get a sense of what they mean in the context of the data. In particular, it helps us identify cases where a lot of observations are just outside the region where the indicator is 1. Or just inside. This matters because coarsening loses that distinction: after we’ve merged the rows, the result doesn’t tell us who was just inside and who was far in. It also matters because it’s often effective to talk about frequencies—they’re simple and a lot of people feel comfortable with them—but saying things like ‘only 15% of people in Georgia live below the poverty line’ can be a way of concealing the truth if another 35% are just above it. We’ll be working with income data a few weeks from now. We’ll get a chance to see whether it’s possible to use frequencies to tell two different stories about the same reality.</p>
+<p>In the plot below, the dots show the sample <span class="math inline">\(Y_1 \ldots Y_5 = 1 \ldots 5\)</span> we were talking about earlier. And the blue-shaded rectangle shows the indicator function <span class="math inline">\(1_{\ge 3}\)</span>. The indicator values <span class="math inline">\(1_{\ge 3}(Y_1)  \ldots 1_{\ge 3}(Y_5)\)</span> are 1 for the points inside the rectangle and 0 for the points outside. The frequency we’ve been talking about is represented visually by the proportion of points inside this rectangle.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-6"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-6-1"><a href="#annotated-cell-6-1" aria-hidden="true" tabindex="-1"></a>freq.data <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">Y =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>), </span>
 <button class="code-annotation-anchor" data-target-cell="annotated-cell-6" data-target-annotation="1">1</button><span id="annotated-cell-6-2" class="code-annotation-target"><a href="#annotated-cell-6-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">X =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>))</span>
@@ -1468,7 +1410,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <div class="cell-annotation">
 <dl class="code-annotation-container-hidden code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-6" data-target-annotation="1">1</dt>
-<dd data-source-line="627">
+<dd>
 <span data-code-cell="annotated-cell-6" data-code-lines="2" data-code-annotation="1">To draw a ‘scatter plot’ when we have Ys but no Xs, we need to make up some Xs. Here we’ve just used 1s so they all appear in one column.</span>
 </dd>
 <dt data-target-cell="annotated-cell-6" data-target-annotation="2">2</dt>
@@ -1480,15 +1422,15 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-frequency-example-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Five values from one through five in a vertical column, with the region at or above three shaded blue to show the indicator function."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-frequency-example-1.svg" class="img-fluid figure-img" alt="Five values from one through five in a vertical column, with the region at or above three shaded blue to show the indicator function."></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
 <section id="exercises" class="level2">
-<h2 class="anchored" data-anchor-id="exercises" data-source-line="633">Exercises</h2>
-<p data-source-line="635">All this—the <strong>R</strong> stuff and the visualizations — starts to get more useful when we have a larger list. We usually do. Let’s check that we’ve got all of this down by doing a few simple exercises using another list of five numbers, then move on to our supreme court data.</p>
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<p>All this—the <strong>R</strong> stuff and the visualizations — starts to get more useful when we have a larger list. We usually do. Let’s check that we’ve got all of this down by doing a few simple exercises using another list of five numbers, then move on to our supreme court data.</p>
 <div id="exr-indicators-def" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 7.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1501,7 +1443,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="640">Here’s a new list of five numbers. <span class="math display">\[
+<p>Here’s a new list of five numbers. <span class="math display">\[
 3, 0, 1, 2, -1
 \]</span></p>
 <p>If we call these <span class="math inline">\(Y_1 \ldots Y_5\)</span>, what are the values of the indicator variables <span class="math inline">\(1_{\le 0}(Y_1) \ldots 1_{\le 0}(Y_5)\)</span>?</p>
@@ -1533,7 +1475,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="655">Calculate the frequency of numbers <em>less than or equal to 0</em> three ways: by counting, by writing out indicators and taking the mean, and by writing <strong>R</strong> code. Are they all the same? I’m looking for a yes/no answer to this question. I’m hoping for a yes. If it’s a no and you’re not sure why, ask me about it.</p>
+<p>Calculate the frequency of numbers <em>less than or equal to 0</em> three ways: by counting, by writing out indicators and taking the mean, and by writing <strong>R</strong> code. Are they all the same? I’m looking for a yes/no answer to this question. I’m hoping for a yes. If it’s a no and you’re not sure why, ask me about it.</p>
 </div>
 </div>
 </div>
@@ -1562,9 +1504,9 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="667">Adapt the <strong>R</strong> code above to visualize this new list of numbers and our new indicator function <span class="math inline">\(1_{\le 0}\)</span>. It may help to sketch out what you want then translate your sketch into code. And when you’ve done that, check that the plot is, in fact, what you wanted to draw. Sometimes we mistranslate.</p>
-<p data-source-line="671">What I’m asking for here is the plot.</p>
-<p data-source-line="673"><em>Hint</em>. Assuming you’ve re-defined <code>freq.data</code> so that <code>Y</code> is the new list of numbers, all you’ve got to do is adjust the call to <code>annotate</code> to highlight the correct region.</p>
+<p>Adapt the <strong>R</strong> code above to visualize this new list of numbers and our new indicator function <span class="math inline">\(1_{\le 0}\)</span>. It may help to sketch out what you want then translate your sketch into code. And when you’ve done that, check that the plot is, in fact, what you wanted to draw. Sometimes we mistranslate.</p>
+<p>What I’m asking for here is the plot.</p>
+<p><em>Hint</em>. Assuming you’ve re-defined <code>freq.data</code> so that <code>Y</code> is the new list of numbers, all you’ve got to do is adjust the call to <code>annotate</code> to highlight the correct region.</p>
 </div>
 </div>
 </div>
@@ -1581,7 +1523,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-<p data-source-line="697">Now that we’ve got all this down, let’s think about the frequency a few things happen in the supreme court. Suppose I want indicators that support for liberal position on civil liberties cases among both parties is greater than or equal to 25%. Denoting percent of support as <span class="math inline">\(Y_i\)</span>, these can be written as <span class="math display">\[
+<p>Now that we’ve got all this down, let’s think about the frequency a few things happen in the supreme court. Suppose I want indicators that support for liberal position on civil liberties cases among both parties is greater than or equal to 25%. Denoting percent of support as <span class="math inline">\(Y_i\)</span>, these can be written as <span class="math display">\[
 1_{\ge 25}(Y_i) \qfor
 1_{\ge 25}(y) = \begin{cases}
 1 &amp; \text{ if } y \ge 25 \\
@@ -1600,7 +1542,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="708">Calculate the frequency that support for the liberal position is greater than or equal to 25%. What is it?</p>
+<p>Calculate the frequency that support for the liberal position is greater than or equal to 25%. What is it?</p>
 </div>
 </div>
 </div>
@@ -1617,7 +1559,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-<p data-source-line="721">If you want to avoid writing a very small amount of code, go ahead and do it using this plot.</p>
+<p>If you want to avoid writing a very small amount of code, go ahead and do it using this plot.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>CLindicator25.plot <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span>  </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), </span>
@@ -1632,12 +1574,12 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-25-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the region at or above 25 percent is shaded blue and contains all but one justice."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-25-1.svg" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the region at or above 25 percent is shaded blue and contains all but one justice."></p>
 </figure>
 </div>
 </div>
 </div>
-<p data-source-line="741">What if we want to know the frequency that support for the liberal position exceeds 50% <em>among justices nominated by Republicans</em>? All we’ve got now is to do about the same thing with part of our sample — a <em>subsample</em>. The code below calculates the frequency. It’s the row-picking from before done to a single column rather than the whole table: <code>Y[X==0]</code> keeps the entries of <code>Y</code> where <code>X</code> is 0, the way <code>EMdata[EMdata$party == 0, ]</code> kept the rows.</p>
+<p>What if we want to know the frequency that support for the liberal position exceeds 50% <em>among justices nominated by Republicans</em>? All we’ve got now is to do about the same thing with part of our sample — a <em>subsample</em>. The code below calculates the frequency. It’s the row-picking from before done to a single column rather than the whole table: <code>Y[X==0]</code> keeps the entries of <code>Y</code> where <code>X</code> is 0, the way <code>EMdata[EMdata$party == 0, ]</code> kept the rows.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> EMdata<span class="sc">$</span>CLlib</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>X <span class="ot">=</span> EMdata<span class="sc">$</span>party</span>
@@ -1646,7 +1588,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <pre><code>[1] 0.3333333</code></pre>
 </div>
 </div>
-<p data-source-line="756">And this code draws a plot to help us interpret it.</p>
+<p>And this code draws a plot to help us interpret it.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>CLindicator50.repub.plot <span class="ot">=</span> <span class="fu">ggplot</span>(EMdata) <span class="sc">+</span>  </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>party, <span class="at">y=</span>CLlib), </span>
@@ -1661,7 +1603,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-50-republican-1.svg?v=1789407483430" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the Republican region at or above 50 percent is shaded blue."></p>
+<p><img src="homework-descriptive.handout_files/figure-html/plot-indicator-50-republican-1.svg" class="img-fluid figure-img" alt="Liberal civil-liberties voting by nominating party; the Republican region at or above 50 percent is shaded blue."></p>
 </figure>
 </div>
 </div>
@@ -1678,7 +1620,7 @@ O_1 = 0, \ O_2 = 0, \ O_3 = 1, \ O_4 = 1, \ O_5 = 1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="777">What if we want to know how often support is greater than or equal to 50% among justices nominated by Democrats? Calculate this frequency. Then, by adapting the <strong>R</strong> code above, draw a plot to help you interpret it. Do you think this frequency is a reasonable summary of the way Democrat-nominated justices vote in civil liberties cases? With reference to the plot, explain why or why not. What about frequency 33% as a summary of the way Republican-nominated justices vote?</p>
+<p>What if we want to know how often support is greater than or equal to 50% among justices nominated by Democrats? Calculate this frequency. Then, by adapting the <strong>R</strong> code above, draw a plot to help you interpret it. Do you think this frequency is a reasonable summary of the way Democrat-nominated justices vote in civil liberties cases? With reference to the plot, explain why or why not. What about frequency 33% as a summary of the way Republican-nominated justices vote?</p>
 </div>
 </div>
 </div>
@@ -1931,34 +1873,7 @@ setTimeout(function() {
 </ol>
 </section>
 
-
-<div class="tlda-chapter-nav">
-  <div class="tlda-nav-prev" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'prev'},'*')"><span class="tlda-nav-arrow">←</span> Homework −1: Setting Up</div>
-  <div class="tlda-nav-next" onclick="window.parent.postMessage({type:'tlda-navigate-rel',shapeId:new URLSearchParams(window.location.search).get('_tldaShape')||'',direction:'next'},'*')"><span class="tlda-nav-arrow">→</span> Point and Interval Estimates</div>
-</div>
-<style>
-.tlda-chapter-nav {
-  display: flex;
-  justify-content: space-between;
-  padding: 40px 20px 60px;
-  margin-top: 60px;
-  border-top: 1px solid #ccc;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.tlda-nav-prev, .tlda-nav-next {
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  font-size: 14px;
-  color: #888;
-  cursor: pointer;
-  transition: color 0.15s ease;
-  max-width: 45%;
-}
-.tlda-nav-prev:hover, .tlda-nav-next:hover { color: #444; }
-.tlda-nav-next { text-align: right; }
-.tlda-nav-arrow { font-size: 16px; }
-</style></main> <!-- /main -->
+</main> <!-- /main -->
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
@@ -2426,766 +2341,4 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-
-<script>
-(function() {
-  // Read shape ID from query string
-  var params = new URLSearchParams(window.location.search);
-  var shapeId = params.get('_tldaShape') || '';
-  var tldaWheelOwner = 'page';
-  var tldaWheelViewportId = '';
-
-  // Strip Quarto navigation elements for clean embedding
-  function stripNav() {
-    var selectors = [
-      '#quarto-sidebar',
-      '#quarto-margin-sidebar',
-      '.navbar',
-      '#quarto-header',
-      '#quarto-back-to-top',
-      '.nav-footer',
-      '#quarto-overlay',
-      '#quarto-search',
-      '.page-navigation',
-      '.quarto-title-breadcrumbs',
-    ];
-    selectors.forEach(function(sel) {
-      var el = document.querySelector(sel);
-      if (el) el.remove();
-    });
-    // Hide the first h1 — redundant with the injected title card
-    var firstH1 = document.querySelector('h1');
-    if (firstH1) firstH1.style.display = 'none';
-    // Make content full-width (remove sidebar offset)
-    var main = document.querySelector('#quarto-content');
-    if (main) {
-      main.style.marginLeft = '0';
-      main.style.paddingLeft = '0';
-    }
-    var content = document.querySelector('.page-columns');
-    if (content) {
-      content.style.display = 'block';
-    }
-    // Add padding to approximate default article margins (1in each side at 800/612 scale)
-    document.body.style.margin = '0';
-    document.body.style.padding = '0 90px';
-    document.body.style.overflow = 'visible';
-    document.body.style.background = 'transparent';
-    document.documentElement.style.background = 'transparent';
-
-    // Dark mode: toggle via postMessage from parent, only change backgrounds
-    // and default text color — leave semantic colors (plots, colored text) alone
-    window.addEventListener('message', function(e) {
-      if (e.data?.type === 'tlda-dark-mode') {
-        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
-      }
-      if (e.data?.type === 'tlda-wheel-owner') {
-        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
-        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
-      }
-      if (e.data?.type === 'tlda-scroll-to-id') {
-        var el = document.getElementById(e.data.id);
-        if (el) {
-          // Report element position back to parent for camera scrolling
-          var rect = el.getBoundingClientRect();
-          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-          window.parent.postMessage({
-            type: 'tlda-element-position',
-            shapeId: shapeId,
-            id: e.data.id,
-            offsetTop: rect.top + scrollY,
-            offsetLeft: rect.left,
-            height: rect.height,
-          }, '*');
-          // Flash the element briefly
-          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
-          el.style.outlineOffset = '4px';
-          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
-        }
-      }
-      if (e.data?.type === 'tlda-figure-transform') {
-        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
-        if (!wrapper) return;
-        var svg = wrapper.querySelector('svg');
-        if (!svg) return;
-        svg.style.transformOrigin = '0 0';
-        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
-      }
-    });
-    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
-    // pointer-events:none on iframes for scroll gestures).
-    // Forward to parent so TLDraw still scrolls when text-select tool is active.
-    function tldaAllowsInternalScroll(target) {
-      return !!(target && target.closest && target.closest('.tlda-scroll'));
-    }
-    document.addEventListener('wheel', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) return;
-      e.preventDefault();
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
-          shapeId: shapeId,
-          viewportId: tldaWheelViewportId,
-          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
-          clientX: e.clientX, clientY: e.clientY,
-          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
-        }, '*');
-      }
-    }, { passive: false });
-    var tldaLastTouch = null;
-    function tldaTouchCenter(touches) {
-      var x = 0, y = 0;
-      for (var i = 0; i < touches.length; i++) {
-        x += touches[i].clientX;
-        y += touches[i].clientY;
-      }
-      return { x: x / touches.length, y: y / touches.length };
-    }
-    document.addEventListener('touchstart', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) {
-        tldaLastTouch = null;
-        return;
-      }
-      if (!e.touches || e.touches.length < 2) {
-        tldaLastTouch = null;
-        return;
-      }
-      tldaLastTouch = tldaTouchCenter(e.touches);
-      tldaPostTouches(e);
-    }, { passive: true });
-    // Send the touches themselves, not a scroll derived from them.
-    //
-    // This used to post the centroid delta as a WHEEL event, and that was the
-    // judder: a wheel carries translation and nothing else, so a pinch inside a
-    // page could only ever pan. Skip: "the slide seemed to refuse pinch
-    // gestures, and they comply with drag gestures but they vibrate while you
-    // do them." Pan arrived by one mechanism with its own timing while the
-    // scale it implied was thrown away.
-    //
-    // The parent already converts this frame's CSS pixels to screen pixels for
-    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
-    // So hand it the raw points and let one classifier read them, wherever the
-    // fingers happen to be.
-    function tldaPostTouches(e) {
-      if (window.parent === window) return;
-      var pts = [];
-      for (var i = 0; i < e.touches.length; i++) {
-        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
-      }
-      window.parent.postMessage({
-        type: 'tlda-touches',
-        shapeId: shapeId,
-        viewportId: tldaWheelViewportId,
-        points: pts,
-      }, '*');
-    }
-    document.addEventListener('touchmove', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) return;
-      if (!e.touches || e.touches.length < 2) return;
-      e.preventDefault();
-      tldaPostTouches(e);
-    }, { passive: false });
-    document.addEventListener('touchend', function(e) {
-      tldaLastTouch = null;
-      tldaPostTouches(e);
-    }, { passive: true });
-    document.addEventListener('touchcancel', function(e) {
-      tldaLastTouch = null;
-      tldaPostTouches(e);
-    }, { passive: true });
-
-    function tldaElementFromNode(node) {
-      if (!node) return null;
-      return node.nodeType === 1 ? node : node.parentElement;
-    }
-    function tldaSelectionLine(range) {
-      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
-      while (node && node !== document.body && node !== document.documentElement) {
-        if (node.id) {
-          var m = String(node.id).match(/^line-(\d+)$/);
-          if (m) return parseInt(m[1], 10);
-        }
-        node = node.parentElement;
-      }
-      return null;
-    }
-    function tldaPostTextSelection() {
-      if (window.parent === window) return;
-      var sel = window.getSelection && window.getSelection();
-      var text = sel ? String(sel.toString() || '').trim() : '';
-      if (!sel || sel.rangeCount === 0 || !text) return;
-      var range = sel.getRangeAt(0);
-      var rect = range.getBoundingClientRect();
-      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
-      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
-      window.parent.postMessage({
-        type: 'tlda-text-selection',
-        shapeId: shapeId,
-        text: text,
-        line: tldaSelectionLine(range),
-        rect: {
-          left: rect.left,
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height,
-          offsetLeft: rect.left + scrollX,
-          offsetTop: rect.top + scrollY,
-        },
-        docSize: {
-          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
-          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
-        },
-      }, '*');
-    }
-    document.addEventListener('selectionchange', function() {
-      setTimeout(tldaPostTextSelection, 0);
-    });
-    document.addEventListener('pointerup', tldaPostTextSelection, true);
-
-    function docLinkPayload(el) {
-      var rect = el.getBoundingClientRect();
-      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
-      return {
-        type: '',
-        shapeId: shapeId,
-        refType: el.dataset.refType || '',
-        refValue: el.dataset.refValue || '',
-        refLabel: el.dataset.refLabel || '',
-        refFile: el.dataset.refFile || '',
-        refLine: el.dataset.refLine || '',
-        text: (el.textContent || '').trim(),
-        rect: {
-          left: rect.left,
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height,
-          offsetLeft: rect.left + scrollX,
-          offsetTop: rect.top + scrollY,
-        },
-        docSize: {
-          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
-          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
-        },
-      };
-    }
-
-    document.addEventListener('mouseover', function(e) {
-      var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link || link.classList.contains('doc-link-unresolved')) return;
-      var payload = docLinkPayload(link);
-      payload.type = 'tlda-doc-link-hover';
-      if (window.parent !== window) window.parent.postMessage(payload, '*');
-    }, true);
-
-    document.addEventListener('mouseout', function(e) {
-      var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link) return;
-      var related = e.relatedTarget;
-      if (related && related.closest && related.closest('.doc-link') === link) return;
-      if (window.parent !== window) {
-        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
-      }
-    }, true);
-
-    function postDocLinkClick(e, docLink) {
-      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
-      e.preventDefault();
-      var payload = docLinkPayload(docLink);
-      payload.type = 'tlda-doc-link-click';
-      if (window.parent !== window) window.parent.postMessage(payload, '*');
-      return true;
-    }
-
-    document.addEventListener('pointerdown', function(e) {
-      var docLink = e.target.closest && e.target.closest('.doc-link');
-      postDocLinkClick(e, docLink);
-    }, true);
-
-    // Intercept link clicks — route navigation through parent canvas
-    document.addEventListener('click', function(e) {
-      var docLink = e.target.closest && e.target.closest('.doc-link');
-      if (postDocLinkClick(e, docLink)) return;
-      var a = e.target.closest('a[href]');
-      if (!a) return;
-      // Download links must retain the browser's native file-download behavior.
-      if (a.hasAttribute('download')) return;
-      var href = a.getAttribute('href');
-      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
-      // External links: open in new tab
-      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
-        e.preventDefault();
-        window.open(href, '_blank');
-        return;
-      }
-      e.preventDefault();
-      // Parse href: same-host full URLs, relative paths, or bare anchors
-      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
-      // → treat as in-page anchor if they point to this same iframe URL
-      var parsed = href;
-      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
-        // Extract just the hash portion — these are same-document cross-refs
-        var hashIdx = href.indexOf('#');
-        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
-      }
-      var parts = parsed.split('#');
-      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
-      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
-      if (targetFile) targetFile = targetFile.split('?')[0] || null;
-      var anchor = parts[1] || null;
-      // targetFile is a basename and stays one — every existing consumer matches
-      // on it. targetPath keeps the whole path, which is what you need to OPEN a
-      // document of this project that has no shape on the canvas yet, and
-      // targetTitle is what the link called it.
-      var targetPath = parts[0] || null;
-      var targetTitle = ((a.textContent || '').trim()) || null;
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: 'tlda-navigate',
-          shapeId: shapeId,
-          targetFile: targetFile,
-          targetPath: targetPath,
-          targetTitle: targetTitle,
-          anchor: anchor,
-        }, '*');
-      }
-    }, true);
-    // Hide WebR loading spinners (bracket chars) but keep the container visible
-    // so code editors and outputs remain accessible
-    var style = document.createElement('style');
-    style.textContent = [
-      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
-      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
-      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
-      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
-      '.cm-line { overflow-wrap: anywhere; }',
-      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
-      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
-      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
-      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
-      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
-      '.spinner-grow, .spinner-border { opacity: 0.3; }',
-      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
-      '.image-toggle .image-toggle-controls { display: none !important; }',
-      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
-      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
-      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
-      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
-      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
-      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
-      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
-      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
-      // Applying the same filter undoes the parent: invert(invert(x)) = x
-      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
-      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
-      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
-    ].join('\n');
-    document.head.appendChild(style);
-  }
-
-  // Hide WebR cells when WebR runtime is not available.
-  // With live-html format, WebR is embedded — don't call this.
-  function processWebRCells() {
-    var pres = document.querySelectorAll('pre[class="{webr}"]');
-    pres.forEach(function(pre) {
-      var cell = pre.closest('.cell');
-      if (cell) cell.style.display = 'none';
-      else pre.style.display = 'none';
-    });
-  }
-
-  // Report height to parent
-  function reportHeight() {
-    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
-    var main = document.querySelector('main');
-    var h;
-    if (main) {
-      var rect = main.getBoundingClientRect();
-      h = Math.ceil(rect.bottom + window.scrollY);
-    } else {
-      h = Math.max(
-        document.body.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.scrollHeight
-      );
-    }
-    if (h > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-resize',
-        shapeId: shapeId,
-        height: h,
-      }, '*');
-    }
-  }
-
-  // Report anchor Y positions for navigation (headings, figures, tables, sections)
-  function reportHeadings() {
-    var elements = document.querySelectorAll('[id]');
-    var positions = {};
-    elements.forEach(function(el) {
-      var id = el.id;
-      if (!id) return;
-      var y = 0;
-      var node = el;
-      while (node) {
-        y += node.offsetTop || 0;
-        node = node.offsetParent;
-      }
-      positions[id] = y;
-    });
-    if (Object.keys(positions).length > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-headings',
-        shapeId: shapeId,
-        positions: positions,
-      }, '*');
-    }
-  }
-
-  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
-  var figuresReported = false;
-  function getOffsetY(el) {
-    var y = 0;
-    while (el) {
-      y += el.offsetTop || 0;
-      el = el.offsetParent;
-    }
-    return y;
-  }
-  function getOffsetX(el) {
-    var x = 0;
-    while (el) {
-      x += el.offsetLeft || 0;
-      el = el.offsetParent;
-    }
-    return x;
-  }
-
-  function reportFigures() {
-    var result = [];
-    var globalIdx = 0;
-
-    // 1. Old-style: <figure> with <img src="...svg">
-    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
-    figures.forEach(function(fig) {
-      var img = fig.querySelector('img[src$=".svg"]');
-      if (!img) return;
-      if (fig.closest('.image-toggle')) return;
-      var tabPane = fig.closest('.tab-pane');
-      if (tabPane && !tabPane.classList.contains('active')) return;
-      var rect = fig.getBoundingClientRect();
-      if (rect.height < 10) return;
-      img.style.visibility = 'hidden';
-      var tabset = fig.closest('.panel-tabset');
-      result.push({
-        svgUrl: img.src,
-        offsetY: getOffsetY(fig),
-        w: rect.width,
-        h: rect.height,
-        id: img.id || fig.id || null,
-        caption: (fig.querySelector('figcaption') || {}).textContent || null,
-        index: globalIdx++,
-        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
-      });
-    });
-
-    // 2. Inline SVGs from the inline-svg Lua filter
-    // The overlay is a transparent glass pane — content stays in the iframe for styling.
-    // Each wrapper gets a data-figure-idx for targeted transform messages.
-    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
-    inlineSvgs.forEach(function(svg) {
-      var wrapper = svg.parentElement;
-      if (wrapper.closest('.image-toggle')) return;
-      var tabPane = wrapper.closest('.tab-pane');
-      if (tabPane && !tabPane.classList.contains('active')) return;
-      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
-      // and make SVG scale responsively within its container
-      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
-        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
-      }
-      if (!svg.getAttribute('viewBox')) {
-        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
-        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
-      }
-      svg.style.width = '100%';
-      svg.style.height = 'auto';
-      svg.removeAttribute('width');
-      svg.removeAttribute('height');
-      var wrapperRect = wrapper.getBoundingClientRect();
-      if (wrapperRect.height < 10) return;
-      // Tag wrapper for transform messages and set up clipping
-      wrapper.dataset.figureIdx = String(globalIdx);
-      wrapper.style.overflow = 'hidden';
-      var tabset = wrapper.closest('.panel-tabset');
-      var figEl = wrapper.closest('figure');
-      result.push({
-        svgUrl: '',
-        inline: true,
-        offsetX: getOffsetX(wrapper),
-        offsetY: getOffsetY(wrapper),
-        w: wrapperRect.width,
-        h: wrapperRect.height,
-        id: (figEl && figEl.id) || wrapper.id || null,
-        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
-        index: globalIdx++,
-        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
-      });
-    });
-
-    if (result.length > 0 && window.parent !== window) {
-      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
-      figuresReported = true;
-    }
-  }
-
-  function reportMermaidDiagrams() {
-    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
-    if (placeholders.length === 0 || window.parent === window) return;
-    var diagrams = [];
-    placeholders.forEach(function(el) {
-      var rect = el.getBoundingClientRect();
-      if (rect.height < 10) return;
-      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
-      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
-      if (!source.trim()) return;
-      diagrams.push({
-        id: el.getAttribute('data-tlda-mermaid-id'),
-        source: source,
-        offsetX: getOffsetX(el),
-        offsetY: getOffsetY(el),
-        w: rect.width,
-        h: rect.height,
-        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
-      });
-    });
-    if (diagrams.length > 0) {
-      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
-    }
-  }
-
-  // Report scrollytelling region metadata to parent for overlay rendering.
-  // The overlay shows the figure in a floating panel; step text stays inline.
-  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
-  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
-  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
-  function reportScrollyRegions() {
-    var containers = document.querySelectorAll('.image-toggle');
-    if (containers.length === 0) return;
-
-    function getOffsetY(el) {
-      var y = 0;
-      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
-      return y;
-    }
-
-    var regions = [];
-    containers.forEach(function(container, idx) {
-      var containerY = getOffsetY(container);
-      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
-      var stepSel = container.getAttribute('data-steps');
-
-      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
-      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
-      var cells = container.querySelectorAll('.image-toggle-cell');
-      var imgUrls = Array.from(cells).map(function(cell) {
-        var img = cell.querySelector('img');
-        if (img) return img.src;
-        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
-        if (inlineSvg) {
-          var serialized = new XMLSerializer().serializeToString(inlineSvg);
-          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
-        }
-        return '';
-      });
-
-      // Find step text elements — location depends on layout:
-      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
-      // Non-sidebar: still siblings of the container
-      var stepTextEls = [];
-      var sidebar = container.closest('.image-toggle-sidebar');
-      if (sidebar) {
-        var stepsCol = sidebar.querySelector('.image-toggle-steps');
-        if (stepsCol && stepSel) {
-          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
-        }
-      } else if (stepSel) {
-        var sibling = container.nextElementSibling;
-        while (sibling) {
-          if (sibling.matches && sibling.matches(stepSel)) {
-            stepTextEls.push(sibling);
-          } else if (stepTextEls.length > 0) {
-            break;
-          }
-          sibling = sibling.nextElementSibling;
-        }
-      }
-
-      // Build steps array
-      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
-      if (numSteps === 0) return;
-
-      var steps = [];
-      for (var s = 0; s < numSteps; s++) {
-        var stepEl = stepTextEls[s];
-        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
-        // Extract bold lead-in as label, remainder as text
-        var stepLabel = labels[s] || ('Step ' + (s + 1));
-        var stepText = '';
-        if (stepEl) {
-          var strong = stepEl.querySelector('strong, b');
-          if (strong) {
-            stepLabel = strong.textContent.replace(/[.s]+$/, '');
-            // Get text after the bold element
-            var clone = stepEl.cloneNode(true);
-            var boldClone = clone.querySelector('strong, b');
-            if (boldClone) boldClone.remove();
-            stepText = clone.textContent.trim();
-          } else {
-            stepText = stepEl.textContent.trim();
-          }
-        }
-        steps.push({
-          y: stepY,
-          label: stepLabel,
-          imageUrl: imgUrls[s] || imgUrls[0] || '',
-          text: stepText,
-        });
-      }
-
-      // Click step text → switch figure + highlight active step
-      var cellArr = Array.from(cells);
-      var stepArr = Array.from(stepTextEls);
-      // Mark first step as active initially
-      if (stepArr.length > 0) {
-        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
-        if (activeIdx >= 0 && activeIdx < stepArr.length) {
-          stepArr[activeIdx].classList.add('scrolly-active');
-        }
-      }
-      for (var s2 = 0; s2 < stepArr.length; s2++) {
-        (function(stepIdx) {
-          stepArr[stepIdx].addEventListener('click', function() {
-            for (var c = 0; c < cellArr.length; c++) {
-              cellArr[c].classList.toggle('active', c === stepIdx);
-            }
-            for (var t = 0; t < stepArr.length; t++) {
-              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
-            }
-          });
-        })(s2);
-      }
-
-      // Region bounds: top of container to bottom of last step element
-      var startY = containerY;
-      var endY = containerY + (container.offsetHeight || 200);
-      // For sidebar, use the sidebar wrapper bounds
-      if (sidebar) {
-        startY = getOffsetY(sidebar);
-        endY = startY + sidebar.offsetHeight;
-      }
-      if (stepTextEls.length > 0) {
-        var lastEl = stepTextEls[stepTextEls.length - 1];
-        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
-        if (lastY > endY) endY = lastY;
-      }
-
-      regions.push({
-        id: container.id || ('scrolly-' + idx),
-        startY: startY,
-        endY: endY,
-        steps: steps,
-      });
-    });
-
-    if (regions.length > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-scrolly-regions',
-        shapeId: shapeId,
-        regions: regions,
-      }, '*');
-    }
-  }
-
-  // Strip nav on DOMContentLoaded, then measure
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      stripNav();
-      // processWebRCells(); // Disabled — live-html includes WebR runtime
-      // Early reports for fast anchor resolution, later reports for MathJax accuracy
-      setTimeout(reportHeight, 200);
-      setTimeout(reportHeight, 500);
-      setTimeout(reportHeight, 2000);
-      setTimeout(reportHeight, 5000);
-      setTimeout(reportHeadings, 200);
-      setTimeout(reportHeadings, 1000);
-      setTimeout(reportHeadings, 3000);
-      setTimeout(reportHeadings, 6000);
-      setTimeout(reportScrollyRegions, 200);
-      setTimeout(reportScrollyRegions, 1000);
-      setTimeout(reportScrollyRegions, 3000);
-      setTimeout(reportFigures, 500);
-      setTimeout(reportFigures, 2000);
-      setTimeout(reportFigures, 5000);
-      setTimeout(reportMermaidDiagrams, 500);
-      setTimeout(reportMermaidDiagrams, 2000);
-      setTimeout(reportMermaidDiagrams, 5000);
-    });
-  } else {
-    stripNav();
-    processWebRCells();
-    setTimeout(reportHeight, 100);
-    setTimeout(reportHeight, 2000);
-    setTimeout(reportHeadings, 500);
-    setTimeout(reportHeadings, 2500);
-    setTimeout(reportScrollyRegions, 500);
-    setTimeout(reportScrollyRegions, 2500);
-    setTimeout(reportFigures, 500);
-    setTimeout(reportFigures, 2000);
-    setTimeout(reportMermaidDiagrams, 500);
-    setTimeout(reportMermaidDiagrams, 2000);
-  }
-
-  // Observe DOM mutations (webR output, MathJax rendering, etc.)
-  var lastHeight = 0;
-  var debounceTimer = null;
-  var observer = new MutationObserver(function() {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      var h = document.body.scrollHeight;
-      if (Math.abs(h - lastHeight) > 10) {
-        lastHeight = h;
-        reportHeight();
-        reportHeadings();
-        reportScrollyRegions();
-        if (!figuresReported) reportFigures();
-        reportMermaidDiagrams();
-      }
-    }, 300);
-  });
-
-  // Start observing once DOM is ready
-  function startObserver() {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      characterData: false,
-    });
-  }
-
-  if (document.body) {
-    startObserver();
-  } else {
-    document.addEventListener('DOMContentLoaded', startObserver);
-  }
-})();
-</script>
-<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
-<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/homework/homework-descriptive.html">App version</a>
-<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
 </body></html>

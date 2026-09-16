@@ -1,4 +1,5 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -78,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-fc47e451316820cd4726ab4d2a53c78b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
 <link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 <script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
@@ -133,38 +134,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  
-<script>
-(function() {
-  var prev = window.MathJax || {};
-  var prevTex = prev.tex || {};
-  var prevMacros = prevTex.macros || {};
-  window.MathJax = Object.assign({}, prev, {
-    tex: Object.assign({}, prevTex, {
-      inlineMath: [['\\(', '\\)'], ['$', '$']],
-      displayMath: [['\\[', '\\]'], ['$$', '$$']],
-      processEscapes: true,
-      macros: Object.assign({}, prevMacros, {
-        qqtext: ['\\qquad\\text{#1}\\qquad', 1],
-        qty: ['\\left(#1\\right)', 1],
-        qfor: ['\\quad\\text{for}\\quad', 0],
-        qand: ['\\quad\\text{and}\\quad', 0],
-        qwhere: ['\\quad\\text{where}\\quad', 0],
-        E: '\\operatorname{E}',
-        Var: '\\operatorname{V}',
-        Cov: '\\operatorname{Cov}',
-        bias: '\\operatorname{bias}',
-        RMSE: '\\operatorname{RMSE}',
-        sd: '\\operatorname{sd}',
-        hVar: '\\widehat{\\operatorname{V}}',
-        nprior: 'n_0',
-        ind: '\\perp\\!\\!\\!\\perp'
-      })
-    })
-  });
-})();
-</script>
-<script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -196,24 +166,6 @@ window.Quarto = {
 </head>
 
 <body class="nav-sidebar floating quarto-light">
-<div class="tlda-chapter-title">
-  <div class="tlda-chapter-title-text">10&amp;nbsp; Sampling without Replacement and the Hypergeometric Distribution – Prediction, Inference, and Causality</div>
-</div>
-<style>
-.tlda-chapter-title {
-  padding: 40px 0 32px;
-  text-align: center;
-  border-bottom: 1px solid #ccc;
-  margin-bottom: 32px;
-}
-.tlda-chapter-title-text {
-  font-family: -apple-system, 'Helvetica Neue', sans-serif;
-  font-size: 28px;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  color: #222;
-}
-</style>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -777,13 +729,13 @@ window.Quarto = {
 <p>$$</p>
 </div>
 <section id="sec-sampling-without-replacement" class="level1">
-<h1 data-source-line="15">Review: Sampling with Replacement</h1>
-<p data-source-line="17">We calculated a sampling distribution last time, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
-<p data-source-line="19">Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">\(m_1\)</span> Yes-voters and <span class="math inline">\(m_0\)</span> No-voters, with <span class="math inline">\(m_1+m_0=10\)</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
-<p data-source-line="21">Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">\(10 \times 10 \times 10 = 10^3\)</span> roll sequences in all.</p>
+<h1>Review: Sampling with Replacement</h1>
+<p>We calculated a sampling distribution last time, and we did it in two stages. First we went from calls to responses. Then we went from responses to their sum.</p>
+<p>Think back to three calls to ten voters, <strong>with replacement</strong>. There were <span class="math inline">\(m_1\)</span> Yes-voters and <span class="math inline">\(m_0\)</span> No-voters, with <span class="math inline">\(m_1+m_0=10\)</span>. Each call could reach any of the ten people, including someone we’d already called.</p>
+<p>Each of the eight things you could hear has three counts multiplied together underneath it, one per call, for the same reason as before — and <span class="math inline">\(10 \times 10 \times 10 = 10^3\)</span> roll sequences in all.</p>
 <div class="grid">
 <section id="partially-marginalized" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized" data-source-line="27">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -855,7 +807,7 @@ window.Quarto = {
 </table>
 </section>
 <section id="fully-marginalized" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized" data-source-line="43">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -884,11 +836,11 @@ window.Quarto = {
 </table>
 </section>
 </div>
-<p data-source-line="56">The left-hand column of the second table carries the multipliers <span class="math inline">\(1, 3, 3, 1\)</span>.</p>
-<p data-source-line="58">The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">\(m_0^2m_1\)</span>.</p>
-<p data-source-line="60">Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
-<p data-source-line="62"><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
-<p data-source-line="64"><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
+<p>The left-hand column of the second table carries the multipliers <span class="math inline">\(1, 3, 3, 1\)</span>.</p>
+<p>The first table has a row for each thing we could hear. The second table combines rows with the same sum. The three rows with one Yes have the same probability because moving the Yes only rearranges the factors of <span class="math inline">\(m_0^2m_1\)</span>.</p>
+<p>Look at the cards you’ve laid out, with red for 1 and black for 0. If you don’t have cards, you’ll have to imagine them.</p>
+<p><strong>Understanding partial marginalization.</strong> Swap a card for another of the same colour. You called somebody else and you heard the same thing. The row doesn’t move; you’ve found another roll sequence sitting underneath it, and counting those is what the first stage does.</p>
+<p><strong>Understanding full marginalization.</strong> Move the cards you have into a different order. Now you’ve got a different row — a different thing to hear — with the same number of Yeses in it, so it lands on the same sum. Counting those is what the second stage does.</p>
 <p>For <span class="math inline">\(n\)</span> calls <strong>with replacement</strong> to <span class="math inline">\(m=m_1+m_0\)</span> people, we wrote the population frequencies as <span class="math inline">\(\theta_1=m_1/m\)</span> and <span class="math inline">\(\theta_0=m_0/m\)</span>. A response sequence <span class="math inline">\(a_1,\ldots,a_n\)</span> is a binary sequence of length <span class="math inline">\(n\)</span>. If its sum is <span class="math inline">\(k\)</span>, the same two steps are</p>
 <p><span class="math display">\[
 \begin{aligned}
@@ -896,10 +848,10 @@ P(Y_1=a_1,\ldots,Y_n=a_n)&amp;=\theta_1^k\theta_0^{n-k},\\
 P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 \end{aligned}
 \]</span></p>
-<p data-source-line="75">The first line has one factor for each response: <span class="math inline">\(k\)</span> ones and <span class="math inline">\(n-k\)</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">\(k\)</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
-<p data-source-line="77">You could work out how to count binary sequences of length <span class="math inline">\(n\)</span> with sum <span class="math inline">\(k\)</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\(\binom{n}{k}\)</span> and read ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(k\)</span>’. You don’t need to derive the count to write the formula.</p>
+<p>The first line has one factor for each response: <span class="math inline">\(k\)</span> ones and <span class="math inline">\(n-k\)</span> zeros. For the second, we sum the probabilities of all binary sequences with sum <span class="math inline">\(k\)</span>. With replacement, those sequences all have the same probability: rearranging the responses only rearranges the factors. So summing is counting and multiplying.</p>
+<p>You could work out how to count binary sequences of length <span class="math inline">\(n\)</span> with sum <span class="math inline">\(k\)</span>. But we talked about its name last class: the <em>binomial coefficient</em>, written <span class="math inline">\(\binom{n}{k}\)</span> and read ‘<span class="math inline">\(n\)</span> choose <span class="math inline">\(k\)</span>’. You don’t need to derive the count to write the formula.</p>
 <section id="check-with-r" class="level3">
-<h3 class="anchored" data-anchor-id="check-with-r" data-source-line="79">Check with R</h3>
+<h3 class="anchored" data-anchor-id="check-with-r">Check with R</h3>
 <p>In these cells, <code>theta</code> is <span class="math inline">\(\theta_1\)</span>, and <code>x</code> is the number of Yeses, which we called <span class="math inline">\(k\)</span> above. Edit the inputs to check your calculation. <code>x</code> can be one value or a vector of values; <code>0:n</code> checks them all.</p>
 <div>
 <div id="webr-1" class="exercise-cell">
@@ -909,17 +861,17 @@ P(Y_1+\ldots+Y_n=k)&amp;=\binom{n}{k}\theta_1^k\theta_0^{n-k}.
 eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEiOnRydWV9LCJjb2RlIjoibSA9IDEwICAgICAgICMgcG9wdWxhdGlvbiBzaXplXG5uID0gMyAgICAgICAgIyBudW1iZXIgb2YgY2FsbHNcbnRoZXRhID0gLjcgICAjIHBvcHVsYXRpb24gcHJvcG9ydGlvbiB3aG8gd2lsbCB2b3RlXG54ID0gMDpuICAgICAgIyBudW1iZXJzIG9mIFllc2VzIHRvIGNoZWNrOyBvciB1c2UgYSB2ZWN0b3IgbGlrZSBjKDAsIDIsIDMpXG5cbmRhdGEuZnJhbWUoWWVzZXMgPSB4LCBwcm9iYWJpbGl0eSA9IGRiaW5vbSh4LCBzaXplID0gbiwgcHJvYiA9IHRoZXRhKSkifQ==
 </script>
 </div>
-<p data-source-line="92">Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
-<p data-source-line="94">Now we sample without replacement: we can’t call the same person twice.</p>
-<p data-source-line="96">Which step changes? What stays the same? Think about it.</p>
+<p>Both steps were counting and multiplying: the call sequences were equally likely, and response sequences with the same sum had the same probability.</p>
+<p>Now we sample without replacement: we can’t call the same person twice.</p>
+<p>Which step changes? What stays the same? Think about it.</p>
 </section>
 <section id="sampling-without-replacement-two-exercises" class="level2">
-<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises" data-source-line="98">Sampling without Replacement: Two Exercises</h2>
-<p data-source-line="100">The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
-<p data-source-line="102">With that in mind, work through the two exercises below.</p>
+<h2 class="anchored" data-anchor-id="sampling-without-replacement-two-exercises">Sampling without Replacement: Two Exercises</h2>
+<p>The probability column in the first table changes. The second step stays the same: combine rows with the same number of Yeses. Those sequences still have equal probabilities, so we can still count them and multiply.</p>
+<p>With that in mind, work through the two exercises below.</p>
 <section id="three-calls-from-ten-people" class="level3">
-<h3 class="anchored" data-anchor-id="three-calls-from-ten-people" data-source-line="104">Three Calls from Ten People</h3>
-<p data-source-line="106">Deal three cards from your ten without putting any back, and count the Yeses. That count has a distribution, and the distribution has a name: this is the <em>hypergeometric distribution</em>. Find its probabilities in the first exercise, then generalize to any number of calls.</p>
+<h3 class="anchored" data-anchor-id="three-calls-from-ten-people">Three Calls from Ten People</h3>
+<p>Deal three cards from your ten without putting any back, and count the Yeses. That count has a distribution, and the distribution has a name: this is the <em>hypergeometric distribution</em>. Find its probabilities in the first exercise, then generalize to any number of calls.</p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -931,18 +883,18 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p data-source-line="110">Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">\(Y_1+Y_2+Y_3\)</span>.</p>
-<p data-source-line="112">Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your group’s own counts if they’re different. Draw three cards without putting them back.</p>
+<p>Ten voters: seven will vote and three won’t. Make three calls without replacement. Find the distribution of <span class="math inline">\(Y_1+Y_2+Y_3\)</span>.</p>
+<p>Look at the ten cards you’ve laid out, Ace through 10: red is 1 and black is 0. These cards are our population. If you don’t have cards, you’ll have to imagine them. The example here uses seven red and three black; use your group’s own counts if they’re different. Draw three cards without putting them back.</p>
 <ol type="1">
-<li data-source-line="114">Write the eight response sequences and calculate their probabilities.</li>
-<li data-source-line="115">Combine the sequences with the same sum.</li>
+<li>Write the eight response sequences and calculate their probabilities.</li>
+<li>Combine the sequences with the same sum.</li>
 </ol>
-<p data-source-line="117">To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
-<p data-source-line="119"><strong>Checkpoint.</strong> Set <code>m</code> to your group’s number of cards and <code>theta</code> to the fraction that are red in the cell below. Check your numbers, then discuss your calculation with me before generalizing. Why do sequences with the same number of Yeses have the same probability?</p>
+<p>To help count, lay out a response sequence such as red, red, black. Count the choices for each card as you take it from the population. Try rearranging the same colours and count again.</p>
+<p><strong>Checkpoint.</strong> Set <code>m</code> to your group’s number of cards and <code>theta</code> to the fraction that are red in the cell below. Check your numbers, then discuss your calculation with me before generalizing. Why do sequences with the same number of Yeses have the same probability?</p>
 </div>
 </div>
 </div>
-<p data-source-line="122">Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
+<p>Use the same inputs as in the review. Choose <code>m</code> and <code>theta</code> so that <code>m * theta</code> is a whole number of voters, and keep <code>n</code> no larger than <code>m</code>. The cell converts the population proportion into the two counts that <code>dhyper</code> needs.</p>
 <div>
 <div id="webr-2" class="exercise-cell">
 
@@ -964,11 +916,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
-<p data-source-line="138">There are <span class="math inline">\(10\times9\times8=720\)</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">\(7\times6\times3=126\)</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">\(126/720\)</span>.</p>
-<p data-source-line="140">The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
+<p>There are <span class="math inline">\(10\times9\times8=720\)</span> equally likely call sequences. Take ‘Yes,Yes,No’. There are seven choices for the first Yes, six for the second, and three for the No.&nbsp;That’s <span class="math inline">\(7\times6\times3=126\)</span> call sequences that sound the same, so this response sequence has probability <span class="math inline">\(126/720\)</span>.</p>
+<p>The tables have the same columns as before. What changes is the probability column: using a person up leaves one fewer choice the next time we need that response.</p>
 <div class="grid">
 <section id="partially-marginalized-1" class="level4 g-col-7">
-<h4 class="anchored" data-anchor-id="partially-marginalized-1" data-source-line="145">Partially Marginalized</h4>
+<h4 class="anchored" data-anchor-id="partially-marginalized-1">Partially Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1040,7 +992,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 <section id="fully-marginalized-1" class="level4 g-col-5">
-<h4 class="anchored" data-anchor-id="fully-marginalized-1" data-source-line="161">Fully Marginalized</h4>
+<h4 class="anchored" data-anchor-id="fully-marginalized-1">Fully Marginalized</h4>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1069,20 +1021,20 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVkaXQiOnRydWUsImV2YWwiOnRydWUsImZpZy1yZXRpbmEi
 </table>
 </section>
 </div>
-<p data-source-line="173">Look at the three rows with two Yeses. Their numerators are <span class="math inline">\(3\times7\times6\)</span>, <span class="math inline">\(7\times3\times6\)</span>, and <span class="math inline">\(7\times6\times3\)</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
+<p>Look at the three rows with two Yeses. Their numerators are <span class="math inline">\(3\times7\times6\)</span>, <span class="math inline">\(7\times3\times6\)</span>, and <span class="math inline">\(7\times6\times3\)</span>. Moving the No changes the order of the factors, not their product. So the second step is still counting and multiplying:</p>
 <p><span class="math display">\[
 P(Y_1+Y_2+Y_3=2)
 =\frac{126}{720}+\frac{126}{720}+\frac{126}{720}
 =3\times\frac{126}{720}.
 \]</span></p>
-<p data-source-line="181">The multipliers are still <span class="math inline">\(1,3,3,1\)</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
+<p>The multipliers are still <span class="math inline">\(1,3,3,1\)</span>. The probability of each response sequence changed; the number of response sequences with each sum did not.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
 <section id="generalize-your-answer" class="level3">
-<h3 class="anchored" data-anchor-id="generalize-your-answer" data-source-line="186">Generalize Your Answer</h3>
+<h3 class="anchored" data-anchor-id="generalize-your-answer">Generalize Your Answer</h3>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1095,10 +1047,10 @@ P(Y_1+Y_2+Y_3=2)
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>Now <span class="math inline">\(n\)</span> calls to <span class="math inline">\(m\)</span> voters, of whom <span class="math inline">\(m_1\)</span> will vote and <span class="math inline">\(m_0\)</span> won’t, still without replacement. Find the distribution of <span class="math inline">\(Y_1 + \ldots + Y_n\)</span>.</p>
-<p data-source-line="192"><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_0\)</span>, and replace three calls by <span class="math inline">\(n\)</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
-<p data-source-line="194">For a response sequence with <span class="math inline">\(s\)</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
-<p data-source-line="196">You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
-<p data-source-line="198">Check your formula by putting the three-call numbers back in. You can’t check arbitrary <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> computationally in the abstract, but you can try a couple of pairs. For each pair, choose how many of the <span class="math inline">\(m\)</span> voters will vote, set <code>m</code>, <code>n</code>, and <code>theta</code> in the cell above, and compare its probabilities with your formula.</p>
+<p><strong>Generalize your three-call calculation.</strong> Replace your population counts by <span class="math inline">\(m_1\)</span> and <span class="math inline">\(m_0\)</span>, and replace three calls by <span class="math inline">\(n\)</span> calls. Keep the same two steps: calls to responses, then responses to their sum.</p>
+<p>For a response sequence with <span class="math inline">\(s\)</span> Yeses, which factors appear in its probability? How many response sequences have that sum?</p>
+<p>You won’t write out an arbitrarily large table. Spot-check a few rows: choose a response sequence and count the call sequences underneath it, then compare with your formula.</p>
+<p>Check your formula by putting the three-call numbers back in. You can’t check arbitrary <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> computationally in the abstract, but you can try a couple of pairs. For each pair, choose how many of the <span class="math inline">\(m\)</span> voters will vote, set <code>m</code>, <code>n</code>, and <code>theta</code> in the cell above, and compare its probabilities with your formula.</p>
 </div>
 </div>
 </div>
@@ -1114,8 +1066,8 @@ P(Y_1+Y_2+Y_3=2)
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p data-source-line="203">Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted last time.</p>
-<p data-source-line="205">Stage 1 is the one to redo, and the thing to work out is what each call uses up. When you’ve already heard three Yeses, how many Yeses are left to hear — and how many Nos?</p>
+<p>Stage 2 you already have. Rows with the same sum still carry the same probability — the falling factor moves to a different call and the product doesn’t notice — so the count of rows is the one you counted last time.</p>
+<p>Stage 1 is the one to redo, and the thing to work out is what each call uses up. When you’ve already heard three Yeses, how many Yeses are left to hear — and how many Nos?</p>
 </div>
 </div>
 </div>
@@ -1133,16 +1085,16 @@ P(Y_1+Y_2+Y_3=2)
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>To find the distribution of a sum <span class="math inline">\(Y_1 + \ldots + Y_n\)</span> when we sample <em>without replacement</em> we do the same thing. We start by writing out the joint distribution of <span class="math inline">\(n\)</span> calls. We’re equally likely to pull any sequence of <span class="math inline">\(n\)</span> <em>distinct</em> numbers in <span class="math inline">\(1\ldots m\)</span>. There are <span class="math inline">\(m \times (m-1) \times \ldots \times (m-n+1)\)</span> sequences, so the probability is <span class="math inline">\(1/\bigl[m(m-1)\ldots(m-n+1)\bigr]\)</span> for each sequence. Then we add the responses and sums as columns. That doesn’t change.</p>
-<p data-source-line="214">Then we marginalize in two steps.</p>
+<p>Then we marginalize in two steps.</p>
 <ol type="1">
-<li data-source-line="216">Sum over roll sequences leading to the same response sequence <span class="math inline">\(a_1 \ldots a_n\)</span>.</li>
-<li data-source-line="217">Sum over response sequences leading to the same sum <span class="math inline">\(s=a_1+\ldots+a_n\)</span>.</li>
+<li>Sum over roll sequences leading to the same response sequence <span class="math inline">\(a_1 \ldots a_n\)</span>.</li>
+<li>Sum over response sequences leading to the same sum <span class="math inline">\(s=a_1+\ldots+a_n\)</span>.</li>
 </ol>
 <section id="step-1.-partial-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization" data-source-line="219">Step 1. Partial Marginalization</h4>
-<p data-source-line="221">Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. A row has probability zero if it asks for more of either response than the population contains.</p>
+<h4 class="anchored" data-anchor-id="step-1.-partial-marginalization">Step 1. Partial Marginalization</h4>
+<p>Here’s the partially marginalized table again. Each row represents a response sequence, and its last column is the number of Yeses. A row has probability zero if it asks for more of either response than the population contains.</p>
 <section id="partially-marginalized-2" class="level5">
-<h5 class="anchored" data-anchor-id="partially-marginalized-2" data-source-line="223">Partially Marginalized</h5>
+<h5 class="anchored" data-anchor-id="partially-marginalized-2">Partially Marginalized</h5>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 16%">
@@ -1205,24 +1157,24 @@ P(Y_1+Y_2+Y_3=2)
 </tr>
 </tbody>
 </table>
-<p data-source-line="233">There are still <span class="math inline">\(2^n\)</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one. Each product has one factor per response of that kind; when there are none, that product is 1.</p>
-<p data-source-line="236">To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">\(a_1 \ldots a_n = 0,0,...,0,0\)</span>. First assume <span class="math inline">\(n\leq m_0\)</span>, so this sequence is possible.</p>
+<p>There are still <span class="math inline">\(2^n\)</span> response sequences. To fill the probability column, we count the distinct-person call sequences under each one. Each product has one factor per response of that kind; when there are none, that product is 1.</p>
+<p>To sum over roll sequences, we sum over one roll after another. Suppose we’re calculating the probability of the response sequence <span class="math inline">\(a_1 \ldots a_n = 0,0,...,0,0\)</span>. First assume <span class="math inline">\(n\leq m_0\)</span>, so this sequence is possible.</p>
 <ol type="1">
 <li>We consider any ‘head’ <span class="math inline">\(j_1\ldots j_{n-1}\)</span> where <span class="math inline">\(y_{j_1} \ldots y_{j_{n-1}}=0,0,...0\)</span> and think about choosing the last element. No matter what the head is, we’ve ‘used up’ <span class="math inline">\(n-1\)</span> people with response <span class="math inline">\(y_j=0\)</span>. So there are <span class="math inline">\(m_0-(n-1)=m_0-n+1\)</span> ways to complete the sequence by choosing <em>an as-yet unused</em> <span class="math inline">\(j_{n}\)</span> with <span class="math inline">\(y_{j_n}=0\)</span>.</li>
 <li>We repeat with shortened ‘head’ <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> to consider the choice of <span class="math inline">\(j_{n-1}\)</span>. We have <span class="math inline">\(m_0-n+2\)</span> as-yet unused choices and our last step tells us that each choice results in <span class="math inline">\(m_0-(n-1)\)</span> call sequences, so there are <span class="math inline">\((m_0 - n + 1)(m_0 - n + 2)\)</span> sequences with head <span class="math inline">\(j_1 \ldots j_{n-2}\)</span> ending in <span class="math inline">\(0,0\)</span>.</li>
 <li>Repeat <span class="math inline">\(n-2\)</span> more times. We get <span class="math inline">\((m_0 - n + 1) \times \ldots \times m_0\)</span> rows.</li>
 </ol>
-<p data-source-line="242">When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">\(s\)</span> ones and <span class="math inline">\(n-s\)</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\(\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\times\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]\)</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">\(s\)</span> ones.</p>
+<p>When we work through the same argument for sequences with a mix of 0s and 1s, we see that a call in the head forecloses possibilities for later calls <em>with the same response only</em>. Thus, when we have <span class="math inline">\(s\)</span> ones and <span class="math inline">\(n-s\)</span> zeros, we can think of ourselves as choosing calls with response zero and response one separately. We have <span class="math inline">\(\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\times\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]\)</span> rows. Multiplying by the probability of each row, we get the probability of seeing a response sequence with <span class="math inline">\(s\)</span> ones.</p>
 <p><span class="math display">\[
 \frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}
 \]</span></p>
 </section>
 </section>
 <section id="step-2.-full-marginalization" class="level4">
-<h4 class="anchored" data-anchor-id="step-2.-full-marginalization" data-source-line="248">Step 2. Full Marginalization</h4>
-<p data-source-line="250">Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
+<h4 class="anchored" data-anchor-id="step-2.-full-marginalization">Step 2. Full Marginalization</h4>
+<p>Now combine rows with the same sum. Each multiplier counts how many response sequences have that sum.</p>
 <section id="fully-marginalized-2" class="level5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-2" data-source-line="252">Fully Marginalized</h5>
+<h5 class="anchored" data-anchor-id="fully-marginalized-2">Fully Marginalized</h5>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1257,14 +1209,14 @@ P(Y_1+Y_2+Y_3=2)
 </tr>
 </tbody>
 </table>
-<p data-source-line="263">To calculate the probability that the sum takes on the value <span class="math inline">\(s\)</span>, we sum over response sequences with <span class="math inline">\(s\)</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
-<p data-source-line="265">The count is the same as before: the number of binary sequences of length <span class="math inline">\(n\)</span> with <span class="math inline">\(s\)</span> ones is <span class="math inline">\(\binom{n}{s}\)</span>. For <span class="math inline">\(0\leq s\leq n\)</span>, multiplying, we get</p>
+<p>To calculate the probability that the sum takes on the value <span class="math inline">\(s\)</span>, we sum over response sequences with <span class="math inline">\(s\)</span> ones. Just like in the with-replacement case, the probability of all these sequences is the same—it depends only on how many ones and zeros are in the sequence, not their order. So summing is counting and multiplying.</p>
+<p>The count is the same as before: the number of binary sequences of length <span class="math inline">\(n\)</span> with <span class="math inline">\(s\)</span> ones is <span class="math inline">\(\binom{n}{s}\)</span>. For <span class="math inline">\(0\leq s\leq n\)</span>, multiplying, we get</p>
 <p><span class="math display">\[
 P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{\bigl[m_0(m_0-1)\ldots(m_0-(n-s)+1)\bigr]\,\bigl[m_1(m_1-1)\ldots(m_1-s+1)\bigr]}{m(m-1)\ldots(m-n+1)}.
 \]</span></p>
-<p data-source-line="271">Outside <span class="math inline">\(0\leq s\leq n\)</span>, the probability is zero.</p>
-<p data-source-line="273">It’s a bit uglier than the Binomial, but the same R tricks work.</p>
-<p data-source-line="275">One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">\(m_1 (m_1-1) \ldots (m_1-s+1)\)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">\(s=4\)</span> row is <span class="math inline">\(3 \times 2 \times 1 \times 0\)</span>.</p>
+<p>Outside <span class="math inline">\(0\leq s\leq n\)</span>, the probability is zero.</p>
+<p>It’s a bit uglier than the Binomial, but the same R tricks work.</p>
+<p>One thing it does that the Binomial didn’t: some of the rows come out zero. You can’t hear four Yeses from three Yes-voters, and you don’t have to say so as a special case — the falling product <span class="math inline">\(m_1 (m_1-1) \ldots (m_1-s+1)\)</span> runs off the end and multiplies by zero exactly when you ask for more Yeses than there are. With ten voters, three of whom will vote, and four calls, the <span class="math inline">\(s=4\)</span> row is <span class="math inline">\(3 \times 2 \times 1 \times 0\)</span>.</p>
 <div class="callout callout-style-simple callout-note no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1282,22 +1234,22 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{\bigl[m_0(m_0-1)\
 \qand
 \frac{m_0!}{(m_0-(n-s))!} = m_0 (m_0-1) \ldots (m_0-(n-s)+1)
 \]</span></p>
-<p data-source-line="287">The same probability can then be written</p>
+<p>The same probability can then be written</p>
 <p><span class="math display">\[
 P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))!} \times \frac{m_1!}{(m_1-s)!} \times \frac{(m-n)!}{m!}.
 \]</span></p>
-<p data-source-line="293">Outside those population counts the probability is zero; the factorial expression is only for counts that fit.</p>
+<p>Outside those population counts the probability is zero; the factorial expression is only for counts that fit.</p>
 </div>
 </div>
 </div>
 </section>
 </section>
 <section id="the-two-call-table" class="level4">
-<h4 class="anchored" data-anchor-id="the-two-call-table" data-source-line="297">The Two-Call Table</h4>
-<p data-source-line="299">For <span class="math inline">\(n=2\)</span>, the same formula has the following table.</p>
+<h4 class="anchored" data-anchor-id="the-two-call-table">The Two-Call Table</h4>
+<p>For <span class="math inline">\(n=2\)</span>, the same formula has the following table.</p>
 <div class="grid">
 <section id="partially-marginalized-3" class="level5 g-col-7">
-<h5 class="anchored" data-anchor-id="partially-marginalized-3" data-source-line="304">Partially Marginalized</h5>
+<h5 class="anchored" data-anchor-id="partially-marginalized-3">Partially Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1336,7 +1288,7 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </table>
 </section>
 <section id="fully-marginalized-3" class="level5 g-col-5">
-<h5 class="anchored" data-anchor-id="fully-marginalized-3" data-source-line="316">Fully Marginalized</h5>
+<h5 class="anchored" data-anchor-id="fully-marginalized-3">Fully Marginalized</h5>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1361,7 +1313,7 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </table>
 </section>
 </div>
-<p data-source-line="327">Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
+<p>Every factor that had a repeat in it fell by one, and every factor that didn’t stayed put. Hearing two Yeses uses up a Yes; hearing a Yes and then a No doesn’t use up any Nos.</p>
 </section>
 </div>
 </div>
@@ -1370,12 +1322,12 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 </section>
 </section>
 <section id="sec-binom-hyper-comparison" class="level2">
-<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison" data-source-line="332">Comparing Sampling with and without Replacement</h2>
-<p data-source-line="334">Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">\(n\)</span>; columns change the population size <span class="math inline">\(m\)</span>. The diagonal keeps <span class="math inline">\(n/m=1/5\)</span>. Use the tabs to change the population proportion <span class="math inline">\(\theta_1\)</span>.</p>
+<h2 class="anchored" data-anchor-id="sec-binom-hyper-comparison">Comparing Sampling with and without Replacement</h2>
+<p>Each panel shows the distribution of the estimated population proportion. Rows change the number of calls <span class="math inline">\(n\)</span>; columns change the population size <span class="math inline">\(m\)</span>. The diagonal keeps <span class="math inline">\(n/m=1/5\)</span>. Use the tabs to change the population proportion <span class="math inline">\(\theta_1\)</span>.</p>
 <ol type="1">
-<li data-source-line="336"><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
-<li data-source-line="337"><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
-<li data-source-line="338"><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
+<li><strong>Across a row:</strong> keep the number of calls fixed. What changes as the population grows? What stays the same?</li>
+<li><strong>Down the diagonal:</strong> increase the number of calls and the population size together. What changes when the fraction sampled stays the same?</li>
+<li><strong>Between tabs:</strong> what changes as the population proportion moves away from one half? How do the last two tabs compare?</li>
 </ol>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Even: <span class="math inline">\(\theta_1=0.5\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Mid: <span class="math inline">\(\theta_1=0.7\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Extreme-ish: <span class="math inline">\(\theta_1=0.9\)</span></a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">Flipped: <span class="math inline">\(\theta_1=0.1\)</span></a></li></ul>
@@ -1386,7 +1338,7 @@ P\left(\sum_{i=1}^n Y_i = s\right) = \binom{n}{s} \times \frac{m_0!}{(m_0-(n-s))
 <div id="fig-binom-vs-hyper" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-vs-hyper-1.svg?v=1789514120154" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-vs-hyper-1.svg" id="fig-binom-vs-hyper" class="img-fluid figure-img" alt="Binomial and Hypergeometric sample-proportion probabilities with population proportion 0.5. The nine panels cross sample sizes 10, 20, 40 with population sizes 50, 100, 200. Both axes and panel locations remain fixed across all four tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-vs-hyper-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.1
@@ -1402,7 +1354,7 @@ Figure&nbsp;11.1
 <div id="fig-binom-hyper-mid" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-mid-1.svg?v=1789514120154" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-mid-1.svg" id="fig-binom-hyper-mid" class="img-fluid figure-img" alt="The same nine-panel Binomial and Hypergeometric comparison with population proportion 0.7; sample-size rows, population-size columns, and axes match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-mid-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.2
@@ -1418,7 +1370,7 @@ Figure&nbsp;11.2
 <div id="fig-binom-hyper-extreme" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-extreme-1.svg?v=1789514120154" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-extreme-1.svg" id="fig-binom-hyper-extreme" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.9. The sample proportions cluster toward one. Axes and panel locations match the other tabs.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-extreme-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.3
@@ -1434,7 +1386,7 @@ Figure&nbsp;11.3
 <div id="fig-binom-hyper-flipped" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-flipped-1.svg?v=1789514120154" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
+<img src="chapter-sampling-without-replacement_files/figure-html/fig-binom-hyper-flipped-1.svg" id="fig-binom-hyper-flipped" class="img-fluid figure-img" alt="The same nine-panel comparison with population proportion 0.1. The probabilities mirror the 0.9 tab around a sample proportion of one half. Axes and panel locations remain fixed.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-binom-hyper-flipped-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;11.4
@@ -1446,12 +1398,12 @@ Figure&nbsp;11.4
 </div>
 </div>
 </div>
-<p data-source-line="429">The Hypergeometric looks a lot like the Binomial when <span class="math inline">\(n\)</span> is small relative to <span class="math inline">\(m\)</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">\(n\)</span> is a meaningful fraction of <span class="math inline">\(m\)</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
-<p data-source-line="431">If you called everybody you’d know <span class="math inline">\(\theta_1\)</span> exactly, and there’d be nothing left to be uncertain about.</p>
+<p>The Hypergeometric looks a lot like the Binomial when <span class="math inline">\(n\)</span> is small relative to <span class="math inline">\(m\)</span>. That’s because sampling without replacement is almost like sampling with replacement when you’re unlikely to pick the same person twice anyway. When <span class="math inline">\(n\)</span> is a meaningful fraction of <span class="math inline">\(m\)</span>, the Hypergeometric is narrower—you get better precision by not wasting calls on people you’ve already talked to.</p>
+<p>If you called everybody you’d know <span class="math inline">\(\theta_1\)</span> exactly, and there’d be nothing left to be uncertain about.</p>
 </section>
 <section id="using-r" class="level2">
-<h2 class="anchored" data-anchor-id="using-r" data-source-line="435">Using <strong>R</strong></h2>
-<p data-source-line="437">The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">\(P(\sum_{i=1}^n Y_i = s)\)</span> when we sample <span class="math inline">\(n\)</span> times without replacement from a population with <span class="math inline">\(m_1\)</span> ones and <span class="math inline">\(m_0\)</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
+<h2 class="anchored" data-anchor-id="using-r">Using <strong>R</strong></h2>
+<p>The <code>dhyper</code> function gives us the probability: <code>dhyper(s, m1, m0, n)</code> is <span class="math inline">\(P(\sum_{i=1}^n Y_i = s)\)</span> when we sample <span class="math inline">\(n\)</span> times without replacement from a population with <span class="math inline">\(m_1\)</span> ones and <span class="math inline">\(m_0\)</span> zeros. The <code>rhyper</code> function draws samples: <code>rhyper(10000, m1, m0, n)</code> gives us 10,000.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>R code</summary>
@@ -1472,7 +1424,7 @@ Figure&nbsp;11.4
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="chapter-sampling-without-replacement_files/figure-html/plot-hypergeometric-exact-and-simulated-1.svg?v=1789514120154" class="img-fluid figure-img" alt="Exact Hypergeometric probability histogram for sampling 100 without replacement from a binary population of 1000, overlaid with a simulated histogram and 100 simulated counts."></p>
+<p><img src="chapter-sampling-without-replacement_files/figure-html/plot-hypergeometric-exact-and-simulated-1.svg" class="img-fluid figure-img" alt="Exact Hypergeometric probability histogram for sampling 100 without replacement from a binary population of 1000, overlaid with a simulated histogram and 100 simulated counts."></p>
 </figure>
 </div>
 </div>
@@ -2177,766 +2129,4 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-
-<script>
-(function() {
-  // Read shape ID from query string
-  var params = new URLSearchParams(window.location.search);
-  var shapeId = params.get('_tldaShape') || '';
-  var tldaWheelOwner = 'page';
-  var tldaWheelViewportId = '';
-
-  // Strip Quarto navigation elements for clean embedding
-  function stripNav() {
-    var selectors = [
-      '#quarto-sidebar',
-      '#quarto-margin-sidebar',
-      '.navbar',
-      '#quarto-header',
-      '#quarto-back-to-top',
-      '.nav-footer',
-      '#quarto-overlay',
-      '#quarto-search',
-      '.page-navigation',
-      '.quarto-title-breadcrumbs',
-    ];
-    selectors.forEach(function(sel) {
-      var el = document.querySelector(sel);
-      if (el) el.remove();
-    });
-    // Hide the first h1 — redundant with the injected title card
-    var firstH1 = document.querySelector('h1');
-    if (firstH1) firstH1.style.display = 'none';
-    // Make content full-width (remove sidebar offset)
-    var main = document.querySelector('#quarto-content');
-    if (main) {
-      main.style.marginLeft = '0';
-      main.style.paddingLeft = '0';
-    }
-    var content = document.querySelector('.page-columns');
-    if (content) {
-      content.style.display = 'block';
-    }
-    // Add padding to approximate default article margins (1in each side at 800/612 scale)
-    document.body.style.margin = '0';
-    document.body.style.padding = '0 90px';
-    document.body.style.overflow = 'visible';
-    document.body.style.background = 'transparent';
-    document.documentElement.style.background = 'transparent';
-
-    // Dark mode: toggle via postMessage from parent, only change backgrounds
-    // and default text color — leave semantic colors (plots, colored text) alone
-    window.addEventListener('message', function(e) {
-      if (e.data?.type === 'tlda-dark-mode') {
-        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
-      }
-      if (e.data?.type === 'tlda-wheel-owner') {
-        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
-        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
-      }
-      if (e.data?.type === 'tlda-scroll-to-id') {
-        var el = document.getElementById(e.data.id);
-        if (el) {
-          // Report element position back to parent for camera scrolling
-          var rect = el.getBoundingClientRect();
-          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-          window.parent.postMessage({
-            type: 'tlda-element-position',
-            shapeId: shapeId,
-            id: e.data.id,
-            offsetTop: rect.top + scrollY,
-            offsetLeft: rect.left,
-            height: rect.height,
-          }, '*');
-          // Flash the element briefly
-          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
-          el.style.outlineOffset = '4px';
-          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
-        }
-      }
-      if (e.data?.type === 'tlda-figure-transform') {
-        var wrapper = document.querySelector('[data-figure-idx="' + e.data.figureIdx + '"]');
-        if (!wrapper) return;
-        var svg = wrapper.querySelector('svg');
-        if (!svg) return;
-        svg.style.transformOrigin = '0 0';
-        svg.style.transform = 'scale(' + e.data.zoom + ') translate(' + e.data.panX + 'px, ' + e.data.panY + 'px)';
-      }
-    });
-    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
-    // pointer-events:none on iframes for scroll gestures).
-    // Forward to parent so TLDraw still scrolls when text-select tool is active.
-    function tldaAllowsInternalScroll(target) {
-      return !!(target && target.closest && target.closest('.tlda-scroll'));
-    }
-    document.addEventListener('wheel', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) return;
-      e.preventDefault();
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
-          shapeId: shapeId,
-          viewportId: tldaWheelViewportId,
-          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
-          clientX: e.clientX, clientY: e.clientY,
-          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
-        }, '*');
-      }
-    }, { passive: false });
-    var tldaLastTouch = null;
-    function tldaTouchCenter(touches) {
-      var x = 0, y = 0;
-      for (var i = 0; i < touches.length; i++) {
-        x += touches[i].clientX;
-        y += touches[i].clientY;
-      }
-      return { x: x / touches.length, y: y / touches.length };
-    }
-    document.addEventListener('touchstart', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) {
-        tldaLastTouch = null;
-        return;
-      }
-      if (!e.touches || e.touches.length < 2) {
-        tldaLastTouch = null;
-        return;
-      }
-      tldaLastTouch = tldaTouchCenter(e.touches);
-      tldaPostTouches(e);
-    }, { passive: true });
-    // Send the touches themselves, not a scroll derived from them.
-    //
-    // This used to post the centroid delta as a WHEEL event, and that was the
-    // judder: a wheel carries translation and nothing else, so a pinch inside a
-    // page could only ever pan. Skip: "the slide seemed to refuse pinch
-    // gestures, and they comply with drag gestures but they vibrate while you
-    // do them." Pan arrived by one mechanism with its own timing while the
-    // scale it implied was thrown away.
-    //
-    // The parent already converts this frame's CSS pixels to screen pixels for
-    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
-    // So hand it the raw points and let one classifier read them, wherever the
-    // fingers happen to be.
-    function tldaPostTouches(e) {
-      if (window.parent === window) return;
-      var pts = [];
-      for (var i = 0; i < e.touches.length; i++) {
-        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
-      }
-      window.parent.postMessage({
-        type: 'tlda-touches',
-        shapeId: shapeId,
-        viewportId: tldaWheelViewportId,
-        points: pts,
-      }, '*');
-    }
-    document.addEventListener('touchmove', function(e) {
-      if (tldaAllowsInternalScroll(e.target)) return;
-      if (!e.touches || e.touches.length < 2) return;
-      e.preventDefault();
-      tldaPostTouches(e);
-    }, { passive: false });
-    document.addEventListener('touchend', function(e) {
-      tldaLastTouch = null;
-      tldaPostTouches(e);
-    }, { passive: true });
-    document.addEventListener('touchcancel', function(e) {
-      tldaLastTouch = null;
-      tldaPostTouches(e);
-    }, { passive: true });
-
-    function tldaElementFromNode(node) {
-      if (!node) return null;
-      return node.nodeType === 1 ? node : node.parentElement;
-    }
-    function tldaSelectionLine(range) {
-      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
-      while (node && node !== document.body && node !== document.documentElement) {
-        if (node.id) {
-          var m = String(node.id).match(/^line-(\d+)$/);
-          if (m) return parseInt(m[1], 10);
-        }
-        node = node.parentElement;
-      }
-      return null;
-    }
-    function tldaPostTextSelection() {
-      if (window.parent === window) return;
-      var sel = window.getSelection && window.getSelection();
-      var text = sel ? String(sel.toString() || '').trim() : '';
-      if (!sel || sel.rangeCount === 0 || !text) return;
-      var range = sel.getRangeAt(0);
-      var rect = range.getBoundingClientRect();
-      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
-      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
-      window.parent.postMessage({
-        type: 'tlda-text-selection',
-        shapeId: shapeId,
-        text: text,
-        line: tldaSelectionLine(range),
-        rect: {
-          left: rect.left,
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height,
-          offsetLeft: rect.left + scrollX,
-          offsetTop: rect.top + scrollY,
-        },
-        docSize: {
-          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
-          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
-        },
-      }, '*');
-    }
-    document.addEventListener('selectionchange', function() {
-      setTimeout(tldaPostTextSelection, 0);
-    });
-    document.addEventListener('pointerup', tldaPostTextSelection, true);
-
-    function docLinkPayload(el) {
-      var rect = el.getBoundingClientRect();
-      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
-      return {
-        type: '',
-        shapeId: shapeId,
-        refType: el.dataset.refType || '',
-        refValue: el.dataset.refValue || '',
-        refLabel: el.dataset.refLabel || '',
-        refFile: el.dataset.refFile || '',
-        refLine: el.dataset.refLine || '',
-        text: (el.textContent || '').trim(),
-        rect: {
-          left: rect.left,
-          top: rect.top,
-          right: rect.right,
-          bottom: rect.bottom,
-          width: rect.width,
-          height: rect.height,
-          offsetLeft: rect.left + scrollX,
-          offsetTop: rect.top + scrollY,
-        },
-        docSize: {
-          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
-          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
-        },
-      };
-    }
-
-    document.addEventListener('mouseover', function(e) {
-      var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link || link.classList.contains('doc-link-unresolved')) return;
-      var payload = docLinkPayload(link);
-      payload.type = 'tlda-doc-link-hover';
-      if (window.parent !== window) window.parent.postMessage(payload, '*');
-    }, true);
-
-    document.addEventListener('mouseout', function(e) {
-      var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link) return;
-      var related = e.relatedTarget;
-      if (related && related.closest && related.closest('.doc-link') === link) return;
-      if (window.parent !== window) {
-        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
-      }
-    }, true);
-
-    function postDocLinkClick(e, docLink) {
-      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
-      e.preventDefault();
-      var payload = docLinkPayload(docLink);
-      payload.type = 'tlda-doc-link-click';
-      if (window.parent !== window) window.parent.postMessage(payload, '*');
-      return true;
-    }
-
-    document.addEventListener('pointerdown', function(e) {
-      var docLink = e.target.closest && e.target.closest('.doc-link');
-      postDocLinkClick(e, docLink);
-    }, true);
-
-    // Intercept link clicks — route navigation through parent canvas
-    document.addEventListener('click', function(e) {
-      var docLink = e.target.closest && e.target.closest('.doc-link');
-      if (postDocLinkClick(e, docLink)) return;
-      var a = e.target.closest('a[href]');
-      if (!a) return;
-      // Download links must retain the browser's native file-download behavior.
-      if (a.hasAttribute('download')) return;
-      var href = a.getAttribute('href');
-      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
-      // External links: open in new tab
-      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
-        e.preventDefault();
-        window.open(href, '_blank');
-        return;
-      }
-      e.preventDefault();
-      // Parse href: same-host full URLs, relative paths, or bare anchors
-      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
-      // → treat as in-page anchor if they point to this same iframe URL
-      var parsed = href;
-      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
-        // Extract just the hash portion — these are same-document cross-refs
-        var hashIdx = href.indexOf('#');
-        parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
-      }
-      var parts = parsed.split('#');
-      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
-      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
-      if (targetFile) targetFile = targetFile.split('?')[0] || null;
-      var anchor = parts[1] || null;
-      // targetFile is a basename and stays one — every existing consumer matches
-      // on it. targetPath keeps the whole path, which is what you need to OPEN a
-      // document of this project that has no shape on the canvas yet, and
-      // targetTitle is what the link called it.
-      var targetPath = parts[0] || null;
-      var targetTitle = ((a.textContent || '').trim()) || null;
-      if (window.parent !== window) {
-        window.parent.postMessage({
-          type: 'tlda-navigate',
-          shapeId: shapeId,
-          targetFile: targetFile,
-          targetPath: targetPath,
-          targetTitle: targetTitle,
-          anchor: anchor,
-        }, '*');
-      }
-    }, true);
-    // Hide WebR loading spinners (bracket chars) but keep the container visible
-    // so code editors and outputs remain accessible
-    var style = document.createElement('style');
-    style.textContent = [
-      '.ojs-in-a-box-waiting-for-module-import::before, .ojs-in-a-box-waiting-for-module-import::after { display: none !important; }',
-      '.ojs-in-a-box-waiting-for-module-import > .ojs-in-a-box-turn-off-waiter { display: none !important; }',
-      '.panel-tabset > .nav-tabs { background: #fff; position: relative; z-index: 2; }',
-      '.cm-editor { max-width: 100% !important; overflow-x: auto !important; }',
-      '.cm-line { overflow-wrap: anywhere; }',
-      '.cell-output img, .cell-output svg { max-width: 100%; height: auto; }',
-      '.tlda-output-source { margin: 0.65rem 0 0; font-size: 0.9rem; }',
-      '.tlda-output-source > summary { cursor: pointer; color: var(--bs-link-color, #315a9a); }',
-      '.tlda-output-source > pre { margin: 0.5rem 0 0; padding: 0.75rem; overflow-x: auto; background: rgba(127,127,127,0.08); border-radius: 6px; }',
-      '.image-toggle-sidebar div.inlined-svg > svg { max-width: 100%; height: auto; }',
-      '.spinner-grow, .spinner-border { opacity: 0.3; }',
-      '.exercise-loading-indicator { font-size: 12px; opacity: 0.5; }',
-      '.image-toggle .image-toggle-controls { display: none !important; }',
-      '.image-toggle-sidebar .image-toggle-steps > * { margin-bottom: 1em; padding: 0.5em 0.75em; border-radius: 6px; border-left: 3px solid rgba(100, 100, 200, 0.12); font-size: 0.95em; line-height: 1.5; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease; }',
-      '.image-toggle-sidebar .image-toggle-steps > *:hover { background: rgba(100, 100, 200, 0.06); }',
-      '.image-toggle-sidebar .image-toggle-steps > *.scrolly-active { border-left-color: rgba(80, 100, 200, 0.6); background: rgba(100, 100, 200, 0.06); }',
-      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
-      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
-      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
-      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
-      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
-      // Applying the same filter undoes the parent: invert(invert(x)) = x
-      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
-      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
-      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
-    ].join('\n');
-    document.head.appendChild(style);
-  }
-
-  // Hide WebR cells when WebR runtime is not available.
-  // With live-html format, WebR is embedded — don't call this.
-  function processWebRCells() {
-    var pres = document.querySelectorAll('pre[class="{webr}"]');
-    pres.forEach(function(pre) {
-      var cell = pre.closest('.cell');
-      if (cell) cell.style.display = 'none';
-      else pre.style.display = 'none';
-    });
-  }
-
-  // Report height to parent
-  function reportHeight() {
-    // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height
-    var main = document.querySelector('main');
-    var h;
-    if (main) {
-      var rect = main.getBoundingClientRect();
-      h = Math.ceil(rect.bottom + window.scrollY);
-    } else {
-      h = Math.max(
-        document.body.scrollHeight,
-        document.body.offsetHeight,
-        document.documentElement.scrollHeight
-      );
-    }
-    if (h > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-resize',
-        shapeId: shapeId,
-        height: h,
-      }, '*');
-    }
-  }
-
-  // Report anchor Y positions for navigation (headings, figures, tables, sections)
-  function reportHeadings() {
-    var elements = document.querySelectorAll('[id]');
-    var positions = {};
-    elements.forEach(function(el) {
-      var id = el.id;
-      if (!id) return;
-      var y = 0;
-      var node = el;
-      while (node) {
-        y += node.offsetTop || 0;
-        node = node.offsetParent;
-      }
-      positions[id] = y;
-    });
-    if (Object.keys(positions).length > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-headings',
-        shapeId: shapeId,
-        positions: positions,
-      }, '*');
-    }
-  }
-
-  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
-  var figuresReported = false;
-  function getOffsetY(el) {
-    var y = 0;
-    while (el) {
-      y += el.offsetTop || 0;
-      el = el.offsetParent;
-    }
-    return y;
-  }
-  function getOffsetX(el) {
-    var x = 0;
-    while (el) {
-      x += el.offsetLeft || 0;
-      el = el.offsetParent;
-    }
-    return x;
-  }
-
-  function reportFigures() {
-    var result = [];
-    var globalIdx = 0;
-
-    // 1. Old-style: <figure> with <img src="...svg">
-    var figures = document.querySelectorAll('figure.figure, figure.quarto-float');
-    figures.forEach(function(fig) {
-      var img = fig.querySelector('img[src$=".svg"]');
-      if (!img) return;
-      if (fig.closest('.image-toggle')) return;
-      var tabPane = fig.closest('.tab-pane');
-      if (tabPane && !tabPane.classList.contains('active')) return;
-      var rect = fig.getBoundingClientRect();
-      if (rect.height < 10) return;
-      img.style.visibility = 'hidden';
-      var tabset = fig.closest('.panel-tabset');
-      result.push({
-        svgUrl: img.src,
-        offsetY: getOffsetY(fig),
-        w: rect.width,
-        h: rect.height,
-        id: img.id || fig.id || null,
-        caption: (fig.querySelector('figcaption') || {}).textContent || null,
-        index: globalIdx++,
-        group: tabset ? (tabset.id || 'tabset-' + tabset.dataset.group || null) : null,
-      });
-    });
-
-    // 2. Inline SVGs from the inline-svg Lua filter
-    // The overlay is a transparent glass pane — content stays in the iframe for styling.
-    // Each wrapper gets a data-figure-idx for targeted transform messages.
-    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
-    inlineSvgs.forEach(function(svg) {
-      var wrapper = svg.parentElement;
-      if (wrapper.closest('.image-toggle')) return;
-      var tabPane = wrapper.closest('.tab-pane');
-      if (tabPane && !tabPane.classList.contains('active')) return;
-      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
-      // and make SVG scale responsively within its container
-      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
-        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
-      }
-      if (!svg.getAttribute('viewBox')) {
-        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
-        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
-      }
-      svg.style.width = '100%';
-      svg.style.height = 'auto';
-      svg.removeAttribute('width');
-      svg.removeAttribute('height');
-      var wrapperRect = wrapper.getBoundingClientRect();
-      if (wrapperRect.height < 10) return;
-      // Tag wrapper for transform messages and set up clipping
-      wrapper.dataset.figureIdx = String(globalIdx);
-      wrapper.style.overflow = 'hidden';
-      var tabset = wrapper.closest('.panel-tabset');
-      var figEl = wrapper.closest('figure');
-      result.push({
-        svgUrl: '',
-        inline: true,
-        offsetX: getOffsetX(wrapper),
-        offsetY: getOffsetY(wrapper),
-        w: wrapperRect.width,
-        h: wrapperRect.height,
-        id: (figEl && figEl.id) || wrapper.id || null,
-        caption: figEl ? (figEl.querySelector('figcaption') || {}).textContent || null : null,
-        index: globalIdx++,
-        group: tabset ? (tabset.id || 'tabset-' + (tabset.dataset.group || globalIdx)) : null,
-      });
-    });
-
-    if (result.length > 0 && window.parent !== window) {
-      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figures: result }, '*');
-      figuresReported = true;
-    }
-  }
-
-  function reportMermaidDiagrams() {
-    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
-    if (placeholders.length === 0 || window.parent === window) return;
-    var diagrams = [];
-    placeholders.forEach(function(el) {
-      var rect = el.getBoundingClientRect();
-      if (rect.height < 10) return;
-      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
-      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
-      if (!source.trim()) return;
-      diagrams.push({
-        id: el.getAttribute('data-tlda-mermaid-id'),
-        source: source,
-        offsetX: getOffsetX(el),
-        offsetY: getOffsetY(el),
-        w: rect.width,
-        h: rect.height,
-        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
-      });
-    });
-    if (diagrams.length > 0) {
-      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
-    }
-  }
-
-  // Report scrollytelling region metadata to parent for overlay rendering.
-  // The overlay shows the figure in a floating panel; step text stays inline.
-  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
-  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
-  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
-  function reportScrollyRegions() {
-    var containers = document.querySelectorAll('.image-toggle');
-    if (containers.length === 0) return;
-
-    function getOffsetY(el) {
-      var y = 0;
-      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
-      return y;
-    }
-
-    var regions = [];
-    containers.forEach(function(container, idx) {
-      var containerY = getOffsetY(container);
-      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
-      var stepSel = container.getAttribute('data-steps');
-
-      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
-      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
-      var cells = container.querySelectorAll('.image-toggle-cell');
-      var imgUrls = Array.from(cells).map(function(cell) {
-        var img = cell.querySelector('img');
-        if (img) return img.src;
-        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
-        if (inlineSvg) {
-          var serialized = new XMLSerializer().serializeToString(inlineSvg);
-          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
-        }
-        return '';
-      });
-
-      // Find step text elements — location depends on layout:
-      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
-      // Non-sidebar: still siblings of the container
-      var stepTextEls = [];
-      var sidebar = container.closest('.image-toggle-sidebar');
-      if (sidebar) {
-        var stepsCol = sidebar.querySelector('.image-toggle-steps');
-        if (stepsCol && stepSel) {
-          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
-        }
-      } else if (stepSel) {
-        var sibling = container.nextElementSibling;
-        while (sibling) {
-          if (sibling.matches && sibling.matches(stepSel)) {
-            stepTextEls.push(sibling);
-          } else if (stepTextEls.length > 0) {
-            break;
-          }
-          sibling = sibling.nextElementSibling;
-        }
-      }
-
-      // Build steps array
-      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
-      if (numSteps === 0) return;
-
-      var steps = [];
-      for (var s = 0; s < numSteps; s++) {
-        var stepEl = stepTextEls[s];
-        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
-        // Extract bold lead-in as label, remainder as text
-        var stepLabel = labels[s] || ('Step ' + (s + 1));
-        var stepText = '';
-        if (stepEl) {
-          var strong = stepEl.querySelector('strong, b');
-          if (strong) {
-            stepLabel = strong.textContent.replace(/[.s]+$/, '');
-            // Get text after the bold element
-            var clone = stepEl.cloneNode(true);
-            var boldClone = clone.querySelector('strong, b');
-            if (boldClone) boldClone.remove();
-            stepText = clone.textContent.trim();
-          } else {
-            stepText = stepEl.textContent.trim();
-          }
-        }
-        steps.push({
-          y: stepY,
-          label: stepLabel,
-          imageUrl: imgUrls[s] || imgUrls[0] || '',
-          text: stepText,
-        });
-      }
-
-      // Click step text → switch figure + highlight active step
-      var cellArr = Array.from(cells);
-      var stepArr = Array.from(stepTextEls);
-      // Mark first step as active initially
-      if (stepArr.length > 0) {
-        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
-        if (activeIdx >= 0 && activeIdx < stepArr.length) {
-          stepArr[activeIdx].classList.add('scrolly-active');
-        }
-      }
-      for (var s2 = 0; s2 < stepArr.length; s2++) {
-        (function(stepIdx) {
-          stepArr[stepIdx].addEventListener('click', function() {
-            for (var c = 0; c < cellArr.length; c++) {
-              cellArr[c].classList.toggle('active', c === stepIdx);
-            }
-            for (var t = 0; t < stepArr.length; t++) {
-              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
-            }
-          });
-        })(s2);
-      }
-
-      // Region bounds: top of container to bottom of last step element
-      var startY = containerY;
-      var endY = containerY + (container.offsetHeight || 200);
-      // For sidebar, use the sidebar wrapper bounds
-      if (sidebar) {
-        startY = getOffsetY(sidebar);
-        endY = startY + sidebar.offsetHeight;
-      }
-      if (stepTextEls.length > 0) {
-        var lastEl = stepTextEls[stepTextEls.length - 1];
-        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
-        if (lastY > endY) endY = lastY;
-      }
-
-      regions.push({
-        id: container.id || ('scrolly-' + idx),
-        startY: startY,
-        endY: endY,
-        steps: steps,
-      });
-    });
-
-    if (regions.length > 0 && window.parent !== window) {
-      window.parent.postMessage({
-        type: 'tlda-scrolly-regions',
-        shapeId: shapeId,
-        regions: regions,
-      }, '*');
-    }
-  }
-
-  // Strip nav on DOMContentLoaded, then measure
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
-      stripNav();
-      // processWebRCells(); // Disabled — live-html includes WebR runtime
-      // Early reports for fast anchor resolution, later reports for MathJax accuracy
-      setTimeout(reportHeight, 200);
-      setTimeout(reportHeight, 500);
-      setTimeout(reportHeight, 2000);
-      setTimeout(reportHeight, 5000);
-      setTimeout(reportHeadings, 200);
-      setTimeout(reportHeadings, 1000);
-      setTimeout(reportHeadings, 3000);
-      setTimeout(reportHeadings, 6000);
-      setTimeout(reportScrollyRegions, 200);
-      setTimeout(reportScrollyRegions, 1000);
-      setTimeout(reportScrollyRegions, 3000);
-      setTimeout(reportFigures, 500);
-      setTimeout(reportFigures, 2000);
-      setTimeout(reportFigures, 5000);
-      setTimeout(reportMermaidDiagrams, 500);
-      setTimeout(reportMermaidDiagrams, 2000);
-      setTimeout(reportMermaidDiagrams, 5000);
-    });
-  } else {
-    stripNav();
-    processWebRCells();
-    setTimeout(reportHeight, 100);
-    setTimeout(reportHeight, 2000);
-    setTimeout(reportHeadings, 500);
-    setTimeout(reportHeadings, 2500);
-    setTimeout(reportScrollyRegions, 500);
-    setTimeout(reportScrollyRegions, 2500);
-    setTimeout(reportFigures, 500);
-    setTimeout(reportFigures, 2000);
-    setTimeout(reportMermaidDiagrams, 500);
-    setTimeout(reportMermaidDiagrams, 2000);
-  }
-
-  // Observe DOM mutations (webR output, MathJax rendering, etc.)
-  var lastHeight = 0;
-  var debounceTimer = null;
-  var observer = new MutationObserver(function() {
-    if (debounceTimer) clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(function() {
-      var h = document.body.scrollHeight;
-      if (Math.abs(h - lastHeight) > 10) {
-        lastHeight = h;
-        reportHeight();
-        reportHeadings();
-        reportScrollyRegions();
-        if (!figuresReported) reportFigures();
-        reportMermaidDiagrams();
-      }
-    }, 300);
-  });
-
-  // Start observing once DOM is ready
-  function startObserver() {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      characterData: false,
-    });
-  }
-
-  if (document.body) {
-    startObserver();
-  } else {
-    document.addEventListener('DOMContentLoaded', startObserver);
-  }
-})();
-</script>
-<style>.tlda-flip{position:fixed;top:12px;left:12px;z-index:2147483000;font:13px/1.4 system-ui,sans-serif;color:inherit;background:canvas;border:1px solid ButtonBorder;border-radius:6px;padding:4px 10px;text-decoration:none;opacity:.85}.tlda-flip:hover{opacity:1}</style>
-<a class="tlda-flip" data-static-flip href="https://pic.cormorant-matrix.ts.net/app/chapters/chapter-sampling-without-replacement.html">App version</a>
-<script data-static-mode>(function(){if(!/[?&]static([=&]|$)/.test(location.search))return;document.addEventListener("click",function(e){var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;var h=a.getAttribute("href");if(!h||/^(https?:|mailto:|tel:|#|data:|javascript:)/i.test(h))return;try{var u=new URL(h,location.href);if(u.origin!==location.origin)return;if(/[?&]static([=&]|$)/.test(u.search))return;u.searchParams.set("static","1");a.setAttribute("href",u.toString());}catch(_){}},true);})();</script>
 </body></html>
