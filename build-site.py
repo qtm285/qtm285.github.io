@@ -9,16 +9,6 @@ import yaml
 COURSE_DIR = None
 SCHEDULE_SOURCE = None
 
-# Homework that has not come out yet, collected while the schedule is read.
-#
-# Leaving a future homework's page unlinked is not the same as not publishing
-# it: the book build renders every declared chapter, the site copies the book
-# wholesale, and the page then answers on its URL with the solutions inside it.
-# On 2026-09-18 HW3's and HW4's worked solutions were served that way while both
-# were still out. Unlinked is not unposted, so these are removed from the
-# assembled site, on the same date rule that decides the linking.
-WITHHELD_HOMEWORK = []
-
 # The schedule, from the book project
 #
 # The book's index.qmd holds the real schedule: date, title, the chapter each
@@ -140,10 +130,6 @@ def declared_homeworks():
 def homework_html(path, number, linked):
   stem = path.stem.removesuffix('.handout')
   if not linked:
-    # The schedule is read more than once per build, so guard against listing
-    # the same homework twice: a doubled "withheld" line reads as two removals.
-    if stem not in WITHHELD_HOMEWORK:
-      WITHHELD_HOMEWORK.append(stem)
     return f'HW {number} out'
   page = Path('book/homework') / f'{stem}.html'
   archive = Path('book/homework/handouts') / f'{stem}-handout.zip'
@@ -272,28 +258,6 @@ def assemble_static(book_dir, site_dir):
       shutil.copytree(support, deck_dir / support.name)
   ACTIVE_SITE = site_dir
   render_site(site_dir)
-  remove_withheld_homework(site_dir)
-
-
-def remove_withheld_homework(site_dir):
-  """Drop the pages and handouts of homework that has not come out yet.
-
-  Runs after render_site, because reading the schedule is what decides which
-  those are. Says what it removed: a homework silently vanishing from the site
-  is the same class of failure as one silently appearing with its answers.
-  """
-  homework_dir = site_dir / 'book' / 'homework'
-  for stem in WITHHELD_HOMEWORK:
-    for target in (homework_dir / f'{stem}.html',
-                   homework_dir / f'{stem}_files',
-                   homework_dir / 'handouts' / f'{stem}-handout.zip'):
-      if not target.exists():
-        continue
-      if target.is_dir():
-        shutil.rmtree(target)
-      else:
-        target.unlink()
-      print(f'withheld (not out yet): {target.relative_to(site_dir)}')
 
 
 if __name__ == '__main__':
