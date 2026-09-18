@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>14&nbsp; Homework: Bootstrap – Prediction, Inference, and Causality</title>
+<title>13&nbsp; Homework: Bootstrap – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -22,6 +22,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -80,6 +115,8 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
 <link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
   window.MathJax = {
     options : {
@@ -137,7 +174,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-bootstrap.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-bootstrap.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -185,7 +222,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
   </div>
 </li>
@@ -214,7 +251,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
   </div>
 </li>
@@ -250,32 +287,32 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -344,7 +381,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-changes-if-you-change-this" id="toc-what-changes-if-you-change-this" class="nav-link active" data-scroll-target="#what-changes-if-you-change-this">What Changes If You Change This</a></li>
+  <li><a href="#bootstrap-vs.-binomial" id="toc-bootstrap-vs.-binomial" class="nav-link active" data-scroll-target="#bootstrap-vs.-binomial">Bootstrap vs.&nbsp;Binomial</a></li>
+  <li><a href="#checking-coverage-in-the-vote-history-example" id="toc-checking-coverage-in-the-vote-history-example" class="nav-link" data-scroll-target="#checking-coverage-in-the-vote-history-example">Checking Coverage in the Vote-History Example</a></li>
+  <li><a href="#think-dont-calculate" id="toc-think-dont-calculate" class="nav-link" data-scroll-target="#think-dont-calculate">Think, Don’t Calculate</a></li>
+  <li><a href="#calculating-sampling-distributions" id="toc-calculating-sampling-distributions" class="nav-link" data-scroll-target="#calculating-sampling-distributions">Calculating Sampling Distributions</a></li>
+  <li><a href="#what-changes-if-you-change-this" id="toc-what-changes-if-you-change-this" class="nav-link" data-scroll-target="#what-changes-if-you-change-this">What Changes If You Change This</a></li>
   <li><a href="#appendix-throwing-rolls-away" id="toc-appendix-throwing-rolls-away" class="nav-link" data-scroll-target="#appendix-throwing-rolls-away">Appendix: Throwing Rolls Away</a></li>
   </ul>
 </nav>
@@ -352,9 +393,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-bootstrap.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../homework/homework-bootstrap.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></h1>
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></h1>
 </div>
 
 
@@ -380,6 +421,430 @@ window.Quarto = {
     interval comparison on GA turnout data)
   - homework/homework-sample-size-coverage.qmd:177 (bootstrap-vs-normal coverage)
 -->
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} </p>
+<p>$$</p>
+</div>
+<section id="bootstrap-vs.-binomial" class="level2">
+<h2 class="anchored" data-anchor-id="bootstrap-vs.-binomial">Bootstrap vs.&nbsp;Binomial</h2>
+<p>In class, we argued that for a binary response, the bootstrap sampling distribution of the sample frequency <span class="math inline">\(\hat\theta\)</span> <em>is</em> our plug-in Binomial estimate of the sampling distribution: the distribution of the frequency of ones in <span class="math inline">\(n\)</span> draws, with replacement, from a ‘population’ where that frequency is <span class="math inline">\(\hat\theta\)</span>—our sample. Let’s confirm that empirically in our Georgia turnout poll, where <code>Y</code> is our sample of <span class="math inline">\(n=625\)</span> responses.</p>
+<div id="exr-hw3-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Draw 10,000 samples from the bootstrap sampling distribution of <span class="math inline">\(\hat\theta\)</span>. Plot them as a bar plot, and overlay the plug-in Binomial estimate—the probabilities <span class="math inline">\(\hat P(\hat\theta = s/n) = \binom{n}{s}\hat\theta^s(1-\hat\theta)^{n-s}\)</span>, which you can get from <code>dbinom(0:n, n, mean(Y))</code>. Do they agree?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">285</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>bootstrap.samples <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Y[I])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>bootstrap.samples, <span class="at">y=</span><span class="fu">after_stat</span>(prop)), <span class="at">alpha=</span>.<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>(<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n, <span class="at">y=</span><span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, <span class="fu">mean</span>(Y)))) <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlim</span>(.<span class="dv">6</span>, .<span class="dv">8</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-bootstrap_files/figure-html/hw3-bootstrap-vs-binomial-1.svg" class="img-fluid figure-img" alt="Bootstrap distribution of the turnout sample proportion shown as bars, overlaid by the matching plug-in Binomial probabilities; they coincide."></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Yes. Up to simulation noise, the bars sit right on the curve. They should: each bootstrap draw is the frequency of ones in <span class="math inline">\(n\)</span> draws with replacement from the sample, and the Binomial plug-in estimate is the distribution of exactly that.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="checking-coverage-in-the-vote-history-example" class="level2">
+<h2 class="anchored" data-anchor-id="checking-coverage-in-the-vote-history-example">Checking Coverage in the Vote-History Example</h2>
+<p>Where the bootstrap earned its keep in class was the <em>categorical</em> response: vote history, the number of the last 5 elections each person voted in. There’s no nice parametric form for the sampling distribution of its mean, so we bootstrapped instead. Here’s the population and sample from class: <code>h</code> is vote history for everyone in Georgia, and <code>H</code> is what we observe for the <span class="math inline">\(n=625\)</span> people in our turnout sample.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>h <span class="ot">=</span> <span class="fu">rep</span>(<span class="cn">NA</span>, m)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>h[y <span class="sc">==</span> <span class="dv">1</span>] <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="fu">sum</span>(y <span class="sc">==</span> <span class="dv">1</span>), <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> <span class="fl">0.7</span>)  <span class="co"># voters average ~3.5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>h[y <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="fu">sum</span>(y <span class="sc">==</span> <span class="dv">0</span>), <span class="at">size =</span> <span class="dv">5</span>, <span class="at">prob =</span> <span class="fl">0.3</span>)  <span class="co"># non-voters average ~1.5</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">=</span> <span class="fu">mean</span>(h)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>H <span class="ot">=</span> h[J]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Our point estimate of the population’s average vote history <span class="math inline">\(\mu = 2.896\)</span> is the sample mean <span class="math inline">\(\bar H = 2.901\)</span>, and we calibrate an interval around it using the bootstrap: give it arms spanning the middle 95% of its bootstrap sampling distribution. The 95% is a claim about repeated polling: if we ran our poll over and over, drawing a fresh sample each time and calibrating a fresh interval from it, about 95% of those intervals would contain <span class="math inline">\(\mu\)</span>. In real life we can’t check that claim—we get one sample, and we don’t know <span class="math inline">\(\mu\)</span>. In our simulation we can.</p>
+<div id="exr-hw3-2a" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.2 (Part A)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Write a function <code>bootstrap.interval</code> that takes a sample—any numeric vector, e.g.&nbsp;<code>H</code>—and returns a 95% confidence interval for the corresponding population mean, calibrated using the bootstrap. It should return a vector of length 2: the lower and upper bounds. Use the function <code>width</code> from our shared code to choose the interval’s width. Report the interval you get for the sample <code>H</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">285</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bootstrap.interval <span class="ot">=</span> <span class="cf">function</span>(H) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">=</span> <span class="fu">length</span>(H)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  H.bar <span class="ot">=</span> <span class="fu">mean</span>(H)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  boot.means <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    I <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(H[I])</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  })</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="fu">width</span>(boot.means, <span class="at">center=</span>H.bar)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(H.bar <span class="sc">-</span> w<span class="sc">/</span><span class="dv">2</span>, H.bar <span class="sc">+</span> w<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">bootstrap.interval</span>(H)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.789856 3.011744</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-hw3-2b" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.3 (Part B)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Now run the poll over and over. Draw 1000 samples of size <span class="math inline">\(n=625\)</span> with replacement from the population <code>h</code>. For each one, calibrate an interval using your function from Part A. What fraction of your 1000 intervals contain <span class="math inline">\(\mu\)</span>? Is it close to 95%?</p>
+<p>This computation takes a minute—you’re drawing a thousand bootstrap samples for each of a thousand polls. That’s not a mistake. Each poll gets its own sample, so it has to get its own bootstrap: the width is calibrated fresh, from that poll’s sample, every time. That’s what checking a coverage claim costs.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">285</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>covers <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span> <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(<span class="cf">function</span>(.) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  J <span class="ot">=</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>m, <span class="at">size=</span>n, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  interval <span class="ot">=</span> <span class="fu">bootstrap.interval</span>(h[J])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  interval[<span class="dv">1</span>] <span class="sc">&lt;=</span> mu <span class="sc">&amp;</span> mu <span class="sc">&lt;=</span> interval[<span class="dv">2</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(covers)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.947</code></pre>
+</div>
+</div>
+<p>Yes. We get 0.947, which is close to 95%.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="think-dont-calculate" class="level2">
+<h2 class="anchored" data-anchor-id="think-dont-calculate">Think, Don’t Calculate</h2>
+<p>You can answer everything in this section without computing anything. Find the right way to look at it, and the answer reads off.</p>
+<p>Here are the sampling distributions of the sample frequency <span class="math inline">\(\hat\theta\)</span> for two polls, each based on a sample of size <span class="math inline">\(n=25\)</span> drawn with replacement. On the left, the population frequency is <span class="math inline">\(\theta = 0.1\)</span>. On the right, it’s <span class="math inline">\(\theta = 0.9\)</span>.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-hw3-mirror-1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial sample-frequency probabilities for population frequency 0.1, concentrated near zero.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hw3-mirror-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="homework-bootstrap_files/figure-html/fig-hw3-mirror-1.svg" class="img-fluid figure-img" alt="Binomial sample-frequency probabilities for population frequency 0.1, concentrated near zero.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hw3-mirror-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13.1: θ = 0.1
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-hw3-mirror-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Binomial sample-frequency probabilities for population frequency 0.9, concentrated near one---the left plot flipped around one half.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hw3-mirror-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="homework-bootstrap_files/figure-html/fig-hw3-mirror-2.svg" class="img-fluid figure-img" alt="Binomial sample-frequency probabilities for population frequency 0.9, concentrated near one---the left plot flipped around one half.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hw3-mirror-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13.2: θ = 0.9
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>These are perfect mirrors of each other.</p>
+<div id="exr-hw3-3" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.4 (Mirror Images)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Describe the precise sense in which that’s true. Ideally, draw it. Then argue, as best you can, why this is the case.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If <span class="math inline">\(Z = 1_{=y}(Y)\)</span>, what is <span class="math inline">\(1-Z\)</span>?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<p>The precise sense: the probability the left poll’s <span class="math inline">\(\hat\theta\)</span> comes out to <span class="math inline">\(t\)</span> is the probability the right poll’s comes out to <span class="math inline">\(1-t\)</span>. Writing <span class="math inline">\(P_{0.1}\)</span> and <span class="math inline">\(P_{0.9}\)</span> for probabilities in the left and right polls, <span class="math display">\[
+P_{0.1}(\hat\theta = t) = P_{0.9}(\hat\theta = 1-t) \qqtext{for every} t.
+\]</span> The map taking <span class="math inline">\(t\)</span> to <span class="math inline">\(1-t\)</span> is reflection around <span class="math inline">\(t=1/2\)</span>, so flipping the left plot around a vertical line at one half gives you the right plot, bar for bar. To draw it: pair each bar at <span class="math inline">\(t\)</span> on the left with the bar at <span class="math inline">\(1-t\)</span> on the right—the bar at <span class="math inline">\(0\)</span> with the bar at <span class="math inline">\(1\)</span>, the bar at <span class="math inline">\(1/25\)</span> with the bar at <span class="math inline">\(24/25\)</span>, and so on—and the paired bars have equal heights.</p>
+<p>Why: a response <span class="math inline">\(Y_i\)</span> is a Yes or a No, and the indicator <span class="math inline">\(Z_i = 1_{=y}(Y_i)\)</span> that it’s a Yes determines the indicator that it’s a No: that’s <span class="math inline">\(1 - Z_i\)</span>. So the frequency of Nos in a sample is one minus the frequency of Yeses, <span class="math display">\[
+\frac{1}{n}\sum_{i=1}^n (1 - Z_i) = 1 - \hat\theta.
+\]</span> Now look at the left poll through that lens. A population where 10% say Yes is a population where 90% say No.&nbsp;So if we count <em>Nos</em> instead of Yeses, the left poll <em>is</em> the right poll: same sampling, same counting, with the labels swapped. The No-frequency <span class="math inline">\(1-\hat\theta\)</span> in the left poll therefore has exactly the distribution of <span class="math inline">\(\hat\theta\)</span> in the right poll, and that’s the mirror statement: <span class="math inline">\(\hat\theta\)</span> lands at <span class="math inline">\(t\)</span> on the left exactly when <span class="math inline">\(1-\hat\theta\)</span> lands at <span class="math inline">\(1-t\)</span>, which happens with the right poll’s probability at <span class="math inline">\(1-t\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-hw3-3b" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.5 (Rolls in the Bin)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Read the appendix on throwing rolls away at the end of this homework first. Suppose you decide up front to roll the d12 exactly <span class="math inline">\(60\)</span> times, keeping the rolls you can use and binning the rest. The number you keep has a sampling distribution. So does the number you bin.</p>
+<p>Describe the precise sense in which these two are mirrors of each other, and argue, as best you can, why.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<p>It’s the last question again with different labels. Each roll is kept or binned, and the indicator <span class="math inline">\(Z\)</span> that it’s kept determines the indicator that it’s binned: <span class="math inline">\(1 - Z\)</span>. So if <span class="math inline">\(K\)</span> is the number kept out of <span class="math inline">\(60\)</span>, the number binned is <span class="math inline">\(60 - K\)</span>, always. The bin count lands at <span class="math inline">\(t\)</span> exactly when the keep count lands at <span class="math inline">\(60-t\)</span>, so each one’s distribution is the other’s flipped around <span class="math inline">\(30\)</span>: a keep-vs-toss version of the Yes-vs-No mirror. And if you want the parametric form, a roll is kept when it shows <span class="math inline">\(1\)</span> through <span class="math inline">\(10\)</span>, which has probability <span class="math inline">\(\frac{10}{12} = \frac{5}{6}\)</span> independently of every other roll—so <span class="math inline">\(K\)</span> is <span class="math inline">\(\text{Binomial}(60, \frac{5}{6})\)</span> and the bin count is <span class="math inline">\(\text{Binomial}(60, \frac{1}{6})\)</span>. But you didn’t need that to see the mirror.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-hw3-3c" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.6 (Shrinking Bars)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>In class, when we compared sampling distributions at different sample sizes, the bars got shorter as the sample size grew—even though the distribution was getting <em>narrower</em>, which sounds like the bars should be getting taller. Somebody asked why, and it’s an important point, so let’s nail it down.</p>
+<p>Why do the bars get shorter? And what should we put on the y-axis instead, so that sampling distributions at different sample sizes come out at comparable heights—so we can lay them on the same axes and see what’s actually changing?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<p>Each bar’s height was a probability: the chance that <span class="math inline">\(\hat\theta\)</span> comes out to that exact value. At sample size <span class="math inline">\(n\)</span>, the possible values are <span class="math inline">\(0, \frac{1}{n}, \ldots, 1\)</span>—so a bigger sample packs more possible values into the same interval, and the total probability of one gets split among more of them. Every individual value’s bar shrinks, even while the distribution concentrates. The shrinking is the accounting, not the spread.</p>
+<p>The fix is to plot <em>density</em>: probability divided by the spacing between values, <span class="math inline">\(1/n\)</span>. Then it’s the bar’s <em>area</em> that is the probability, the overall level no longer depends on how finely the values are packed, and distributions at different sample sizes can sit on one set of axes. Drawn that way, what you see is the thing that’s actually changing: the distribution getting narrower around <span class="math inline">\(\theta\)</span>.</p>
+<p>There’s a moral here that outlives this plot. Two of the quantities we’ve been working with have a built-in problem: they change when the bookkeeping changes, even when the thing they describe doesn’t.</p>
+<ul>
+<li>The probability of one exact value shrinks when the possible values get packed closer together. That’s what happened in our plots. Nothing about the distribution changed; each value’s share just got smaller.</li>
+<li>A sum grows when the sample gets bigger. Ten times the observations means roughly ten times the sum, whether or not anything interesting is going on.</li>
+</ul>
+<p>The cure is the same in both cases: divide out the bookkeeping. Divide probability by the spacing between values and you get density, which you can compare across plots. Divide a sum by <span class="math inline">\(n\)</span> and you get an average, which you can compare across sample sizes. That’s why we plot density, and why we work with the frequency <span class="math inline">\(\hat\theta\)</span> rather than the count. You do still have to keep track of which values are possible. But given that, density is the honest picture.</p>
+<p>And it turns out this isn’t just a statistics habit. In visualization it’s called the principle of <em>proportional ink</em>: the ink a plot spends on a quantity should be proportional to the quantity, because area is what our eyes actually read.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Density bars are that principle applied to distributions—so you’re picking up something here that isn’t just statistics.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="calculating-sampling-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="calculating-sampling-distributions">Calculating Sampling Distributions</h2>
+<p>You’re canvassing a street of <span class="math inline">\(m=10\)</span> houses, numbered 1 through 10, asking a Yes/No question. Unbeknownst to you, the people at houses 1, 2, 3, and 10 would say Yes and everyone else would say No.&nbsp;That’s a frequency of <span class="math inline">\(\theta = 2/5\)</span>, and the Yeses are neighbors: on a walk that loops from house 10 back to house 1, they’re four in a row.</p>
+<p>Our usual scheme would be to roll the d10 <span class="math inline">\(n\)</span> times and knock on the doors it names. The schemes below are different, and so are their sampling distributions. Both are small enough to calculate by hand: list every sample the scheme can produce, work out each one’s probability, and tally up the values of your summary.</p>
+<div id="exr-hw3-4" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.7 (One Roll and a Walk)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Rolling the d10 over and over is tiring, so you roll it once. You knock at the house it names and at the next three houses up the street, wrapping around to house 1 if you run past house 10. That’s a sample of size <span class="math inline">\(n=4\)</span>.</p>
+<p>Calculate the sampling distribution of the number of Yeses you hear, and draw it as a bar plot. Then compare it to the sampling distribution for our usual scheme, four rolls of the d10—that’s <span class="math inline">\(\text{Binomial}(4, 2/5)\)</span>. Do the two schemes agree on the average number of Yeses? On how spread out it is? What is it about this street that makes them come out so different?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<p>One roll decides everything, so there are only ten possible samples, each with probability <span class="math inline">\(1/10\)</span>. Walk through them: starting at house 1 you hear <span class="math inline">\(3\)</span> Yeses, at house 2 you hear <span class="math inline">\(2\)</span>, at house 3 you hear <span class="math inline">\(1\)</span>, at houses 4 through 6 you hear <span class="math inline">\(0\)</span>, at house 7 you hear <span class="math inline">\(1\)</span>, at house 8 you hear <span class="math inline">\(2\)</span>, at house 9 you hear <span class="math inline">\(3\)</span>, and at house 10 you hear <span class="math inline">\(4\)</span>—the roll that catches the whole cluster. Tallying up, the number of Yeses <span class="math inline">\(S\)</span> has distribution <span class="math display">\[
+P(S = 0) = \frac{3}{10}, \quad P(S=1) = P(S=2) = P(S=3) = \frac{2}{10}, \quad P(S=4) = \frac{1}{10}.
+\]</span> The average number of Yeses is the same under both schemes. Here it’s <span class="math inline">\(\frac{0 \cdot 3 + 1 \cdot 2 + 2 \cdot 2 + 3 \cdot 2 + 4 \cdot 1}{10} = 1.6\)</span>, which is the Binomial’s <span class="math inline">\(n\theta = 4 \cdot \frac{2}{5}\)</span>. That’s because every house shows up in exactly four of the ten walks, so across all ten walks, each Yes on the street is counted four times.</p>
+<p>The spread is not the same. The one-roll distribution puts probability <span class="math inline">\(\frac{4}{10}\)</span> on the extremes <span class="math inline">\(\{0, 4\}\)</span>; the Binomial puts about <span class="math inline">\(\frac{97}{625} \approx .16\)</span> there. The street is why: the Yeses are four consecutive houses, so a single roll either lands you on the cluster and hears mostly Yeses or misses it and hears mostly Nos. Four independent rolls can’t be wiped out by one unlucky start—each gets its own chance to find a Yes. And that’s worth remembering: whether one-roll sampling works well depends on how the answers are arranged along the street, which is something the sampling distribution for our usual scheme doesn’t care about at all.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="exr-hw3-5" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 13.8 (Splitting the Street)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>You and a friend decide to split the work: you take houses 1 through 5, your friend takes houses 6 through 10. You each pick one house uniformly at random from your own half and knock. That’s a sample of size <span class="math inline">\(n=2\)</span>: your response <span class="math inline">\(Y_1\)</span> and your friend’s <span class="math inline">\(Y_2\)</span>.</p>
+<p>Calculate the sampling distribution of the number of Yeses <span class="math inline">\(S = Y_1 + Y_2\)</span>. Then compare it to the one for two rolls of the d10 over the whole street—that’s <span class="math inline">\(\text{Binomial}(2, 2/5)\)</span>. Same mean? Same distribution? The two-stage derivation from class breaks somewhere when the halves are different like this. Where?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-week="3">
+<p>Your half has <span class="math inline">\(3\)</span> Yeses out of <span class="math inline">\(5\)</span>; your friend’s has <span class="math inline">\(1\)</span> out of <span class="math inline">\(5\)</span>. The two picks are independent, so <span class="math display">\[
+\begin{aligned}
+P(S = 0) &amp;= \frac{2}{5} \cdot \frac{4}{5} = \frac{8}{25} \\
+P(S = 1) &amp;= \frac{3}{5} \cdot \frac{4}{5} + \frac{2}{5} \cdot \frac{1}{5} = \frac{14}{25} \\
+P(S = 2) &amp;= \frac{3}{5} \cdot \frac{1}{5} = \frac{3}{25}.
+\end{aligned}
+\]</span> The Binomial gives <span class="math inline">\(\frac{9}{25}, \frac{12}{25}, \frac{4}{25}\)</span>—a different distribution. The means agree: yours is <span class="math inline">\(\frac{0 \cdot 8 + 1 \cdot 14 + 2 \cdot 3}{25} = \frac{4}{5}\)</span>, the Binomial’s is <span class="math inline">\(n\theta = 2 \cdot \frac{2}{5} = \frac{4}{5}\)</span>. Because the halves are the same size, every house is still equally likely to be knocked on, so the expected number of Yeses is unchanged.</p>
+<p>Where the derivation breaks: stage 1 is fine. There are <span class="math inline">\(5 \times 5 = 25\)</span> equally likely samples, so adding over call sequences is still counting. It’s stage 2 that dies. The response sequence (Yes, No) has probability <span class="math inline">\(\frac{3}{5}\cdot\frac{4}{5} = \frac{12}{25}\)</span> and (No, Yes) has probability <span class="math inline">\(\frac{2}{5}\cdot\frac{1}{5} = \frac{2}{25}\)</span>: same number of Yeses, different probabilities, because a Yes is easy on your half and hard on your friend’s. So we can’t count the sequences with one Yes and multiply by a shared factor <span class="math inline">\(\theta^s(1-\theta)^{n-s}\)</span>. We have to add the products up one by one—which is what we did above. With <span class="math inline">\(n=2\)</span> that’s two products. With a bigger sample it’s a lot more of them, and that’s the work the Binomial’s one-formula answer saves us when its assumptions hold.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="what-changes-if-you-change-this" class="level2">
 <h2 class="anchored" data-anchor-id="what-changes-if-you-change-this">What Changes If You Change This</h2>
 <p>The derivation had two stages, and each one needed something to be true. Stage 1 needed every roll sequence to be equally likely, so that adding them up was counting them. Stage 2 needed every response sequence with the same sum to carry the same probability, so that adding those was counting too. Change the setup and you can ask which of those two survives.</p>
@@ -400,7 +865,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -409,7 +874,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>Stage 1 stops being counting. There are twelve equally likely rolls but only ten people, and the tenth of them owns three of those rolls, so the call sequences under one response sequence no longer weigh the same as each other. You can’t get their total by counting them; you have to add up their weights.</p>
@@ -436,7 +901,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -445,7 +910,7 @@ window.Quarto = {
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution">
 <p>Stage 1 is fine. The die is unloaded, every roll sequence is still equally likely, and the count under a response sequence is still one factor per call — there are just three kinds of factor now instead of two.</p>
@@ -688,6 +1153,12 @@ setTimeout(function() {
 }, 100);
 </script>
 
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The name comes from Carl Bergstrom and Jevin West; Claus Wilke’s <em>Fundamentals of Data Visualization</em> (2019) has a good chapter on it.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
@@ -1144,12 +1615,12 @@ window._ojs.runtime.interpretFromScriptTags();
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/chapter-bootstrap.html" class="pagination-link" aria-label="Calibrating Interval Estimates using the Bootstrap">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../chapters/chapter-random-variables-and-moments.html" class="pagination-link" aria-label="Random Variables and Moments">
-        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -1,0 +1,804 @@
+---
+title: "Calibrating Interval Estimates using the Bootstrap"
+format: r-wasm/live-revealjs
+---
+
+# Review
+
+## Point and Interval Estimation
+
+{{< include ../_extensions/r-wasm/live/_knitr.qmd >}}
+
+```{webr}
+#| label: ggplot-theme
+#| include: false
+
+lightgray = "#aaaaaa"
+body.bg = rgb(231, 240, 236, maxColorValue=255)
+gridcolor = rgb(0,0,0,.1, maxColorValue=1)
+
+lab.theme = theme(
+        plot.background = element_rect(fill = body.bg, colour = NA),
+        panel.background = element_rect(fill = body.bg, colour = NA),
+                    legend.background = element_rect(fill=body.bg, colour = NA),
+                    legend.box.background = element_rect(fill=body.bg, colour = NA),
+                    legend.key = element_rect(fill=body.bg, colour = NA),
+        axis.ticks.x = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.x  = element_text(colour = lightgray),
+        axis.text.y  = element_text(colour = lightgray),
+        axis.title.x  = element_blank(),
+        axis.title.y  = element_blank())
+
+theme_set(lab.theme)
+set.seed(1)
+```
+
+
+{{< include shared-code.qmd >}}
+{{< include ga-turnout.qmd >}}
+
+```{r}
+#| fig-asp: .3 
+
+set.seed(default.seed)
+Js = array(dim=c(10000, n))
+Ys = array(dim=c(10000, n))
+for(rr in 1:10000) {
+  Js[rr,] = sample(m, n, replace=TRUE)
+  Ys[rr,] = y[Js[rr,]]
+}
+meanY.samples = rowMeans(Ys)
+pmf.height = max(dbinom(0:n, n, mean(y))) 
+
+scale_x = scale_x_continuous(breaks=seq(.6,.8, by=.025)) 
+scale_y = scale_y_continuous(breaks=seq(0, pmf.height,by=.01))
+
+bar.plot = ggplot() + geom_bar(aes(x=meanY.samples, y=after_stat(prop)), alpha=.3) +
+                      geom_vline(aes(xintercept=mean(y)), color='green', size=2, alpha=.8) + 
+                      scale_x + scale_y
+                      
+bar.plot + with_annotations(meanY.samples, interval.width=width(meanY.samples), height=pmf.height) + 
+           coord_cartesian(xlim=c(.6,.8), ylim=c(0, pmf.height))
+```
+
+- In last week, we talked about estimating population frequencies.
+- Our **point estimates** were frequencies in a random sample drawn from the population. 
+- To characterize our uncertainty, we used **interval estimates**.
+  - In particular, *calibrated* interval estimates. Confidence intervals.  
+  - To get these intervals, we add 'arms' of equal length to our point estimate.
+  - We choose the arm length so that, in 95% of surveys done like ours, the estimation target is within them.
+
+## Calibration of Interval Estimates
+```{r}
+#| fig-asp: .3
+
+bar.plot + with_annotations(meanY.samples, interval.width=width(meanY.samples), 
+                                          shade.width=width(meanY.samples), height=pmf.height) +
+           coord_cartesian(xlim=c(.6,.8), ylim=c(0, pmf.height))
+```
+
+- We can do that using the **sampling distribution** of our point estimate.
+- We'd draw arms out from the sampling distribution's center until they span 95% of point estimates.
+- We can see that this is the right length by a shift of perspective.
+  - A point estimate can touch the mean with its arms iff^[if and only if] the mean can touch it with equally long arms.
+  - So 95% of intervals cover if and only if 95% of point estimates are within the mean's arms.
+- In practice, we can't do exactly that. We don't know the sampling distribution.
+- But we can use an estimate of the sampling distribution in its place. 
+- If it's a good one, we'll get approximately 95% coverage.
+
+## A Parametric Estimate of the Sampling Distribution 
+```{r}
+#| label: sampling-dist-comparison-binomial
+#| fig-width: 7
+#| fig-asp: .7
+#| layout-ncol: 2 
+#| fig-cap:
+#| - Our point estimate and its sampling distribution
+#| - Our estimate of its sampling distribution 
+
+estimated.dist.samples = rbinom(10000, n, mean(Y)) / n 
+bar.plot.estimated = ggplot() + 
+  geom_bar(aes(x=estimated.dist.samples, y=after_stat(prop)), alpha=.3) +
+  geom_vline(aes(xintercept=mean(y)), color='green', size=2, alpha=.7) + 
+  scale_x + scale_y 
+
+xx = seq(0,n)
+p.parametric.truth = bar.plot +
+  with_annotations(meanY.samples, interval.width=width(meanY.samples), highlight.dots=1, height=pmf.height) +
+  geom_col(aes(x=xx/n, y=dbinom(xx, n, mean(y))), width=1/n,
+           fill='black', color='black', alpha=.25, linewidth=.1)
+p.parametric.estimate = bar.plot.estimated  +
+  with_annotations(c(mean(Y), estimated.dist.samples), highlight.dots=1, height=pmf.height,
+                   shade.width=width(estimated.dist.samples), shade.color='red') +
+  geom_col(aes(x=xx/n, y=dbinom(xx, n, mean(Y))), width=1/n,
+           fill='black', color='black', alpha=.25, linewidth=.1)
+
+coord  = coord_flip(xlim=c(.6,.8), ylim=c(0, pmf.height))
+p.parametric.truth + coord
+p.parametric.estimate + coord
+```
+
+ - Our estimate was based on knowledge of the **parametric form** of the sampling distribution.
+ - When we sample with replacement, it's **binomial**.
+    - It's the distribution of the frequency of heads in `r n` flips of a coin with probability $\theta$
+    - where $\theta$ is the 'frequency of heads' in the population.
+    - e.g. $\theta\approx `r approx(mean(y))`$ is the proportion of **registered voters** who will vote in our turnout example.
+
+ $$
+ P_\theta(\hat\theta = t) = \binom{n}{nt} \theta^{nt} (1-\theta)^{n(1-t)} \quad \text{ is the probability of the sample frequency being $t$} \quad
+ $$
+
+
+- By *parametric form*, I mean a formula in terms of some parameters. 
+  - That tells us what parameters we need to estimate to estimate the sampling distribution.
+  - In this case, the only (unknown) parameter is the $\theta$, the frequency of heads in the population.
+  - We plugged in the sample frequency, $\hat\theta$, to get our estimate of the sampling distribution.
+
+$$
+\hat P_\theta(\hat\theta = t) = \binom{n}{nt} \hat\theta^{nt} (1-\hat\theta)^{n(1-t)} \quad \text{ is our estimate of the same thing} \quad
+$$
+
+
+# An Exercise
+
+## A Survey
+```{webr}
+#| label: room-frame
+draw = function(marks) {
+  marks$who = factor(marks$who, levels=c('room','sample','bootstrap'))
+  ggplot(marks, aes(x=j, y=y, color=who, alpha=who, group=seq_len(nrow(marks)))) +
+    geom_point(shape='circle', size=5, position=position_dodge2(width=.6)) +
+    scale_color_manual(name=NULL, values=c(room='black', sample='blue', bootstrap='red')) +
+    scale_alpha_manual(name=NULL, values=c(room=.15, sample=.6, bootstrap=.6)) +
+    scale_x_continuous(breaks=1:max(marks$j)) +
+    scale_y_continuous(breaks=c(0,1), labels=c('watermelon','pickle'))
+}
+```
+
+```{webr}
+#| timelimit: 120
+m = 10                         # people in the room
+y = rep(c(0,1), length.out=m)  # 1 = pickle, 0 = watermelon. Type in the room's tastes.
+
+room = data.frame(j=1:m, y=y, who='room')
+draw(room)
+```
+
+- The faint dots are the room. One per person, sitting at the straw they liked.
+
+## Our Sample
+
+```{webr}
+#| timelimit: 120
+n = 6
+J = sample(m, n, replace=TRUE)   # the draw. Comment this out and type the room's rolls:
+# J = c(1,3,3,2,4,6)
+Y = y[J]
+
+draw(rbind(room, data.frame(j=J, y=Y, who='sample')))
+```
+
+- The blue dots are the people the d10 called. That's our sample.
+- Anyone called twice gets two blue dots side by side. That's what *with replacement* looks like.
+
+::: {.panel-tabset}
+### The Idea
+- We're going to run a survey on Candy Preferences.
+  - I'll draw a sample of size $n=6$, with replacement, from the people in the room.
+  - They'll pick candy and write their selection into a sample table on the board.
+  - In particular, we'll write out whether they chose pickle ($Y=1$) or watermelon ($Y=0$) sour straws.
+- Then we're going to estimate the sampling distribution in a new way.
+  - It'll be a lot like calculating the actual sampling distribution.
+  - We'll draw a sample of size $n$ with replacement, use it to calculate our estimator, and repeat.
+- What's different is the population we're drawing our sample from.
+- We don't have responses from the whole population, so we'll draw it from the closest thing we've got: the sample.
+  - We call this *bootstrapping*. 
+  - The estimate of the sampling distribution we get is called the *bootstrap sampling distribution*.
+
+### Instructions
+
+- I've drawn the sample we got from our survey on the board.
+- Here's how you draw a sample from the bootstrap sampling distribution of our point estimator.
+  1. Roll your die 6 times to draw a sample of size $n=6$ *from the sample*.
+  2. Calculate the sample frequency. That's one draw from the bootstrap sampling distribution. Write it down.
+- If we all do this 5 times, we'll have a bunch of draws.
+- We'll tally them up on the board and visualize the result as a histogram.
+- A histogram of draws from the *bootstrap sampling distribution*.
+
+:::
+
+## One Bootstrap Sample
+
+```{webr}
+#| timelimit: 120
+Jstar = c(5,6,6,1,5,1)         # who your die called, out of the six. Type in yours.
+Ystar = Y[Jstar]
+
+draw(rbind(room, data.frame(j=J, y=Y, who='sample'),
+                 data.frame(j=J[Jstar], y=Ystar, who='bootstrap')))
+mean(Ystar)
+```
+
+- Same picture, one more drawing. The red dots are your bootstrap sample.
+- We drew them the way we drew the blue ones — with replacement — but from the blue dots, not from the room.
+- The number underneath is your $\hat\theta^*$, the frequency of pickle among the red dots. That's one draw from the bootstrap sampling distribution.
+
+## Simulating a Few More Draws
+
+```{webr}
+draws = 1:10000 |> map_vec(function(.) { 
+  Jstar = sample(1:n, n, replace=TRUE)
+  Ystar = Y[Jstar]
+  mean(Ystar)
+})
+computer.tally = as.data.frame(table(draws)) |>
+  rename(theta.hat=draws, count=Freq)
+```
+
+## Our Tally
+
+```{webr}
+hand.tally = data.frame(theta.hat = c(0,1,2,3,4,5,6),
+                        count     = c(0,0,0,1,0,0,0))
+
+# each bootstrap draw the room got, as a value of theta.hat
+draws = rep(hand.tally$theta.hat, hand.tally$count)/n
+
+frame = list(scale_x_continuous(breaks=(0:n)/n, labels=paste0(0:n,'/',n)),
+             coord_cartesian(xlim=c(-.12, 1.12), ylim=c(0, .55)),
+             labs(x=NULL, y=NULL))
+
+dots = function(t, h=.04)
+  geom_point(aes(x=sort(t), y=ave(sort(t), sort(t), FUN=seq_along)*h - h/2),
+             color='red', size=4, alpha=.7)
+
+bars = function(t, by, fill) {
+  k = round(t*n); g = (k %/% by) * by
+  p = table(factor(g, levels=seq(0, n, by=by)))/length(k)
+  geom_col(aes(x=as.numeric(names(p))/n + (by-1)/(2*n), y=as.numeric(p)),
+           width=by/n, fill=fill, color=fill, alpha=.25, linewidth=.1)
+}
+
+est = function(by, fill='blue') {
+  p = dbinom(0:n, n, mean(Y)); g = ((0:n) %/% by) * by
+  q = tapply(p, factor(g, levels=seq(0, n, by=by)), sum)
+  geom_col(aes(x=as.numeric(names(q))/n + (by-1)/(2*n), y=as.numeric(q)),
+           width=by/n, fill=fill, color=fill, alpha=.25, linewidth=.1)
+}
+
+ggplot() + dots(draws) + frame
+```
+
+- Type the room's tally into `count` above and run it.
+- One dot per bootstrap draw. That's what we get bootstrapping.
+
+## A Rough Histogram
+
+```{webr}
+ggplot() + bars(draws, 2, 'red') + frame
+```
+
+## A Fine Histogram
+
+```{webr}
+ggplot() + bars(draws, 1, 'red') + frame
+```
+
+## The Estimate
+
+```{webr}
+ggplot() + est(1) + frame
+```
+
+## Our Draws Against It
+
+```{webr}
+ggplot() + est(2) + dots(draws) + frame
+```
+
+::: {.panel-tabset}
+### Success!
+- If all has gone to plan, [our histogram]{.fg style="color:red"} looks a lot like our [binomial estimate]{.fg style="color:blue"} of the sampling distribution.
+  - If we substitute in a computer tally of 10,000 draws from the bootstrap sampling distribution, we nail it.
+  - It looks like the bootstrap sampling distribution *is* the binomial estimate. 
+- **Q**. It is. How do you know?
+
+### A Big Hint.
+  - We know the distribution of the frequency of 1s in a sample of size $n$ drawn with replacement ...
+    - ... from a population $y_1\ldots y_m$ of binary responses with frequency $\theta$.
+  - It's $\text{Binomial}(n, \theta)$. To estimate it, we plug in $\hat\theta$, the frequency of 1s in our sample. 
+  - So our Binomial estimate is the distribution of the frequency of 1s in a sample of size $n$ drawn with replacement ...
+    - ... from 'a population' $Y_1 \ldots Y_n$ with frequency $\hat\theta$.
+  - What's a draw from the bootstrap sampling distribution?
+
+### Answer.
+
+- Each bootstrap sample is the frequency of 1s in a sample of size $n$ drawn with replacement ...
+  - ... from  'a population' $Y_1 \ldots Y_n$ in which the frequency of 1s is $\hat\theta$,  the frequency of 1s in our sample.
+  - Because that 'population' is our sample.
+
+:::
+
+## The Picture
+
+$$
+\begin{array}{ccc}
+\underset{\textstyle\text{drawing from the population}}{\text{sampling distribution}}
+& = &
+\text{Binomial}(n, \theta)\big/n \\[18pt]
+{\overset{\normalsize ?}{\approx}} & & {\Big\downarrow}\ {\footnotesize\text{plug in } \hat\theta} \\[18pt]
+\underset{\textstyle\text{drawing from the sample}}{\text{bootstrap sampling distribution}}
+& = &
+\text{Binomial}(n, \hat\theta)\big/n
+\end{array}
+$$
+
+- This is what the room just did, drawn as a rectangle.
+  - **Top edge**: last week's derivation. Sampling with replacement, the sample frequency is Binomial.
+  - **Right edge**: our estimate. One approximation --- $\hat\theta$ in place of $\theta$.
+  - **Bottom edge**: today's exercise. The bootstrap sampling distribution *is* the plug-in estimate.
+- The **left edge** is the one we care about: does the bootstrap estimate the real sampling distribution?
+  - Follow the other three edges around the rectangle.
+  - The left edge inherits the right edge's error --- and only that.
+
+# The Bootstrap
+
+## The Bootstrap Interpretation in Our Turnout Poll
+```{r}
+#| fig-asp: .8 
+#| fig-width: 4.5
+#| layout-ncol: 3
+
+boot.ind = sample(1:n, n, replace=TRUE)
+
+displaypop = pop[1:50000,]
+pop$sam.replicated   = as.numeric(table(c(1:m, Js[1,])) - 1)
+pop$boot.replicated  = as.numeric(table(c(1:m, Js[1, boot.ind])) - 1)
+
+pop.map  = state.plot + geom_point(aes(x = long, y = lat), 
+                                   alpha=.05, data=displaypop, size=.025, color=polla) + 
+                        scale_size_area() + guides(size='none')
+sam.map  = state.plot + geom_point(aes(x = long, y = lat, size=sam.replicated),   
+                                   alpha=.2, data=pop[pop$sam.replicated > 0, ], color=polla) + 
+                        scale_size_area(max_size=3) + guides(size='none')
+boot.map = state.plot + geom_point(aes(x = long, y = lat, size=boot.replicated),   
+                                   alpha=.2, data=pop[pop$boot.replicated > 0, ], color=polla)   +
+                        scale_size_area(max_size=6) + guides(size='none')
+
+pop.map
+sam.map
+boot.map
+```
+
+
+:::: r-stack
+::: {.fragment .fade-out data-fragment-index="0"}
+
+- The sampling distribution estimate we've used was $\text{Binomial}(n,\hat\theta)$ for $n=`r n`$ and $\hat\theta \approx `r approx(mean(Y))`$.
+  - It's the distribution of the proportion heads in `r n` flips of a coin with probability $\hat\theta \approx `r approx(mean(Y))`$ of heads.
+  - where $\hat\theta \approx `r approx(mean(Y))`$ is the proportion of **voters we've polled** who will vote. 
+- That is, it's the sampling distribution of a 'poll' of the people in our sample, i.e.
+    - roll a 625-sided die 625 times
+    - call up the corresponding person in our sample
+    - and counting up the yeses we hear
+- Note that this is random because we're drawing with replacement.
+  - Each time we run this poll, we call each person in our sample 0,1,2,... times
+  - And the number of times we call them is random.
+
+:::
+::: {.fragment .current-visible data-fragment-index="0"}
+
+- If we plot our voters on a map, you can see the idea in visual terms.
+    - On the left, we have the population. 
+    - In the middle, we have our sample. It's drawn, with replacement, from the population.
+    - On the right, we have something else. A new sample drawn, with replacement, *from the sample*.
+- Each 'call' that a person receives increases the size of their dot: $\text{circle area} \propto \text{number of calls}$.
+- In the sample, even though it's drawn with replacement, all dots are the same size.
+  - Because we draw from such a large population, nobody gets called twice.
+- In the bootstrap sample, dots vary in size.
+  - Because we draw $n$ people from a sample of size $n$, it's almost impossible not to call somebody twice. 
+
+:::
+::::
+
+## Bootstrapping
+
+- Before the election, we don't observe the population. But we do observe the sample. 
+  - And we can *sample from the sample* and act as if it were the population.
+  - We'll take repeated random samples of size `r n`, with replacement, from our sample of size `r n`.
+- We call these *bootstrap samples* and estimates based on them *bootstrap estimates*.
+  - The distribution of these estimates is called the *bootstrap sampling distribution*.
+  - If the sample is like the population, this should be like our estimator's actual sampling distribution.
+
+```{r bootstrap.sample}
+J.star = sample(n, size=n, replace=TRUE)
+Y.star = Y[J.star]
+```
+
+:::: columns
+::: column
+The Sample
+$$
+\begin{array}{r|rrrr|r}
+i    &   1 & 2 & \dots & `r n` & \bar{Y}_{`r n`}  \\
+Y_i  &  `r Y[1]` & `r Y[2]` & \dots & `r Y[n]` & `r approx(mean(Y))` \\
+\end{array}
+$$
+
+The Bootstrap Sample
+
+$$
+\begin{array}{r|rrrr|r}
+i    &   1 & 2 & \dots & `r n` & \bar{Y}_{`r n`}^*  \\
+Y_i^*  &  `r Y.star[1]` & `r Y.star[2]` & \dots & `r Y.star[n]` & `r approx(mean(Y.star))` \\
+\end{array}
+$$
+:::
+
+::: column
+The Population
+
+$$
+\begin{array}{r|rrrr|r}
+j & 1 & 2 & \dots &   `r approx(m)` & \bar{y}_{`r approx(m)`}  \\
+y_{j} & `r y[1]` & `r y[2]` & \dots & `r y[m]`   & `r approx(mean(y))`  \\
+\end{array}
+$$
+
+The 'Bootstrap Population' --- The Sample
+$$
+\begin{array}{r|rrrr|r}
+j        &   1 & 2 & \dots & `r n` & \bar{y}^*_{`r n`}  \\
+y_j^*  &  `r Y[1]` & `r Y[2]` & \dots & `r Y[n]` & `r approx(mean(Y))` \\
+\end{array}
+$$
+
+:::
+::::
+
+::: aside
+Notation. We use stars to distinguish the bootstrap sample from our original sample---we write $Y_i^*$ and $\bar Y^*$.
+:::
+
+## The Bootstrap is *Nonparametric* 
+
+```{r}
+#| echo: true
+
+bootstrap.samples = array(dim=10000)
+for(rr in 1:10000) {
+    Y.star = Y[sample(1:n, n, replace=TRUE)]
+    bootstrap.samples[rr] = mean(Y.star) 
+}
+```
+
+```{r}
+#| out-height: 400px 
+#| fig-asp: .3 
+ggplot() + geom_bar(aes(x=bootstrap.samples, y=after_stat(prop)), alpha=.3, position='identity') + 
+           geom_line(aes(x=(0:n)/n, y=dbinom(0:n, n, mean(Y))), color='black') + 
+           xlim(.6,.8)
+```
+
+- We do not need to know the parametric form of our sampling distribution to use it.
+- All we do is re-run our poll *acting as if* our sample were the population.
+  - We can do this no matter what we're estimating. 
+  - So let's try it out on some stuff where we don't know the parametric form.
+  
+  
+# Beyond Binary Responses
+
+## Vote History
+
+```{r}
+#| label: vote-history-setup
+
+# Generate vote history: number of elections voted in out of the last 5
+# Correlated with current turnout intention
+set.seed(42)
+# For the population: people who will vote (y=1) tend to have higher vote history
+h = rep(NA, m)
+h[y == 1] = rbinom(sum(y == 1), size = 5, prob = 0.7)  # voters average ~3.5
+h[y == 0] = rbinom(sum(y == 0), size = 5, prob = 0.3)  # non-voters average ~1.5
+pop$h = h
+
+# Sample vote history
+H = h[J1]
+sam$h = H
+```
+
+- So far we've asked a binary question: will you vote?
+- But voter files contain richer information.
+    - For each registered voter, we can see how many of the last 5 elections they voted in.
+    - Let's call this *vote history*, and write it $H_i$ in our sample and $h_j$ in the population.
+
+$$
+\begin{array}{r|rrrr|r}
+i    &   1 & 2 & \dots & `r n` & \bar{H}_{`r n`}  \\
+H_i  &  `r H[1]` & `r H[2]` & \dots & `r H[n]` & `r round(mean(H), 2)` \\
+\end{array}
+$$
+
+- We might want to estimate the average vote history in the population.
+    - Our point estimate would be the sample mean, $\bar H_n = `r round(mean(H), 2)`$.
+    - But what about the sampling distribution?
+
+## No Parametric Form This Time
+
+- When the response was binary, we knew the parametric form: Binomial.
+    - The mean of $n$ binary responses, each $1$ with probability $\theta$, has a $\text{Binomial}(n, \theta)/n$ distribution.
+- But now our responses take values in $\{0, 1, 2, 3, 4, 5\}$.
+    - There's no simple parametric form for the distribution of their mean.
+- We could work one out.
+    - A response $H_i$ has some probability $p_0$ of being 0, $p_1$ of being 1, and so on.
+    - The sum $H_1 + \ldots + H_n$ is a sum of $n$ such random variables, and its distribution could be computed.
+    - But that's a pain. And it'd be an even bigger pain if our responses were continuous.
+- The bootstrap gives us a way out. We don't need to know the parametric form.
+    - We just resample from the sample.
+
+## The Sampling Distribution of Average Vote History
+
+```{r}
+#| echo: true
+#| eval: false
+mean.history.samples = array(dim=10000)
+for(rr in 1:10000) {
+    I = sample(1:m, n, replace=TRUE)
+    Hsam = h[I]
+    mean.history.samples[rr] = mean(Hsam)
+}
+```
+
+```{r}
+set.seed(default.seed)
+mean.history.samples = array(dim=10000)
+for(rr in 1:10000) {
+    I = sample(1:m, n, replace=TRUE)
+    Hsam = h[I]
+    mean.history.samples[rr] = mean(Hsam)
+}
+```
+
+```{r}
+#| fig-asp: .4
+history.histogram = ggplot() +
+  geom_histogram(aes(x=mean.history.samples, y=after_stat(density)), bins=50, alpha=.3)
+history.histogram +
+  with_annotations(mean.history.samples,
+                   shade.width=width(mean.history.samples),
+                   interval.width=width(mean.history.samples),
+                   estimand=mean(h)) +
+  coord_cartesian(xlim=range(c(mean.history.samples, mean(h))))
+```
+
+- That's what the *sampling distribution* of average vote history looks like.
+- As before, if we can estimate it we can use that estimate to get a 95% confidence interval.
+- But, unlike before, we don't have a nice parametric form like the Binomial.
+    - So we'll use the bootstrap to estimate it.
+
+## The Bootstrap Sampling Distribution of Average Vote History
+
+```{r}
+#| echo: true
+
+history.bootstrap.samples = array(dim=10000)
+for(rr in 1:10000) {
+    I = sample(1:n, n, replace=TRUE)
+    Hstar = H[I]
+    history.bootstrap.samples[rr] = mean(Hstar)
+}
+```
+
+```{r}
+#| fig-width: 7
+#| fig-asp: .5
+#| layout-ncol: 2
+#| fig-cap:
+#| - The actual sampling distribution
+#| - The bootstrap sampling distribution
+
+xlim.hist = range(c(mean.history.samples, history.bootstrap.samples, mean(h)))
+w.hist = width(mean.history.samples, alpha=.05)
+w.hist.boot = width(history.bootstrap.samples, alpha=.05)
+
+bootstrap.history.histogram = ggplot() +
+  geom_histogram(aes(x=history.bootstrap.samples, y=after_stat(density)), alpha=.3, bins=50)
+
+history.histogram +
+  with_annotations(mean.history.samples, interval.width=w.hist.boot, highlight.dots=1,
+                   estimand=mean(h)) +
+  coord_flip(xlim=xlim.hist)
+
+bootstrap.history.histogram +
+  with_annotations(c(mean(H), history.bootstrap.samples),
+                   highlight.dots=1, shade.width=w.hist.boot, shade.color='red') +
+  coord_flip(xlim=xlim.hist)
+```
+
+- It looks like it works in this case.
+    - The bootstrap sampling distribution is a good approximation to the actual sampling distribution.
+    - And the interval widths are similar.
+
+## But We Can't Argue That It Should
+
+- We're no longer able to argue that it *should* work the way we did before.
+    - For the binary case, we took advantage of our knowledge of the parametric form.
+    - We knew the bootstrap sampling distribution *was* the plug-in binomial estimate.
+    - And we don't have that now.
+
+## The Picture, Broken
+
+$$
+\begin{array}{ccc}
+\underset{\textstyle\text{drawing from the population}}{\text{sampling distribution}}
+& \approx &
+\text{normal approximation} \\[18pt]
+{\overset{\normalsize ?}{\approx}} & & {\Big\downarrow}\ {\footnotesize\text{plug in estimates}} \\[18pt]
+\underset{\textstyle\text{drawing from the sample}}{\text{bootstrap sampling distribution}}
+& \approx &
+\text{its plug-in estimate}
+\end{array}
+$$
+
+- For binary responses, the right side of our rectangle was exact: the parametric form.
+- With vote history, there is no parametric form. The right side is broken.
+- The plan is to replace it with the **normal approximation** --- a parametric form for an *approximation*.
+    - That turns the top and bottom edges from $=$ into $\approx$ too.
+- A question to sit with until then: we already had one approximation, plugging in.
+    - Once one edge of the rectangle is approximate, how much does it cost that the others are?
+- Getting there takes two tools we'll build over the coming weeks.
+    - **Normal approximation**, which gives us a parametric form for an *approximation* to our estimator's sampling distribution.
+    - **Techniques for variance calculation**, which help us understand the parameters that go into it.
+
+# Scope of the Bootstrap
+
+## When the Poll Is Without Replacement
+
+- The bootstrap resamples **with replacement**, no matter how the sample itself was drawn.
+    - So what it estimates is the with-replacement sampling distribution: the plug-in Binomial.
+- But suppose our poll sampled **without replacement**. Then the real sampling distribution is **Hypergeometric**:
+
+$$
+P_\theta(\hat\theta = t) = \binom{n}{nt}\,
+\frac{\bigl[m_1(m_1-1)\ldots(m_1-nt+1)\bigr]\,\bigl[m_0(m_0-1)\ldots(m_0-n(1-t)+1)\bigr]}{m(m-1)\ldots(m-n+1)}
+\quad\text{ for }\quad m_1 = m\theta, \ \ m_0 = m(1-\theta)
+$$
+
+- Same two stages as last class --- but calls use people up, so each factor falls as its response repeats.
+- If we knew we'd sampled without replacement, and knew $m$, we could plug $\hat\theta$ into *this* instead.
+- The question for the bootstrap: how far apart are these two distributions, really?
+
+## The Shapes
+
+```{r}
+#| label: deck-binom-hyper-grid
+cmp.sizes = expand.grid(n = c(10, 20, 40), m = c(50, 100, 200),
+                        theta = c(.5, .7, .9, .1))
+cmp = do.call(rbind, lapply(seq_len(nrow(cmp.sizes)), function(i) {
+  setting = cmp.sizes[i, ]
+  s = 0:setting$n
+  m1 = round(setting$m * setting$theta)
+  rbind(
+    data.frame(x = s/setting$n, probability = dbinom(s, setting$n, setting$theta),
+               scheme = 'with replacement', setting, row.names = NULL),
+    data.frame(x = s/setting$n,
+               probability = dhyper(s, m1, setting$m-m1, setting$n),
+               scheme = 'without replacement', setting, row.names = NULL))
+}))
+cmp$bar.width = .9/cmp$n
+cmp$n = factor(cmp$n, levels = c(10, 20, 40),
+               labels = c('n = 10 calls', 'n = 20 calls', 'n = 40 calls'))
+cmp$m = factor(cmp$m, levels = c(50, 100, 200),
+               labels = c('m = 50 people', 'm = 100 people', 'm = 200 people'))
+
+plot.comparison = function(theta) {
+  ggplot(cmp[cmp$theta == theta, ],
+         aes(x = x, y = probability, color = scheme, fill = scheme)) +
+    geom_col(aes(width = bar.width), position = 'identity', alpha = .05, linewidth = .2) +
+    facet_grid(n ~ m) +
+    scale_fill_manual(values = c('with replacement' = pollc,
+                                  'without replacement' = polld)) +
+    scale_color_manual(values = c('with replacement' = pollc,
+                                   'without replacement' = polld)) +
+    scale_x_continuous(breaks = c(0, .5, 1), labels = c('0', '0.5', '1')) +
+    scale_y_continuous(breaks = c(0, .2, .4)) +
+    coord_cartesian(xlim = c(-.05, 1.05), ylim = c(0, .46), expand = FALSE) +
+    labs(x = 'Estimated population proportion', y = 'Probability', fill = NULL, color = NULL) +
+    theme(legend.position = 'bottom',
+          strip.background = element_blank(),
+          strip.text = element_text(size = 11, color = '#aaaaaa'),
+          axis.text.x = element_text(size = 10),
+          axis.text.y = element_text(size = 10),
+          panel.spacing = grid::unit(.8, 'lines'))
+}
+```
+
+```{r}
+#| label: deck-binom-hyper-grid-plot
+#| fig-height: 6
+#| fig-width: 9
+#| fig-alt: "Nine panels comparing Binomial and Hypergeometric sample-proportion probabilities across sample sizes 10, 20, 40 and population sizes 50, 100, 200 at population proportion one half."
+plot.comparison(.5)
+```
+
+## Walking the Edge
+
+- Rows change the number of calls $n$; columns change the population size $m$. Walk the edge, clockwise from the top left.
+    - **Top left, $n=10$ of $m=50$:** a fifth of the population per poll. The schemes already disagree a little.
+    - **Along the top to $m=200$:** same ten calls, bigger population. The difference fades.
+    - **Down to $n=40$ of $m=200$:** a fifth again. A visible difference again.
+    - **Along the bottom to $m=50$:** forty calls to fifty people. The schemes come apart completely.
+- If you're sampling 40 of 50 people, it matters whether you put them back.
+
+## A Drop in the Ocean
+
+```{r}
+#| label: deck-drop-in-ocean
+#| fig-width: 5
+#| fig-asp: .8
+#| layout-ncol: 3
+#| fig-cap:
+#| - The population
+#| - Our sample
+#| - Both sampling distributions
+#| fig-alt:
+#| - "Map of Georgia's registered-voter population as many small faint points."
+#| - "Map of a random sample of 625 registered voters."
+#| - "Binomial and hypergeometric sample-proportion probabilities at n equal to 625 drawn in the same teal; the two bar sets coincide exactly, appearing as one histogram."
+ss = 0:n
+m1.ga = round(m*mean(y))
+ocean.window = ss/n > .6 & ss/n < .8
+pop.map
+sam.map
+ggplot() +
+  geom_col(aes(x=ss[ocean.window]/n, y=dbinom(ss[ocean.window], n, mean(y))),
+           width=1/n, fill=pollc, color=pollc, alpha=.5, linewidth=.1) +
+  geom_col(aes(x=ss[ocean.window]/n, y=dhyper(ss[ocean.window], m1.ga, m-m1.ga, n)),
+           width=1/n, fill=pollc, color=pollc, alpha=.5, linewidth=.1) +
+  scale_x_continuous(breaks=seq(.6,.8,by=.05)) + labs(x='', y='')
+```
+
+- In our turnout poll, it's $n=625$ of $m\approx 7$ million. A drop in the ocean.
+- The plot on the right is **both** sampling distributions --- with and without replacement --- overlaid.
+    - You see one teal histogram because they're indistinguishable.
+- It really doesn't matter. And people use sampling with replacement for analysis just because it's convenient.
+
+## Conservative Anyway
+
+```{r}
+#| label: deck-conservative-comparison
+#| fig-width: 7
+#| fig-asp: .5
+#| layout-ncol: 2
+#| fig-cap:
+#| - With replacement
+#| - Without replacement
+#| fig-alt:
+#| - "Simulated Binomial sample-proportion distribution at 40 calls to 50 people, with its calibrated middle 95 percent marked; the interval is wide."
+#| - "Simulated Hypergeometric distribution for the same poll, with its calibrated middle 95 percent marked; the interval is visibly narrower."
+set.seed(default.seed)
+mc = 50; nc = 40; thetac = .5
+binom.draws = rbinom(10000, nc, thetac)/nc
+hyper.draws = rhyper(10000, mc*thetac, mc*(1-thetac), nc)/nc
+scale.cons = list(scale_x_continuous(breaks=seq(.2,.8,by=.1)),
+                  coord_cartesian(xlim=c(.2,.8)),
+                  labs(x='', y=''))
+
+ggplot() +
+  geom_bar(aes(x=binom.draws, y=after_stat(prop)), fill=pollc, color=pollc, alpha=.3, linewidth=.1) +
+  with_annotations(binom.draws, interval.width=width(binom.draws)) +
+  scale.cons
+
+ggplot() +
+  geom_bar(aes(x=hyper.draws, y=after_stat(prop)), fill=polld, color=polld, alpha=.3, linewidth=.1) +
+  with_annotations(hyper.draws, interval.width=width(hyper.draws)) +
+  scale.cons
+```
+
+- Back at the bad corner --- 40 calls to 50 people --- the difference has a direction.
+    - Without replacement is **narrower**. You don't waste calls on people you've already talked to.
+- So if the truth is without-replacement and you analyze as if with-replacement --- the bootstrap included ---
+    - your intervals come out **too wide**, not too narrow.
+    - You cover *more* often than you promised. That's called being **conservative**.
+- Wrong, but wrong in the safe direction.

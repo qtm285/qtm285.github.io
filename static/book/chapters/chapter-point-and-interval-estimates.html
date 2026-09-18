@@ -68,7 +68,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../homework/homework-calibration-solutions.html" rel="next">
+<link href="../homework/homework-calibration.html" rel="next">
 <link href="../chapters/chapter-sampling.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -222,7 +222,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
   </div>
 </li>
@@ -251,7 +251,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-solutions.html" class="sidebar-item-text sidebar-link">
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
   </div>
 </li>
@@ -287,32 +287,32 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -486,7 +486,7 @@ y_{j} &amp; \textcolor[RGB]{17,138,178}{0} &amp; 1 &amp; \textcolor[RGB]{17,138,
 </div>
 </div>
 <p>Sampling was a huge time-saver. But is our estimate trustworthy? How close was our estimate to the actual proportion in the population of 6? We looked into it ahead of time by running a <strong>simulation</strong> of our survey on a fake population. We did exactly what we did in our actual survey, but we did it over and over. This let us look at what our estimator does, knowing what we want it to do: be <span class="math inline">\(\textcolor{gray}{ \approx 4/6}\)</span>. Above, we’ve shown the results of three of these simulations. We call the distribution of estimates we get like this our estimator’s <strong>sampling distribution</strong>. These three estimates are three <em>draws</em> from the sampling distribution. That’s three equally-likely outcomes of our survey. And we do ok in these three. But that’s just three. To get a better sense of what’s likely, we should look at a lot more.</p>
-<div id="fig-viz-sampling-dist" class="image-toggle drawable quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-labels="Dots,Bars,Histogram" data-steps=".viz-step">
+<div id="fig-viz-sampling-dist" class="image-toggle drawable quarto-float quarto-figure quarto-figure-center anchored" data-steps=".viz-step" data-mode="steps" data-labels="Dots,Bars,Histogram">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-viz-sampling-dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -1815,7 +1815,7 @@ y_{j} &amp; 1 &amp; 1 &amp; 1 &amp; 0 &amp; \dots &amp; 1   &amp; 0.70  \\
 <section id="sampling" class="level2">
 <h2 class="anchored" data-anchor-id="sampling">Sampling</h2>
 <p>To answer these questions, let’s first be precise about how we run our poll. For each call <span class="math inline">\(i\)</span>, we randomly select a voter with an ID we’ll call <span class="math inline">\(J_i\)</span>. And we record as that call’s outcome the turnout of that voter: <span class="math inline">\(Y_i = y_{J_i}\)</span>. On each call, each registered voter has a <span class="math inline">\(1/7.23M\)</span> chance of being called. This is called sampling with replacement because we could call the same person twice—though in our poll, this is unlikely because we’re making a small number of calls relative to population size.</p>
-<div id="fig-sampling-process" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="First calls,All calls,Our estimate" data-steps=".sample-step">
+<div id="fig-sampling-process" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".sample-step" data-mode="steps" data-labels="First calls,All calls,Our estimate">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-sampling-process-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -2063,7 +2063,7 @@ Figure&nbsp;7.1: The sampling process: making calls and recording responses.
 <section id="sampling-distributions" class="level2">
 <h2 class="anchored" data-anchor-id="sampling-distributions">Sampling Distributions</h2>
 <p>To find out, imagine our friends ran identical polls. Same method, same population—but different random samples, so different estimates.</p>
-<div id="fig-friends-polls" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="Our poll,Friend 1,Friend 2,All three,Many more" data-steps=".dist-step">
+<div id="fig-friends-polls" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".dist-step" data-mode="steps" data-labels="Our poll,Friend 1,Friend 2,All three,Many more">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-friends-polls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -2882,7 +2882,7 @@ Figure&nbsp;7.4
 <section id="interval-estimation" class="level2">
 <h2 class="anchored" data-anchor-id="interval-estimation">Interval Estimation</h2>
 <p>Our <em>point estimate</em> of the turnout frequency in our population is the turnout frequency in our sample: <span class="math inline">\(\overline{Y}_{625}\)</span>. So let’s try an interval of width 0.02 centered on it: <span class="math inline">\(\overline{Y}_{625} \pm 0.01\)</span>. This is just a width we chose arbitarily. Maybe it’s wishful thinking. Being off by at most 1% sounds good. What we want is for our interval to <strong>cover</strong> our estimation target, i.e.&nbsp;for the population frequency to be in our interval. This one doesn’t. Is that just bad luck? Or is it typical of <span class="math inline">\(\pm 0.01\)</span> intervals? Let’s see what happens when our friends try intervals like this.</p>
-<div id="fig-interval-est" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="Our poll,Friends' polls,100 polls" data-steps=".interval-step">
+<div id="fig-interval-est" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".interval-step" data-mode="steps" data-labels="Our poll,Friends' polls,100 polls">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-interval-est-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -3046,7 +3046,7 @@ Figure&nbsp;7.7
 </section>
 <section id="calibrating-interval-estimates" class="level2">
 <h2 class="anchored" data-anchor-id="calibrating-interval-estimates">Calibrating Interval Estimates</h2>
-<div id="fig-calibration" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-mode="steps" data-layout="sidebar" data-labels="Narrow intervals,Wide intervals" data-steps=".calib-step">
+<div id="fig-calibration" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".calib-step" data-mode="steps" data-labels="Narrow intervals,Wide intervals">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -3821,7 +3821,7 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../homework/homework-calibration-solutions.html" class="pagination-link" aria-label="Homework: The Idea of Calibration">
+      <a href="../homework/homework-calibration.html" class="pagination-link" aria-label="Homework: The Idea of Calibration">
         <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

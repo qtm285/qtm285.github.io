@@ -30,12 +30,12 @@
       }
     },
     {
-      "file": "homework/homework-descriptive-solutions.html",
+      "file": "homework/homework-descriptive.html",
       "title": "Homework: Basic Descriptive Statistics",
       "source": {
         "type": "project-source",
         "format": "qmd",
-        "file": "homework/homework-descriptive-solutions.qmd"
+        "file": "homework/homework-descriptive.qmd"
       }
     },
     {
@@ -66,12 +66,12 @@
       }
     },
     {
-      "file": "homework/homework-calibration-solutions.html",
+      "file": "homework/homework-calibration.html",
       "title": "Homework: The Idea of Calibration",
       "source": {
         "type": "project-source",
         "format": "qmd",
-        "file": "homework/homework-calibration-solutions.qmd"
+        "file": "homework/homework-calibration.qmd"
       }
     },
     {
@@ -120,15 +120,6 @@
       }
     },
     {
-      "file": "homework/homework-random-variables-and-moments.html",
-      "title": "Homework — Random Variables, Moments, and the Standard Deviation",
-      "source": {
-        "type": "project-source",
-        "format": "qmd",
-        "file": "homework/homework-random-variables-and-moments.qmd"
-      }
-    },
-    {
       "file": "chapters/chapter-bootstrap.html",
       "title": "Calibrating Interval Estimates using the Bootstrap",
       "source": {
@@ -162,6 +153,15 @@
         "type": "project-source",
         "format": "qmd",
         "file": "homework/homework-sample-size-coverage.qmd"
+      }
+    },
+    {
+      "file": "homework/homework-random-variables-and-moments.html",
+      "title": "Homework — Random Variables, Moments, and the Standard Deviation",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-random-variables-and-moments.qmd"
       }
     },
     {
