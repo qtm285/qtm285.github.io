@@ -376,35 +376,46 @@ def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
 
 
 def build_info(book_dir, provenance, stale, unbuilt, dropped):
+  """What the site publishes about itself.
+
+  This file is served, so it carries counts rather than paths for the same reason
+  the stamp does: naming a page that was held back from the site announces it.
+  The operator's copy, with every path, goes to stderr at the end of the run.
+  """
   return {'version': 1,
           'builtAt': datetime.datetime.now().astimezone().isoformat(timespec='seconds'),
-          'course': provenance,
-          'publishedStale': stale,
-          'publishedWithoutChapters': unbuilt,
-          'deletedFromSite': dropped}
+          'course': {'checkout': provenance['checkout'],
+                     'revision': provenance['revision'],
+                     'committedAt': provenance['committedAt'],
+                     'subject': provenance['subject'],
+                     'uncommittedSourceCount': len(provenance['uncommittedSources'])},
+          'publishedStale': len(stale),
+          'publishedWithoutChapters': len(unbuilt),
+          'deletedFromSite': len(dropped)}
 
 
 def build_stamp_html(info):
   """The one line on the landing page that answers "is this current?".
 
-  Whatever was overridden to get the build out says so here, because a stamp that
-  only ever reports success is not worth reading.
+  Counts, never paths. This page is public, and a path here would announce the
+  filename of material that was deliberately kept off the site -- homework that
+  is still out, in practice. The operator gets the paths on stderr and in the
+  refusal messages, which is where the evidence is useful anyway.
+
+  Whatever was overridden to get the build out is still counted here, because a
+  stamp that only ever reports success is not worth reading.
   """
   course = info['course']
   when = datetime.datetime.fromisoformat(info['builtAt']).strftime('%b %-d, %Y at %-I:%M %p')
   parts = [f'Built {when} from course revision '
            f'<code>{course["revision"][:12]}</code> ({course["subject"]}).']
-  if course['uncommittedSources']:
-    parts.append(f'{len(course["uncommittedSources"])} source file(s) were uncommitted: '
-                 f'{", ".join(course["uncommittedSources"])}.')
-  if info['publishedStale']:
-    parts.append('<b>Published with pages older than their source:</b> '
-                 f'{", ".join(row["page"] for row in info["publishedStale"])}.')
-  if info['publishedWithoutChapters']:
-    parts.append('<b>Chapters not in this build:</b> '
-                 f'{", ".join(info["publishedWithoutChapters"])}.')
-  if info['deletedFromSite']:
-    parts.append(f'{len(info["deletedFromSite"])} previously published file(s) were removed.')
+  for count, description in (
+      (course['uncommittedSourceCount'], 'source file(s) were uncommitted'),
+      (info['publishedStale'], 'page(s) are older than the source they came from'),
+      (info['publishedWithoutChapters'], 'declared chapter(s) are not in this build'),
+      (info['deletedFromSite'], 'previously published file(s) were removed')):
+    if count:
+      parts.append(f'<b>{count}</b> {description}.')
   return ('<p style="margin-top:3em;font-size:0.8em;color:#666">'
           f'{" ".join(parts)}</p>')
 
@@ -473,12 +484,17 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     shutil.rmtree(stage_dir, ignore_errors=True)
     raise
   ACTIVE_SITE = site_dir
+  # The operator's copy names every path. The published stamp and build-info.json
+  # deliberately do not.
   summary = [f'{site_dir}: course revision {provenance["revision"][:12]}']
-  for label, rows in (('stale pages published', stale), ('chapters not built', unbuilt),
-                      ('files removed from the site', deleted),
-                      ('uncommitted sources', provenance['uncommittedSources'])):
-    if rows:
-      summary.append(f'  {len(rows)} {label}')
+  for label, paths in (
+      ('stale page(s) published', [row['page'] for row in stale]),
+      ('declared chapter(s) not built', unbuilt),
+      ('file(s) removed from the site', deleted),
+      ('uncommitted source(s)', provenance['uncommittedSources'])):
+    if paths:
+      summary.append(f'  {len(paths)} {label}:')
+      summary.extend(f'    {path}' for path in paths)
   print('\n'.join(summary), file=sys.stderr)
 
 
