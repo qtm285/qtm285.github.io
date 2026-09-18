@@ -12,6 +12,16 @@ import yaml
 COURSE_DIR = None
 SCHEDULE_SOURCE = None
 
+# Homework that has not come out yet, collected while the schedule is read.
+#
+# Leaving a future homework's page unlinked is not the same as not publishing
+# it: the book build renders every declared chapter, the site copies the book
+# wholesale, and the page then answers on its URL with the solutions inside it.
+# On 2026-09-18 HW4 was reachable that way while it was still out. Unlinked is
+# not unposted, so these are removed from the assembled site, on the same date
+# rule that already decides the linking.
+WITHHELD_HOMEWORK = []
+
 # The schedule, from the book project
 #
 # The book's index.qmd holds the real schedule: date, title, the chapter each
@@ -133,6 +143,10 @@ def declared_homeworks():
 def homework_html(path, number, linked):
   stem = path.stem.removesuffix('.handout')
   if not linked:
+    # The schedule is read more than once per build, so guard against listing
+    # the same homework twice: a doubled "withheld" line reads as two removals.
+    if stem not in WITHHELD_HOMEWORK:
+      WITHHELD_HOMEWORK.append(stem)
     return f'HW {number} out'
   page = Path('book/homework') / f'{stem}.html'
   archive = Path('book/homework/handouts') / f'{stem}-handout.zip'
@@ -290,6 +304,11 @@ def stale_pages(book_dir):
     source_path, page_path = COURSE_DIR / source, book_dir / page
     if not source_path.exists() or not page_path.exists():
       continue
+    # A homework that has not come out is not published, so how current its
+    # render is says nothing about the site. Blocking the build on it would
+    # hold every publish hostage to a page nobody can reach.
+    if source_path.stem in WITHHELD_HOMEWORK:
+      continue
     rendered_at, edited_at = page_path.stat().st_mtime, source_path.stat().st_mtime
     if edited_at > rendered_at:
       stale.append({'page': page, 'source': source,
@@ -375,6 +394,30 @@ def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
   return going
 
 
+def remove_withheld_homework(site_dir):
+  """Drop the pages, assets and handouts of homework that has not come out yet.
+
+  Runs after render_site, because reading the schedule is what decides which
+  those are. Returns what it removed: a homework silently vanishing from the
+  site is the same class of failure as one silently appearing with its answers.
+  """
+  homework_dir = site_dir / 'book' / 'homework'
+  removed = []
+  for stem in WITHHELD_HOMEWORK:
+    for target in (homework_dir / f'{stem}.html',
+                   homework_dir / f'{stem}_files',
+                   homework_dir / f'{stem}-solutions.html',
+                   homework_dir / 'handouts' / f'{stem}-handout.zip'):
+      if not target.exists():
+        continue
+      if target.is_dir():
+        shutil.rmtree(target)
+      else:
+        target.unlink()
+      removed.append(str(target.relative_to(site_dir)))
+  return removed
+
+
 def build_info(book_dir, provenance, stale, unbuilt, dropped):
   """What the site publishes about itself.
 
@@ -443,6 +486,9 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   """
   global ACTIVE_SITE
   provenance = course_provenance(book_dir)
+  # Read the schedule first: it is what decides which homework is not out yet,
+  # and both the currency check and the assembled tree need that answer.
+  parse_schedule(datetime.date.today())
   stale = refuse_stale(book_dir, stale_ok)
   unbuilt = refuse_unbuilt(book_dir, incomplete_ok)
 
@@ -469,6 +515,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
     ACTIVE_SITE = stage_dir
     render_site(stage_dir, build_stamp_html(info))
+    withheld = remove_withheld_homework(stage_dir)
 
     deleted = refuse_deletions(stage_dir, site_dir, set(dropped), drop_all)
     if deleted:
@@ -491,6 +538,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
       ('stale page(s) published', [row['page'] for row in stale]),
       ('declared chapter(s) not built', unbuilt),
       ('file(s) removed from the site', deleted),
+      ('file(s) withheld, homework not out yet', withheld),
       ('uncommitted source(s)', provenance['uncommittedSources'])):
     if paths:
       summary.append(f'  {len(paths)} {label}:')
