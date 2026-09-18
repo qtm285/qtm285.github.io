@@ -2,4 +2,5 @@
 # publishes `path: .`. Anything that is not meant to be on the web must be
 # ignored, not merely left uncommitted.
 .venv/
+__pycache__/
 _site/
