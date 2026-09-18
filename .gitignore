@@ -1,0 +1,5 @@
+# Everything committed here is uploaded to Pages as-is: the deploy workflow
+# publishes `path: .`. Anything that is not meant to be on the web must be
+# ignored, not merely left uncommitted.
+.venv/
+_site/

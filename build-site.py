@@ -1,8 +1,11 @@
 from pathlib import Path
 import argparse
 import datetime
+import json
 import re
 import shutil
+import subprocess
+import sys
 from pybars import Compiler
 import yaml
 
@@ -229,35 +232,254 @@ def schedule_html(today=None):
   return '\n'.join(out)
 
 
-def render_site(site_dir=Path('_site')):
+# What the site says about itself
+#
+# The site used to carry no record of where it came from, so "is what's published
+# current?" was a question only an agent with both trees in front of it could
+# answer, and it was answered wrong: a tarball rendered at 15:39 from superseded
+# source was published at 15:56 by a clean run. The three checks below all exist
+# so that the assemble step refuses to do that, and `build-info.json` plus the
+# line at the foot of the landing page exist so the answer is readable off the
+# site itself rather than out of somebody's terminal.
+
+
+def git_output(args):
+  result = subprocess.run(['git', '-C', str(COURSE_DIR), *args], capture_output=True, text=True)
+  if result.returncode != 0:
+    raise ValueError(f'git {" ".join(args)} in {COURSE_DIR} failed: {result.stderr.strip()}')
+  return result.stdout.strip()
+
+
+def declared_chapters():
+  """Every `.qmd` the book declares, whether or not it was rendered."""
+  config = yaml.safe_load((COURSE_DIR / '_quarto_book.yml').read_text())
+  result = []
+  for part in config['book']['chapters']:
+    entries = part.get('chapters', []) if isinstance(part, dict) else [part]
+    for chapter in [entries] if isinstance(entries, str) else entries:
+      if isinstance(chapter, str) and chapter.endswith('.qmd'):
+        result.append(chapter)
+  return result
+
+
+def rendered_pages(book_dir):
+  """The book's own record of what it rendered: `{output file: source file}`.
+
+  Quarto leaves no revision behind, but the tlda manifest it writes alongside the
+  pages maps each rendered page to the source it came from, which is what makes a
+  per-page currency check possible at all.
+  """
+  manifest = book_dir / 'tlda-manifest.json'
+  if not manifest.exists():
+    raise ValueError(f'{manifest} is absent, so nothing records which source produced '
+                     f'{book_dir} -- refusing to publish a tree whose currency cannot be checked')
+  pages = json.loads(manifest.read_text())['pages']
+  return {page['file']: page['source']['file']
+          for page in pages if page.get('source', {}).get('file')}
+
+
+def stale_pages(book_dir):
+  """Pages whose source has been edited since the page was rendered.
+
+  mtime is the only available oracle: neither `_book` nor `_freeze` records the
+  revision a page was rendered from. It errs towards refusing -- touching a file
+  without changing it raises the alarm -- which is the safe direction.
+  """
+  stale = []
+  for page, source in sorted(rendered_pages(book_dir).items()):
+    source_path, page_path = COURSE_DIR / source, book_dir / page
+    if not source_path.exists() or not page_path.exists():
+      continue
+    rendered_at, edited_at = page_path.stat().st_mtime, source_path.stat().st_mtime
+    if edited_at > rendered_at:
+      stale.append({'page': page, 'source': source,
+                    'renderedAt': stamp(rendered_at), 'sourceEditedAt': stamp(edited_at),
+                    'behindMinutes': round((edited_at - rendered_at) / 60, 1)})
+  return stale
+
+
+def unbuilt_chapters(book_dir):
+  built = set(rendered_pages(book_dir).values())
+  return [chapter for chapter in declared_chapters() if chapter not in built]
+
+
+def stamp(mtime):
+  return datetime.datetime.fromtimestamp(mtime).astimezone().isoformat(timespec='seconds')
+
+
+def course_provenance(book_dir):
+  """Where the course source stood when this site was assembled."""
+  sources = sorted(set(rendered_pages(book_dir).values()) | {'index.qmd', '_quarto_book.yml'})
+  present = [source for source in sources if (COURSE_DIR / source).exists()]
+  uncommitted = [line[3:] for line in
+                 git_output(['status', '--porcelain=v1', '--', *present]).splitlines()]
+  return {'checkout': str(COURSE_DIR),
+          'revision': git_output(['rev-parse', 'HEAD']),
+          'committedAt': git_output(['log', '-1', '--format=%cI']),
+          'subject': git_output(['log', '-1', '--format=%s']),
+          'uncommittedSources': uncommitted}
+
+
+def site_files(root):
+  return {str(path.relative_to(root)) for path in root.rglob('*') if path.is_file()}
+
+
+def refuse_stale(book_dir, allowed):
+  stale = stale_pages(book_dir)
+  if stale and not allowed:
+    rows = '\n'.join(f'  {row["page"]}\n'
+                     f'    rendered      {row["renderedAt"]}\n'
+                     f'    source edited {row["sourceEditedAt"]}  ({row["source"]}, '
+                     f'{row["behindMinutes"]} min later)' for row in stale)
+    raise SystemExit(f'{len(stale)} page(s) in {book_dir} are older than the source they '
+                     f'were rendered from, so publishing would ship superseded work:\n{rows}\n'
+                     f'Re-render the course, or pass --stale-ok to publish them anyway and say '
+                     f'so on the site.')
+  return stale
+
+
+def refuse_unbuilt(book_dir, allowed):
+  unbuilt = unbuilt_chapters(book_dir)
+  if unbuilt and not allowed:
+    rows = '\n'.join(f'  {chapter}' for chapter in unbuilt)
+    raise SystemExit(f'{len(unbuilt)} chapter(s) that {COURSE_DIR / "_quarto_book.yml"} declares '
+                     f'were never rendered into {book_dir}, so publishing would ship a partial '
+                     f'book:\n{rows}\n'
+                     f'Render them, or pass --incomplete-ok to publish without them and say so '
+                     f'on the site.')
+  return unbuilt
+
+
+def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
+  """Nothing already published disappears because a fresh render did not carry it.
+
+  The assemble step replaces the whole tree, so a render missing a handout zip or
+  a deck deletes it from the site on an exit-zero run. That has happened: a
+  regeneration from an out-of-sync `_book` staged 62 deletions including the
+  homework setup handout students use.
+  """
+  if not site_dir.exists():
+    return []
+  going = sorted(site_files(site_dir) - site_files(stage_dir))
+  if not going:
+    return []
+  if drop_all:
+    return going
+  unexpected = [path for path in going if path not in dropped]
+  if unexpected:
+    rows = '\n'.join(f'  {path}' for path in unexpected)
+    raise SystemExit(f'{len(unexpected)} file(s) published in {site_dir} are absent from this '
+                     f'build and would be deleted from the site:\n{rows}\n'
+                     f'Re-render whatever produced them, or name each one with --drop, or pass '
+                     f'--drop-all to remove all {len(going)}.')
+  return going
+
+
+def build_info(book_dir, provenance, stale, unbuilt, dropped):
+  return {'version': 1,
+          'builtAt': datetime.datetime.now().astimezone().isoformat(timespec='seconds'),
+          'course': provenance,
+          'publishedStale': stale,
+          'publishedWithoutChapters': unbuilt,
+          'deletedFromSite': dropped}
+
+
+def build_stamp_html(info):
+  """The one line on the landing page that answers "is this current?".
+
+  Whatever was overridden to get the build out says so here, because a stamp that
+  only ever reports success is not worth reading.
+  """
+  course = info['course']
+  when = datetime.datetime.fromisoformat(info['builtAt']).strftime('%b %-d, %Y at %-I:%M %p')
+  parts = [f'Built {when} from course revision '
+           f'<code>{course["revision"][:12]}</code> ({course["subject"]}).']
+  if course['uncommittedSources']:
+    parts.append(f'{len(course["uncommittedSources"])} source file(s) were uncommitted: '
+                 f'{", ".join(course["uncommittedSources"])}.')
+  if info['publishedStale']:
+    parts.append('<b>Published with pages older than their source:</b> '
+                 f'{", ".join(row["page"] for row in info["publishedStale"])}.')
+  if info['publishedWithoutChapters']:
+    parts.append('<b>Chapters not in this build:</b> '
+                 f'{", ".join(info["publishedWithoutChapters"])}.')
+  if info['deletedFromSite']:
+    parts.append(f'{len(info["deletedFromSite"])} previously published file(s) were removed.')
+  return ('<p style="margin-top:3em;font-size:0.8em;color:#666">'
+          f'{" ".join(parts)}</p>')
+
+
+def render_site(site_dir=Path('_site'), buildstamp=''):
   compiler = Compiler()
   source = open("index.template", "r").read()
   template = compiler.compile(source)
   output = template({
     'zoomlink': 'https://emory.zoom.us/j/91330426454?pwd=US7RfFmxBgGd2rvJCtnLcYu3zDepki.1',
     # add dummy element to count lectures/labs starting with 1
-    'schedule': schedule_html()
+    'schedule': schedule_html(),
+    'buildstamp': buildstamp
     })
   (site_dir / 'index.html').write_text(output)
 
 
-def assemble_static(book_dir, site_dir):
+def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
+                    dropped=(), drop_all=False):
+  """Assemble the site beside the published one, check it, then swap.
+
+  Staging first is what lets the deletion check compare the new tree against the
+  published one while the published one still exists. The old order -- delete,
+  then copy -- had already destroyed the evidence by the time anything could look.
+  """
   global ACTIVE_SITE
-  if site_dir.exists():
-    shutil.rmtree(site_dir)
-  site_dir.mkdir(parents=True)
-  shutil.copytree(book_dir, site_dir / 'book')
-  for name in ('css', 'images'):
-    shutil.copytree(Path('site-assets') / name, site_dir / name)
-  deck_dir = site_dir / 'decks'
-  deck_dir.mkdir()
-  for html in (book_dir.parent / 'decks').glob('*-slides.html'):
-    shutil.copy2(html, deck_dir / html.name)
-    support = html.with_name(f'{html.stem}_files')
-    if support.exists():
-      shutil.copytree(support, deck_dir / support.name)
+  provenance = course_provenance(book_dir)
+  stale = refuse_stale(book_dir, stale_ok)
+  unbuilt = refuse_unbuilt(book_dir, incomplete_ok)
+
+  stage_dir = site_dir.with_name(f'{site_dir.name}.staging')
+  if stage_dir.exists():
+    shutil.rmtree(stage_dir)
+  # A refusal must leave nothing behind: a half-built tree sitting next to the
+  # published one is another copy nobody can identify, and this repository is
+  # published whole -- the deploy workflow uploads `path: .`.
+  try:
+    stage_dir.mkdir(parents=True)
+    shutil.copytree(book_dir, stage_dir / 'book')
+    for name in ('css', 'images'):
+      shutil.copytree(Path('site-assets') / name, stage_dir / name)
+    deck_dir = stage_dir / 'decks'
+    deck_dir.mkdir()
+    for html in (book_dir.parent / 'decks').glob('*-slides.html'):
+      shutil.copy2(html, deck_dir / html.name)
+      support = html.with_name(f'{html.stem}_files')
+      if support.exists():
+        shutil.copytree(support, deck_dir / support.name)
+
+    info = build_info(book_dir, provenance, stale, unbuilt, [])
+    (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
+    ACTIVE_SITE = stage_dir
+    render_site(stage_dir, build_stamp_html(info))
+
+    deleted = refuse_deletions(stage_dir, site_dir, set(dropped), drop_all)
+    if deleted:
+      info = build_info(book_dir, provenance, stale, unbuilt, deleted)
+      (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
+      render_site(stage_dir, build_stamp_html(info))
+
+    if site_dir.exists():
+      shutil.rmtree(site_dir)
+    stage_dir.rename(site_dir)
+  except BaseException:
+    ACTIVE_SITE = site_dir
+    shutil.rmtree(stage_dir, ignore_errors=True)
+    raise
   ACTIVE_SITE = site_dir
-  render_site(site_dir)
+  summary = [f'{site_dir}: course revision {provenance["revision"][:12]}']
+  for label, rows in (('stale pages published', stale), ('chapters not built', unbuilt),
+                      ('files removed from the site', deleted),
+                      ('uncommitted sources', provenance['uncommittedSources'])):
+    if rows:
+      summary.append(f'  {len(rows)} {label}')
+  print('\n'.join(summary), file=sys.stderr)
 
 
 if __name__ == '__main__':
@@ -265,11 +487,20 @@ if __name__ == '__main__':
   parser.add_argument('--course-dir', type=Path, required=True)
   parser.add_argument('--book-dir', type=Path)
   parser.add_argument('--site-dir', type=Path, default=Path('_site'))
+  parser.add_argument('--stale-ok', action='store_true',
+                      help='publish pages older than their source, and say so on the site')
+  parser.add_argument('--incomplete-ok', action='store_true',
+                      help='publish without chapters the book declares, and say so on the site')
+  parser.add_argument('--drop', action='append', default=[], metavar='PATH',
+                      help='a published file this build is meant to remove; repeatable')
+  parser.add_argument('--drop-all', action='store_true',
+                      help='remove every published file absent from this build')
   args = parser.parse_args()
   COURSE_DIR = args.course_dir.resolve()
   SCHEDULE_SOURCE = COURSE_DIR / 'index.qmd'
   ACTIVE_SITE = args.site_dir
   if args.book_dir:
-    assemble_static(args.book_dir, args.site_dir)
+    assemble_static(args.book_dir, args.site_dir, stale_ok=args.stale_ok,
+                    incomplete_ok=args.incomplete_ok, dropped=args.drop, drop_all=args.drop_all)
   else:
     render_site(args.site_dir)
