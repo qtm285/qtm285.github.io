@@ -394,6 +394,49 @@ def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
   return going
 
 
+def homework_pages_with_solutions(site_dir):
+  """Homework chapter pages that would publish worked solutions.
+
+  Skip's rule, 2026-09-18 05:31: "you guys know you're not to render solutions
+  for students who've not yet handed in a hw assignment or at all on the static
+  site ... [like if you haven't submitted/are on the static site the chapter
+  shows the like, handout version]". The chapter is the page this checks.
+
+  A `*-solutions.html` page is exempt: that page is the solutions, and his own
+  schedule links it once a homework is due.
+
+  `exams/` is scanned on the same rule. Skip, 2026-09-19, on the practice
+  midterm this missed: "just dont fking post the solution". Scanning `homework/`
+  alone walked straight past it, because the directory was the whole test.
+  """
+  found = []
+  for section in ('homework', 'exams'):
+    section_dir = site_dir / 'book' / section
+    if not section_dir.is_dir():
+      continue
+    for page in sorted(section_dir.glob('*.html')):
+      if page.stem.endswith('-solutions'):
+        continue
+      blocks = page.read_text(errors='ignore').count('callout-solution')
+      if blocks:
+        found.append({'page': str(page.relative_to(site_dir)), 'blocks': blocks})
+  return found
+
+
+def refuse_published_solutions(site_dir, allowed):
+  found = [row for row in homework_pages_with_solutions(site_dir)
+           if row['page'] not in allowed]
+  if found:
+    rows = '\n'.join(f'  {row["page"]}  — {row["blocks"]} solution callout(s)' for row in found)
+    raise SystemExit(f'{len(found)} chapter(s) in this build carry worked solutions, '
+                     f'which the static site must not serve:\n{rows}\n'
+                     f'The book renders these chapters from their full masters; there is no '
+                     f'handout render in the book to publish instead, so this is fixed where the '
+                     f'chapter is rendered, not here. Pass --allow-solutions PATH per page to '
+                     f'publish anyway.')
+  return found
+
+
 def remove_withheld_homework(site_dir):
   """Drop the pages, assets and handouts of homework that has not come out yet.
 
@@ -477,7 +520,7 @@ def render_site(site_dir=Path('_site'), buildstamp=''):
 
 
 def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
-                    dropped=(), drop_all=False):
+                    dropped=(), drop_all=False, allow_solutions=()):
   """Assemble the site beside the published one, check it, then swap.
 
   Staging first is what lets the deletion check compare the new tree against the
@@ -516,8 +559,18 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     ACTIVE_SITE = stage_dir
     render_site(stage_dir, build_stamp_html(info))
     withheld = remove_withheld_homework(stage_dir)
+    # After withholding, so a homework that is not out yet is already gone and
+    # is not reported twice.
+    refuse_published_solutions(stage_dir, set(allow_solutions))
 
-    deleted = refuse_deletions(stage_dir, site_dir, set(dropped), drop_all)
+    # A page this build withheld on purpose is not a file that went missing, so
+    # it must not trip the deletion guard. Without this the two checks deadlock
+    # on the one case that matters: withholding removes the page from the staged
+    # tree, the deletion guard refuses the build because it would vanish from the
+    # site, nothing publishes, and the page stays up. Refusing to publish is not
+    # the same as taking down, and only this makes a takedown possible at all.
+    deleted = refuse_deletions(stage_dir, site_dir, set(dropped) | set(withheld), drop_all)
+    deleted = [path for path in deleted if path not in set(withheld)]
     if deleted:
       info = build_info(book_dir, provenance, stale, unbuilt, deleted)
       (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
@@ -557,6 +610,9 @@ if __name__ == '__main__':
                       help='publish without chapters the book declares, and say so on the site')
   parser.add_argument('--drop', action='append', default=[], metavar='PATH',
                       help='a published file this build is meant to remove; repeatable')
+  parser.add_argument('--allow-solutions', action='append', default=[], metavar='PATH',
+                      help='publish this homework chapter even though it carries worked '
+                           'solutions; repeatable')
   parser.add_argument('--drop-all', action='store_true',
                       help='remove every published file absent from this build')
   args = parser.parse_args()
@@ -565,6 +621,7 @@ if __name__ == '__main__':
   ACTIVE_SITE = args.site_dir
   if args.book_dir:
     assemble_static(args.book_dir, args.site_dir, stale_ok=args.stale_ok,
-                    incomplete_ok=args.incomplete_ok, dropped=args.drop, drop_all=args.drop_all)
+                    incomplete_ok=args.incomplete_ok, dropped=args.drop, drop_all=args.drop_all,
+                    allow_solutions=args.allow_solutions)
   else:
     render_site(args.site_dir)
