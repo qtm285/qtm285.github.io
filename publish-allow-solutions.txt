@@ -1,0 +1,25 @@
+# Published chapters allowed to carry worked solutions.
+#
+# Everything else is refused before upload by check-published-tree.py. Adding a
+# line here is how a page gets published with its answers in it, and it shows up
+# in the diff with the page's name in it.
+#
+# These seven are Skip's ruling, 2026-09-19: "plz dont make those specific ones
+# vanish until the app works consistently for my students", and, one sentence
+# later, "they need solutions of older stuff". Homework students are relying on
+# now because the app is unreliable.
+
+book/homework/homework-setup.html
+book/homework/homework-descriptive.html
+book/homework/homework-calibration.html
+book/homework/homework-calibration-binary.html
+book/homework/homework-random-variables-and-moments.html
+book/homework/homework-markov-chebyshev.html
+book/homework/homework-comparing-estimators.html
+
+# book/exams/practice-midterm-1.html is deliberately NOT listed. His ruling,
+# 2026-09-19 10:43-10:44: "practice exam works like hw tbh" / "solutions like,
+# the next meeting i think?" / "so like...whatever just dont fking post the
+# solution". The release point is the next class meeting, which has not
+# happened. Its source already carries `withhold-solutions: true`; the served
+# page predates that edit, so the repair is a re-render, not a line here.

@@ -9,6 +9,10 @@ import sys
 from pybars import Compiler
 import yaml
 
+# The solution scan lives in publish_guard so the workflow can run the same
+# function over the committed tree without this file's dependencies.
+from publish_guard import pages_with_solutions
+
 COURSE_DIR = None
 SCHEDULE_SOURCE = None
 
@@ -394,37 +398,8 @@ def refuse_deletions(stage_dir, site_dir, dropped, drop_all):
   return going
 
 
-def homework_pages_with_solutions(site_dir):
-  """Homework chapter pages that would publish worked solutions.
-
-  Skip's rule, 2026-09-18 05:31: "you guys know you're not to render solutions
-  for students who've not yet handed in a hw assignment or at all on the static
-  site ... [like if you haven't submitted/are on the static site the chapter
-  shows the like, handout version]". The chapter is the page this checks.
-
-  A `*-solutions.html` page is exempt: that page is the solutions, and his own
-  schedule links it once a homework is due.
-
-  `exams/` is scanned on the same rule. Skip, 2026-09-19, on the practice
-  midterm this missed: "just dont fking post the solution". Scanning `homework/`
-  alone walked straight past it, because the directory was the whole test.
-  """
-  found = []
-  for section in ('homework', 'exams'):
-    section_dir = site_dir / 'book' / section
-    if not section_dir.is_dir():
-      continue
-    for page in sorted(section_dir.glob('*.html')):
-      if page.stem.endswith('-solutions'):
-        continue
-      blocks = page.read_text(errors='ignore').count('callout-solution')
-      if blocks:
-        found.append({'page': str(page.relative_to(site_dir)), 'blocks': blocks})
-  return found
-
-
 def refuse_published_solutions(site_dir, allowed):
-  found = [row for row in homework_pages_with_solutions(site_dir)
+  found = [row for row in pages_with_solutions(site_dir)
            if row['page'] not in allowed]
   if found:
     rows = '\n'.join(f'  {row["page"]}  — {row["blocks"]} solution callout(s)' for row in found)

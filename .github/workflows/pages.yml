@@ -18,6 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Everything committed here is uploaded as-is, so this is the one point
+      # that sees every change however it was made. The assemble step in
+      # build-site.py runs the same check, but the record shows most updates are
+      # published by hand and never go through it.
+      - name: Refuse to publish worked solutions
+        run: python3 check-published-tree.py --site-dir static
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
