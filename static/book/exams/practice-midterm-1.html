@@ -469,27 +469,6 @@ window.Quarto = {
 <p>The x-axis ticks were mislabeled in the version of this document posted earlier. They were off by 1, so ‘estimator a’ was centered at 0, etc. This has been fixed. I apologize for any confusion this caused.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p><span class="math inline">\(\hat\theta_1\)</span> is <span class="math inline">\(c\)</span>, <span class="math inline">\(\hat\theta_2\)</span> is <span class="math inline">\(a\)</span>, and <span class="math inline">\(\hat\theta_3\)</span> is <span class="math inline">\(b\)</span>. I know <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> are consistent, whereas <span class="math inline">\(\hat\theta_1\)</span> <em>could</em> be consistent but I don’t know that.</p>
-<p><em>Explanation</em>. It’s easy to identify the sampling distribution of <span class="math inline">\(\hat\theta_1\)</span>, as it has no spread at all: it’s always <span class="math inline">\(0\)</span>. And we can differentiate between the sampling distributions of <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> by observing that <span class="math inline">\(\hat\theta_2\)</span> (the sample mean) is unbiased, so it must be the one whose center doesn’t change as <span class="math inline">\(n\)</span> does.</p>
-<p>I know <span class="math inline">\(\hat\theta_2\)</span> and <span class="math inline">\(\hat\theta_3\)</span> are consistent, as their standard deviations both go to zero as <span class="math inline">\(n\)</span> goes to infinity and the bias of <span class="math inline">\(\theta_2\)</span> is zero and that of <span class="math inline">\(\theta_3\)</span> is <span class="math inline">\(10\theta/(n+10)\)</span> which goes to zero as <span class="math inline">\(n\)</span> goes to infinity. I don’t know that <span class="math inline">\(\hat\theta_1\)</span> is, since its bias is <span class="math inline">\(-\theta\)</span> no matter what <span class="math inline">\(n\)</span> is.</p>
-<p>But — if you disconnect this part from the sampling distributions I’ve drawn — <span class="math inline">\(\hat\theta_1\)</span> <em>could</em> be consistent, since its standard deviation does go to zero as <span class="math inline">\(n\)</span> goes to infinity (it’s zero for all <span class="math inline">\(n\)</span>) and its bias would be zero if <span class="math inline">\(\theta\)</span> were <span class="math inline">\(0\)</span>. I wouldn’t take points off for saying it couldn’t be for two reasons. First, I did draw the sampling distributions for you, and what I’ve drawn is inconsistent with <span class="math inline">\(\theta\)</span> being 0. Second, it’s so rare that anything is ever <em>exactly</em> zero that I wouldn’t fault you for answering the question as if it outright never happened. But that idea—that <span class="math inline">\(\hat\theta_1\)</span> would be consistent if <span class="math inline">\(\theta\)</span> were <span class="math inline">\(0\)</span>—was what I was trying to get at with this <em>could</em> question.</p>
-</div>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -520,25 +499,6 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>If I ask a problem like this on an exam, I’ll make it clear that ‘at least but not exactly 95% coverage’ means substantially more than 95% coverage. Maybe I’ll give you a list of choices for each interval, e.g.&nbsp;1%, 5%, 50%, 95%, 99% that are spread out enough that familiarity with the illustrations we use often in class will make it clear which is which.</p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>From the top, the first, third, and fourth have 95% coverage—the widest 3. The third and fourth have almost exactly 95% coverage.</p>
-<p><em>Explanation</em>. All 3 are wide enough to span at least 95% of draws from (i.e.&nbsp;probability mass of the) sampling distribution. The third and fourth, which are roughly the same, have almost exactly 95% coverage. The first is too wide for that—it spans almost all draws from the sampling distribution.</p>
-</div>
-</div>
 </div>
 </div>
 <div class="cell">
@@ -573,24 +533,6 @@ window.Quarto = {
 <div class="callout-body-container">
 <div class="callout-exercise">
 <p>Now suppose that you’ve been lazy, and instead of calling <span class="math inline">\(n\)</span> different people, you’ve just called one and reported their income <span class="math inline">\(n\)</span> times. That is, you’ve got ‘a sample of size n’, <span class="math inline">\(\tilde Y_1 \ldots \tilde Y_n\)</span>, with <span class="math inline">\(\tilde Y_1=Y_1, \tilde Y_2 = Y_1, \tilde Y_3 = Y_1, \ldots\)</span>. What is the variance of the mean of this ‘sample’, <span class="math inline">\(\frac1n\sum_{i=1}^n \tilde Y_i\)</span>? And if it’s not <span class="math inline">\(\sigma^2/n\)</span> like we got for the mean of <span class="math inline">\(Y_1 \ldots Y_n\)</span>, explain—with reference to the calculation above—why it is not. If there’s a line or lines where something different happens, say which; say what happens instead; and explain why.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>The variance of this ‘sample mean’ is <span class="math inline">\(\sigma^2\)</span>. The problem is in the second to last line. Note that if we replace each instance of <span class="math inline">\(Y_i\)</span> with <span class="math inline">\(\tilde Y_i=Y_1\)</span>, then <span class="math inline">\(Z_i=Y_1 - \E Y_1\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(Z_iZ_j=(Y_1-\E Y_1)^2\)</span> for all <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>. This means that <span class="math inline">\(\E Z_i Z_j=\sigma^2\)</span> always instead of only when <span class="math inline">\(i=j\)</span> and, as a result, <span class="math inline">\(\frac{1}{n^2}\sum_i\sum_j \E Z_i Z_j\)</span> is an average of <span class="math inline">\(n^2\)</span> copies of <span class="math inline">\(\sigma^2\)</span> — one for each pair <span class="math inline">\((i,j)\)</span>.</p>
 </div>
 </div>
 </div>
@@ -644,31 +586,6 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>The interval contains <span class="math inline">\(\theta\)</span> when <span class="math inline">\(\theta = 0.6\)</span> (the center plot) and when <span class="math inline">\(\theta = 0.7\)</span> (the right plot). It does not contain <span class="math inline">\(\theta\)</span> when <span class="math inline">\(\theta = 0.5\)</span> (the left plot).</p>
-<p>Looking at the sampling distributions:</p>
-<ul>
-<li>When <span class="math inline">\(\theta = 0.5\)</span>: Very few intervals would cover. The sampling distribution is centered at 0.5, but the intervals are centered at whatever <span class="math inline">\(\hat\theta\)</span> we get. Since <span class="math inline">\(\hat\theta\)</span> would typically be near 0.5, the intervals would usually be centered near 0.5, and they’d cover <span class="math inline">\(\theta = 0.5\)</span> about 95% of the time.</li>
-<li>When <span class="math inline">\(\theta = 0.6\)</span>: About 95% of intervals would cover since the interval width was calibrated for this case.</li>
-<li>When <span class="math inline">\(\theta = 0.7\)</span>: About 95% would cover. The sampling distribution is shifted right, but so would our estimates and thus our interval centers.</li>
-</ul>
-<p>The key insight is that coverage depends on where <span class="math inline">\(\hat\theta\)</span> falls relative to <span class="math inline">\(\theta\)</span>, not on where we’ve drawn a single fixed interval.</p>
-</div>
-</div>
-</div>
-</div>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -681,26 +598,6 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>If you wanted to have 95% coverage no matter which of these three <span class="math inline">\(\theta\)</span> values was true, would you need to make your interval wider, narrower, or keep it the same? Explain briefly.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>Keep it the same width (or very nearly).</p>
-<p>The width of a 95% confidence interval for a proportion is approximately <span class="math inline">\(1.96\sqrt{\theta(1-\theta)/n}\)</span>. This width is largest when <span class="math inline">\(\theta = 0.5\)</span> and decreases as <span class="math inline">\(\theta\)</span> moves toward 0 or 1. So the interval calibrated for <span class="math inline">\(\theta = 0.6\)</span> has width <span class="math inline">\(1.96\sqrt{0.24/n}\)</span>, while the “correct” width for <span class="math inline">\(\theta = 0.5\)</span> would be <span class="math inline">\(1.96\sqrt{0.25/n}\)</span> and for <span class="math inline">\(\theta = 0.7\)</span> would be <span class="math inline">\(1.96\sqrt{0.21/n}\)</span>.</p>
-<p>Since <span class="math inline">\(\sqrt{0.24} \approx 0.49\)</span> is between <span class="math inline">\(\sqrt{0.25} = 0.5\)</span> and <span class="math inline">\(\sqrt{0.21} \approx 0.46\)</span>, the intervals we’ve drawn are slightly too narrow for <span class="math inline">\(\theta = 0.5\)</span> and slightly too wide for <span class="math inline">\(\theta = 0.7\)</span>, but the differences are small. In practice, since we don’t know <span class="math inline">\(\theta\)</span>, we estimate the width using <span class="math inline">\(\hat\theta\)</span>, and this gives us close to 95% coverage across a wide range of true <span class="math inline">\(\theta\)</span> values.</p>
-</div>
 </div>
 </div>
 </div>
@@ -717,25 +614,6 @@ window.Quarto = {
 <div class="callout-exercise">
 <p>Suppose you wanted to achieve 99% coverage instead of 95%. By what factor would you need to multiply the interval width?</p>
 <p><em>Hint</em>: For a normal distribution, 95% of the probability is within <span class="math inline">\(\pm 1.96\)</span> standard deviations of the mean, and 99% is within <span class="math inline">\(\pm 2.58\)</span> standard deviations.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>You would multiply the width by <span class="math inline">\(2.58/1.96 \approx 1.32\)</span>.</p>
-<p>The 95% interval has width <span class="math inline">\(2 \times 1.96 \times \sigma\)</span> and the 99% interval has width <span class="math inline">\(2 \times 2.58 \times \sigma\)</span>, so the ratio is <span class="math inline">\(2.58/1.96 \approx 1.32\)</span>. The 99% interval is about 32% wider than the 95% interval.</p>
-</div>
 </div>
 </div>
 </div>
@@ -770,25 +648,6 @@ window.Quarto = {
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
 <p>If we take this approach to calibrating an interval estimator centered on <span class="math inline">\(\hat\theta_2\)</span>, what is the coverage probability of these intervals: roughly 95%, roughly 50%, or roughly 5%? What about the interval estimators centered on <span class="math inline">\(\hat\theta_3\)</span>?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-15" class="callout-15-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>95% for <span class="math inline">\(\hat\theta_2\)</span> and 50% for <span class="math inline">\(\hat\theta_3\)</span>.</p>
-<p><em>Explanation</em>. The ‘thing’ <code>do.thing</code> does is draw 10,000 samples from the bootstrap sampling distribution of our estimator, so these are the intervals <span class="math inline">\(\hat\theta \pm 1.96\hat\sigma\)</span> where <span class="math inline">\(\hat\sigma\)</span> is the standard deviation of the estimator’s bootstrap sampling distributions standard deviation. But we don’t need to know that to answer this question. All we need to know is that, whatever it does, we get histograms with the same widths as our estimators’ actual sampling distributions. That gives us 95% coverage for the unbiased estimator <span class="math inline">\(\hat\theta_2\)</span>, but only about 50% coverage for the estimator <span class="math inline">\(\hat\theta_3\)</span>, which has bias roughly equal to this interval’s width. Why 50%? Because when bias and interval width are equal, we get an interval that covers when our point estimate is on the right half of its sampling distribution and one that doesn’t when it’s on the left half.</p>
-</div>
 </div>
 </div>
 </div>
@@ -834,28 +693,6 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <p>This one was meant to be a little unfamiliar—something you couldn’t do on autopilot even if you had perfect recall of the lectures and homeworks. I will put something a bit like this on the exam, but it’ll be an extra credit problem and clearly identified as an extra credit problem. If want to prepare for it, you might want to think a little bit more about <span class="math inline">\(\hat\sigma_2\)</span> and its relationship to the usual estimate of the standard deviation of the sample mean <span class="math inline">\(\bar Y\)</span>, <span class="math inline">\(\hat\sigma = \sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \bar Y)^2 / n}\)</span>.</p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>What we’ve done is made <span class="math inline">\(\hat\sigma\)</span> the root-mean-squared distance of a draw <span class="math inline">\(\hat\theta^\star\)</span> from our estimator’s bootstrap sampling distribution from the sample’s mean <span class="math inline">\(\bar Y\)</span> instead of from the bootstrap sampling distribution’s mean. When we’re using the estimator <span class="math inline">\(\hat\theta_2\)</span>, <span class="math inline">\(\bar Y\)</span> <em>is</em> the bootstrap sampling distribution’s mean, so nothing changes. When we’re using the estimator <span class="math inline">\(\hat\theta_2\)</span>, it’s not—our draws <span class="math inline">\(\hat\theta^\star\)</span> tend to be lower—so the root-mean-squared distance to <span class="math inline">\(\bar Y\)</span> is bigger than the standard deviation of <span class="math inline">\(\hat\theta_2\)</span>. We might want to use these because, when we have a biased estimator, they get wider to account for the bias, which improves coverage.</p>
-<p><em>Detail I wouldn’t expect you to provide.</em> In fact, it gets the right amount wider. Think of a point estimate at the left edge of the middle 95% of the sampling distribution of <span class="math inline">\(\hat\theta_3\)</span>—about where the black interval ends. If you calibrated an interval estimate around it ‘the blue way’, it’d just touch the estimation target. You can see why by thinking about the analogy that motivates the bootstrap.</p>
-<p><em>About the Bootstrap</em>. When we use the bootstrap, we’re thinking of the relationship between a bootstrap sample and the sample as analogous to the relationship between the sample and population. So what we’re really doing here is calculating the root-mean-squared difference between a bootstrap version of our estimator, <span class="math inline">\(\hat\theta^\star\)</span>, to a bootstrap version of our estimation target, <span class="math inline">\(\theta^\star=\bar Y\)</span>—that’s the mean of the ‘population’ that our bootstrap sample is drawn from. When <span class="math inline">\(\hat\theta^\star\)</span> an an unbiased estimator of <span class="math inline">\(\theta^\star\)</span>, this is just its standard deviation. But when <span class="math inline">\(\hat\theta^*\)</span> is a <em>biased estimator</em> of <span class="math inline">\(\theta^\star\)</span>, it’s a bootstrap version of root-mean-squared-error. <span class="math display">\[
-\text{bootstrap rmse} = \sqrt{\text{bootstrap bias}^2 + \text{bootstrap sd}^2}.
-\]</span> Often, the bootstrap analogy works and the bootstrap bias and bootstrap sd are about the same as the actual bias and actual sd. This mean we’ll get 95% coverage from our biased estimator, as we’re inflating the width of our intervals just enough that that happens. That is not, however, necessarily the best way to take advantage of our ability to use the bootstrap to anticipate our estimator’s bias. Instead of using it to inflate the width of our intervals, we can use it to correct the bias of our estimator so we don’t have to inflate them. More on this later in the semester.</p>
-</div>
-</div>
 </div>
 </div>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
