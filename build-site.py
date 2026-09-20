@@ -341,8 +341,18 @@ def rendered_pages(book_dir):
   """
   manifest = book_dir / 'tlda-manifest.json'
   if not manifest.exists():
-    raise ValueError(f'{manifest} is absent, so nothing records which source produced '
-                     f'{book_dir} -- refusing to publish a tree whose currency cannot be checked')
+    # Seen for real on 2026-09-20: a render was rewriting `_book` and the
+    # manifest was absent for a few seconds, so this fired mid-rebuild rather
+    # than on a genuinely unrecorded tree. Both are refusals, but a reader who
+    # is told which one saves themselves a search.
+    written = datetime.datetime.fromtimestamp(book_dir.stat().st_mtime).astimezone()
+    raise SystemExit(
+        f'{manifest} is absent, so nothing records which source produced {book_dir} '
+        f'and its currency cannot be checked.\n'
+        f'{book_dir} was last written {written.isoformat(timespec="seconds")}. '
+        f'If that is seconds ago a render is probably still writing it, and this run '
+        f'was reading a half-built tree -- wait for the render and try again. '
+        f'If it is not, the book was produced without a manifest and needs re-rendering.')
   pages = json.loads(manifest.read_text())['pages']
   return {page['file']: page['source']['file']
           for page in pages if page.get('source', {}).get('file')}
