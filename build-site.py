@@ -288,35 +288,34 @@ def book_fingerprint(book_dir):
                 for path in book_dir.rglob('*') if path.is_file())
 
 
-def refuse_unsettled_book(book_dir, settle_seconds=2.0):
-  """Refuse to read a book that something is still writing.
+def refuse_if_book_moved(book_dir, before):
+  """Refuse if the book changed across this run's reads of it.
 
   Measured 2026-09-20 02:35: a render removed `tlda-manifest.json` while
   rewriting `_book`, and a run in that window saw a tree with no manifest. The
-  same window can produce a chapter that looks unbuilt or a page that looks
-  stale, and every one of those is a wrong verdict delivered confidently.
+  same window can present a chapter as unbuilt or a page as stale when it is
+  neither, and each is a wrong verdict delivered confidently.
 
-  This compares the tree to itself a moment later. It detects change, which is
-  not the same as proving quiescence -- a render paused longer than the window
-  still slips through -- but it catches the case that actually happens and it
-  fails towards refusing.
+  Anchored on the tree's own content across the span this run actually read it,
+  rather than on "did it move during an N-second sample". `publish-state` made
+  the argument for the difference and it is right: a window only catches a build
+  impatient enough to write inside it, while comparing the thing itself catches
+  any change at all, including a rebuild that produces the same revision.
   """
-  if not book_dir.is_dir():
+  if before is None or not book_dir.is_dir():
     return
-  before = book_fingerprint(book_dir)
-  time.sleep(settle_seconds)
   after = book_fingerprint(book_dir)
   if before == after:
     return
-  changed = {name for name, _, _ in after} ^ {name for name, _, _ in before}
-  moved = [name for name, mtime, size in set(after) - set(before) if name not in changed]
-  detail = sorted(changed)[:5] + moved[:5]
-  raise SystemExit(f'{book_dir} changed while this run was reading it, so something is '
-                   f'writing the book right now -- most likely a render.\n'
-                   f'Changed in a {settle_seconds:g}s window: '
-                   f'{", ".join(detail) if detail else "file contents"}.\n'
+  names = {name for name, _, _ in after} ^ {name for name, _, _ in before}
+  rewritten = [name for name, _, _ in sorted(set(after) - set(before)) if name not in names]
+  detail = sorted(names)[:5] + rewritten[:5]
+  raise SystemExit(f'{book_dir} changed while this run was reading it, so something was '
+                   f'writing the book -- most likely a render.\n'
+                   f'Changed: {", ".join(detail) if detail else "file contents"}.\n'
                    f'A tree read mid-write reports chapters as unbuilt and pages as stale '
-                   f'when they are neither. Wait for the render to finish and run again.')
+                   f'when they are neither, so nothing was published. Wait for the render '
+                   f'to finish and run again.')
 
 
 def publication_target():
@@ -603,7 +602,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   """
   global ACTIVE_SITE
   target = refuse_wrong_destination(site_dir)
-  refuse_unsettled_book(book_dir)
+  book_before = book_fingerprint(book_dir) if book_dir.is_dir() else None
   provenance = course_provenance(book_dir)
   # Read the schedule first: it is what decides which homework is not out yet,
   # and both the currency check and the assembled tree need that answer.
@@ -634,6 +633,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
     ACTIVE_SITE = stage_dir
     render_site(stage_dir, build_stamp_html(info))
+    refuse_if_book_moved(book_dir, book_before)
     withheld = remove_withheld_homework(stage_dir)
     # After withholding, so a homework that is not out yet is already gone and
     # is not reported twice.
