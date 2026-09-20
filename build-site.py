@@ -11,10 +11,14 @@ import yaml
 
 # The solution scan lives in publish_guard so the workflow can run the same
 # function over the committed tree without this file's dependencies.
-from publish_guard import pages_with_solutions
+from publish_guard import pages_with_solutions, read_allowlist
 
 COURSE_DIR = None
 SCHEDULE_SOURCE = None
+
+# The pages his ruling keeps published with their answers, read by this script
+# and by the workflow gate from the same file.
+ALLOWLIST_PATH = Path('publish-allow-solutions.txt')
 
 # Homework that has not come out yet, collected while the schedule is read.
 #
@@ -268,6 +272,54 @@ def git_output(args):
   return result.stdout.strip()
 
 
+# Where this project publishes
+#
+# The course declares its destination in `course-release.json`, which already
+# records where this project's artifacts go. Before that key existed the target
+# was whichever repository someone happened to be standing in, so pointing
+# publication somewhere else was a thing to remember rather than a thing that
+# held -- and Skip's instruction to publish to the test site while he reviews it
+# is exactly the kind of thing that gets forgotten at 8am on a class day.
+
+
+def publication_target():
+  contract = COURSE_DIR / 'course-release.json'
+  if not contract.exists():
+    return None
+  return json.loads(contract.read_text()).get('publication')
+
+
+def destination_repository(site_dir):
+  """`owner/name` of the repository `site_dir` sits in, or None if it is not one.
+
+  A scratch directory is not a repository and is not publishing, so it is not
+  checked -- the target only means something when the output is going somewhere
+  a push can reach.
+  """
+  result = subprocess.run(['git', '-C', str(site_dir), 'remote', 'get-url', 'origin'],
+                          capture_output=True, text=True)
+  if result.returncode != 0:
+    return None
+  url = result.stdout.strip().removesuffix('.git')
+  if ':' in url and '//' not in url:
+    url = url.split(':', 1)[1]
+  parts = [part for part in url.split('/') if part]
+  return '/'.join(parts[-2:]) if len(parts) >= 2 else None
+
+
+def refuse_wrong_destination(site_dir):
+  target = publication_target()
+  if not target or not target.get('repository'):
+    return None
+  destination = destination_repository(site_dir)
+  if destination is None or destination == target['repository']:
+    return target
+  raise SystemExit(f'{COURSE_DIR / "course-release.json"} publishes this project to '
+                   f'{target["repository"]}, but {site_dir} is in {destination}.\n'
+                   f'Publishing here would send it somewhere the course does not declare. '
+                   f'Change `publication.repository` if the destination has moved.')
+
+
 def declared_chapters():
   """Every `.qmd` the book declares, whether or not it was rendered."""
   config = yaml.safe_load((COURSE_DIR / '_quarto_book.yml').read_text())
@@ -503,6 +555,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   then copy -- had already destroyed the evidence by the time anything could look.
   """
   global ACTIVE_SITE
+  target = refuse_wrong_destination(site_dir)
   provenance = course_provenance(book_dir)
   # Read the schedule first: it is what decides which homework is not out yet,
   # and both the currency check and the assembled tree need that answer.
@@ -536,7 +589,11 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     withheld = remove_withheld_homework(stage_dir)
     # After withholding, so a homework that is not out yet is already gone and
     # is not reported twice.
-    refuse_published_solutions(stage_dir, set(allow_solutions))
+    # Same allowlist file the workflow gate reads, so the builder and the
+    # boundary cannot disagree about which pages his ruling keeps published.
+    # `--allow-solutions` adds to it rather than replacing it.
+    refuse_published_solutions(stage_dir,
+                               read_allowlist(ALLOWLIST_PATH) | set(allow_solutions))
 
     # A page this build withheld on purpose is not a file that went missing, so
     # it must not trip the deletion guard. Without this the two checks deadlock
@@ -561,7 +618,8 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   ACTIVE_SITE = site_dir
   # The operator's copy names every path. The published stamp and build-info.json
   # deliberately do not.
-  summary = [f'{site_dir}: course revision {provenance["revision"][:12]}']
+  destination = f' -> {target["repository"]}' if target else ''
+  summary = [f'{site_dir}{destination}: course revision {provenance["revision"][:12]}']
   for label, paths in (
       ('stale page(s) published', [row['page'] for row in stale]),
       ('declared chapter(s) not built', unbuilt),
