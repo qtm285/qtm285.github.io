@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>17&nbsp; The Standard Deviation is Standard – Prediction, Inference, and Causality</title>
+<title>Variance and Chebyshev’s Inequality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,83 +23,526 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../chapters/chapter-normal-approximation.html" rel="next">
-<link href="../homework/homework-random-variables-and-moments.html" rel="prev">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-c2285da70463f4438cb186c72dbe10d2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
-<link href="../site_libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
-<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
-<script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
-  "copy-button": false,
-  "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
-  "limit": 50,
-  "keyboard-shortcut": [
-    "f",
-    "/",
-    "s"
-  ],
-  "show-item-context": false,
-  "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
-    "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
-  }
-}</script>
-<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="chapter-standard-deviation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter-standard-deviation_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="chapter-standard-deviation_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="chapter-standard-deviation_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter-standard-deviation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="chapter-standard-deviation_files/libs/quarto-html/anchor.min.js"></script>
+<link href="chapter-standard-deviation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter-standard-deviation_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter-standard-deviation_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="chapter-standard-deviation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="chapter-standard-deviation_files/libs/bootstrap/bootstrap-a972a42294ee7f24f78cc846a459d063.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="chapter-standard-deviation_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="chapter-standard-deviation_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="chapter-standard-deviation_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
+<link href="chapter-standard-deviation_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
+<script src="chapter-standard-deviation_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="chapter-standard-deviation_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script type="module" src="chapter-standard-deviation_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="chapter-standard-deviation_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="chapter-standard-deviation_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="chapter-standard-deviation_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
-  window.MathJax = {
-    options : {
-      menuOptions: {
-        settings: {
-          assistiveMml: false,
-          collapsible: false,
-          explorer: false
-        }
-      }
-    },
-    loader: {load: ['[tex]/physics', '[tex]/unicode']},
-    tex: {packages: {'[+]': ['physics', 'unicode']}}
+// GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
+// shared/katex-base-macros.mjs. Do not edit here -- edit the source and
+// re-run the generator, or the two copies drift and the book renders
+// different mathematics from the app.
+//
+// Course-side entries below are NOT generated and NOT in the tlda
+// source: \rmse, \MSE, \class, \texttip, \mathtip, \unicode. Edit them here.
+
+// Universal KaTeX base macros — given to everybody, superseded by a paper's own
+// extracted definitions.
+//
+// KaTeX has NO `\usepackage` mechanism and ships only a fixed built-in macro set
+// (plus the mhchem contrib). So commands provided by the LaTeX `physics` package
+// — \qty, \norm, \abs, \grad, the \q… text helpers, etc. — are unknown to KaTeX
+// unless we define them. This file is that physics.sty → KaTeX port.
+//
+// It contains ONLY commands that live in a package (nothing a paper writes in its
+// own preamble). Paper-specific macros (\chis, \hgamma, \dzetase, …) come from the
+// build's `*-macros.json` extraction and override anything here via merge order:
+//   { ...baseMacros, ...extractedPaperMacros }
+//
+// Single source of truth: imported by the browser renderer (src/katexMacros.ts)
+// and the server-side chat linter (mcp-server/fleet-tools.mjs).
+
+// Bare is fixed, starred stretches. KaTeX has no \DeclarePairedDelimiter and no
+// \@ifstar, so the star is read here by peeking at the next token.
+function pairedDelimiter(open, close) {
+  return (ctx) => {
+    const next = ctx.future()
+    if (next && next.text === "*") {
+      ctx.popToken()
+      return `\\left${open}#1\\right${close}`
+    }
+    return `${open}#1${close}`
   }
+}
+
+// TeX source of a consumed group, spaces intact. Token texts alone lose
+// whitespace (the lexer skips it); the token offsets recover it exactly.
+// Falls back to joined texts if the lexer internals ever move.
+function groupSource(toks) {
+  const first = toks[toks.length - 1];
+  const last = toks[0];
+  const input = first && first.loc && first.loc.lexer && first.loc.lexer.input;
+  if (typeof input === 'string' && first.loc.start != null && last.loc.end != null) {
+    return input.slice(first.loc.start, last.loc.end);
+  }
+  return toks.map((t) => t.text).reverse().join('');
+}
+
+// Tip payload encoding for the hover script below. The tip TeX travels
+// in an htmlData attribute, whose values split on commas and take no
+// escapes, so raw TeX cannot ride there. Unpadded base64url carries
+// arbitrary TeX (dollars, commas, braces, backslashes) in [A-Za-z0-9-_].
+function tipEncode(str) {
+  const bytes = new TextEncoder().encode(str)
+  let bin = ''
+  bytes.forEach((b) => { bin += String.fromCharCode(b) })
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+}
+
+// The one trust rule for course math. KaTeX gates its html extension
+// (\htmlClass, \htmlData, \htmlId, \htmlStyle, \href, \url,
+// \includegraphics) on this callback; anything it rejects renders as
+// an unsupported-command error rather than HTML. Only the commands
+// our own macros emit are admitted, and only in the shapes they emit:
+// fragment classes, lone data-tip attributes, and data-tip plus a
+// data-mode of math (the mathtip marker). Strict is untouched.
+function tldaTrust(ctx) {
+  if (ctx.command === '\\htmlClass') {
+    return typeof ctx.class === 'string' &&
+      ctx.class.split(/\s+/).every((c) => c === 'fragment')
+  }
+  if (ctx.command === '\\htmlData') {
+    const attrs = ctx.attributes || {}
+    const keys = Object.keys(attrs)
+    // Numeric fragment grouping only: exactly that one attribute, digits
+    // only. Deliberately not a general data-* admission.
+    if (keys.length === 1 && keys[0] === 'data-fragment-index') {
+      return /^\d+$/.test(String(attrs['data-fragment-index']))
+    }
+    return keys.length <= 2 &&
+      ('data-tip' in attrs) &&
+      keys.every((k) => k === 'data-tip' || k === 'data-mode') &&
+      (!('data-mode' in attrs) || attrs['data-mode'] === 'math')
+  }
+  return false
+}
+window.__tldaKatexMacros = {
+  // physics: text spacers (\q… family)
+  "\\qq": "\\quad\\text{#1}\\quad",
+  // physics spells this one both ways and the long form is the one the course
+  // actually writes -- 358 uses against \qq's handful. It was absent here, so a
+  // course moving to KaTeX would have lost all 358 SILENTLY: an undefined macro
+  // renders as literal text with a clean console. Same expansion as \qq; they
+  // are the same command in physics.
+  "\\qqtext": "\\quad\\text{#1}\\quad",
+  "\\qwhere": "\\quad\\text{where}\\quad",
+  "\\qfor": "\\quad\\text{for}\\quad",
+  "\\qand": "\\quad\\text{and}\\quad",
+  "\\qor": "\\quad\\text{or}\\quad",
+  "\\qthen": "\\quad\\text{then}\\quad",
+  "\\qif": "\\quad\\text{if}\\quad",
+  "\\qelse": "\\quad\\text{else}\\quad",
+  "\\qotherwise": "\\quad\\text{otherwise}\\quad",
+  "\\qgiven": "\\quad\\text{given}\\quad",
+  "\\qall": "\\quad\\text{for all}\\quad",
+  "\\qsince": "\\quad\\text{since}\\quad",
+  "\\qlet": "\\quad\\text{let}\\quad",
+  "\\qimplies": "\\quad\\Rightarrow\\quad",
+  "\\qas": "\\quad\\text{as}\\quad",
+  "\\qc": ",",
+
+  // physics: delimiters & operators
+  // \qty dispatches on its delimiter: \qty(x) → (x), \qty[x] → [x], and
+  // \qty{x} keeps visible braces. The old "" no-op was exact for parens and
+  // brackets but dropped the curlies — 288 such sites in the course, rendering
+  // bare content where physics puts braces. KaTeX binds the following group to
+  // #1 once the expansion names it, so only the curly branch needs one.
+  "\\qty": (ctx) => {
+    const next = ctx.future();
+    if (next && next.text === '{') {
+      return '\\left\\{#1\\right\\}';
+    }
+    return '';
+  },
+  "\\abs": "\\left|#1\\right|",
+  "\\norm": "\\left\\|#1\\right\\|",
+  "\\eval": "\\left.#1\\right|",
+  "\\order": "\\mathcal{O}\\left(#1\\right)",
+  "\\dv": "\\frac{d#1}{d#2}",
+  "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+  "\\fdv": "\\frac{\\delta #1}{\\delta #2}",
+  "\\bra": "\\left\\langle #1\\right|",
+  "\\ket": "\\left|#1\\right\\rangle",
+  "\\braket": "\\left\\langle #1\\middle|#2\\right\\rangle",
+  "\\expval": "\\left\\langle #1\\right\\rangle",
+  "\\ev": "\\left\\langle #1\\right\\rangle",
+  "\\comm": "\\left[#1,\\,#2\\right]",
+  "\\acomm": "\\left\\{#1,\\,#2\\right\\}",
+  "\\vb": "\\mathbf{#1}",
+  "\\vbu": "\\hat{#1}",
+  "\\grad": "\\nabla",
+  "\\curl": "\\nabla\\times",
+  // physics defines \cross and this port had omitted it, so it would have gone
+  // silently literal at the renderer switch. Found by the used-minus-defined
+  // gate rather than by anyone noticing a formula.
+  "\\cross": "\\times",
+  // Course shorthands that arrive undefined: single-use spellings, each with one
+  // meaning in the tree. Defined here (not edited at the call sites) per the
+  // course owner's call — the call sites render literal-or-red without them,
+  // and these restore the evidently intended mathematics.
+  "\\rmse": "\\operatorname{rmse}",
+  "\\MSE": "\\operatorname{MSE}",
+  // reveal.js fragment wrapper. Emits a real fragment class so reveal
+  // steps the content on decks; in the book the span is inert (no
+  // reveal runtime, no fragment styling) and the content reads as
+  // before. Any other class name falls back to bare content.
+  "\\class": (ctx) => {
+    const args = ctx.consumeArgs(2);
+    const cls = groupSource(args[0]).trim();
+    if (cls === 'fragment') {
+      return '\\htmlClass{fragment}{' + groupSource(args[1]) + '}';
+    }
+    // fragment=N puts both cells of an aligned row in one reveal step:
+    // reveal groups fragments sharing a data-fragment-index. KaTeX emits
+    // htmlClass and htmlData on separate nested spans, so the index is
+    // carried here and the fragment class is added after render, below.
+    const grouped = cls.match(/^fragment=(\d+)$/);
+    if (grouped) {
+      return '\\htmlData{fragment-index=' + grouped[1] + '}{' + groupSource(args[1]) + '}';
+    }
+    ctx.pushTokens(args[1]);
+    return '';
+  },
+  "\\tr": "\\operatorname{Tr}",
+  "\\Tr": "\\operatorname{Tr}",
+  "\\rank": "\\operatorname{rank}",
+  "\\diag": "\\operatorname{diag}",
+  "\\sgn": "\\operatorname{sgn}",
+
+  // The course's \DeclareMathOperator declarations, as plain entries. KaTeX has
+  // no \DeclareMathOperator and fails silently on it -- literal text, no console
+  // error -- so the operators have to live here instead.
+  //
+  // Skip, 2026-09-12: "um just define \E to be \operatorname{E} no? ... like
+  // it's not that hard?" It is not. The alarming 2,577-call-site number came
+  // from costing a TeX-level rewrite, where \newcommand vs \renewcommand is
+  // fragile -- one line changed there killed eight working operators while the
+  // error count went from 1 to 0. Here each declaration is one string and no
+  // call site changes at all.
+  //
+  // \argmin is defined by stock KaTeX; a later key wins, which is what makes
+  // redefining it safe here and was NOT safe in the TeX route.
+  "\\E": "\\operatorname{E}",
+  "\\P": "\\operatorname{P}",
+  "\\V": "\\operatorname{V}",
+  "\\Var": "\\operatorname{V}",
+  "\\Cov": "\\operatorname{Cov}",
+  "\\CATE": "\\operatorname{CATE}",
+  "\\RMSE": "\\operatorname{RMSE}",
+  "\\sd": "\\operatorname{sd}",
+  "\\bias": "\\operatorname{bias}",
+  "\\argmin": "\\operatorname{argmin}",
+  "\\invlogit": "\\operatorname{logit}^{-1}",
+  "\\hVar": "\\widehat{\\operatorname{V}}",
+
+  // Course annotations: \explain{X}{tip} is \overset{\texttip{marker}{tip}}{X}
+  // (and \mathexplain the math-mode twin). The marker renders; the tip
+  // rides encoded in a data-tip attribute (plus a data-mode marker on the
+  // math-mode twin) for the hover script below,
+  // which typesets it with this same KaTeX. Encoding (not parsing)
+  // carries dollars, commas and braces through the attribute intact.
+  "\\texttip": (ctx) => {
+    const args = ctx.consumeArgs(2);
+    return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + '}{' + groupSource(args[0]) + '}';
+  },
+  "\\mathtip": (ctx) => {
+    const args = ctx.consumeArgs(2);
+    return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + ',mode=math}{' + groupSource(args[0]) + '}';
+  },
+  // MathJax's [tex]/unicode package. KaTeX has no
+  // \unicode: hex or decimal becomes the character, anything else renders as
+  // text rather than literal backslash-soup. (The course's `r square` /
+  // `r triangle` / `r circle` shapes are not valid \unicode args —
+  // decimal-or-hex only — and the real glyph mapping is a content call, not this.)
+  "\\unicode": (ctx) => {
+    const raw = groupSource(ctx.consumeArgs(1)[0]);
+    const m = raw.match(/^x([0-9a-fA-F]{1,6})$/) || raw.match(/^([0-9]{1,7})$/);
+    if (m) {
+      const cp = parseInt(m[1], m[0][0] === 'x' ? 16 : 10);
+      if (cp <= 0x10ffff) {
+        return String.fromCodePoint(cp);
+      }
+    }
+    return `\\text{${raw}}`;
+  },
+
+  // Paired delimiters. Skip, 2026-09-12: "i said \p \cb \sb".
+  //
+  // Bare is fixed, starred stretches -- he uses * for tacit \left\right
+  // consistently. KaTeX has no \DeclarePairedDelimiter and no \@ifstar, so the
+  // star is read by a function macro peeking at the next token. Verified
+  // against KaTeX 0.16.47, including the counterfactual that a BARE macro on
+  // tall content stays fixed, so the check is not merely detecting \frac.
+  "\\p": pairedDelimiter("(", ")"),
+  "\\sb": pairedDelimiter("[", "]"),
+  "\\cb": pairedDelimiter("\\{", "\\}"),
+}
+</script>
+<script>
+// Give KaTeX the course's macro set.
+//
+// pandoc emits its own render loop and hardcodes `var macros = []` inside it --
+// function-scoped, unreachable from config, and there is no Quarto option that
+// reaches it either. Quarto's own re-render helper (window.Quarto.typesetMath)
+// hardcodes the same empty array. So the macros cannot be delivered by
+// configuration on the plain-HTML path; the only seam is katex.render itself,
+// which both of those call.
+//
+// This wraps it. The capture listener below fires before pandoc's
+// document-level bubble listener even when registered later; katex.min.js
+// is deferred, so by DOMContentLoaded it has executed and window.katex exists.
+//
+// Deliberately does NOT override a caller that supplied its own non-empty macros
+// object -- that is somebody meaning something specific, and this is a default.
+// Trust gets the same treatment: a supplied value wins, otherwise
+// the course allowlist above. Strict is untouched.
+(function () {
+  function install() {
+    if (!window.katex || !window.katex.render || window.__tldaKatexShimmed) return
+    var base = window.__tldaKatexMacros
+    if (!base) { console.error('[tlda] katex macro set missing; math will render without it'); return }
+    var inner = window.katex.render.bind(window.katex)
+    // One shared object, because KaTeX writes \def definitions back into it and
+    // they are expected to persist across calls within a page.
+    var shared = {}
+    for (var k in base) shared[k] = base[k]
+    window.katex.render = function (tex, el, opts) {
+      opts = opts || {}
+      if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+      if (opts.trust == null) opts.trust = tldaTrust
+      const out = inner(tex, el, opts)
+      // Reveal reads data-fragment-index from the .fragment node itself,
+      // and KaTeX cannot put the class and the index on one span, so the
+      // class is added here -- scoped to the element just rendered.
+      if (el && el.querySelectorAll) {
+        el.querySelectorAll('[data-fragment-index]').forEach(function (n) {
+          if (/^\d+$/.test(n.getAttribute('data-fragment-index') || '')) n.classList.add('fragment')
+        })
+      }
+      return out
+    }
+    window.__tldaKatexShimmed = true
+  }
+  // Capture fires before pandoc's document-level bubble listener;
+  // immediate call if the document is already parsed.
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, true)
+  else install()
+})()
+</script>
+<style>
+/* Explanation hover tips (see the script below). No visual change to
+   the equation itself besides the help cursor on the marker. */
+[data-tip] { cursor: help; position: relative; z-index: 1; }
+#tlda-tip {
+  position: fixed; z-index: 60; display: none; max-width: min(34em, 90vw);
+  background: #fff; color: #222; border: 1px solid #888; border-radius: 6px;
+  padding: .5em .7em; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+  font-size: .85rem; line-height: 1.35; pointer-events: none;
+}
+#tlda-tip.on { display: block; }
+.tlda-tip-err { color: #c00; font-weight: bold; }
+</style>
+<script>
+// Explanation hovers. Marker spans carry the tip as encoded TeX in
+// data-tip (see \texttip above); this typesets it with the page KaTeX
+// on hover. Delegated listeners: no per-element binding, survives math
+// re-renders. Markers inside unrevealed fragments are skipped.
+(function () {
+  function markerOf(node) {
+    while (node && node !== document) {
+      if (node.getAttribute && node.getAttribute('data-tip') != null) return node
+      node = node.parentNode
+    }
+    return null
+  }
+  // Hidden markers never open: display:none ancestors (non-current slides)
+  // anywhere, plus any unrevealed ancestor fragment up to the reveal root —
+  // a visible inner fragment beneath a hidden outer stays hidden. The
+  // fragment walk runs only inside a reveal deck (book fragment spans never
+  // gain .visible, so it is deck-only there).
+  function isHidden(marker) {
+    if (marker.getClientRects().length === 0) return true
+    if (marker.closest && marker.closest('.reveal')) {
+      let node = marker.parentNode
+      while (node && node !== document) {
+        if (node.classList && node.classList.contains('reveal')) break
+        if (node.classList && node.classList.contains('fragment') && !node.classList.contains('visible')) return true
+        node = node.parentNode
+      }
+    }
+    return false
+  }
+  function tipDecode(s) {
+    const b64 = s.replace(/-/g, '+').replace(/_/g, '/')
+    const bin = atob(b64)
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
+    return new TextDecoder().decode(bytes)
+  }
+  function errSpan(text, detail) {
+    const err = document.createElement('span')
+    err.className = 'tlda-tip-err'
+    err.textContent = text
+    err.title = String(detail)
+    return err
+  }
+  // Mixed mode (texttip): text with $...$ math. Math mode (mathtip): the
+  // whole tip is math. Failed math shows an explicit error naming the
+  // failure; it never substitutes raw TeX silently.
+  function renderTip(tex, mode, box) {
+    box.textContent = ''
+    if (mode === 'math') {
+      const s = document.createElement('span')
+      box.appendChild(s)
+      try { window.katex.render(tex, s, {}) }
+      catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+      return
+    }
+    const parts = tex.split(/(?<!\\)\$/)
+    parts.forEach((seg, i) => {
+      if (seg === '') return
+      if (i % 2 === 1) {
+        const s = document.createElement('span')
+        box.appendChild(s)
+        try { window.katex.render(seg, s, {}) }
+        catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+      } else {
+        box.appendChild(document.createTextNode(seg))
+      }
+    })
+  }
+  var box = null
+  var current = null
+  function open(marker) {
+    if (!window.katex) return
+    if (isHidden(marker)) { close(); return }
+    const payload = marker.getAttribute('data-tip')
+    if (!payload) return
+    if (box && box.classList.contains('on') && current === marker) return
+    if (!box) {
+      box = document.createElement('div')
+      box.id = 'tlda-tip'
+      document.body.appendChild(box)
+    }
+    current = marker
+    try {
+      renderTip(tipDecode(payload), marker.getAttribute('data-mode'), box)
+    } catch (e) {
+      box.textContent = ''
+      box.appendChild(errSpan('(tip error)', (e && e.message) || e))
+    }
+    var r = marker.getBoundingClientRect()
+    box.classList.add('on')
+    var bw = box.offsetWidth, bh = box.offsetHeight
+    var x = Math.min(Math.max(8, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 8)
+    var y = r.top - bh - 10
+    if (y < 8) y = r.bottom + 10
+    box.style.left = x + 'px'
+    box.style.top = y + 'px'
+  }
+  function close() {
+    current = null
+    if (box) box.classList.remove('on')
+  }
+  document.addEventListener('mouseover', (e) => {
+    const m = markerOf(e.target)
+    if (m) open(m); else close()
+  })
+  document.addEventListener('mouseout', (e) => {
+    const m = markerOf(e.target)
+    if (m && !(e.relatedTarget && m.contains(e.relatedTarget))) close()
+  })
+  // Touch: a tap opens (and stays until tap elsewhere, scroll, or slide).
+  document.addEventListener('click', (e) => {
+    const m = markerOf(e.target)
+    if (m) open(m); else close()
+  })
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close() })
+  window.addEventListener('scroll', close, true)
+  window.addEventListener('resize', close)
+  // Reveal (a body-end synchronous script) exists by DOMContentLoaded, so
+  // the slide/fragment dismissal binds there rather than at parse time.
+  function bindReveal() {
+    if (!window.Reveal || !Reveal.on) return
+    Reveal.on('slidechanged', close)
+    Reveal.on('fragmenthidden', () => { if (current && isHidden(current)) close() })
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindReveal)
+  else bindReveal()
+})()
+
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="../katex-assets/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="../katex-assets/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -130,238 +573,15 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="fullcontent quarto-light">
 
-<div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
-<!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Prediction, Inference, and Causality</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Prediction, Inference, and Causality I</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">One-Sample Problems</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Random Variables and Moments</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-markov-chebyshev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-probability-review.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Probability Review</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-variance-and-sample-size.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Variance, Standard Deviation, and Sample Size</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../homework/homework-comparing-estimators.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Homework: Comparing Estimators</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#markovs-inequality" id="toc-markovs-inequality" class="nav-link active" data-scroll-target="#markovs-inequality">Markov’s Inequality</a></li>
-  <li><a href="#chebyshevs-inequality" id="toc-chebyshevs-inequality" class="nav-link" data-scroll-target="#chebyshevs-inequality">Chebyshev’s Inequality</a></li>
-  <li><a href="#chebyshevs-inequality-1" id="toc-chebyshevs-inequality-1" class="nav-link" data-scroll-target="#chebyshevs-inequality-1">Chebyshev’s Inequality</a></li>
-  <li><a href="#the-standard-deviation-is-standard" id="toc-the-standard-deviation-is-standard" class="nav-link" data-scroll-target="#the-standard-deviation-is-standard">The Standard Deviation is Standard</a></li>
-  <li><a href="#two-moments-give-you-an-interval" id="toc-two-moments-give-you-an-interval" class="nav-link" data-scroll-target="#two-moments-give-you-an-interval">Two Moments Give You an Interval</a></li>
-  <li><a href="#markovs-inequality-and-interval-estimation" id="toc-markovs-inequality-and-interval-estimation" class="nav-link" data-scroll-target="#markovs-inequality-and-interval-estimation">Markov’s Inequality and Interval Estimation</a></li>
-  <li><a href="#transition-honest-but-loose" id="toc-transition-honest-but-loose" class="nav-link" data-scroll-target="#transition-honest-but-loose">Transition: Honest but Loose</a></li>
-  </ul>
-</nav>
-    </div>
-<!-- main -->
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-one-sample.html">One-Sample Problems</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Standard Deviation is Standard</span></h1>
+<h1 class="title">Variance and Chebyshev’s Inequality</h1>
 </div>
 
 
@@ -378,63 +598,127 @@ window.Quarto = {
 </header>
 
 
-<!-- ============================================================================
-  CHAPTER 2 of the RV/Moments week. ASSEMBLED 2026-06-19 (Option 2).
-  Design: scratch/design-probability-week-rv-moments.md
-  Sources pulled (these MOVE up from homework into the lecture):
-    - homework-markov-chebyshev.qmd : Markov (statement + proof), Chebyshev (naming),
-      Markov-calibrated interval (the sqrt(20) construction).
-  NOTE: the pulled blocks are in ::: callout-exercise / callout-solution form.
-  KEEP THEM THAT WAY — they become IN-CLASS ("in the room") exercises + solutions
-  (Skip 2026-06-19: "if I thought it was a good exercise it's a good exercise").
-  Do NOT reframe into flat exposition; weave the framing/holes around them.
-  HOLES: the SD-is-standard narrative; the transition into normal approximation.
-============================================================================ -->
-<!-- HOLE (intro): open the chapter — we have two cheap moments now (mean, variance).
-     This chapter asks what just those two buy you, with NO assumption about the shape
-     of the distribution. Answer: Markov -> Chebyshev -> the standard deviation is the
-     universal yardstick for spread. -->
-<p>We now know how to calculate two summaries without finding a random variable’s full distribution. Its mean tells us where it is centered. Its variance tells us how far two independent realizations tend to be from each other.</p>
-<p>What can those two numbers guarantee if we know nothing about the distribution’s shape? More than you might expect. They cannot tell us the exact probability of every event, but they can limit how much probability can live far from the center. The standard deviation becomes a yardstick that works for every distribution with a finite variance.</p>
-<!-- MARKOV STAGING (in-room exercise, Skip 2026-06-19):
-     Step 1 — students DRAW the linear bound on the indicator (x/t above the step 1_{>=t}).
-              Picture first, before any algebra. (Depends on the indicator picture from Ch1.)
-     Step 2 — MONOTONICITY of expectation (proven in Ch1: a<=b pointwise => E[a]<=E[b])
-              cashes the picture: E[1_{>=t}(X)] <= E[X/t], i.e. P(X>=t) <= E[X]/t.
-     Markov = "draw the line, then apply the property you proved." -->
+<div class="hidden">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
+<p>$$</p>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>markov.town.full <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/vote-history-markov.csv"</span>)<span class="sc">$</span>history</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>markov.H <span class="ot">=</span> markov.town.full[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="variance-measures-spread" class="level1">
+<h1>Variance measures spread</h1>
+<p>In the last chapter, we calculated the mean of a total without finding its whole distribution. But the mean did not tell Markov’s inequality how tightly a sample average concentrates. We now turn to spread. Can we calculate it with the same table method?</p>
+<section id="variance-is-an-expectation" class="level2">
+<h2 class="anchored" data-anchor-id="variance-is-an-expectation">Variance is an expectation</h2>
+<p>Subtract the mean from a random variable <span class="math inline">Y</span>. The centered variable <span class="math inline">Z=Y-\mathop{\mathrm{E}}[Y]</span> records a signed distance from the mean. Its expectation is zero: <span class="math display">
+\mathop{\mathrm{E}}[Z]=\mathop{\mathrm{E}}[Y]-\mathop{\mathrm{E}}[Y]=0.
+</span> Positive and negative distances cancel. To measure their size, square them before averaging. The <em>variance</em> is the expected squared distance from the mean: <span class="math display">
+\operatorname{Var}(Y)=\mathop{\mathrm{E}}[(Y-\mathop{\mathrm{E}}[Y])^2]=\mathop{\mathrm{E}}[Z^2].
+</span> The picture follows twenty centered observations. The gray dots are their signed distances from the mean, so the green mean line starts at zero. A bar counts the fraction of observations at that distance. To square a distance, first square its length on its original side of zero, then fold the negative side over. The original dots and the barbells connecting them to their signed squares stay visible as the distribution changes. Teal tracks observations from the negative side; pink tracks those from the positive side. The final histogram counts squared distances, whose average is the variance.</p>
+<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-variance-transformation-step" data-labels="Data,Barbells,Signed-square distribution,Fold and average" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
 <div class="cell">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-standard-deviation_files/figure-html/sds-markov-picture-1.svg" class="img-fluid figure-img" alt="The tail indicator jumps from zero to one at t. The increasing line x divided by t lies above it for every nonnegative x."></p>
-<figcaption>For nonnegative x, the line x/t lies above the tail indicator. Monotonicity turns this pointwise picture into Markov’s probability bound.</figcaption>
+<div id="fig-variance-distances" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-distances-1.svg" id="fig-variance-distances" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<section id="markovs-inequality" class="level1">
-<h1>Markov’s Inequality</h1>
-<p>Markov’s inequality says that for a non-negative random variable <span class="math inline">\(X\)</span> and any <span class="math inline">\(t &gt; 0\)</span>, <span class="math display">\[
-P(X \ge t) \le \frac{\E[X]}{t}.
-\]</span></p>
-<p>The usual proof of Markov’s inequality is based on a few simple observations.</p>
-<ol type="1">
-<li>The expectation of the indicator variable <span class="math inline">\(1_{\ge t}(X)\)</span> is the probability that <span class="math inline">\(X\)</span> exceeds <span class="math inline">\(t\)</span>, <span class="math inline">\(P(X \ge t)\)</span>.</li>
-<li>If we have some function of <span class="math inline">\(u\)</span> that’s always larger than <span class="math inline">\(1_{\ge t}\)</span>, i.e., one satisfying <span class="math inline">\(u_t(x) \ge 1_{\ge t}(x)\)</span> for all <span class="math inline">\(x\)</span>, we know that <span class="math inline">\(\E[u_t(X)] \ge \E 1_{\ge t}(X)\)</span> for any random variable <span class="math inline">\(X\)</span>. If it’s always larger for non-negative <span class="math inline">\(x\)</span>, then <span class="math inline">\(\E[u_t(X)] \ge \E[1_{\ge t}(X)]\)</span> for any non-negative random variable <span class="math inline">\(X\)</span>.</li>
-<li>The function <span class="math inline">\(u_t(x)=x/t\)</span> is such a function.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
-</ol>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-signed-squares" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-signed-squares-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-signed-squares-1.svg" id="fig-variance-signed-squares" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-signed-squares-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-signed-histogram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-signed-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-signed-histogram-1.svg" id="fig-variance-signed-histogram" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-signed-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-folded-1.svg" id="fig-variance-folded" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Data.</strong> Each gray dot is one centered observation. The gray histogram counts them. Positive and negative distances cancel in their average, zero.</p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Barbells.</strong> Keep every data dot. Connect it to its signed square: for example, <span class="math inline">-1.5</span> moves to <span class="math inline">-2.25</span>, while <span class="math inline">0.5</span> moves to <span class="math inline">0.25</span>. The sign still records which side of the mean the observation came from.</p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Signed-square distribution.</strong> Replace the gray histogram by the distribution of the signed-square endpoints. The original dots and connecting barbells remain, so we can follow each observation through the transformation.</p>
+</div>
+<div class="fig-variance-transformation-step">
+<p><strong>Fold and average.</strong> Fold the negative histogram onto the positive side and stack their probabilities. The data dots and barbells remain as a reference. The new green line marks the average squared distance—the variance.</p>
+</div>
+<p>Squaring changes the units. The <em>standard deviation</em> takes us back to the units of <span class="math inline">Y</span>: <span class="math display">
+\operatorname{sd}(Y)=\sqrt{\operatorname{Var}(Y)}.
+</span></p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>Proving Markov’s Inequality
+<span class="screen-reader-only">Exercise</span>
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Prove Markov’s inequality.</p>
+<p>What happens to variance and standard deviation when we add the same number to every value? What happens when we multiply every value by two? By minus two?</p>
 </div>
 </div>
 </div>
@@ -450,69 +734,282 @@ P(X \ge t) \le \frac{\E[X]}{t}.
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>To see that <span class="math inline">\(u_t(x) = x/t \ge 1_{\ge t}(x)\)</span> for all <span class="math inline">\(x \ge 0\)</span>, consider separately the cases <span class="math inline">\(x \ge t\)</span> and <span class="math inline">\(x &lt; t\)</span>. If <span class="math inline">\(x \ge t\)</span>, then <span class="math inline">\(1_{\ge t}(x)=1\)</span> and <span class="math inline">\(x/t \ge 1\)</span>. If <span class="math inline">\(x &lt; t\)</span>, then <span class="math inline">\(1_{\ge t}(x)=0\)</span> and <span class="math inline">\(x/t \ge 0\)</span>. So <span class="math inline">\(u_t(x) \ge 1_{\ge t}(x)\)</span> for all non-negative <span class="math inline">\(x\)</span>. It follows that for any non-negative random variable <span class="math inline">\(X\)</span>, <span class="math display">\[
-P(X \ge t) = \E[1_{\ge t}(X)] \le \E[u_t(X)] = \E\sb*{\frac{X}{t}} = \frac{\E[X]}{t}.
-\]</span></p>
+<div class="callout-solution" data-collapse="true">
+<p>Adding a constant moves the mean by the same amount, leaving all distances unchanged. Multiplying by <span class="math inline">a</span> multiplies signed distances by <span class="math inline">a</span>, squared distances by <span class="math inline">a^2</span>, and standard deviation by <span class="math inline">|a|</span>: <span class="math display">
+\operatorname{Var}(aY+b)=a^2\operatorname{Var}(Y),
+\qquad
+\operatorname{sd}(aY+b)=|a|\operatorname{sd}(Y).
+</span></p>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="chebyshevs-inequality" class="level1">
-<h1>Chebyshev’s Inequality</h1>
-<!-- PULL/REFRAME: hw5 lines 67-75 derive Chebyshev by applying Markov to the square
-     |X-EX|^2; lines 153-159 name it. Combine into the lecture statement below. -->
 </section>
-<section id="chebyshevs-inequality-1" class="level1">
-<h1>Chebyshev’s Inequality</h1>
-<p>You’ve just derived a special case of Chebyshev’s inequality. The general statement: for any random variable <span class="math inline">\(X\)</span> with finite variance, <span class="math display">\[
-P(|X - \E[X]| \ge t) \le \frac{\Var[X]}{t^2}.
-\]</span> When you applied Markov’s inequality to <span class="math inline">\(|\hat\theta - \theta|^2\)</span> above, you got exactly this with <span class="math inline">\(X = \hat\theta\)</span>.</p>
+<section id="calculating-variance-from-two-calls" class="level1">
+<h1>Calculating variance from two calls</h1>
+<p>Remember how we calculated an expectation in the last chapter. We could average over the call sequences directly, or first collect them into response sequences. For a sum, linearity let us go further: calculate each response’s expectation separately, then add.</p>
+<p>Variance involves squares. We use the same tables, adding the quantities we want to average. Return to the population <span class="math inline">0,0,1,1</span>. Its mean is <span class="math inline">\mu=1/2</span>. For person <span class="math inline">j</span>, write <span class="math inline">z_j=y_j-\mu</span> for the centered response:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Person <span class="math inline">j</span></th>
+<th style="text-align: right;">Response <span class="math inline">y_j</span></th>
+<th style="text-align: right;">Centered response <span class="math inline">z_j</span></th>
+<th style="text-align: right;">Square <span class="math inline">z_j^2</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><span class="math inline">-1/2</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><span class="math inline">-1/2</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;"><span class="math inline">1/2</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;"><span class="math inline">1/2</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+</tr>
+</tbody>
+</table>
+<p>The centered population averages to zero. Its squares average to <span class="math inline">1/4</span>, the population variance. On call <span class="math inline">i</span> we select person <span class="math inline">J_i</span>, observe <span class="math inline">Y_i=y_{J_i}</span>, and obtain the centered response <span class="math inline">Z_i=z_{J_i}=Y_i-\mu</span>. Under either sampling scheme, each person has marginal probability <span class="math inline">1/4</span>, so <span class="math inline">\mathop{\mathrm{E}}[Z_i]=0</span> and <span class="math inline">\mathop{\mathrm{E}}[Z_i^2]=1/4</span>.</p>
+<p>For the variance of a two-call total, we must average a square of a sum: <span class="math display">
+(Z_1+Z_2)^2=Z_1^2+Z_1Z_2+Z_2Z_1+Z_2^2.
+</span> We already know the expectations of the squares. The middle terms use two calls together. Add their products to the joint table and calculate them in the same way.</p>
+<section id="with-replacement-products-factor" class="level2">
+<h2 class="anchored" data-anchor-id="with-replacement-products-factor">With replacement: products factor</h2>
+<p>Each of the sixteen call sequences has probability <span class="math inline">1/16</span>. As in the last chapter, group them into the four response sequences, each with probability <span class="math inline">1/4</span>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Responses <span class="math inline">(Y_1,Y_2)</span></th>
+<th>Centered responses <span class="math inline">(Z_1,Z_2)</span></th>
+<th style="text-align: right;">Probability</th>
+<th style="text-align: right;">Product <span class="math inline">Z_1Z_2</span></th>
+<th style="text-align: right;">Product times probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">(0,0)</span></td>
+<td><span class="math inline">(-1/2,-1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">(0,1)</span></td>
+<td><span class="math inline">(-1/2,1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/16</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">(1,0)</span></td>
+<td><span class="math inline">(1/2,-1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/16</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">(1,1)</span></td>
+<td><span class="math inline">(1/2,1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
+</tr>
+</tbody>
+</table>
+<p>Add the last column: <span class="math display">
+\mathop{\mathrm{E}}[Z_1Z_2]=\frac1{16}-\frac1{16}-\frac1{16}+\frac1{16}=0.
+</span> We can also obtain this expectation from the two marginal distributions. Each centered response is <span class="math inline">-1/2</span> or <span class="math inline">1/2</span> with probability <span class="math inline">1/2</span>. Every joint probability in the table is the product <span class="math inline">(1/2)(1/2)</span>. Substituting that product lets us factor the sum: <span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[Z_1Z_2]
+&amp;=\left(-\frac12\right)\left(-\frac12\right)\frac12\frac12
++\left(-\frac12\right)\left(\frac12\right)\frac12\frac12\\
+&amp;\quad+\left(\frac12\right)\left(-\frac12\right)\frac12\frac12
++\left(\frac12\right)\left(\frac12\right)\frac12\frac12\\
+&amp;=\left\{\left(-\frac12\right)\frac12+\left(\frac12\right)\frac12\right\}
+\left\{\left(-\frac12\right)\frac12+\left(\frac12\right)\frac12\right\}\\
+&amp;=\mathop{\mathrm{E}}[Z_1]\mathop{\mathrm{E}}[Z_2]=0.
+\end{aligned}
+</span> This time the calculation factors multiplicatively. The reason is the product structure of the joint probabilities—the property we called <strong>independence</strong> in the last chapter.</p>
+<p>The same reasoning works for any functions <span class="math inline">f</span> and <span class="math inline">g</span> of independent finite-valued random variables <span class="math inline">Y</span> and <span class="math inline">W</span>: <span class="math display">
+\begin{aligned}
+\mathop{\mathrm{E}}[f(Y)g(W)]
+&amp;=\sum_y\sum_w f(y)g(w)P(Y=y,W=w)\\
+&amp;=\sum_y\sum_w f(y)g(w)P(Y=y)P(W=w)\\
+&amp;=\left\{\sum_y f(y)P(Y=y)\right\}
+  \left\{\sum_w g(w)P(W=w)\right\}\\
+&amp;=\mathop{\mathrm{E}}[f(Y)]\mathop{\mathrm{E}}[g(W)].
+\end{aligned}
+</span> Conversely, if this holds for every <span class="math inline">f</span> and <span class="math inline">g</span>, choose indicators of individual values. The result is the factorization of joint probabilities that defines independence.</p>
 </section>
-<section id="the-standard-deviation-is-standard" class="level1">
-<h1>The Standard Deviation is Standard</h1>
-<!-- ============================================================================
-  HOLE (centerpiece narrative — upper half): a formula, sqrt(avg squared deviation),
-  becomes the UNIVERSAL YARDSTICK because Chebyshev says "k standard deviations away"
-  has probability <= 1/k^2 for EVERY distribution. That is what earns the word
-  "standard": k of them means the same quantified rarity everywhere. (The LOWER half —
-  Paley-Zygmund, sigma is no overstatement — is the homework.)
-============================================================================ -->
-<p>Write <span class="math inline">\(\sigma=\sd(X)\)</span>. If <span class="math inline">\(\sigma&gt;0\)</span>, then for every <span class="math inline">\(k&gt;0\)</span>, Chebyshev’s inequality says <span class="math display">\[
-P(|X-\E X|\ge k\sigma)\le \frac1{k^2}.
-\]</span> If <span class="math inline">\(\sigma=0\)</span>, then <span class="math inline">\(X=\E X\)</span> with probability one, so there is no positive departure from the mean to bound. The statement contains no density, no named distribution, and no approximation. Two standard deviations means a tail probability no larger than <span class="math inline">\(1/4\)</span> for every distribution with finite variance. Four standard deviations means no larger than <span class="math inline">\(1/16\)</span>. The exact tail probability changes from one distribution to another; the guarantee does not.</p>
-<p>That is what earns the word <em>standard</em>. Once distance is measured in units of <span class="math inline">\(\sigma\)</span>, the same number <span class="math inline">\(k\)</span> carries the same universal probability guarantee everywhere. The guarantee can be loose, but it cannot be false merely because the distribution has an unfamiliar shape.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="chapter-standard-deviation_files/figure-html/sds-chebyshev-picture-1.svg" class="img-fluid figure-img" alt="A bell-shaped density has both tails beyond two standard deviations shaded, illustrating that Chebyshev bounds their combined area."></p>
-<figcaption>A density-shaped illustration of Chebyshev’s bound. The bound is on the combined shaded tail area, not on the height of the curve.</figcaption>
-</figure>
+<section id="without-replacement-keep-the-joint-probabilities" class="level2">
+<h2 class="anchored" data-anchor-id="without-replacement-keep-the-joint-probabilities">Without replacement: keep the joint probabilities</h2>
+<p>Now change the sampling scheme. The population table stays exactly the same. So do the individual response distributions: each centered response still has expectation zero and square expectation <span class="math inline">1/4</span>.</p>
+<p>The joint probabilities change. Diagonal call sequences are impossible, and each of the twelve remaining sequences has probability <span class="math inline">1/12</span>. Grouping those calls into responses produces:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 16%">
+<col style="width: 22%">
+<col style="width: 22%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Responses <span class="math inline">(Y_1,Y_2)</span></th>
+<th>Centered responses <span class="math inline">(Z_1,Z_2)</span></th>
+<th style="text-align: right;">Probability</th>
+<th style="text-align: right;">Product <span class="math inline">Z_1Z_2</span></th>
+<th style="text-align: right;">Product times probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">(0,0)</span></td>
+<td><span class="math inline">(-1/2,-1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/6</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/24</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">(0,1)</span></td>
+<td><span class="math inline">(-1/2,1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/3</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/12</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">(1,0)</span></td>
+<td><span class="math inline">(1/2,-1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/3</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/12</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">(1,1)</span></td>
+<td><span class="math inline">(1/2,1/2)</span></td>
+<td style="text-align: right;"><span class="math inline">1/6</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/24</span></td>
+</tr>
+</tbody>
+</table>
+<p>The probabilities no longer factor into the two marginal probabilities. We can still average the product, but must use these joint probabilities: <span class="math display">
+\mathop{\mathrm{E}}[Z_1Z_2]=\frac1{24}-\frac1{12}-\frac1{12}+\frac1{24}=-\frac1{12}.
+</span> That is not <span class="math inline">\mathop{\mathrm{E}}[Z_1]\mathop{\mathrm{E}}[Z_2]=0</span>. Opposite-sign pairs are more likely than same-sign pairs, so the negative products outweigh the positive ones.</p>
+<p>Linearity has not failed. For the total, it still implies <span class="math display">
+\begin{aligned}
+\operatorname{Var}(Y_1+Y_2)
+&amp;=\mathop{\mathrm{E}}[(Z_1+Z_2)^2]\\
+&amp;=\mathop{\mathrm{E}}[Z_1^2]+\mathop{\mathrm{E}}[Z_1Z_2]+\mathop{\mathrm{E}}[Z_2Z_1]+\mathop{\mathrm{E}}[Z_2^2]\\
+&amp;=\frac14-\frac1{12}-\frac1{12}+\frac14=\frac13.
+\end{aligned}
+</span> With replacement the same expansion has two zero middle terms, so the total’s variance is <span class="math inline">1/2</span>. The negative product expectations explain the smaller spread without replacement.</p>
+</section>
+</section>
+<section id="variance-of-a-sample-mean" class="level1">
+<h1>Variance of a sample mean</h1>
+<p>Remember the bookkeeping for the three-call distribution: four layers of call sequences, then response sequences, then totals. For variance, we need not build that whole distribution. However many calls we take, squaring a sum produces products involving at most two calls. Linearity lets us average those terms one at a time.</p>
+<p>Let the population have <span class="math inline">m</span> responses <span class="math inline">y_1\ldots y_m</span>, mean <span class="math inline">\mu</span>, and variance <span class="math inline">\sigma^2</span>. Write <span class="math inline">z_j=y_j-\mu</span> for each centered population response and <span class="math inline">Z_i=Y_i-\mu</span> for the centered response on call <span class="math inline">i</span>. Uniform sampling implies <span class="math display">
+\mathop{\mathrm{E}}[Z_i]=\frac1m\sum_{j=1}^m z_j=0,
+\qquad
+\mathop{\mathrm{E}}[Z_i^2]=\frac1m\sum_{j=1}^m z_j^2=\sigma^2.
+</span> For <span class="math inline">n</span> calls, the sample mean is <span class="math inline">\hat\mu=n^{-1}\sum_iY_i</span>. It is unbiased, as we proved in the last chapter, so its variance is the expected square of <span class="math inline">\hat\mu-\mu=n^{-1}\sum_iZ_i</span>.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Squaring sums
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Here’s a version where I’m very explicit: it’s a product of two copies of <span class="math inline">(a+b)</span>: one <span class="pink">pink</span> and one <span class="teal">teal</span>. <span class="math display">
+\begin{aligned}
+(a+b)^2
+&amp;=\textcolor{#EF476F}{(a+b)}\textcolor{#118AB2}{(a+b)}\\
+&amp;=\textcolor{#EF476F}{a}\textcolor{#118AB2}{a}
++\textcolor{#EF476F}{a}\textcolor{#118AB2}{b}
++\textcolor{#EF476F}{b}\textcolor{#118AB2}{a}
++\textcolor{#EF476F}{b}\textcolor{#118AB2}{b}\\
+&amp;=a^2+2ab+b^2.
+\end{aligned}
+</span> It helps to count out the terms in our <span class="pink">pink copy</span> using <span class="math inline">i</span> and in our <span class="teal">teal copy</span> using <span class="math inline">j</span>. When we multiply out our sums, we get a product term for each pair of terms in the sum. <span class="math display">
+\left(\sum_{i=1}^nZ_i\right)^2
+=\textcolor{#EF476F}{\sum_{i=1}^nZ_i}\textcolor{#118AB2}{\sum_{j=1}^nZ_j}
+=\textcolor{#EF476F}{\sum_{i=1}^n}\textcolor{#118AB2}{\sum_{j=1}^n}
+\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j}.
+</span></p>
 </div>
 </div>
 </div>
-</section>
-<section id="two-moments-give-you-an-interval" class="level1">
-<h1>Two Moments Give You an Interval</h1>
-<!-- PULL/REFRAME: hw5 "Markov's Inequality and Interval Estimation" — the sqrt(20)
-     construction: applying Markov/Chebyshev to |theta_hat - theta|^2 yields a 95%
-     interval theta_hat +/- sqrt(20)*sigma with NO normality assumption. SHOW this
-     construction in class (the deeper coverage comparison stays in homework). -->
-</section>
-<section id="markovs-inequality-and-interval-estimation" class="level1">
-<h1>Markov’s Inequality and Interval Estimation</h1>
-<p>So far, when we’ve calibrated interval estimates using our estimator’s standard deviation, we’ve relied on normal approximation. In effect, we’ve been using a formula for <span class="math inline">\(P(\lvert\hat\theta - \theta\rvert \le \epsilon)\)</span> that’s accurate when <span class="math inline">\(\hat\theta\)</span> has a normal distribution and close enough when its distribution is close enough to normal. In this problem, we’re going to think about doing without this reliance on approximate normality.</p>
-<p>Let’s consider <span class="math inline">\(\hat\theta\)</span>, an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>, so the normal approximation to the distribution of <span class="math inline">\(\hat\theta-\theta\)</span> has the density <span class="math inline">\(f_{0,\sigma}(x)\)</span> below.</p>
-<p><span class="math display">\[
-P\p*{|\hat\theta - \theta| \le \epsilon}
-\approx \int_{-\epsilon}^{\epsilon} f_{0,\sigma}(x) dx
-\qfor f_{0, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-x^2/(2\sigma^2)}
-\]</span></p>
-<p>The reason we’ve been talking about interval estimators of the form <span class="math inline">\(\hat\theta \pm 1.96 \sigma\)</span> is that, if this approximation were perfect, these interval estimators would have 95% coverage. That is, it’d be true that <span class="math inline">\(P(|\hat\theta-\theta| \le 1.96 \sigma) = .95\)</span>. And if the approximation is pretty good, we should still expect coverage close to that. But suppose we’re not confident that it is. Markov’s inequality allows us to calibrate interval estimates in terms of our estimator’s standard deviation <em>without any caveats</em> about its sampling distribution being approximately normal. Let’s give it a shot.</p>
-<div id="exr-sds-markov-interval" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 23.1</strong></span> &nbsp;</p>
+<p>Expanding the square and using linearity, under either sampling scheme, <span class="math display">
+\begin{aligned}
+\operatorname{Var}(\hat\mu)
+&amp;=\frac1{n^2}\sum_{i=1}^n\sum_{j=1}^n\mathop{\mathrm{E}}[Z_iZ_j]\\
+&amp;=\frac1{n^2}\left\{n\sigma^2+\sum_{i\ne j}\mathop{\mathrm{E}}[Z_iZ_j]\right\}.
+\end{aligned}
+</span> There are <span class="math inline">n</span> square terms, one for each call, and <span class="math inline">n(n-1)</span> ordered products of distinct calls. Each product expectation uses only the joint distribution of those two calls. Under uniform sampling with replacement, every distinct pair has the same joint distribution; the same is true under uniform sampling without replacement. In either case, one two-call calculation supplies every cross term. We have lost the product shortcut without replacement, not the saving from linearity.</p>
+<section id="independent-calls" class="level2">
+<h2 class="anchored" data-anchor-id="independent-calls">Independent calls</h2>
+<p>With replacement, distinct calls are independent. The factorization just proved and the zero mean of each centered response imply <span class="math display">
+\mathop{\mathrm{E}}[Z_iZ_j]=\mathop{\mathrm{E}}[Z_i]\mathop{\mathrm{E}}[Z_j]=0 \qquad (i\ne j).
+</span> For equal indices, the product is a square, whose expectation is <span class="math inline">\sigma^2</span>. Substitute these two cases into the variance calculation. Keep the two copies of the sum separate when squaring: <span class="math display">
+\begin{aligned}
+\operatorname{Var}(\hat\mu)
+&amp;\overset{\texttip{\small{\text{?}}}{center}}{=}\mathop{\mathrm{E}}\left[\left(\frac1n\sum_{i=1}^nZ_i\right)^2\right]\\
+&amp;\overset{\texttip{\small{\text{?}}}{square}}{=}\frac1{n^2}\mathop{\mathrm{E}}\left[
+\textcolor{#EF476F}{\sum_{i=1}^nZ_i}
+\textcolor{#118AB2}{\sum_{j=1}^nZ_j}\right]\\
+&amp;\overset{\texttip{\small{\text{?}}}{linearity}}{=}\frac1{n^2}\textcolor{#EF476F}{\sum_{i=1}^n}
+\textcolor{#118AB2}{\sum_{j=1}^n}\mathop{\mathrm{E}}[\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j}]\\
+&amp;\overset{\texttip{\small{\text{?}}}{equal indices produce a square; distinct independent centered terms have product expectation zero}}{=}\frac1{n^2}\textcolor{#EF476F}{\sum_{i=1}^n}
+\textcolor{#118AB2}{\sum_{j=1}^n}
+\begin{cases}
+\sigma^2 &amp; \textcolor{#EF476F}{i}=\textcolor{#118AB2}{j},\\
+0 &amp; \textcolor{#EF476F}{i}\ne\textcolor{#118AB2}{j}
+\end{cases}\\
+&amp;\overset{\texttip{\small{\text{?}}}{only the equal-index terms remain}}{=}\frac1{n^2}\sum_{i=1}^n\mathop{\mathrm{E}}[Z_i^2]\\
+&amp;\overset{\texttip{\small{\text{?}}}{there are n such terms, each with expectation equal to the population variance}}{=}\frac{n\sigma^2}{n^2}
+=\frac{\sigma^2}{n}.
+\end{aligned}
+</span> Only the <span class="math inline">n</span> equal-index terms remain. Taking a square root, <span class="math display">
+\operatorname{sd}(\hat\mu)=\frac{\sigma}{\sqrt n}.
+</span> Quadrupling the sample size halves the standard deviation.</p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -523,23 +1020,7 @@ P\p*{|\hat\theta - \theta| \le \epsilon}
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Let <span class="math inline">\(\hat\theta\)</span> be an unbiased estimator of <span class="math inline">\(\theta\)</span> with standard deviation <span class="math inline">\(\sigma\)</span>. By applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, find a <em>lower bound</em> on <span class="math inline">\(P(|\hat\theta-\theta| \le t\sigma)\)</span> as a function of <span class="math inline">\(t\)</span>. For what choice of <span class="math inline">\(t\)</span> is this bound equal to <span class="math inline">\(.95\)</span>? Explain how you can use this to get an interval estimate <span class="math inline">\(\hat\theta \pm t\sigma\)</span> with a coverage probability of at least 95%.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>From Upper Bounds to Lower Bounds.
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>If you have an upper bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span>, then you have a lower bound on <span class="math inline">\(P(X \le \epsilon)\)</span>. <span class="math inline">\(P(X \le \epsilon)=1-P(X &gt; \epsilon)\)</span> because <span class="math inline">\(X &gt; \epsilon\)</span> if and only if it is not the case that <span class="math inline">\(X \le \epsilon\)</span>, so if <span class="math inline">\(P(X &gt; \epsilon) \le u\)</span>, then <span class="math inline">\(P(X \le \epsilon) = 1-P(X &gt; \epsilon) \ge 1-u\)</span>. And if you’re troubled that Markov’s inequality says <span class="math inline">\(\ge\)</span> instead of <span class="math inline">\(&gt;\)</span>, don’t be. You have a bound on <span class="math inline">\(P(X &gt; \epsilon)\)</span> too. <span class="math inline">\(P(X &gt; \epsilon) \le  P(X\ge \epsilon)\)</span> because <span class="math inline">\(X \ge \epsilon\)</span> whenever <span class="math inline">\(X &gt; \epsilon\)</span>.</p>
+<p>For binary responses with frequency <span class="math inline">\theta</span>, calculate the population variance by averaging the two possible squared distances from <span class="math inline">\theta</span>. Then find the variance of the sample frequency under independent uniform sampling.</p>
 </div>
 </div>
 </div>
@@ -555,30 +1036,711 @@ P\p*{|\hat\theta - \theta| \le \epsilon}
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="callout-solution">
-<p>Applying Markov’s inequality to <span class="math inline">\(|\hat\theta-\theta|^2\)</span>, which has mean-square <span class="math inline">\(\sigma^2\)</span> because <span class="math inline">\(\hat\theta\)</span> is unbiased, for <span class="math inline">\(\epsilon = (t\sigma)^2\)</span> gives</p>
-<p><span class="math display">\[
-P(|\hat\theta-\theta|^2 \ge (t\sigma)^2) \le \frac{\E[(\hat\theta-\theta)^2]}{(t\sigma)^2} = \frac{\sigma^2}{(t\sigma)^2} = \frac{1}{t^2}.
-\]</span> The probability that <span class="math inline">\(|\hat\theta-\theta| &gt; t\sigma\)</span> is also no larger than <span class="math inline">\(1/t^2\)</span> because this happens <em>only if</em> <span class="math inline">\(|\hat\theta-\theta|^2 \ge (t\sigma)^2\)</span>. And it follows that the probability that <span class="math inline">\(|\hat\theta-\theta| \le t\sigma\)</span> is at least <span class="math inline">\(1-1/t^2\)</span>.</p>
-<p>To find the value of <span class="math inline">\(t\)</span> that makes this lower bound equal to <span class="math inline">\(.95\)</span>, we solve <span class="math inline">\(1-1/t^2=.95\)</span> to find <span class="math inline">\(t=\sqrt{1/(1-.95)}= \sqrt{20} \approx 4.5\)</span>. And because <span class="math inline">\(\hat\theta \in [\theta - t\sigma, \theta + t\sigma]\)</span> if (and only if) <span class="math inline">\(|\hat\theta-\theta| \le t\sigma\)</span>, it follows that this interval has a coverage probability of at least <span class="math inline">\(.95\)</span>.</p>
+<div class="callout-solution" data-collapse="true">
+<p>The population variance is <span class="math display">
+\sigma^2=(0-\theta)^2(1-\theta)+(1-\theta)^2\theta
+=\theta(1-\theta).
+</span> Therefore <span class="math inline">\operatorname{Var}(\hat\theta)=\theta(1-\theta)/n</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Now sample independently from a population with responses <span class="math inline">0,1,2,5</span>. Calculate its mean and variance, then the standard deviation of the sample mean for <span class="math inline">n=4</span> and <span class="math inline">n=16</span>. The responses are no longer binary. Which parts of the preceding calculation change?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<p>The mean is <span class="math inline">2</span> and the variance is <span class="math inline">(4+1+0+9)/4=3.5</span>. The sample mean’s standard deviation is <span class="math inline">\sqrt{3.5/n}</span>: approximately <span class="math inline">0.935</span> for four draws and <span class="math inline">0.468</span> for sixteen. The population variance changes; the independent-sampling calculation is the same.</p>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="transition-honest-but-loose" class="level1">
-<h1>Transition: Honest but Loose</h1>
-<!-- ============================================================================
-  HOLE (transition into normal approximation): Chebyshev's interval is honest but
-  LOOSE (sqrt(20) ~ 4.5 sigma vs the 1.96 you're used to) — that is the price of
-  assuming nothing about the shape. Next chapter: spend the SAME two moments plus a
-  little theory (the CLT — proof deferred to the post-exam "when you're older"
-  enrichment) and the interval gets sharp. Sets up the normal-approximation chapter.
-============================================================================ -->
-<p>The guaranteed 95% interval reaches roughly <span class="math inline">\(4.5\)</span> standard deviations in both directions. The exact Binomial calculation students already know usually gives a much narrower interval. That comparison creates the next question: can we keep the cheap mean-and-standard-deviation calculation without paying for a uselessly wide universal guarantee?</p>
-<p>Normal approximation answers yes. It keeps the same two moments and adds information about shape. The resulting interval is approximate rather than universal, but it is close to the sharp exact Binomial interval. The next chapter puts all three answers beside each other: exact, guaranteed, and approximate.</p>
-
-
+</section>
+<section id="dependence-changes-the-spread" class="level1">
+<h1>Dependence changes the spread</h1>
+<p>The three sampling schemes in the part opening use the same population. Each draw position has the same marginal mean and variance. That explains their common center. The schemes differ in how the draws occur together.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>moments.population <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">40</span>), <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">60</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>moments.sizes <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">80</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>moments.sampling.distribution <span class="ot">=</span> <span class="cf">function</span>(n, mechanism) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (mechanism <span class="sc">==</span> <span class="st">"With replacement"</span>) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    estimate <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    probability <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>n, n, <span class="fu">mean</span>(moments.population))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (mechanism <span class="sc">==</span> <span class="st">"Without replacement"</span>) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    estimate <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>n)<span class="sc">/</span>n</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    probability <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>n, <span class="fu">sum</span>(moments.population),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">length</span>(moments.population)<span class="sc">-</span><span class="fu">sum</span>(moments.population), n)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (mechanism <span class="sc">==</span> <span class="st">"Random-start cycle"</span>) {</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    draws <span class="ot">=</span> <span class="fu">sapply</span>(<span class="fu">seq_along</span>(moments.population), <span class="cf">function</span>(start) {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      positions <span class="ot">=</span> ((start<span class="dv">-1</span><span class="sc">+</span><span class="dv">0</span><span class="sc">:</span>(n<span class="dv">-1</span>)) <span class="sc">%%</span> <span class="fu">length</span>(moments.population))<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>(moments.population[positions])</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    counts <span class="ot">=</span> <span class="fu">table</span>(draws)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    estimate <span class="ot">=</span> <span class="fu">as.numeric</span>(<span class="fu">names</span>(counts))</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    probability <span class="ot">=</span> <span class="fu">as.numeric</span>(counts)<span class="sc">/</span><span class="fu">length</span>(moments.population)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="fu">stop</span>(<span class="st">"Unknown sampling mechanism: "</span>, mechanism)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">n=</span>n, <span class="at">mechanism=</span>mechanism, <span class="at">estimate=</span>estimate, <span class="at">probability=</span>probability)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>moments.sampling <span class="ot">=</span> purrr<span class="sc">::</span><span class="fu">map_dfr</span>(moments.sizes, <span class="cf">function</span>(n)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map_dfr</span>(<span class="fu">c</span>(<span class="st">"With replacement"</span>, <span class="st">"Without replacement"</span>, <span class="st">"Random-start cycle"</span>),</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(mechanism) <span class="fu">moments.sampling.distribution</span>(n, mechanism)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-sampling-return" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-sampling-return-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-sampling-return-1.svg" id="fig-variance-sampling-return" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-sampling-return-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Compare the with- and without-replacement distributions at the same sample size. Which step in the variance calculation is different? And how?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<p>The step that replaced the distinct-index products by zero used independence. All the other steps still hold. The without-replacement distribution is narrower, so the total contribution of those products must be negative.</p>
+</div>
+</div>
+</div>
+</div>
+<p>The random-start cycle illustrates the other direction. Consecutive people in this ordered population often have the same response. At the sample sizes shown, their cross terms contribute positively, and the sample average has more variation than under independent sampling. Its individual draws are still uniform.</p>
+</section>
+<section id="chebyshevs-inequality" class="level1">
+<h1>Chebyshev’s inequality</h1>
+<p>We now know the sample mean’s variance. How can we turn it into a calibration guarantee?</p>
+<section id="follow-the-same-event" class="level2">
+<h2 class="anchored" data-anchor-id="follow-the-same-event">Follow the same event</h2>
+<p>Let <span class="math inline">Z=X-\mathop{\mathrm{E}}[X]</span>. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold; the same observations are above <span class="math inline">t^2</span>: <span class="math display">
+|X-\mathop{\mathrm{E}}[X]|\ge t
+\quad\Longleftrightarrow\quad
+|Z|\ge t
+\quad\Longleftrightarrow\quad
+Z^2\ge t^2.
+</span></p>
+<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-chebyshev-transformation-step" data-labels="Signed distances,Fold,Square" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-signed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-signed-1.svg" id="fig-chebyshev-signed" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-folded-1.svg" id="fig-chebyshev-folded" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-squared" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-squared-1.svg" id="fig-chebyshev-squared" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Signed distances.</strong> Select observations at distance at least <span class="math inline">t</span> from zero, on either side. These are precisely the observations at distance at least <span class="math inline">t</span> from the original mean.</p>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Fold.</strong> Replace each distance by its absolute value. The selected observations are now at or above <span class="math inline">t</span>; their number and probability have not changed.</p>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Square.</strong> Square every absolute distance and square the threshold. The same observations are now at or above <span class="math inline">t^2</span>, and every value is nonnegative.</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-exercise-hint" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chebyshev-exercise-hint-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-exercise-hint-1.svg" id="fig-chebyshev-exercise-hint" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-exercise-hint-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>For <span class="math inline">t&gt;0</span>, use Markov’s inequality to prove <span class="math display">
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
+\le\frac{\operatorname{Var}(X)}{t^2}.
+</span></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The squared distance is nonnegative. What is its expectation?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<p>The first two pictures change the event’s description without changing which observations it contains. Then the indicator-to-ramp comparison bounds its probability:</p>
+<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-chebyshev-area-comparison-step" data-labels="Indicator average,Ramp average" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-indicator" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-indicator-1.svg" id="fig-chebyshev-indicator" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="math inline">P(Z^2\ge t^2)=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]</span>.</p>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-ramp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-ramp-1.svg" id="fig-chebyshev-ramp" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5
+</figcaption>
+</figure>
+</div>
+<div class="fig-chebyshev-area-comparison-step">
+<p><strong>Indicator average.</strong> Assign one to each selected observation and zero to every other observation. The average is the probability we want to bound.</p>
+</div>
+<div class="fig-chebyshev-area-comparison-step">
+<p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average.</p>
+</div>
+<p><span class="math display">
+\begin{aligned}
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
+&amp;=P(Z^2\ge t^2)\\
+&amp;=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\\
+&amp;\le\mathop{\mathrm{E}}[Z^2/t^2]\\
+&amp;=\frac{\operatorname{Var}(X)}{t^2}.
+\end{aligned}
+</span> This is <strong>Chebyshev’s inequality</strong>. It is Markov’s inequality applied to squared distance.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="calibrating-intervals-with-variance" class="level1">
+<h1>Calibrating intervals with variance</h1>
+<section id="standard-deviation-is-standard" class="level2">
+<h2 class="anchored" data-anchor-id="standard-deviation-is-standard">Standard deviation is standard</h2>
+<p>Write <span class="math inline">s=\operatorname{sd}(X)&gt;0</span>. Measure distance in multiples of <span class="math inline">s</span>. Chebyshev implies <span class="math display">
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
+</span> The bound has the same form for every distribution with finite variance. If <span class="math inline">s=0</span>, <span class="math inline">X</span> equals its expectation with probability one and there is no deviation to bound.</p>
+<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>How many standard deviations are sufficient to include at least <span class="math inline">95\%</span> of a distribution’s probability? Use this to construct an interval around an unbiased estimator that covers its target with probability at least <span class="math inline">95\%</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<p>Solve <span class="math inline">1/k^2=0.05</span>: <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span> with known standard deviation <span class="math inline">s</span>, the interval <span class="math display">
+[\hat\mu-\sqrt{20}s,\;\hat\mu+\sqrt{20}s]
+</span> covers <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">s=\sigma/\sqrt n</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="compare-the-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="compare-the-intervals">Compare the intervals</h2>
+<p>Return to the bootstrap/binomial and Markov intervals from <a href="chapter-random-variables-and-moments.qmd">Means and Markov’s Inequality</a>. The new Chebyshev intervals remain wider than the binomial calibration, but they shrink as sample size grows. Squaring the centered estimator exposed the information the direct Markov calculation missed.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mcal.theta <span class="ot">=</span> <span class="fl">0.7</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mcal.n <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>, <span class="dv">320</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mcal.p <span class="ot">=</span> <span class="fu">lapply</span>(<span class="fu">setNames</span>(mcal.n, mcal.n), <span class="cf">function</span>(nn)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">100</span>, nn, mcal.theta)<span class="sc">/</span>nn))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mcal.lo <span class="ot">=</span> mcal.hi <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mcal.lo<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="fl">0.025</span><span class="sc">*</span>p)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mcal.hi<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="dv">1</span><span class="fl">-0.025</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(mcal.p)) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  nn <span class="ot">=</span> <span class="fu">as.numeric</span>(nm)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  hw.plugin <span class="ot">=</span> <span class="fu">vapply</span>(mcal.p[[nm]], <span class="cf">function</span>(pp) <span class="fu">width_binom</span>(pp, nn)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>hw.plugin</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">+</span>hw.plugin</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(mcal.p)) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  nn <span class="ot">=</span> <span class="fu">as.numeric</span>(nm)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  hw.cheb <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span><span class="fu">sqrt</span>(mcal.theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>mcal.theta)<span class="sc">/</span>nn)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>chebyshev[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>hw.cheb</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>chebyshev[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">+</span>hw.cheb</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>The samples, positions, and scales are unchanged. The additional <span class="teal">blue intervals</span> use Chebyshev; pink still marks bootstrap/binomial calibration and dark marks Markov.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">20 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">80 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">320 observations</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-calibration-20" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-20-1.svg" id="fig-variance-calibration-20" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-calibration-80" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-80-1.svg" id="fig-variance-calibration-80" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-calibration-320" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-320-1.svg" id="fig-variance-calibration-320" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>In this comparison we know the population and use its true variance. The guarantee just proved depends on that variance; replacing it with an estimate requires another argument. The bootstrap/binomial intervals use the observed frequency in their calibration, as in the preceding chapter.</p>
+<p>Now compare exact and guaranteed intervals under sampling without replacement. The estimator has a different variance, so the Chebyshev interval changes. The probability argument does not: independence was used to calculate a variance, not in Chebyshev’s inequality itself.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>intcomp.n <span class="ot">=</span> <span class="dv">625</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>intcomp.theta <span class="ot">=</span> <span class="fl">0.7</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>intcomp.m <span class="ot">=</span> <span class="dv">2000</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>intcomp.values <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>intcomp.n)<span class="sc">/</span>intcomp.n</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>intcomp.samples.binom <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">10000</span>, intcomp.n, intcomp.theta)<span class="sc">/</span>intcomp.n)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>intcomp.samples.hyper <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rhyper</span>(<span class="dv">10000</span>, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)<span class="sc">/</span>intcomp.n)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.binom <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.n, intcomp.theta)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.hyper <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>intcomp.error <span class="ot">=</span> intcomp.values<span class="sc">-</span>intcomp.theta</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.binom))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.hyper))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.binom <span class="ot">=</span> <span class="fu">width_binom</span>(intcomp.theta, intcomp.n)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.hyper <span class="ot">=</span> <span class="fu">width_hyper</span>(intcomp.theta, intcomp.n, intcomp.m)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.binom</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Here the <span class="pink">pink interval</span> is calibrated from the exact sampling distribution, and the <span class="teal">blue interval</span> uses Chebyshev. Both use the same estimate on each row.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">With replacement</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Without replacement</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-exact-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-binomial-1.svg" id="fig-variance-exact-binomial" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-exact-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-hypergeometric-1.svg" id="fig-variance-exact-hypergeometric" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;10
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="how-narrow-can-the-right-interval-be" class="level2">
+<h2 class="anchored" data-anchor-id="how-narrow-can-the-right-interval-be">How narrow can the right interval be?</h2>
+<p>Chebyshev tells us a width that is sufficient. Can the moments also tell us how narrow a calibrated interval could be? Almost: we need two summaries of the absolute error, its mean and its mean square.</p>
+<p>Return to the two distance pictures. They follow the same centered observations <span class="math inline">Z</span>. The green lines mark two different averages: the average of <span class="math inline">|Z|</span> and the average of <span class="math inline">Z^2</span>.</p>
+<div id="fig-two-moment-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-two-moment-comparison-step" data-labels="Average absolute distance,Average squared distance" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-moment-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-lower-absolute-moment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-lower-absolute-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-lower-absolute-moment-1.svg" id="fig-lower-absolute-moment" class="img-fluid figure-img" data-ref-parent="fig-two-moment-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lower-absolute-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-lower-second-moment" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-lower-second-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-lower-second-moment-1.svg" id="fig-lower-second-moment" class="img-fluid figure-img" data-ref-parent="fig-two-moment-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lower-second-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11
+</figcaption>
+</figure>
+</div>
+<div class="fig-two-moment-comparison-step">
+<p><strong>Average absolute distance.</strong></p>
+</div>
+<div class="fig-two-moment-comparison-step">
+<p><strong>Average squared distance.</strong></p>
+</div>
+<p>For a nonnegative random variable <span class="math inline">A</span> with finite, positive second moment, the <strong>Paley–Zygmund inequality</strong> implies, for <span class="math inline">0\le t&lt;\mathop{\mathrm{E}}[A]</span>, <span class="math display">
+P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
+</span> Apply it to <span class="math inline">A=|\hat\mu-\mu|</span>. For an unbiased estimator, <span class="math inline">\mathop{\mathrm{E}}[A^2]</span> is its variance; <span class="math inline">\mathop{\mathrm{E}}[A]</span> is its mean absolute error. This supplies lower control of the tail using those two moments. A derivation using the indicator split and Cauchy–Schwarz is in <a href="https://stat.cmu.edu/~cshalizi/sml/21/lectures/05/lecture-05.html#backup-lower-bounds-on-deviation-probabilities">these probability-bound notes</a>.</p>
+<p>For <span class="math inline">95\%</span> coverage, any symmetric half-width smaller than <span class="math display">
+\max\left\{0,\;\mathop{\mathrm{E}}[A]-\sqrt{0.05\mathop{\mathrm{E}}[A^2]}\right\}
+</span> misses more than <span class="math inline">5\%</span> of the probability. The dashed yellow intervals below mark that lower control of width; they are not another proposed <span class="math inline">95\%</span> interval. The exact calibrated widths lie between it and the sufficient Chebyshev widths.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>intcomp.mae.binom <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.binom)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>intcomp.mae.hyper <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.hyper)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.binom <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.binom<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.binom)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.hyper <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.hyper<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.hyper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">With replacement</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Without replacement</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-lower-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-binomial-1.svg" id="fig-variance-lower-binomial" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-lower-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-hypergeometric-1.svg" id="fig-variance-lower-hypergeometric" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;13
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Why is variance alone insufficient? Consider an error that is zero with probability <span class="math inline">95\%</span> and is <span class="math inline">-L</span> or <span class="math inline">L</span> with probability <span class="math inline">2.5\%</span> each. Its mean is zero and its variance is <span class="math inline">0.05L^2</span>. Push the two tails farther out: the variance grows, but the interval containing just zero still contains <span class="math inline">95\%</span> of the probability. A large variance need not mean that most errors are large.</p>
+<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-rare-large-errors-step" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-mode="steps">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-rare-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-rare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-1-1.svg" id="fig-variance-rare-1" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-rare-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-rare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-2-1.svg" id="fig-variance-rare-2" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-rare-4" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-rare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-4-1.svg" id="fig-variance-rare-4" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-variance-rare-8" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-variance-rare-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-8-1.svg" id="fig-variance-rare-8" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14
+</figcaption>
+</figure>
+</div>
+<div class="fig-rare-large-errors-step">
+<p><strong>Tail distance 1.</strong></p>
+</div>
+<div class="fig-rare-large-errors-step">
+<p><strong>Tail distance 2.</strong></p>
+</div>
+<div class="fig-rare-large-errors-step">
+<p><strong>Tail distance 4.</strong></p>
+</div>
+<div class="fig-rare-large-errors-step">
+<p><strong>Tail distance 8.</strong></p>
+</div>
+<p>The lower-bound comparison therefore uses the mean absolute error as well as the variance. The binomial and hypergeometric examples let us calculate both, and place the exact calibrated width between the lower control and the sufficient Chebyshev width.</p>
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
@@ -804,21 +1966,17 @@ setTimeout(function() {
 </script>
 
 </section>
-<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1"><p>If you’re not convinced, sketch the two functions on the same axes. Sketching usually helps.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
 </section>
 
-</main> <!-- /main -->
+</main>
+<!-- /main column -->
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
-window._ojs.paths.runtimeToDoc = "../../chapters";
-window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../../..";
 window._ojs.paths.docToRoot = "..";
 window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
@@ -1262,18 +2420,6 @@ window._ojs.runtime.interpretFromScriptTags();
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="../homework/homework-random-variables-and-moments.html" class="pagination-link" aria-label="Homework — Random Variables, Moments, and the Standard Deviation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../chapters/chapter-normal-approximation.html" class="pagination-link" aria-label="Normal Approximation">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
