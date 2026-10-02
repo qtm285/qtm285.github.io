@@ -407,10 +407,10 @@ def stale_pages(book_dir):
   """
   stale = []
   selected = set(declared_chapters())
-  for page, source in sorted(rendered_pages(book_dir).items()):
+  for page, source in sorted(rendered_output_pages(book_dir).items()):
     if source not in selected:
       continue
-    source_path, page_path = COURSE_DIR / source, book_dir / page
+    source_path, page_path = COURSE_DIR / source, book_dir.parent / page
     if not source_path.exists() or not page_path.exists():
       continue
     # A homework that has not come out is not published, so how current its
@@ -427,8 +427,43 @@ def stale_pages(book_dir):
 
 
 def unbuilt_chapters(book_dir):
-  built = set(rendered_pages(book_dir).values())
+  built = {source for page, source in rendered_output_pages(book_dir).items()
+           if (book_dir.parent / page).is_file()}
   return [chapter for chapter in declared_chapters() if chapter not in built]
+
+
+def rendered_output_pages(book_dir):
+  pages = {str(Path(book_dir.name) / page): source
+           for page, source in rendered_pages(book_dir).items()}
+  page_info = book_dir.parent / 'page-info.json'
+  if page_info.is_file():
+    for page in json.loads(page_info.read_text()):
+      source, output = page.get('source', {}).get('file'), page.get('file')
+      if source and output:
+        pages[output] = source
+  return pages
+
+
+def prune_rolling_book(book_dir, copied_book, required):
+  manifest_path = copied_book / 'tlda-manifest.json'
+  manifest = json.loads(manifest_path.read_text())
+  kept = [page for page in manifest['pages']
+          if page.get('source', {}).get('file') in required]
+  selected_outputs = {page['file'] for page in kept}
+  recorded_outputs = {page['file'] for page in manifest['pages']}
+  for path in copied_book.rglob('*.html'):
+    rel = path.relative_to(copied_book)
+    course_page = (str(rel) in recorded_outputs
+                   or (COURSE_DIR / rel.with_suffix('.qmd')).is_file()
+                   or rel.parts[0] in {'chapters', 'homework', 'decks'})
+    if not course_page or str(rel) in selected_outputs:
+      continue
+    path.unlink()
+    support = path.with_name(f'{path.stem}_files')
+    if support.is_dir():
+      shutil.rmtree(support)
+  manifest['pages'] = kept
+  manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
 
 
 def stamp(mtime):
@@ -632,17 +667,10 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   try:
     stage_dir.mkdir(parents=True)
     shutil.copytree(book_dir, stage_dir / 'book')
-    for page, source in rendered_pages(book_dir).items():
-      if source in required:
-        continue
-      target = stage_dir / 'book' / page
-      target.unlink(missing_ok=True)
-      support = target.with_name(f'{target.stem}_files')
-      if support.is_dir():
-        shutil.rmtree(support)
     generator = COURSE_DIR / 'bin' / 'generate-index.py'
     selection = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE) if generator.is_file() else None
     if selection is not None:
+      prune_rolling_book(book_dir, stage_dir / 'book', required)
       for archive in (stage_dir / 'book' / 'homework' / 'handouts').glob('*-handout.zip'):
         if str(archive.relative_to(stage_dir / 'book')) not in selection['assets']:
           archive.unlink()
