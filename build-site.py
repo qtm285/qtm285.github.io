@@ -3,6 +3,7 @@ import argparse
 import datetime
 import json
 import re
+import runpy
 import shutil
 import subprocess
 import sys
@@ -16,6 +17,7 @@ from publish_guard import pages_with_solutions, read_allowlist
 
 COURSE_DIR = None
 SCHEDULE_SOURCE = None
+SOURCE_REVISION = None
 
 # The pages his ruling keeps published with their answers, read by this script
 # and by the workflow gate from the same file.
@@ -107,10 +109,10 @@ def book_href(target):
   Deliberately does not call `rendered()`: building the syllabus should not
   trigger a chapter render as a side effect.
   """
-  if not target.endswith('.qmd'):
-    return target
-  href = Path('book') / Path(target).with_suffix('.html')
-  return href if (ACTIVE_SITE / href).exists() else None
+  href = Path('book') / (Path(target).with_suffix('.html') if target.endswith('.qmd') else Path(target))
+  if not (ACTIVE_SITE / href).is_file():
+    raise ValueError(f'scheduled material is absent from this build: {target} (expected {ACTIVE_SITE / href})')
+  return href
 
 
 def cell_html(cell, linked):
@@ -175,10 +177,12 @@ def parse_schedule(today):
     raise ValueError(f'{SCHEDULE_SOURCE}: no "## Schedule" section to read')
   # Stop at the next top-level heading, or the practices and policies further
   # down the page contribute their own `###` headings as empty sections.
-  body = re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0]
+  generator = COURSE_DIR / 'bin' / 'generate-index.py'
+  body = (runpy.run_path(str(generator))['render_region'](today=today, year=year)
+          if generator.is_file() else
+          re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0])
 
   sections, heading, note, rows = [], None, None, []
-  homework_paths = declared_homeworks()
   through_first_exam = False
   for line in body.splitlines():
     if through_first_exam:
@@ -213,12 +217,7 @@ def parse_schedule(today):
       main = main[:match.start()]
     homework = []
     for marker in markers:
-      for event in re.finditer(r'\bHW\s+(?P<number>[−-]?\d+)\s+(?P<action>due|out)\b', marker):
-        number, action = event.group('number'), event.group('action')
-        if action == 'due':
-          homework.append(f'HW {number} due')
-        else:
-          homework.append(homework_html(next(homework_paths), number, linked=date <= today))
+      homework.append(cell_html(marker, linked=date <= today))
     rows.append({'date': meeting_date(cells[0]),
                  'homework_date': dated_time(cells[0], '11:59'),
                  'session': cell_html(main, linked=date <= today),
@@ -239,7 +238,8 @@ def parse_schedule(today):
 
 
 def schedule_html(today=None):
-  today = today or datetime.date.today()
+  from zoneinfo import ZoneInfo
+  today = today or datetime.datetime.now(ZoneInfo('America/New_York')).date()
   out = []
   for heading, note, rows in parse_schedule(today):
     out.append(f'<h5> {heading} </h5>\n')
@@ -358,6 +358,10 @@ def refuse_wrong_destination(site_dir):
 
 def declared_chapters():
   """Every `.qmd` the book declares, whether or not it was rendered."""
+  generator = COURSE_DIR / 'bin' / 'generate-index.py'
+  if generator.is_file():
+    spec = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE)
+    return spec['documents'] + spec['decks']
   config = yaml.safe_load((COURSE_DIR / '_quarto_book.yml').read_text())
   result = []
   for part in config['book']['chapters']:
@@ -402,7 +406,10 @@ def stale_pages(book_dir):
   without changing it raises the alarm -- which is the safe direction.
   """
   stale = []
+  selected = set(declared_chapters())
   for page, source in sorted(rendered_pages(book_dir).items()):
+    if source not in selected:
+      continue
     source_path, page_path = COURSE_DIR / source, book_dir / page
     if not source_path.exists() or not page_path.exists():
       continue
@@ -430,6 +437,12 @@ def stamp(mtime):
 
 def course_provenance(book_dir):
   """Where the course source stood when this site was assembled."""
+  if SOURCE_REVISION is not None:
+    if not re.fullmatch(r'[0-9a-f]{40}', SOURCE_REVISION):
+      raise ValueError('--source-revision must be the exact accepted tlda source revision (40 lowercase hex characters)')
+    return {'kind': 'tlda', 'checkout': str(COURSE_DIR),
+            'revision': SOURCE_REVISION, 'committedAt': None,
+            'subject': 'accepted tlda source snapshot', 'uncommittedSources': []}
   sources = sorted(set(rendered_pages(book_dir).values()) | {'index.qmd', '_quarto_book.yml'})
   present = [source for source in sources if (COURSE_DIR / source).exists()]
   uncommitted = [line[3:] for line in
@@ -606,7 +619,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   provenance = course_provenance(book_dir)
   # Read the schedule first: it is what decides which homework is not out yet,
   # and both the currency check and the assembled tree need that answer.
-  parse_schedule(datetime.date.today())
+  required = set(declared_chapters())
   stale = refuse_stale(book_dir, stale_ok)
   unbuilt = refuse_unbuilt(book_dir, incomplete_ok)
 
@@ -619,11 +632,27 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
   try:
     stage_dir.mkdir(parents=True)
     shutil.copytree(book_dir, stage_dir / 'book')
+    for page, source in rendered_pages(book_dir).items():
+      if source in required:
+        continue
+      target = stage_dir / 'book' / page
+      target.unlink(missing_ok=True)
+      support = target.with_name(f'{target.stem}_files')
+      if support.is_dir():
+        shutil.rmtree(support)
+    generator = COURSE_DIR / 'bin' / 'generate-index.py'
+    selection = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE) if generator.is_file() else None
+    if selection is not None:
+      for archive in (stage_dir / 'book' / 'homework' / 'handouts').glob('*-handout.zip'):
+        if str(archive.relative_to(stage_dir / 'book')) not in selection['assets']:
+          archive.unlink()
     for name in ('css', 'images'):
       shutil.copytree(Path('site-assets') / name, stage_dir / name)
     deck_dir = stage_dir / 'decks'
     deck_dir.mkdir()
     for html in (book_dir.parent / 'decks').glob('*-slides.html'):
+      if selection is not None and f'decks/{html.stem}.qmd' not in selection['decks']:
+        continue
       shutil.copy2(html, deck_dir / html.name)
       support = html.with_name(f'{html.stem}_files')
       if support.exists():
@@ -683,6 +712,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--course-dir', type=Path, required=True)
+  parser.add_argument('--source-revision', help='exact accepted tlda source revision for a materialized snapshot')
   parser.add_argument('--book-dir', type=Path)
   parser.add_argument('--site-dir', type=Path, default=Path('_site'))
   parser.add_argument('--stale-ok', action='store_true',
@@ -698,6 +728,7 @@ if __name__ == '__main__':
                       help='remove every published file absent from this build')
   args = parser.parse_args()
   COURSE_DIR = args.course_dir.resolve()
+  SOURCE_REVISION = args.source_revision
   SCHEDULE_SOURCE = COURSE_DIR / 'index.qmd'
   ACTIVE_SITE = args.site_dir
   if args.book_dir:
