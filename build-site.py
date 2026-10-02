@@ -127,7 +127,7 @@ def cell_html(cell, linked):
       return text
     result = f'<a href="{href}">{text}</a>'
     target = Path(match.group('target'))
-    deck = Path('decks') / f'{target.stem}-slides.html'
+    deck = Path('book/decks') / f'{target.stem}-slides.html'
     if target.parts and target.parts[0] == 'chapters' and (ACTIVE_SITE / deck).exists():
       result += f' <a href="{deck}">[slides]</a>'
     return result
@@ -441,6 +441,10 @@ def rendered_output_pages(book_dir):
       source, output = page.get('source', {}).get('file'), page.get('file')
       if source and output:
         pages[output] = source
+        if source.startswith('decks/'):
+          linear = Path(output).with_name(f'{Path(output).stem}-linear.html')
+          if (book_dir.parent / linear).is_file():
+            pages[str(linear)] = source
   return pages
 
 
@@ -450,6 +454,10 @@ def prune_rolling_book(book_dir, copied_book, required):
   kept = [page for page in manifest['pages']
           if page.get('source', {}).get('file') in required]
   selected_outputs = {page['file'] for page in kept}
+  for output, source in rendered_output_pages(book_dir).items():
+    path = Path(output)
+    if source in required and path.parts[0] == book_dir.name:
+      selected_outputs.add(str(Path(*path.parts[1:])))
   recorded_outputs = {page['file'] for page in manifest['pages']}
   for path in copied_book.rglob('*.html'):
     rel = path.relative_to(copied_book)
@@ -676,16 +684,6 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
           archive.unlink()
     for name in ('css', 'images'):
       shutil.copytree(Path('site-assets') / name, stage_dir / name)
-    deck_dir = stage_dir / 'decks'
-    deck_dir.mkdir()
-    for html in (book_dir.parent / 'decks').glob('*-slides.html'):
-      if selection is not None and f'decks/{html.stem}.qmd' not in selection['decks']:
-        continue
-      shutil.copy2(html, deck_dir / html.name)
-      support = html.with_name(f'{html.stem}_files')
-      if support.exists():
-        shutil.copytree(support, deck_dir / support.name)
-
     info = build_info(book_dir, provenance, stale, unbuilt, [])
     (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
     ACTIVE_SITE = stage_dir
