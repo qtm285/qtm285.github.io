@@ -114,6 +114,13 @@ def book_href(target, unbuilt=()):
   """
   if target.endswith('.qmd') and target in unbuilt:
     return None
+  # Schedule page links are spelled .html while membership is declared .qmd;
+  # resolve through the declared form, mirroring the generator's mapping
+  # order (solutions first, then generic).
+  if target.endswith('-solutions.html') and target.removesuffix('-solutions.html') + '.solutions.qmd' in unbuilt:
+    return None
+  if target.endswith('.html') and str(Path(target).with_suffix('.qmd')) in unbuilt:
+    return None
   href = Path('book') / (Path(target).with_suffix('.html') if target.endswith('.qmd') else Path(target))
   if not (ACTIVE_SITE / href).is_file():
     raise ValueError(f'scheduled material is absent from this build: {target} (expected {ACTIVE_SITE / href})')
@@ -684,6 +691,15 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     selection = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE) if generator.is_file() else None
     if selection is not None:
       prune_rolling_book(book_dir, stage_dir / 'book', required)
+      # The linked book carries built pages, not committed assets: stage each
+      # selected asset the book lacks straight from course source. No
+      # existence guard here — the generator validated the source, so an
+      # absent source fails loudly at the copy instead of skipping silently.
+      for asset in selection['assets']:
+        staged = stage_dir / 'book' / asset
+        if not staged.is_file():
+          staged.parent.mkdir(parents=True, exist_ok=True)
+          shutil.copy2(COURSE_DIR / asset, staged)
       for archive in (stage_dir / 'book' / 'homework' / 'handouts').glob('*-handout.zip'):
         if str(archive.relative_to(stage_dir / 'book')) not in selection['assets']:
           archive.unlink()
