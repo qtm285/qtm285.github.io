@@ -99,29 +99,34 @@ def meeting_date(cell):
   return cell.replace(' ', '&nbsp;')
 
 
-def book_href(target):
+def book_href(target, unbuilt=()):
   """Where something the schedule points at actually is on the site, or None.
 
   A `.qmd` is a chapter, and resolves to the book's rendered page if it is
   published — the same rule the homework list uses. Anything else is already a
   site asset, a handout zip in practice, and is passed through as written.
 
+  A declared chapter missing from this build stays as schedule text. Other
+  missing targets remain errors.
+
   Deliberately does not call `rendered()`: building the syllabus should not
   trigger a chapter render as a side effect.
   """
+  if target.endswith('.qmd') and target in unbuilt:
+    return None
   href = Path('book') / (Path(target).with_suffix('.html') if target.endswith('.qmd') else Path(target))
   if not (ACTIVE_SITE / href).is_file():
     raise ValueError(f'scheduled material is absent from this build: {target} (expected {ACTIVE_SITE / href})')
   return href
 
 
-def cell_html(cell, linked):
+def cell_html(cell, linked, unbuilt=()):
   """One schedule cell as HTML. `linked` decides whether its chapter link survives.
 
   A future session keeps its title and loses its link, which is the whole rule.
   """
   def link(match):
-    href = book_href(match.group('target')) if linked else None
+    href = book_href(match.group('target'), unbuilt) if linked else None
     text = match.group('text')
     if not href:
       return text
@@ -165,7 +170,7 @@ def homework_html(path, number, linked):
           f'<a href="{archive}">[download zip]</a>')
 
 
-def parse_schedule(today):
+def parse_schedule(today, unbuilt=()):
   """The book's schedule as `[(heading, [row, ...]), ...]`, dates already decided.
 
   A row that will not parse raises. Skipping it would drop a session off the
@@ -217,10 +222,10 @@ def parse_schedule(today):
       main = main[:match.start()]
     homework = []
     for marker in markers:
-      homework.append(cell_html(marker, linked=date <= today))
+      homework.append(cell_html(marker, linked=date <= today, unbuilt=unbuilt))
     rows.append({'date': meeting_date(cells[0]),
                  'homework_date': dated_time(cells[0], '11:59'),
-                 'session': cell_html(main, linked=date <= today),
+                 'session': cell_html(main, linked=date <= today, unbuilt=unbuilt),
                  'homework': homework})
     if main.strip() == '**Exam 1**':
       through_first_exam = True
@@ -237,11 +242,11 @@ def parse_schedule(today):
   return sections
 
 
-def schedule_html(today=None):
+def schedule_html(today=None, unbuilt=()):
   from zoneinfo import ZoneInfo
   today = today or datetime.datetime.now(ZoneInfo('America/New_York')).date()
   out = []
-  for heading, note, rows in parse_schedule(today):
+  for heading, note, rows in parse_schedule(today, unbuilt):
     out.append(f'<h5> {heading} </h5>\n')
     if note:
       out.append(f'<p>{cell_html(note, linked=False)}</p>\n')
@@ -635,14 +640,14 @@ def build_stamp_html(info):
           f'{" ".join(parts)}</p>')
 
 
-def render_site(site_dir=Path('_site'), buildstamp=''):
+def render_site(site_dir=Path('_site'), buildstamp='', unbuilt=()):
   compiler = Compiler()
   source = open("index.template", "r").read()
   template = compiler.compile(source)
   output = template({
     'zoomlink': 'https://emory.zoom.us/j/91330426454?pwd=US7RfFmxBgGd2rvJCtnLcYu3zDepki.1',
     # add dummy element to count lectures/labs starting with 1
-    'schedule': schedule_html(),
+    'schedule': schedule_html(unbuilt=unbuilt),
     'buildstamp': buildstamp
     })
   (site_dir / 'index.html').write_text(output)
@@ -687,7 +692,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     info = build_info(book_dir, provenance, stale, unbuilt, [])
     (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
     ACTIVE_SITE = stage_dir
-    render_site(stage_dir, build_stamp_html(info))
+    render_site(stage_dir, build_stamp_html(info), unbuilt=unbuilt)
     refuse_if_book_moved(book_dir, book_before)
     withheld = remove_withheld_homework(stage_dir)
     # After withholding, so a homework that is not out yet is already gone and
@@ -709,7 +714,7 @@ def assemble_static(book_dir, site_dir, stale_ok=False, incomplete_ok=False,
     if deleted:
       info = build_info(book_dir, provenance, stale, unbuilt, deleted)
       (stage_dir / 'build-info.json').write_text(json.dumps(info, indent=2) + '\n')
-      render_site(stage_dir, build_stamp_html(info))
+      render_site(stage_dir, build_stamp_html(info), unbuilt=unbuilt)
 
     if site_dir.exists():
       shutil.rmtree(site_dir)
