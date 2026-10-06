@@ -71,14 +71,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="homework-random-variables-and-moments_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="homework-random-variables-and-moments_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="homework-random-variables-and-moments_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="homework-random-variables-and-moments_files/libs/bootstrap/bootstrap-99f53f485be1718408f9d02525548b22.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script>
-window.MathJax = {
-  loader: {load: ["[tex]/mathtools"]},
-  tex: {packages: {"[+]": ["mathtools"]},
-        mathtools: {pairedDelimiters: {cb: ["\\{", "\\}"]}}}
-};
-</script>
+<link href="homework-random-variables-and-moments_files/libs/bootstrap/bootstrap-7b62c3756862186daae96a0ac4bea601.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="homework-random-variables-and-moments_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="homework-random-variables-and-moments_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -137,6 +132,9 @@ window.Quarto = {
 </header>
 
 
+<div class="callout-handout">
+<p><a href="handouts/homework-random-variables-and-moments-handout.zip" download="homework-random-variables-and-moments-handout.zip"><strong>Download this assignment</strong></a> — unzip it, open <code>homework-random-variables-and-moments.qmd</code> in Positron, and answer inside the answer blocks.</p>
+</div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pollurl <span class="ot">=</span> <span class="st">"https://pollev.com/davidahirshberg"</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lecture <span class="ot">=</span> <span class="cf">function</span>(n, <span class="at">id=</span><span class="cn">NULL</span>) { </span>
@@ -201,7 +199,7 @@ window.Quarto = {
 <span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>whitebw.theme <span class="ot">=</span> whitebg.theme</span>
 <span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots without labs() inherit the global theme: leave it on class.theme, not the debug grid above.</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(class.theme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(simplified.theme)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-qtm285-webr="common">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># These are the HTML entities for shapes we use in the text. </span></span>
@@ -434,37 +432,6 @@ window.Quarto = {
 <span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>    geoms</span>
 <span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Default visualization settings for CA income plots.</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Defined here so they're available even if ca-income.qmd chunks fail.</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (qtm285_homework) {</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">exists</span>(<span class="st">'scale_y'</span>)) {</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  scale_y <span class="ot">=</span> <span class="cf">function</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">2e5</span>), <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(limits), <span class="at">by=</span><span class="fl">25e3</span>), ...) {</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span>breaks,</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">labels=</span><span class="fu">label_dollar</span>(<span class="at">scale=</span><span class="fl">1e-3</span>, <span class="at">suffix=</span><span class="st">'k'</span>), ...),</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>         <span class="fu">coord_cartesian</span>(<span class="at">ylim=</span>limits))</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">exists</span>(<span class="st">'scale_x'</span>)) {</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  years <span class="ot">=</span> <span class="dv">8</span><span class="sc">:</span><span class="dv">20</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  scale_x <span class="ot">=</span> <span class="cf">function</span>(<span class="at">limits=</span><span class="fu">c</span>(<span class="fu">min</span>(years)<span class="sc">-</span>.<span class="dv">5</span>, <span class="fu">max</span>(years)<span class="sc">+</span>.<span class="dv">5</span>)) {</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span>years, <span class="at">labels=</span><span class="fu">sprintf</span>(<span class="st">'%dy'</span>, years), <span class="at">limits=</span>limits)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">exists</span>(<span class="st">'dot.size'</span>)) dot.size <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="do">## Fallback: load earnings from CSV if ca-income.qmd didn't set it up</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">exists</span>(<span class="st">'earnings'</span>)) {</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  earnings <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/ca-income.csv"</span>)</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  earnings<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">factor</span>(earnings<span class="sc">$</span>degree, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'no 4-year degree'</span>,<span class="st">'4-year degree'</span>))</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  earnings<span class="sc">$</span>sex <span class="ot">=</span> <span class="fu">factor</span>(earnings<span class="sc">$</span>sex)</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">exists</span>(<span class="st">'pop.earnings'</span>)) {</span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  pop.earnings <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/pop-earnings.csv"</span>)</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  pop.earnings<span class="sc">$</span>degree <span class="ot">=</span> <span class="fu">factor</span>(pop.earnings<span class="sc">$</span>degree, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">'no 4-year degree'</span>,<span class="st">'4-year degree'</span>))</span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  pop.earnings<span class="sc">$</span>sex <span class="ot">=</span> <span class="fu">factor</span>(pop.earnings<span class="sc">$</span>sex)</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 <!-- Recurring submit reminder. Add it at the top of every homework AFTER week 0 with the
      Quarto include shortcode pointing at this file (_submit-reminder.qmd). Do NOT write that
      shortcode literally in this comment: Quarto's include pass scans comments too, so a literal
@@ -489,10 +456,314 @@ window.Quarto = {
   This is a SKELETON stub: HOLE = new writing; PULL = lift from hw5 when we reshape it
   (the kept hw5 sections move here; Markov/Chebyshev derivations went up to Ch2).
 ============================================================================ -->
-<section id="means-and-variances" class="level1">
-<h1>Means and Variances</h1>
+<p>An <strong>estimator</strong> is a random variable: its value depends on the random sample. An <strong>estimate</strong> is the value we calculate from the sample we observed. We use the same distinction for an <strong>interval estimator</strong> and an <strong>interval estimate</strong>. When we say an unbiased estimator is centered at the target, we mean that its expectation is the target. A particular estimate need not equal the target.</p>
+<section id="the-rules" class="level1">
+<h1>The Rules</h1>
+<p>We’ve been using the rules of probability and expectation all semester without ever writing them down. Here they are, against something we actually did: the two calls to the population <span class="math inline">\(0,0,0,1\)</span> from the chapter. Each row is a call sequence, colored by the pair of responses it produces.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">J1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">J2</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y1</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Y2</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">With replacement</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Without replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">2</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">3</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">0</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
+</tr>
+<tr class="even">
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">4</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
+<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Probabilities.</strong> The rules are these.</p>
+<ol type="1">
+<li>Nothing has negative probability.</li>
+<li>If you want to know the probability that one of two outcomes happens, add their probabilities.</li>
+</ol>
+<p>In notation, <span class="math display">\[
+\begin{aligned}
+&amp;P(X=x) \ge 0, \\
+&amp;P(X=x \text{ or } X=x') = P(X=x) + P(X=x') \qqtext{ if } x \ne x'.
+\end{aligned}
+\]</span></p>
+<p>What’s the <span class="math inline">\(x \ne x'\)</span> thing about? Well, in the case that <span class="math inline">\(x = x'\)</span>, if we said the probability that <span class="math inline">\(X=1\)</span> or <span class="math inline">\(X=1\)</span>, that’s just the probability that <span class="math inline">\(X=1\)</span>. So that can’t be two times the probability that <span class="math inline">\(X=1\)</span>. That’s obvious in this case. But sometimes people can get a little confused when they talk in more general terms. For example, they might talk about the probability that the total <span class="math inline">\(Y_1+Y_2\)</span> is at least one. Their way of thinking about that would be that it happens if <span class="math inline">\(Y_1=1\)</span> or if <span class="math inline">\(Y_2=1\)</span>, and then they would go to sum those two probabilities. But when you think about it in terms of the table, what they’re doing is summing the pink and green rows and then <em>adding it</em> to the sum of the blue and green rows. They’re counting the green rows twice. That’s making the same mistake: <span class="math display">\[
+P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
+\]</span></p>
+<p>More generally, if you want to know whether anything in two sets of outcomes happens, you can add their probabilities if the sets are not overlapping. In the table, that says we can add the probabilities of the blue rows and the purple rows to get the probability of a blue or purple row. What we can’t do is double count rows. And that can happen if you’re not careful.</p>
+<p>So you can take any sets of outcomes and get the probability that one or the other of them is true, if those sets are not overlapping. The usual math terminology for nonoverlapping is <em>disjoint</em>, and we call this property of probabilities <em>disjoint additivity</em>.</p>
+<div id="exr-rules-table" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 (Reading the Table)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<ol type="1">
+<li>Add up the probabilities in the pink rows, first with replacement and then without. What event has that probability?</li>
+<li>Add up the probabilities in the pink rows and the green rows together. What event has that probability?</li>
+<li>Add up the probabilities in all the rows. What number do you get, and why?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-rules-table" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<section id="expectations" class="level2">
+<h2 class="anchored" data-anchor-id="expectations">Expectations</h2>
+<p>The expectation of <span class="math inline">\(X\)</span> is its probability-weighted average, <span class="math inline">\(\mathop{\mathrm{E}}[X]=\sum_x xP(X=x)\)</span>. In the table, that’s a column of values next to the probability column: multiply across each row, then add down.</p>
+<p>Linearity says the expectation of a sum is the sum of the expectations, and constants come out in front: <span class="math display">\[
+\mathop{\mathrm{E}}[aY+bZ] = a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
+\]</span> In the table, the total column is the first-response column plus the second, so its expectation is the two expectations added. This is true whether or not <span class="math inline">\(Y\)</span> and <span class="math inline">\(Z\)</span> are independent.</p>
+<p>Two things to remember.</p>
+<ol type="1">
+<li>Adding a constant to a random variable moves its mean by that constant and leaves its spread alone.</li>
+<li>Multiplying by a constant <span class="math inline">\(a\)</span> multiplies the mean by <span class="math inline">\(a\)</span>, the standard deviation by <span class="math inline">\(|a|\)</span>, and the variance by <span class="math inline">\(a^2\)</span>.</li>
+</ol>
+<div id="exr-rules-constants" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2 (Shifts and Scales)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Here is the distribution of a random variable <span class="math inline">\(Y\)</span>, with its mean marked.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="homework-random-variables-and-moments_files/figure-html/plot-shifts-y-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Explain each of these in words and with a picture.</p>
+<ol type="1">
+<li>What happens to the mean and the standard deviation when we add 3 to <span class="math inline">\(Y\)</span>?</li>
+<li>What happens to them when we multiply <span class="math inline">\(Y\)</span> by 2? By <span class="math inline">\(-2\)</span>? What happens to the variance?</li>
+<li>A constant <span class="math inline">\(c\)</span> is a random variable that is always equal to <span class="math inline">\(c\)</span>. What are its mean and standard deviation?</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Hint
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>What does the distribution of a constant look like?</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-rules-constants" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p><strong>Indicators.</strong> An indicator is one when something happens and zero when it doesn’t. We used them in class to turn a probability into an expectation. Write <span class="math inline">\(1_{\textcolor{#7756a8}{P}}\)</span> for the indicator of the purple rows, both responses zero, <span class="math inline">\(1_{\textcolor{#06D6A0}{G}}\)</span> for the green rows, both one, <span class="math inline">\(1_{\textcolor{#EF476F}{R}}\)</span> for the pink rows, first response one, and <span class="math inline">\(1_{\textcolor{#118AB2}{B}}\)</span> for the blue rows, second response one. An indicator only takes the values zero and one, so its probability-weighted average is the probability of its rows: <span class="math display">\[
+\mathop{\mathrm{E}}[1_{\textcolor{#7756a8}{P}}] = 0\cdot P(\text{not purple}) + 1\cdot P(\text{purple}) = P(Y_1=0 \text{ and } Y_2=0),
+\]</span> <span class="math inline">\(9/16\)</span> with replacement and <span class="math inline">\(1/2\)</span> without.</p>
+<div id="exr-rules-indicators" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3 (Adding Indicators)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<ol type="1">
+<li>What values can <span class="math inline">\(1_{\textcolor{#7756a8}{P}}+1_{\textcolor{#06D6A0}{G}}\)</span> take, and in which rows is it one? What is it the indicator of?</li>
+<li>Take its expectation using linearity. What rule about probabilities did you just get back?</li>
+<li>Now take <span class="math inline">\(1_{\textcolor{#EF476F}{R}}+1_{\textcolor{#06D6A0}{G}}\)</span>, the indicator that <span class="math inline">\(Y_1=1\)</span>, plus <span class="math inline">\(1_{\textcolor{#118AB2}{B}}+1_{\textcolor{#06D6A0}{G}}\)</span>, the indicator that <span class="math inline">\(Y_2=1\)</span>. Is the sum still an indicator? Why or why not?</li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-rules-indicators" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="variance-when-sampling-with-replacement" class="level1">
+<h1>Variance when Sampling with Replacement</h1>
 <div id="exr-moments-die" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (Rolling a Die)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 4 (Rolling a Die)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -505,7 +776,7 @@ window.Quarto = {
 <div class="callout-exercise">
 <p>Roll a fair six-sided die <span class="math inline">\(n\)</span> times, independently. Let <span class="math inline">\(Y_i\)</span> be the number on roll <span class="math inline">\(i\)</span>.</p>
 <ol type="1">
-<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}[Y_1]\)</span>, <span class="math inline">\(\mathop{\mathrm{E}}[Y_1^2]\)</span>, and <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)\)</span>.</li>
+<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}[Y_1]\)</span> and <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)\)</span>.</li>
 <li>Calculate the mean and variance of the total <span class="math inline">\(Y_1+\cdots+Y_n\)</span>.</li>
 <li>Calculate the mean and variance of the average <span class="math inline">\(\bar Y\)</span>.</li>
 </ol>
@@ -526,7 +797,7 @@ window.Quarto = {
 </div>
 </div>
 <div id="exr-moments-bernoulli" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2 (Counting Ones)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 5 (Counting Ones)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -539,7 +810,7 @@ window.Quarto = {
 <div class="callout-exercise">
 <p>Now let <span class="math inline">\(Y_1\ldots Y_n\)</span> be independent draws, each equal to one with probability <span class="math inline">\(\theta\)</span> and zero with probability <span class="math inline">\(1-\theta\)</span>.</p>
 <ol type="1">
-<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}[Y_1]\)</span>, <span class="math inline">\(\mathop{\mathrm{E}}[Y_1^2]\)</span>, and <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)\)</span>.</li>
+<li>Calculate <span class="math inline">\(\mathop{\mathrm{E}}[Y_1]\)</span> and <span class="math inline">\(\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)\)</span>.</li>
 <li>Calculate the mean and variance of the number of ones <span class="math inline">\(Y_1+\cdots+Y_n\)</span>.</li>
 <li>Calculate the mean and variance of the proportion of ones <span class="math inline">\(\bar Y\)</span>.</li>
 </ol>
@@ -559,9 +830,8 @@ window.Quarto = {
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-</section>
-<section id="sampling-without-replacement" class="level1">
-<h1>Sampling Without Replacement</h1>
+<section id="sampling-without-replacement" class="level2">
+<h2 class="anchored" data-anchor-id="sampling-without-replacement">Sampling Without Replacement</h2>
 <!-- MECHANICAL FLOOR — ONE UNIFIED CONTEXT (Skip 2026-06-19, refine into final voice).
      Structure (Skip): don't scatter a separate bait per problem — run the WHOLE set through
      ONE rich context, and let the with-vs-without-replacement CONTRAST surface every trap by
@@ -595,7 +865,7 @@ window.Quarto = {
   E[(Y_i-E Y_i)(Y_j-E Y_j)] = -theta(1-theta)/(m-1) and the full Var = theta(1-theta)/n * (m-n)/(m-1).
   This is the "we'll leave deriving this for homework" promise the Ch1 variance section makes.
   ARC: discover the trap (deck) -> name the covariance (lecture) -> derive it (week3). -->
-<p>In <a href="../chapters/chapter-random-variables-and-moments.qmd#sec-marginalization">Random Variables and Moments</a>, we talked about the distribution of a sample proportion when we sample <em>without replacement</em>. This is, admittedly, a long read. But one thing we can take away from it—and I’ll just tell here rather than asking you to work it out — is the probability distribution of <span class="math inline">\(Y_1\)</span> when we make a single call and the joint distribution of <span class="math inline">\(Y_1, Y_2\)</span> when we make two calls. Those are special cases of the marginalization described in that chapter. Letting <span class="math inline">\(m_0\)</span> and <span class="math inline">\(m_1\)</span> be the number of zeros and ones in our binary population <span class="math inline">\(y_1 \ldots y_m\)</span>, for <span class="math inline">\(m&gt;1\)</span>, these are the distributions.</p>
+<p>When we talked about the <a href="../chapters/chapter-sampling-without-replacement.qmd#exr-swor-n-calls">hypergeometric distribution</a>, we got the distribution of a pair of responses when we sample without replacement from a binary population of any size. In <a href="../chapters/chapter-random-variables-and-moments.qmd#sec-marginalization">Means and Markov’s Inequality</a> we did the special case of a population of size four. For a binary population <span class="math inline">\(y_1 \ldots y_m\)</span> with <span class="math inline">\(m_0\)</span> zeros and <span class="math inline">\(m_1\)</span> ones, <span class="math inline">\(m&gt;1\)</span>, these are the distributions of one response and of a pair.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <table class="caption-top table">
@@ -623,6 +893,7 @@ window.Quarto = {
 <th><span class="math inline">\(p\)</span></th>
 <th><span class="math inline">\(Y_1\)</span></th>
 <th><span class="math inline">\(Y_2\)</span></th>
+<th><span class="math inline">\(Z_1Z_2\)</span></th>
 </tr>
 </thead>
 <tbody>
@@ -630,21 +901,25 @@ window.Quarto = {
 <td><span class="math inline">\(\frac{m_0(m_0-1)}{m(m-1)}\)</span></td>
 <td>0</td>
 <td>0</td>
+<td></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\frac{m_0m_1}{m(m-1)}\)</span></td>
 <td>0</td>
 <td>1</td>
+<td></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\frac{m_0m_1}{m(m-1)}\)</span></td>
 <td>1</td>
 <td>0</td>
+<td></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\frac{m_1(m_1-1)}{m(m-1)}\)</span></td>
 <td>1</td>
 <td>1</td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -656,42 +931,12 @@ window.Quarto = {
 <li><p>No matter how many cards we’re going to draw, the distribution of the first card is the same. Same with the first two cards. Thus, what we’ve written above is the marginal distribution of <span class="math inline">\(Y_1\)</span> and the joint distribution of <span class="math inline">\((Y_1,Y_2)\)</span> when we make any number of calls <span class="math inline">\(n\)</span>.</p></li>
 <li><p>If we’d pulled off the first <span class="math inline">\(n\)</span> cards and then counted from the bottom instead of the top, we’d get the same distribution. They’re shuffled, after all. So the marginal distributions of <span class="math inline">\(Y_1\)</span> and <span class="math inline">\(Y_n\)</span> are the same and so are the joint distributions of <span class="math inline">\((Y_1,Y_2)\)</span> and <span class="math inline">\((Y_n,Y_{n-1})\)</span>. The same thing would be true if we went through our top <span class="math inline">\(n\)</span> cards in any order. Thus, the marginal distributions of <span class="math inline">\(Y_i\)</span> are the same for all <span class="math inline">\(i\)</span> and the joint distributions of <span class="math inline">\((Y_i,Y_j)\)</span> are the same for all <span class="math inline">\(i \neq j\)</span>.</p></li>
 </ol>
-<p>Now let’s use this to calculate the variance of our sample proportion <span class="math inline">\(\hat\theta=\frac{1}{n}\sum_{i=1}^{n}Y_i\)</span> for <span class="math inline">\(1\le n\le m\)</span>. The population mean is <span class="math inline">\(\theta=m_1/m\)</span>. The <a href="../chapters/chapter-standard-deviation.qmd#variance-of-the-sample-mean">variance calculation in the chapter</a> shows how to square out the sum and take expectations. With replacement, the cross-terms are zero. Without replacement, we need this identity.</p>
-<p><span class="math display">\[
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = -\frac{\theta(1-\theta)}{m-1} \qfor i\neq j
+<p>We’ve left a column open in the second table for you to write in the product <span class="math inline">\(Z_1Z_2\)</span> of the centered responses. It will be useful later. The population mean is <span class="math inline">\(\theta=m_1/m\)</span>, and the centered response is <span class="math display">\[
+Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta &amp; \text{if } Y_i = 1. \end{cases}
 \]</span></p>
-<p>We haven’t yet shown that it’s true. That’s what we’re going to do now. Let’s start by rewriting this expression so it’s a little easier to work with. Like this.</p>
-<p><span class="math display">\[
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \mathop{\mathrm{E}}[Y_i Y_j] - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
-\]</span></p>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Proof of Equivalence
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>To show that these two expressions are equivalent, we ‘multiply out’ <span class="math inline">\((Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j])\)</span> to get four terms, distribute the expectation and pull out constants, and cancel some equal-and-opposite terms in the result.</p>
-<p><span class="math display">\[
-\begin{aligned}
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) }
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j - Y_i\mathop{\mathrm{E}}[Y_j] - Y_j\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}\sb*{ Y_i\mathop{\mathrm{E}}[Y_j] } - \mathop{\mathrm{E}}\sb*{ Y_j\mathop{\mathrm{E}}[Y_i] } + \mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] - \mathop{\mathrm{E}}[Y_j]\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
-\end{aligned}
-\]</span></p>
-</div>
-</div>
-</div>
-<p>What’s nice about this second form is that using our tables above to calculate these expectations is easy. We actually have a row for <span class="math inline">\(Y_i\)</span> in our marginal table and can easily add a row to our joint table for <span class="math inline">\(Y_i Y_j\)</span>. I’d like to ask you to calculate the thing, but since it’d probably take a litte arithmetic to manipulate what you get into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> we need, I’m going to ask you to verify my calculation instead.</p>
-<div id="exr-without-replacement-variance" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 3</strong></span> &nbsp;</p>
+<p>Now let’s use this to calculate the variance of our sample proportion <span class="math inline">\(\hat\theta=\frac{1}{n}\sum_{i=1}^{n}Y_i\)</span>. In the <a href="../chapters/chapter-standard-deviation.qmd#variance-of-a-sample-mean">chapter</a>, we squared out <span class="math inline">\(\frac1n\sum_i Z_i\)</span> and took expectations. That left two kinds of term. The squares, <span class="math inline">\(\mathop{\mathrm{E}}[Z_i^2]=\theta(1-\theta)\)</span>, the same for every call. And the cross terms, <span class="math inline">\(\mathop{\mathrm{E}}[Z_iZ_j]\)</span> for <span class="math inline">\(i \ne j\)</span>. With replacement, the cross terms are zero. Without replacement, they aren’t. We get them from the table above. It takes a little algebra to get the sum into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> we need, so I’m going to ask you to verify my calculation rather than do it from scratch.</p>
+<div id="exr-without-replacement-cross-term" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6 (The Cross Term)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -702,9 +947,83 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Using this equivalent form, and the tables above, show that the following identity is true. <span class="math display">\[
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
+<ol type="1">
+<li>Fill in the <span class="math inline">\(Z_1Z_2\)</span> column of the table, using <span class="math inline">\(\theta=m_1/m\)</span>.</li>
+<li>Multiply each product by its probability and add, and show that <span class="math display">\[
+\mathop{\mathrm{E}}[Z_iZ_j] = \frac{m_0(m_0-1)\,\theta^2 - 2\,m_0m_1\,\theta(1-\theta) + m_1(m_1-1)\,(1-\theta)^2}{m(m-1)}.
+\]</span></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="ans-exr-without-replacement-cross-term" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p>Simplifying this into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> is a little bit of work. As usual, the trick is to write everything in terms of <span class="math inline">\(m_0\)</span> and <span class="math inline">\(m_1\)</span> and see what cancels. I’ll save you the trouble, but I’ll fold it like I usually do solutions, so if you’d like to try it on your own, you can without the solution staring you in the face.</p>
+<div class="callout callout-style-simple callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Simplifying our Cross-Term
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Write <span class="math inline">\(\theta=m_1/m\)</span> and <span class="math inline">\(1-\theta=m_0/m\)</span>, so <span class="math inline">\(\theta^2=m_1^2/m^2\)</span>, <span class="math inline">\(\theta(1-\theta)=m_0m_1/m^2\)</span>, and <span class="math inline">\((1-\theta)^2=m_0^2/m^2\)</span>. <span class="math display">\[
+\begin{aligned}
+\mathop{\mathrm{E}}[Z_iZ_j]
+&amp;= \frac{m_0(m_0-1)m_1^2 - 2m_0^2m_1^2 + m_1(m_1-1)m_0^2}{m^2\,m(m-1)} &amp;&amp; \text{substituting} \\
+&amp;= \frac{m_0^2m_1^2 - m_0m_1^2 - 2m_0^2m_1^2 + m_0^2m_1^2 - m_0^2m_1}{m^3(m-1)} &amp;&amp; \text{expanding products} \\
+&amp;= \frac{-m_0m_1^2 - m_0^2m_1}{m^3(m-1)} &amp;&amp; \text{canceling equal and opposite terms} \\
+&amp;= \frac{-m_0m_1(m_0+m_1)}{m^3(m-1)} &amp;&amp; \text{pulling out common factors} \\
+&amp;= -\frac{m_0}{m}\cdot\frac{m_1}{m}\cdot\frac{1}{m-1} &amp;&amp; \text{for } m_0+m_1=m \\
+&amp;= -\frac{\theta(1-\theta)}{m-1} &amp;&amp; \text{as desired.}
+\end{aligned}
 \]</span></p>
+</div>
+</div>
+</div>
+<p>Here are the sampling distributions of the sample mean with and without replacement from the same population, 400 ones and 600 zeros, at sample sizes 50, 200, and 800. Same center; the without-replacement one is narrower. That is the cross term at work.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-homework-sampling-replacement" class="quarto-float quarto-figure quarto-figure-center anchored" width="672">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-homework-sampling-replacement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="homework-random-variables-and-moments_files/figure-html/fig-homework-sampling-replacement-1.png" id="fig-homework-sampling-replacement" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-homework-sampling-replacement-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div id="exr-without-replacement-variance" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7 (The Variance)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Substitute the cross term into the chapter’s variance calculation to find the variance of <span class="math inline">\(\hat\theta\)</span> when we sample without replacement. Compare it with sampling with replacement from the same population at the same sample size.</p>
 </div>
 </div>
 </div>
@@ -721,44 +1040,6 @@ window.Quarto = {
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-<p>Simplifying this into the form <span class="math inline">\(-\frac{\theta(1-\theta)}{m-1}\)</span> is a little bit of work. As usual, the trick is to give your two terms a common denominator and see what cancels.</p>
-<p>I’ll save you the trouble, but I’ll ‘fold’ it like I usually do solutions, so if you’d like to try it on your own, you can without the solution staring you in the face. If you do just want to read it, expand the box by clicking on it.</p>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Simplifying our Cross-Term
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p><span class="math display">\[
-\begin{aligned}
-\frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
-&amp;= \frac{m_1(m_1-1)m - m_1^2(m-1)}{m^2(m-1)} &amp;&amp; \text{ getting a common denominator} \\
-&amp;= \frac{ (m_1^2 m - m_1m) - (m_1^2 m - m_1^2)}{m^2(m-1)} &amp;&amp; \text{ expanding products} \\
-&amp;= \frac{ m_1^2 - m_1m}{m^2(m-1)} &amp;&amp; \text{ canceling equal and opposite terms} \\
-&amp;= \frac{ m_1(m_1 - m)}{m^2(m-1)} &amp;&amp; \text{ pulling out common factors} \\
-&amp;= \frac{m_1}{m} \cdot \frac{m_1-m}{m} \times \frac{1}{m-1} &amp;&amp; \text{ grouping factors in the numerator and denominator} \\
-&amp;= \theta (\theta - 1) \times \frac{1}{m-1} &amp;&amp; \text{ for } \  \theta = \frac{m_1}{m} \\
-&amp;= -\frac{\theta(1-\theta)}{m-1} &amp;&amp; \text{ as desired }
-\end{aligned}
-\]</span></p>
-</div>
-</div>
-</div>
-<p>Now substitute this cross-term into the variance calculation. Writing the sample mean as <span class="math inline">\(\bar Y\)</span>, <span class="math display">\[
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}(\bar Y)
-&amp;=\frac1{n^2}\sum_i\sum_j\mathop{\mathrm{E}}[(Y_i-\theta)(Y_j-\theta)]\\
-&amp;=\frac1{n^2}\left\{n\theta(1-\theta)
--n(n-1)\frac{\theta(1-\theta)}{m-1}\right\}\\
-&amp;=\frac{\theta(1-\theta)}{n}\frac{m-n}{m-1}.
-\end{aligned}
-\]</span> With replacement the draws are independent, the cross-terms vanish, and the variance is <span class="math inline">\(\theta(1-\theta)/n\)</span>. Without replacement it is no larger because the covariances are nonpositive. At <span class="math inline">\(n=1\)</span> the two variances agree. At <span class="math inline">\(n=m\)</span> the sample contains the whole population, so its mean equals <span class="math inline">\(\theta\)</span> with probability one and its variance is zero.</p>
 <!-- Engine note: quick reps that keep the vocabulary live. Course-original. DRAFT: -->
 <!-- DRAFT R1 (independent or not? — one-line each, say why):
      (a) The two numbers shown on a roll of two dice.
@@ -840,17 +1121,170 @@ window.Quarto = {
      "Bias, Variance, and Mean Squared Error" (lines 162-345). The Bernoulli
      pseudo-observations estimator; E, bias, sd; bias/variance/MSE; optimal n_prior. -->
 </section>
-<section id="bias-and-standard-deviation" class="level1">
-<h1>Bias and Standard Deviation</h1>
-<section id="using-prior-information" class="level2">
-<h2 class="anchored" data-anchor-id="using-prior-information">Using Prior Information</h2>
+</section>
+<section id="approximate-calibration" class="level1">
+<h1>Approximate Calibration</h1>
+<p>We’ll try the variance formula out on the NBA data we’ve been working with recently.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sam <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/nba_sample_1.csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/nba_population.csv"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>indicator <span class="ot">=</span> <span class="cf">function</span>(W,L,...) { W <span class="sc">/</span> (W<span class="sc">+</span>L) <span class="sc">&gt;</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">2</span> }</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">indicator</span>(sam<span class="sc">$</span>W, sam<span class="sc">$</span>L)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="fu">indicator</span>(pop<span class="sc">$</span>W, pop<span class="sc">$</span>L)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">length</span>(Y)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>m <span class="ot">=</span> <span class="fu">length</span>(y)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">=</span> <span class="fu">mean</span>(y)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The sample <span class="math inline">\(Y_1 \ldots Y_{100}\)</span> we’ll use is drawn without replacement from a population <span class="math inline">\(y_1 \ldots y_{539}\)</span> of indicators. These indicators—one for each of the 539 players who played in the NBA in 2023—are one if the player’s team won more than half the games they played in and zero otherwise. Our estimator is the sample mean, <span class="math inline">\(\hat\theta=\bar Y\)</span>.</p>
+<p>An interval estimate is a function of the sample: it takes <span class="math inline">\(Y_1 \ldots Y_n\)</span> and produces two endpoints. You’re going to write three of them, calibrated three different ways. The code below takes any such function, applies it to 10 samples from the population, and plots the resulting interval estimates over the sampling distribution of the estimator, which we can draw because we know the population. Also loaded for you, from the extra credit of Homework 2: <code>width_hyper(theta, n, m)</code>, the width of the middle 95% of the sample mean’s distribution when we draw <span class="math inline">\(n\)</span> of <span class="math inline">\(m\)</span> without replacement from a population with frequency <code>theta</code> of ones.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-14"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-14-1" class="code-annotation-target"><a href="#annotated-cell-14-1" aria-hidden="true" tabindex="-1"></a>width <span class="ot">=</span> <span class="cf">function</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(draws), <span class="at">alpha =</span> .<span class="dv">05</span>) {</span>
+<span id="annotated-cell-14-2"><a href="#annotated-cell-14-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span> <span class="sc">*</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(draws <span class="sc">-</span> center), <span class="dv">1</span> <span class="sc">-</span> alpha, <span class="at">type =</span> <span class="dv">1</span>)</span>
+<span id="annotated-cell-14-3"><a href="#annotated-cell-14-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-14-4"><a href="#annotated-cell-14-4" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-14" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-14-5" class="code-annotation-target"><a href="#annotated-cell-14-5" aria-hidden="true" tabindex="-1"></a>show.intervals <span class="ot">=</span> <span class="cf">function</span>(intervals, n, <span class="at">estimator =</span> mean, <span class="at">samples =</span> <span class="dv">10</span>) {</span>
+<span id="annotated-cell-14-6"><a href="#annotated-cell-14-6" aria-hidden="true" tabindex="-1"></a>  estimator.samples <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(y), <span class="dv">10000</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-7"><a href="#annotated-cell-14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(\(y) <span class="fu">sample</span>(y, n)) <span class="sc">|&gt;</span> <span class="fu">map_vec</span>(estimator) <span class="sc">|&gt;</span> <span class="fu">with_seed</span>(<span class="dv">285</span>)</span>
+<span id="annotated-cell-14-8"><a href="#annotated-cell-14-8" aria-hidden="true" tabindex="-1"></a>  estimates <span class="ot">=</span> <span class="fu">rep</span>(<span class="fu">list</span>(y), samples) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-9"><a href="#annotated-cell-14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(\(y) <span class="fu">sample</span>(y, n)) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-10"><a href="#annotated-cell-14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(\(Y) <span class="fu">data.frame</span>(<span class="at">method =</span> <span class="fu">names</span>(intervals),</span>
+<span id="annotated-cell-14-11"><a href="#annotated-cell-14-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">center =</span> <span class="fu">estimator</span>(Y),</span>
+<span id="annotated-cell-14-12"><a href="#annotated-cell-14-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">lower =</span> <span class="fu">map_vec</span>(intervals, \(interval) <span class="fu">interval</span>(Y)[<span class="dv">1</span>]),</span>
+<span id="annotated-cell-14-13"><a href="#annotated-cell-14-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">upper =</span> <span class="fu">map_vec</span>(intervals, \(interval) <span class="fu">interval</span>(Y)[<span class="dv">2</span>]))) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-14"><a href="#annotated-cell-14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"sample"</span>) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-15"><a href="#annotated-cell-14-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">height =</span> <span class="fu">max</span>(<span class="fu">table</span>(estimator.samples) <span class="sc">/</span> <span class="fu">length</span>(estimator.samples)) <span class="sc">*</span></span>
+<span id="annotated-cell-14-16"><a href="#annotated-cell-14-16" aria-hidden="true" tabindex="-1"></a>             (<span class="fu">as.integer</span>(sample) <span class="sc">+</span> .<span class="dv">15</span> <span class="sc">*</span> (<span class="fu">as.integer</span>(<span class="fu">factor</span>(method, <span class="at">levels =</span> <span class="fu">names</span>(intervals))) <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">/</span> (samples <span class="sc">+</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="annotated-cell-14-17"><a href="#annotated-cell-14-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with_seed</span>(<span class="dv">285</span>)</span>
+<span id="annotated-cell-14-18"><a href="#annotated-cell-14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="annotated-cell-14-19"><a href="#annotated-cell-14-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> estimator.samples, <span class="at">y =</span> <span class="fu">after_stat</span>(prop)), <span class="at">alpha =</span> .<span class="dv">3</span>,</span>
+<span id="annotated-cell-14-20"><a href="#annotated-cell-14-20" aria-hidden="true" tabindex="-1"></a>             <span class="at">width =</span> <span class="fu">min</span>(<span class="fu">diff</span>(<span class="fu">sort</span>(<span class="fu">unique</span>(estimator.samples))))) <span class="sc">+</span></span>
+<span id="annotated-cell-14-21"><a href="#annotated-cell-14-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">with_annotations</span>(estimator.samples, <span class="at">estimand =</span> theta, <span class="at">dots =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-14-22"><a href="#annotated-cell-14-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_pointrange</span>(<span class="fu">aes</span>(<span class="at">x =</span> center, <span class="at">xmin =</span> lower, <span class="at">xmax =</span> upper, <span class="at">y =</span> height, <span class="at">color =</span> method),</span>
+<span id="annotated-cell-14-23"><a href="#annotated-cell-14-23" aria-hidden="true" tabindex="-1"></a>                    <span class="at">linewidth =</span> default.dot.size<span class="sc">/</span><span class="dv">4</span>, <span class="at">size =</span> default.dot.size<span class="sc">/</span><span class="dv">4</span>, <span class="at">data =</span> estimates) <span class="sc">+</span></span>
+<span id="annotated-cell-14-24"><a href="#annotated-cell-14-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"orange"</span>, <span class="st">"darkcyan"</span>, <span class="st">"black"</span>) <span class="sc">|&gt;</span> <span class="fu">setNames</span>(<span class="fu">names</span>(intervals))) <span class="sc">+</span></span>
+<span id="annotated-cell-14-25"><a href="#annotated-cell-14-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">range</span>(<span class="fu">c</span>(estimates<span class="sc">$</span>lower, estimates<span class="sc">$</span>upper, estimator.samples))) <span class="sc">+</span></span>
+<span id="annotated-cell-14-26"><a href="#annotated-cell-14-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>) <span class="sc">+</span></span>
+<span id="annotated-cell-14-27"><a href="#annotated-cell-14-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Estimate"</span>, <span class="at">y =</span> <span class="st">"Sampling distribution"</span>, <span class="at">color =</span> <span class="st">"Interval estimate"</span>)</span>
+<span id="annotated-cell-14-28"><a href="#annotated-cell-14-28" aria-hidden="true" tabindex="-1"></a>}</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-14" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="1" data-code-annotation="1">The middle-95% width of a set of draws around a center, the same <code>width</code> we used in Homework 2.</span>
+</dd>
+<dt data-target-cell="annotated-cell-14" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-14" data-code-lines="5" data-code-annotation="2">The estimator’s sampling distribution in gray, <span class="math inline">\(\theta\)</span> as a green line, and for each of 10 samples from the population the three interval estimates stacked together, colored by method. <code>intervals</code> is a named list of your functions.</span>
+</dd>
+</dl>
+</div>
+</div>
+<div id="exr-calibration-method-simulation" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 8 (Three Calibration Techniques)</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>Write three functions that take a sample, a vector <code>Y</code> of zeros and ones, and return a 95% interval estimate centered at the sample mean as a vector of two numbers, <code>c(lower, upper)</code>. One calibrated each way.</p>
+<ol type="1">
+<li>Using the bootstrap.</li>
+<li>Using the hypergeometric distribution with the sample’s frequency plugged in for the population’s. The number of ones in a sample drawn without replacement is <a href="../chapters/chapter-sampling-without-replacement.qmd#exr-swor-n-calls">hypergeometric</a>, so if we knew <span class="math inline">\(\theta\)</span> we’d know the sampling distribution of <span class="math inline">\(\hat\theta\)</span> exactly, and <code>width_hyper</code> would give us the width of its middle 95%. We don’t, so we plug in <span class="math inline">\(\hat\theta\)</span>, as we did with the Binomial in <a href="homework-calibration-binary.qmd">Homework 2</a>.</li>
+<li>Using Chebyshev’s inequality with the variance of the sample mean when sampling without replacement.</li>
+</ol>
+<p>Then plot them with <code>show.intervals</code>, and write a function <code>coverage.probability(interval, n)</code> that takes one of your interval-estimate functions and a sample size and returns the fraction of 1000 samples from the population whose interval estimate covers <span class="math inline">\(\theta\)</span>. Report its average width too. Run it at our sample size <span class="math inline">\(n=100\)</span> and at <span class="math inline">\(n=400\)</span> out of the <span class="math inline">\(m=539\)</span> players, and answer the following.</p>
+<ul>
+<li>Which is narrowest? In the middle? Widest? If you had to do this again with data from a different season, which calibration would you use? Why?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><em>Note.</em> Your interval estimates should not use any information about the population other than what’s in the sample and its size. If you need a standard deviation or something like that, estimate it using the sample.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-calibration-method-simulation" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-15"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-15-1"><a href="#annotated-cell-15-1" aria-hidden="true" tabindex="-1"></a>bootstrap.interval <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-15-2" class="code-annotation-target"><a href="#annotated-cell-15-2" aria-hidden="true" tabindex="-1"></a>  draws <span class="ot">=</span> <span class="co"># the mean of each of 1000 resamples of Y, drawn with replacement</span></span>
+<span id="annotated-cell-15-3"><a href="#annotated-cell-15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Y) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">width</span>(draws, <span class="at">center =</span> <span class="fu">mean</span>(Y)) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="annotated-cell-15-4"><a href="#annotated-cell-15-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-15-5"><a href="#annotated-cell-15-5" aria-hidden="true" tabindex="-1"></a>hypergeometric.interval <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-15-6" class="code-annotation-target"><a href="#annotated-cell-15-6" aria-hidden="true" tabindex="-1"></a>  theta.hat <span class="ot">=</span> <span class="fu">round</span>(m <span class="sc">*</span> <span class="fu">mean</span>(Y)) <span class="sc">/</span> m</span>
+<span id="annotated-cell-15-7"><a href="#annotated-cell-15-7" aria-hidden="true" tabindex="-1"></a>  w <span class="ot">=</span> <span class="co"># width_hyper at theta.hat</span></span>
+<span id="annotated-cell-15-8"><a href="#annotated-cell-15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(Y) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> w <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="annotated-cell-15-9"><a href="#annotated-cell-15-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-15-10"><a href="#annotated-cell-15-10" aria-hidden="true" tabindex="-1"></a>chebyshev.interval <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-15-11" class="code-annotation-target"><a href="#annotated-cell-15-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># an interval estimate around mean(Y), calibrated with Chebyshev's inequality</span></span>
+<span id="annotated-cell-15-12"><a href="#annotated-cell-15-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-15-13"><a href="#annotated-cell-15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-14"><a href="#annotated-cell-15-14" aria-hidden="true" tabindex="-1"></a>intervals <span class="ot">=</span> <span class="fu">list</span>(<span class="at">bootstrap =</span> bootstrap.interval,</span>
+<span id="annotated-cell-15-15"><a href="#annotated-cell-15-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">hypergeometric =</span> hypergeometric.interval,</span>
+<span id="annotated-cell-15-16"><a href="#annotated-cell-15-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Chebyshev =</span> chebyshev.interval)</span>
+<span id="annotated-cell-15-17"><a href="#annotated-cell-15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">show.intervals</span>(intervals, <span class="dv">100</span>)</span>
+<span id="annotated-cell-15-18"><a href="#annotated-cell-15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-15-19"><a href="#annotated-cell-15-19" aria-hidden="true" tabindex="-1"></a>coverage.probability <span class="ot">=</span> <span class="cf">function</span>(interval, n) {</span>
+<span id="annotated-cell-15-20"><a href="#annotated-cell-15-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># draw 1000 samples of size n from the population without replacement,</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-15-21" class="code-annotation-target"><a href="#annotated-cell-15-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute interval(Y) for each, and return the fraction that cover theta</span></span>
+<span id="annotated-cell-15-22"><a href="#annotated-cell-15-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-15-23"><a href="#annotated-cell-15-23" aria-hidden="true" tabindex="-1"></a><span class="fu">coverage.probability</span>(bootstrap.interval, <span class="dv">100</span>)</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-15" data-target-annotation="5" onclick="event.preventDefault();" href="">5</a><span id="annotated-cell-15-24" class="code-annotation-target"><a href="#annotated-cell-15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># and for the other two, and at n = 400</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-15" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="2" data-code-annotation="1">Resample with <code>sample(Y, length(Y), replace = TRUE)</code>.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="6" data-code-annotation="2"><code>width_hyper</code> needs a whole number of ones in the population, hence the rounding.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="11" data-code-annotation="3">The variance of the sample mean when sampling without replacement is in the previous section. Estimate it from the sample.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="4">4</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="21" data-code-annotation="4">Your own function. <code>interval</code> is one of the three functions above and <code>y</code> is the population.</span>
+</dd>
+<dt data-target-cell="annotated-cell-15" data-target-annotation="5">5</dt>
+<dd>
+<span data-code-cell="annotated-cell-15" data-code-lines="24" data-code-annotation="5">Six calls. The average width over the same samples is worth reporting too.</span>
+</dd>
+</dl>
+</div>
+</div>
+</section>
+<section id="using-prior-information" class="level1">
+<h1>Using Prior Information</h1>
 <p>So far, we’ve exclusively talked about <em>unbiased estimators</em>. That is, estimators with the property that their expected value is equal to the estimation target. <span class="math display">\[
 \hat\theta \qqtext{ is called unbiased if } \mathop{\mathrm{E}}[\hat{\theta}] = \theta.
 \]</span> We say an estimator is <em>biased</em> if this isn’t true. To get a sense of what that means, let’s consider a simple example of a biased estimator. <span class="math display">\[
-\tilde{Y}_1 = \frac{1}{n+1}\cdot \{\frac{1}{2} + \sum_{i=1}^{n}Y_i\}
+\tilde{Y}_1 = \frac{1}{n+1}\p*{\frac{1}{2} + \sum_{i=1}^{n}Y_i}
 \]</span></p>
 <div id="exr-bias-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 9</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -885,13 +1319,13 @@ window.Quarto = {
 <p><span class="math display">\[
 \begin{aligned}
 \tilde{Y}_{\nprior}
-&amp;= \frac{1}{\nprior + n} \cb*{\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i} \\
-&amp;= \frac{1}{\nprior + n}  \cb*{ \nprior\thetaprior + n\bar Y }
+&amp;= \frac{1}{\nprior + n} \p*{\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i} \\
+&amp;= \frac{1}{\nprior + n}  \p*{ \nprior\thetaprior + n\bar Y }
 \end{aligned}
 \]</span></p>
 <p>We treat these prior observations, and therefore their mean <span class="math inline">\(\thetaprior\)</span>, as deterministic. The simple example we started with, <span class="math inline">\(\tilde{Y}_1\)</span>, is a special case where we have a single prior observation <span class="math inline">\(\yprior_1 = \frac{1}{2}\)</span>.</p>
 <div id="exr-bias-general" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 10</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -902,7 +1336,7 @@ window.Quarto = {
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Repeat <a href="#exr-bias-1" class="quarto-xref">Exercise&nbsp;4</a> for <span class="math inline">\(\tilde{Y}_{\nprior}\)</span>. Compare your answers with the sample mean: its bias is zero and its standard deviation is <span class="math inline">\(\sqrt{\theta(1-\theta)/n}\)</span>. How does using more prior observations change the bias and standard deviation when <span class="math inline">\(\thetaprior\ne\theta\)</span>?</p>
+<p>Repeat <a href="#exr-bias-1" class="quarto-xref">Exercise&nbsp;9</a> for <span class="math inline">\(\tilde{Y}_{\nprior}\)</span>. Compare your answers with the sample mean: its bias is zero and its standard deviation is <span class="math inline">\(\sqrt{\theta(1-\theta)/n}\)</span>. How does using more prior observations change the bias and standard deviation when <span class="math inline">\(\thetaprior\ne\theta\)</span>?</p>
 </div>
 </div>
 </div>
@@ -919,10 +1353,9 @@ window.Quarto = {
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-</section>
-<section id="visualizating-the-impact-of-prior-information" class="level2">
-<h2 class="anchored" data-anchor-id="visualizating-the-impact-of-prior-information">Visualizating the Impact of Prior Information</h2>
-<p>Lets’s try to get a sense of how using prior information like this impacts our inference. We’ll do it visually. The plot below shows the sampling distributions of three estimators of a population mean <span class="math inline">\(\theta\)</span> at three sample sizes <span class="math inline">\(n\)</span>: 10, 40, and 160. These are the estimators.</p>
+<section id="visualizing-the-impact-of-prior-information" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-the-impact-of-prior-information">Visualizing the Impact of Prior Information</h2>
+<p>Let’s try to get a sense of how using prior information like this impacts our inference. We’ll do it visually. The plot below shows the sampling distributions of three estimators of a population mean <span class="math inline">\(\theta\)</span> at three sample sizes <span class="math inline">\(n\)</span>: 10, 40, and 160. These are the estimators.</p>
 <ol type="1">
 <li>The estimator <span class="math inline">\(\hat\theta_1 = \tilde{Y}_{\nprior}\)</span> for <span class="math inline">\(\thetaprior=3/4\)</span> and <span class="math inline">\(\nprior=10\)</span> prior observations.</li>
 <li>The estimator <span class="math inline">\(\hat\theta_2 = \tilde{Y}_{n}\)</span> for <span class="math inline">\(\thetaprior=3/4\)</span> and <span class="math inline">\(\nprior=n\)</span> prior observations. The bigger the sample, the more prior observations we use.</li>
@@ -930,7 +1363,7 @@ window.Quarto = {
 </ol>
 <p>As usual, the estimation target <span class="math inline">\(\theta\)</span> is indicated by a green line, the sampling distribution’s mean by a solid blue line, and its mean plus and minus two standard deviations by dotted blue lines. In this exercise, we’ll match estimators to pictures.</p>
 <div id="exr-bias-visualize" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 6</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 11</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -962,14 +1395,6 @@ window.Quarto = {
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>`summarise()` has regrouped the output.
-ℹ Summaries were computed grouped by n and estimator.
-ℹ Output is grouped by n.
-ℹ Use `summarise(.groups = "drop_last")` to silence this message.
-ℹ Use `summarise(.by = c(n, estimator))` for per-operation grouping
-  (`?dplyr::dplyr_by`) instead.</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -980,18 +1405,12 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-3-sampling-distributions-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1
+Figure&nbsp;2
 </figcaption>
 </figure>
 </div>
-</section>
-</section>
-<section id="estimators-are-functions-of-the-sample" class="level1">
-<h1>Estimators Are Functions of the Sample</h1>
-<p>For the rest of the homework, draw independently <strong>with replacement</strong> from the binary population. We want to estimate its population mean <span class="math inline">\(\theta\)</span>. We will compare the sample mean with two fixed pseudo-observation estimators, both using prior mean <span class="math inline">\(\thetaprior=.5\)</span>: one uses <span class="math inline">\(\nprior=170\)</span> and the other uses <span class="math inline">\(\nprior=250\)</span>.</p>
-<p>We’ll apply each estimator to many different samples. Writing it as a function lets us use the same rule each time: put in a sample and get back an estimate. The rule can use the sample and our fixed prior settings. It cannot use the population mean we are trying to estimate.</p>
-<div id="exr-moments-estimator-functions" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7 (The Same Rule for Each Sample)</strong></span> &nbsp;</p>
+<div id="exr-calibration-prior" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 12 (The Estimator with Prior Observations)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1002,19 +1421,11 @@ Figure&nbsp;1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<ol type="1">
-<li>Write <code>prior.mean(Y, n.prior)</code> to calculate the pseudo-observation estimate from a sample vector <code>Y</code>. Then write <code>prior170(Y)</code> and <code>prior250(Y)</code> using the two fixed prior counts. Use <code>mean(Y)</code> for the sample-mean estimate.</li>
-<li>Let <code>y</code> be the whole population vector. What do <code>prior170(y)</code> and <code>prior250(y)</code> calculate? Why is the estimand still <code>mean(y)</code> rather than either of those results?</li>
-<li>Write <code>binomial.interval(Y)</code> using <code>width_binom(mean(Y), length(Y))</code> to return a symmetric interval around <code>mean(Y)</code>. Write <code>bootstrap.samples(Y)</code> to draw 1,000 samples with replacement from <code>Y</code> and apply <code>mean()</code> to each. Use those draws and <code>width(draws, center=mean(Y))</code> in <code>bootstrap.interval(Y)</code> to return the symmetric interval around <code>mean(Y)</code>.</li>
-<li>Write <code>prior.interval(Y, n.prior)</code> centered at <code>prior.mean(Y, n.prior)</code> with radius <span class="math inline">\(\sqrt{20}\)</span> times the estimated standard deviation <span class="math display">\[
-\widehat{\mathop{\mathrm{sd}}}(\tilde Y_{\nprior})
-=\frac{\sqrt{n\bar Y(1-\bar Y)}}{n+\nprior}.
-\]</span> Then write <code>prior170.interval(Y)</code> and <code>prior250.interval(Y)</code>. Each interval function must return its two endpoints and use only the observed sample and the fixed prior settings. We use the multiplier <span class="math inline">\(\sqrt{20}\)</span> from Chebyshev’s inequality. Does that still mean 95% coverage when the estimator is biased? We’ll investigate that using these functions.</li>
-</ol>
+<p>Do <a href="#exr-calibration-method-simulation" class="quarto-xref">Exercise&nbsp;8</a> again for the mean-with-prior-observations estimator <span class="math inline">\(\tilde Y_{100}\)</span> from <a href="#exr-bias-general" class="quarto-xref">Exercise&nbsp;10</a>. The 100 prior observations and the estimator are loaded for you in the starter code: write the bootstrap and Chebyshev interval estimates centered at <span class="math inline">\(\tilde Y_{100}\)</span>, then plot them with <code>show.intervals(..., estimator = prior.obs.estimator)</code> and calculate their coverage probabilities as before. The hypergeometric one takes a new idea, so it’s in the solution rather than asked of you. Comment briefly on what you see. We’ll get into why next week; if you want to look into it now, the extra credit below is about exactly this.</p>
 </div>
 </div>
 </div>
-<div id="ans-exr-moments-estimator-functions" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
+<div id="ans-exr-calibration-prior" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1024,117 +1435,45 @@ Figure&nbsp;1
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><em>(your answer here)</em></p>
-</div>
-</div>
-</section>
-<section id="comparing-width-and-coverage" class="level1">
-<h1>Comparing Width and Coverage</h1>
-<!-- PULL from hw5 (stays): "Comparing Interval Calibration Methods" (lines 348-482).
-     The programming exercise: empirical coverage of bootstrap vs normal vs Markov;
-     measure coverage & width; choose; does it change with n? This is the empirical
-     coverage calculation Skip wants paired with the biased-estimation material. -->
-<div id="exr-calibration-method-simulation" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 8 (Coverage Is an Empirical Question)</strong></span> &nbsp;</p>
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Let <span class="math inline">\(\theta=.7\)</span> and draw independent binary samples of size <span class="math inline">\(n=625\)</span>. Use the two prior counts, 170 and 250, that we fixed above. Both estimators have smaller standard deviations than the sample mean, but both pull toward .5. We want to see what that trade does to the intervals: how wide are they, and how often do they cover the population mean?</p>
-<ol type="1">
-<li>For the sample mean, plot the bootstrap sampling distribution and a 95% confidence interval calibrated using it.</li>
-<li>Plot the Binomial estimate of the sample mean’s sampling distribution and a second 95% confidence interval calibrated using that. What is the relationship between the two estimated sampling distributions?</li>
-<li>For each of the two biased estimators, plot the interval calibrated using Chebyshev’s inequality from <a href="#exr-moments-estimator-functions" class="quarto-xref">Exercise&nbsp;7</a>.</li>
-<li>Taking advantage of your knowledge of the population, plot each estimator’s actual sampling distribution alongside its interval estimates.</li>
-<li>One interval either covers or misses. To see how often each biased procedure covers, draw 100 new samples. For each sample, calculate both prior-based point estimates and their intervals. Use the helper below to plot 100 intervals for each prior count. Keep the samples in the same order in both plots. How many intervals cover .7? Which side of the target do the misses fall on? How does that relate to the sampling distributions you plotted?</li>
-<li>Write <code>one.experiment()</code> to draw one sample and apply all three point estimators and all four interval procedures to it. Return the point estimates, each interval’s full width, and whether it contains .7. Repeat this experiment 1,000 times. Report the empirical bias and standard deviation of each point estimator, and the coverage and average full width of each interval procedure. Compare the estimated bias and standard deviation with your formulas from <a href="#exr-bias-general" class="quarto-xref">Exercise&nbsp;5</a>.</li>
-</ol>
-<p>Referring to your plots, comment on the behavior of your four interval estimators. If you had to do something like this again, which would you choose? Why? Would it make a difference if your sample size were larger, e.g.&nbsp;<span class="math inline">\(n=2500\)</span> instead of <span class="math inline">\(n=625\)</span>, with the same prior counts?</p>
-<p>The pseudo-observations reduce the estimator’s variance. Does that make the interval narrower than the bootstrap and Binomial intervals with similar coverage? Does achieving about 95% coverage make the first biased procedure worth using? Use bias, standard deviation, width, and coverage together. What happens with the stronger-bias estimator?</p>
-<p>Style your plots as you see fit. Overlay the distributions or plot them side-by-side, use color, transparency, annotations, etc. Make it easy to see the stuff that comes up in your comments.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><em>Note.</em> Your interval estimates should not use any information about the population other than what’s in the sample. If you need a standard deviation or something like that, estimate it using the sample.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Plotting 100 Intervals
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-18" class="callout-18-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Supply a vector of point estimates and a list of intervals, in the same sample order. Each interval is a vector containing its lower and upper endpoints. The helper draws a dot and a horizontal interval for each sample. The green line marks .7; orange intervals miss it.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>plot.intervals <span class="ot">=</span> <span class="cf">function</span>(point.estimates, interval.estimates) {</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  lower <span class="ot">=</span> <span class="fu">map_dbl</span>(interval.estimates, <span class="dv">1</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  upper <span class="ot">=</span> <span class="fu">map_dbl</span>(interval.estimates, <span class="dv">2</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  plotted <span class="ot">=</span> <span class="fu">data.frame</span>(</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">sample=</span><span class="fu">seq_along</span>(point.estimates), <span class="at">estimate=</span>point.estimates,</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower=</span>lower, <span class="at">upper=</span>upper,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">covers=</span>lower <span class="sc">&lt;=</span> .<span class="dv">7</span> <span class="sc">&amp;</span> .<span class="dv">7</span> <span class="sc">&lt;=</span> upper)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(plotted, <span class="fu">aes</span>(<span class="at">x=</span>estimate, <span class="at">y=</span>sample, <span class="at">xmin=</span>lower, <span class="at">xmax=</span>upper,</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color=</span>covers)) <span class="sc">+</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>.<span class="dv">7</span>, <span class="at">color=</span><span class="st">"green"</span>, <span class="at">alpha=</span>.<span class="dv">5</span>, <span class="at">linewidth=</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_pointrange</span>(<span class="at">linewidth=</span>.<span class="dv">3</span>, <span class="at">size=</span>.<span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">`</span><span class="at">TRUE</span><span class="st">`</span><span class="ot">=</span><span class="st">"purple"</span>, <span class="st">`</span><span class="at">FALSE</span><span class="st">`</span><span class="ot">=</span><span class="st">"darkorange"</span>),</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">breaks=</span><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"covers"</span>, <span class="st">"misses"</span>)) <span class="sc">+</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">xlim=</span><span class="fu">c</span>(.<span class="dv">5</span>,.<span class="dv">85</span>)) <span class="sc">+</span></span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x=</span><span class="st">"Estimate and interval"</span>, <span class="at">y=</span><span class="st">"Sample"</span>, <span class="at">color=</span><span class="cn">NULL</span>)</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-<div id="ans-exr-calibration-method-simulation" class="callout callout-style-simple callout-answer no-icon callout-titled" title="Template">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Answer</span>Template
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-16"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-16-1"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Do the calculations and distribution plots above.</span></span>
-<span id="annotated-cell-16-2"><a href="#annotated-cell-16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-16-3"><a href="#annotated-cell-16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For each prior count, fill in this call with your 100 point estimates</span></span>
-<span id="annotated-cell-16-4"><a href="#annotated-cell-16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and the list of their 100 intervals.</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-16-5" class="code-annotation-target"><a href="#annotated-cell-16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.intervals</span>(<span class="at">point.estimates =</span> ..., <span class="at">interval.estimates =</span> ...)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="annotated-cell-16"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-16-1"><a href="#annotated-cell-16-1" aria-hidden="true" tabindex="-1"></a>prior.obs <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/nba_sample_2.csv"</span>)</span>
+<span id="annotated-cell-16-2"><a href="#annotated-cell-16-2" aria-hidden="true" tabindex="-1"></a>Y.prior <span class="ot">=</span> <span class="fu">indicator</span>(prior.obs<span class="sc">$</span>W, prior.obs<span class="sc">$</span>L)</span>
+<span id="annotated-cell-16-3"><a href="#annotated-cell-16-3" aria-hidden="true" tabindex="-1"></a>theta.prior <span class="ot">=</span> <span class="fu">mean</span>(Y.prior)</span>
+<span id="annotated-cell-16-4"><a href="#annotated-cell-16-4" aria-hidden="true" tabindex="-1"></a>n.prior <span class="ot">=</span> <span class="fu">length</span>(Y.prior)</span>
+<span id="annotated-cell-16-5"><a href="#annotated-cell-16-5" aria-hidden="true" tabindex="-1"></a>prior.obs.estimator <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-16-6" class="code-annotation-target"><a href="#annotated-cell-16-6" aria-hidden="true" tabindex="-1"></a>  (theta.prior <span class="sc">*</span> n.prior <span class="sc">+</span> <span class="fu">sum</span>(Y)) <span class="sc">/</span> (n.prior <span class="sc">+</span> <span class="fu">length</span>(Y))</span>
+<span id="annotated-cell-16-7"><a href="#annotated-cell-16-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-16-8"><a href="#annotated-cell-16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-16-9"><a href="#annotated-cell-16-9" aria-hidden="true" tabindex="-1"></a>bootstrap.interval.prior <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<span id="annotated-cell-16-10"><a href="#annotated-cell-16-10" aria-hidden="true" tabindex="-1"></a>  draws <span class="ot">=</span> <span class="co"># prior.obs.estimator applied to each of 1000 resamples of Y</span></span>
+<span id="annotated-cell-16-11"><a href="#annotated-cell-16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prior.obs.estimator</span>(Y) <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">width</span>(draws, <span class="at">center =</span> <span class="fu">prior.obs.estimator</span>(Y)) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="annotated-cell-16-12"><a href="#annotated-cell-16-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-16-13"><a href="#annotated-cell-16-13" aria-hidden="true" tabindex="-1"></a>chebyshev.interval.prior <span class="ot">=</span> <span class="cf">function</span>(Y) {</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-16" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-16-14" class="code-annotation-target"><a href="#annotated-cell-16-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># an interval estimate around prior.obs.estimator(Y), calibrated with Chebyshev's inequality</span></span>
+<span id="annotated-cell-16-15"><a href="#annotated-cell-16-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="annotated-cell-16-16"><a href="#annotated-cell-16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-16-17"><a href="#annotated-cell-16-17" aria-hidden="true" tabindex="-1"></a>intervals.prior <span class="ot">=</span> <span class="fu">list</span>(<span class="at">bootstrap =</span> bootstrap.interval.prior,</span>
+<span id="annotated-cell-16-18"><a href="#annotated-cell-16-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">Chebyshev =</span> chebyshev.interval.prior)</span>
+<span id="annotated-cell-16-19"><a href="#annotated-cell-16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">show.intervals</span>(intervals.prior, <span class="dv">100</span>, <span class="at">estimator =</span> prior.obs.estimator)</span>
+<span id="annotated-cell-16-20"><a href="#annotated-cell-16-20" aria-hidden="true" tabindex="-1"></a><span class="co"># and the coverage probability of each, as before</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-16" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-16" data-code-lines="5" data-code-annotation="1">Replace each <code>...</code> with your calculated estimates. Use the same 100 samples for both prior counts.</span>
+<span data-code-cell="annotated-cell-16" data-code-lines="6" data-code-annotation="1">The estimator: the prior count of ones plus the sample’s, divided by the total number of observations.</span>
+</dd>
+<dt data-target-cell="annotated-cell-16" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-16" data-code-lines="14" data-code-annotation="2"><span class="math inline">\(\tilde Y_{100}\)</span> is <span class="math inline">\(\sum_i Y_i\)</span> plus a constant, divided by <span class="math inline">\(n^{prior}+n\)</span>. Its variance follows from the variance of the sum.</span>
 </dd>
 </dl>
 </div>
 </div>
 </section>
-<section id="explaining-bias-and-coverage" class="level1">
-<h1>Explaining Bias and Coverage</h1>
-<p>The 100-interval plots show where coverage is lost: an interval centered too far to the left does not reach the population mean. Chebyshev’s inequality bounds how often an estimator is far from its own mean. When the estimator is biased, that mean and the population mean are different. Let’s work out how the distance between them affects coverage.</p>
+</section>
+<section id="extra-credit-bias-and-coverage" class="level1">
+<h1>Extra Credit: Bias and Coverage</h1>
+<p>The coverage calculation shows where coverage is lost: an interval centered too far to the right does not reach down to the population mean. Chebyshev’s inequality bounds how often an estimator is far from its own mean. When the estimator is biased, that mean and the population mean are different. Let’s work out how the distance between them affects coverage. We’ll do a parallel calculation using the normal approximation in class later this week.</p>
 <div id="exr-chebyshev-bias-coverage" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 9 (How Much Room Does Bias Leave?)</strong></span> &nbsp;</p>
+<p><span class="theorem-title"><strong>Exercise 13 (Bias and Coverage)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1153,13 +1492,13 @@ T-\theta=(T-\mathop{\mathrm{E}}[T])+b.
 <li>Measure the random deviation and the bias in units of the estimator’s SD: <span class="math inline">\(Z=(T-\mathop{\mathrm{E}}[T])/\sigma\)</span> and <span class="math inline">\(d=b/\sigma\)</span>. Rewrite the coverage event as <span class="math inline">\(-c-d\le Z\le c-d\)</span>. Compare these endpoints with the unbiased case. What is <span class="math inline">\(d\)</span> for our prior-based estimator?</li>
 <li>Suppose <span class="math inline">\(|d|&lt;c\)</span>. Show that <span class="math inline">\(|Z|&lt;c-|d|\)</span> is sufficient for coverage. Use Chebyshev’s inequality to derive the lower bound <span class="math display">\[
 P(|T-\theta|\le c\sigma)
-\ge \max\left\{0,1-\frac1{(c-|d|)^2}\right\}.
-\]</span> What bound does this argument supply when <span class="math inline">\(|d|\ge c\)</span>? With <span class="math inline">\(c=\sqrt{20}\)</span>, compare the bound for an unbiased estimator with the bounds at our two fixed prior counts. Does Chebyshev certify 95% target coverage for either biased estimator?</li>
-<li>Our interval functions estimate the SD from the sample. Why does the bound above, which uses the true SD, not automatically apply to those intervals? For a sample with <span class="math inline">\(s\)</span> ones, show that the interval from <code>prior.interval()</code> covers the population mean exactly when <span class="math display">\[
+\ge \max\left(0,1-\frac1{(c-|d|)^2}\right).
+\]</span> What bound does this argument supply when <span class="math inline">\(|d|\ge c\)</span>? With <span class="math inline">\(c=\sqrt{20}\)</span>, compare the bound for an unbiased estimator with the bound at our prior count. Does Chebyshev certify 95% target coverage for the biased estimator?</li>
+<li>Our interval functions estimate the SD from the sample. Why does the bound above, which uses the true SD, not automatically apply to those intervals? For a sample with <span class="math inline">\(s\)</span> ones, show that the interval estimate from <code>chebyshev.interval.prior</code> covers the population mean exactly when <span class="math display">\[
 |s+\nprior\thetaprior-(n+\nprior)\theta|
-\le \sqrt{20}\sqrt{n(s/n)(1-s/n)}.
+\le \sqrt{20}\sqrt{n(s/n)(1-s/n)\frac{m-n}{m-1}}.
 \]</span></li>
-<li>The number of ones has the Binomial(<span class="math inline">\(n,\theta\)</span>) distribution. Use its probabilities for <span class="math inline">\(s=0\ldots n\)</span> to calculate actual coverage from the event in part 4 at <span class="math inline">\(n=625\)</span>, <span class="math inline">\(\theta=.7\)</span>, <span class="math inline">\(\thetaprior=.5\)</span>, and each of our fixed prior counts. Compare with your simulation. Explain why excess width can compensate for some bias, but the resulting coverage alone does not justify the method.</li>
+<li>The number of ones has the hypergeometric distribution. Use its probabilities for <span class="math inline">\(s=0\ldots n\)</span> to calculate actual coverage from the event in part 4 at our sample size <span class="math inline">\(n\)</span>, our population mean <span class="math inline">\(\theta\)</span>, <span class="math inline">\(\thetaprior=.52\)</span>, and our <span class="math inline">\(\nprior=100\)</span> prior observations. Compare with your simulation. Explain why excess width can compensate for some bias, but the resulting coverage alone does not justify the method.</li>
 </ol>
 </div>
 </div>
