@@ -134,27 +134,24 @@
   visibility: hidden;
 }
 
-/* Sidebar layout: sticky figure on left, steps scroll on right */
+/* Stacked layout: full-width sticky figure, step text below */
 .image-toggle-sidebar {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5em;
-  align-items: start;
+  display: block;
   margin: 1.5em 0;
 }
 
 .image-toggle-sidebar .image-toggle-figure {
   position: sticky;
-  top: 2em;
+  top: 0;
+  z-index: 2;
+  /* Opaque so step text scrolling underneath passes behind the figure. */
+  background: var(--bs-body-bg, #fff);
+  padding: 0.4em 0 0.7em;
 }
 
 .image-toggle-sidebar .image-toggle-figure img {
   max-width: 100%;
   height: auto;
-}
-
-.image-toggle-sidebar .image-toggle-steps {
-  /* Steps column scrolls normally */
 }
 
 .image-toggle-sidebar .image-toggle-steps > * {
@@ -168,18 +165,6 @@
 
 .image-toggle-sidebar .image-toggle-steps p {
   margin: 0 0 0.75em 0;
-}
-
-/* Smaller screens: stack vertically */
-@media (max-width: 768px) {
-  .image-toggle-sidebar {
-    grid-template-columns: 1fr;
-  }
-  
-  .image-toggle-sidebar .image-toggle-figure {
-    position: relative;
-    top: 0;
-  }
 }
 
 /* Nested step groups */
