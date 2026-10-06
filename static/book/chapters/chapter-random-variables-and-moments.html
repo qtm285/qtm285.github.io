@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Means and Markov’s Inequality</title>
+<title>14&nbsp; Means and Markov’s Inequality – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,65 +23,63 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="chapter-random-variables-and-moments_files/libs/clipboard/clipboard.min.js"></script>
-<script src="chapter-random-variables-and-moments_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="chapter-random-variables-and-moments_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="chapter-random-variables-and-moments_files/libs/quarto-html/popper.min.js"></script>
-<script src="chapter-random-variables-and-moments_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="chapter-random-variables-and-moments_files/libs/quarto-html/anchor.min.js"></script>
-<link href="chapter-random-variables-and-moments_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="chapter-random-variables-and-moments_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="chapter-random-variables-and-moments_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="chapter-random-variables-and-moments_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="chapter-random-variables-and-moments_files/libs/bootstrap/bootstrap-a972a42294ee7f24f78cc846a459d063.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="chapter-random-variables-and-moments_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="chapter-random-variables-and-moments_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="chapter-random-variables-and-moments_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
-<link href="chapter-random-variables-and-moments_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
-<script src="chapter-random-variables-and-moments_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="chapter-random-variables-and-moments_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
-<script type="module" src="chapter-random-variables-and-moments_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="chapter-random-variables-and-moments_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="chapter-random-variables-and-moments_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="chapter-random-variables-and-moments_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../homework/homework-sample-size-coverage.html" rel="next">
+<link href="../part1-moments.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-6fe1715721786a838a92806728cb6c53.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -364,6 +362,7 @@ window.__tldaKatexMacros = {
     window.katex.render = function (tex, el, opts) {
       opts = opts || {}
       if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+      if (opts.globalGroup === undefined) opts.globalGroup = true
       if (opts.trust == null) opts.trust = tldaTrust
       const out = inner(tex, el, opts)
       // Reveal reads data-fragment-index from the .fragment node itself,
@@ -573,15 +572,239 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-random-variables-and-moments.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1 Calibration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2 Moments and approximate calibration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-normal-approximation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Normal Approximation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bias-and-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Bias and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../exams/practice-midterm-1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Practice Midterm 1</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-marginalization" id="toc-sec-marginalization" class="nav-link active" data-scroll-target="#sec-marginalization">How we got here</a>
+  <ul class="collapse">
+  <li><a href="#two-calls" id="toc-two-calls" class="nav-link" data-scroll-target="#two-calls">Two calls</a></li>
+  <li><a href="#changing-the-population" id="toc-changing-the-population" class="nav-link" data-scroll-target="#changing-the-population">Changing the population</a></li>
+  <li><a href="#three-calls" id="toc-three-calls" class="nav-link" data-scroll-target="#three-calls">Three calls</a></li>
+  <li><a href="#one-or-two-calls-out-of-three" id="toc-one-or-two-calls-out-of-three" class="nav-link" data-scroll-target="#one-or-two-calls-out-of-three">One or two calls out of three</a></li>
+  </ul></li>
+  <li><a href="#sec-expectation" id="toc-sec-expectation" class="nav-link" data-scroll-target="#sec-expectation">Expectations</a></li>
+  <li><a href="#sec-unbiasedness" id="toc-sec-unbiasedness" class="nav-link" data-scroll-target="#sec-unbiasedness">Unbiasedness</a></li>
+  <li><a href="#from-an-expectation-to-a-probability-bound" id="toc-from-an-expectation-to-a-probability-bound" class="nav-link" data-scroll-target="#from-an-expectation-to-a-probability-bound">From an expectation to a probability bound</a>
+  <ul class="collapse">
+  <li><a href="#indicators-count-the-observations-in-an-event" id="toc-indicators-count-the-observations-in-an-event" class="nav-link" data-scroll-target="#indicators-count-the-observations-in-an-event">Indicators count the observations in an event</a></li>
+  <li><a href="#markovs-inequality" id="toc-markovs-inequality" class="nav-link" data-scroll-target="#markovs-inequality">Markov’s inequality</a></li>
+  <li><a href="#what-markov-misses-about-a-sample-mean" id="toc-what-markov-misses-about-a-sample-mean" class="nav-link" data-scroll-target="#what-markov-misses-about-a-sample-mean">What Markov misses about a sample mean</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-random-variables-and-moments.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Means and Markov’s Inequality</h1>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></h1>
 </div>
 
 
@@ -602,659 +825,237 @@ window.Quarto = {
 <p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
 <p>$$</p>
 </div>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>markov.town.full <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"data/vote-history-markov.csv"</span>)<span class="sc">$</span>history</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>markov.H <span class="ot">=</span> markov.town.full[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>means.populations <span class="ot">=</span> <span class="fu">list</span>(</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Single bump</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="dv">40</span>, <span class="dv">100</span>, .<span class="dv">7</span>)<span class="sc">/</span><span class="dv">100</span>,</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Binary =</span> <span class="fu">rbinom</span>(<span class="dv">40</span>, <span class="dv">1</span>, .<span class="dv">7</span>))</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>means.component <span class="ot">=</span> <span class="fu">rbinom</span>(<span class="dv">40</span>, <span class="dv">1</span>, .<span class="dv">5</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>means.populations<span class="sc">$</span><span class="st">`</span><span class="at">Two bumps</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">ifelse</span>(means.component <span class="sc">==</span> <span class="dv">1</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rbinom</span>(<span class="dv">40</span>, <span class="dv">100</span>, .<span class="dv">3</span>)<span class="sc">/</span><span class="dv">100</span>, <span class="fu">rbinom</span>(<span class="dv">40</span>, <span class="dv">100</span>, .<span class="dv">7</span>)<span class="sc">/</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<section id="sec-marginalization" class="level1">
-<h1>Marginalization</h1>
-<p>We have done this before: list the calls, replace the person selected by that person’s response, then add the responses. This is how we obtained the binomial and hypergeometric distributions. Here we revisit that calculation using grids alongside the tables.</p>
-<section id="from-call-sequences-to-response-sequences" class="level2">
-<h2 class="anchored" data-anchor-id="from-call-sequences-to-response-sequences">From call sequences to response sequences</h2>
-<p>Four people have responses <span class="math inline">0,0,1,1</span>. We call twice. What is the distribution of the pair of responses?</p>
-<p>Let <span class="math inline">J_i</span> identify the person selected on call <span class="math inline">i</span>, and let <span class="math inline">Y_i</span> be that person’s response. The subscript <span class="math inline">i</span> is the call number: <span class="math inline">J_1</span> and <span class="math inline">J_2</span> are the first and second people called; <span class="math inline">Y_1</span> and <span class="math inline">Y_2</span> are their responses. The population is fixed, but these calls and responses are random variables because they depend on whom we select.</p>
+<p>We’ve been working with these distributions, and we’ve been talking about their sampling distributions. And we’ve been talking about them having a center. This is what we mean by that.</p>
+<p>We meant an expected value. We have already been using objects such as <span class="math inline">Y_i</span>, <span class="math inline">\sum_iY_i</span>, and <span class="math inline">\hat\theta=n^{-1}\sum_iY_i</span>. We will now call them <strong>random variables</strong>. The name is new; the objects are not.</p>
+<p>The <em>expectation</em> of a random variable is its <em>probability-weighted average</em>, <span class="math display">
+\mathop{\mathrm{E}}[X]=\sum_x \textcolor{#EF476F}{x}\textcolor{#118AB2}{P(X=x)}.
+</span> That means summing, over the <span class="math inline">x</span> axis, the product of the <span class="pink"><span class="math inline">x</span>, the position</span> along the <span class="math inline">x</span> axis and the <span class="teal"><span class="math inline">P(X=x)</span>, the <em>bar height</em></span> at that position. Histograms are for counting dots. The expectation is the average of infinitely many dots.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-means-population" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-population-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-population-1.svg" id="fig-means-population" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-population-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-center-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In each grid below, the row identifies the first person called and the column identifies the second. A cell is a call sequence. Its top line is the probability of that call sequence; the digits underneath are the responses in call order (for example, 01 means zero followed by one). With replacement, each of the sixteen cells has probability <span class="math inline">1/16</span>. Without replacement, the diagonal is impossible and each of the twelve remaining cells has probability <span class="math inline">1/12</span>.</p>
+<p>Why did we like this? Because it’s right. The blue line is on top of the green line. The reason we center here is that it works. The center is exactly what we wanted to estimate. We call estimators like this <strong>unbiased</strong>, and we’ll see why these are unbiased and how to know that things are unbiased.</p>
+<p>The motivation for using the expectation doesn’t have to be complicated at all. It can just be that you want to center the thing on the thing you want to estimate. We’re always talking about how to calibrate effectively so that we contain the center of the distribution a certain frequency of the time, and that’s only useful if the center of the distribution is where you want it to be.</p>
+<p>Today we’re going to talk about what’s so easy about the expectation, and what we can do with it alone.</p>
+<p>To see what’s easy, we’re going to revisit something hard: how we calculated these distributions in the first place.</p>
+<section id="sec-marginalization" class="level1">
+<h1>How we got here</h1>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-population-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We’re going to draw a sample of size 2 from the population above. Here is the distribution of the total of the two responses. Throughout, sampling with replacement is on the left and without replacement on the right.</p>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call-sequences-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call-sequences-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call-sequences-1.svg" class="img-fluid figure-img">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-sums-balanced-plot-1.svg" class="img-fluid"></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call-sequences-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: With replacement
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call-sequences-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call-sequences-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call-sequences-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call-sequences-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Without replacement
-</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-sums-balanced-plot-2.svg" class="img-fluid"></p>
 </div>
 </div>
 </div>
-</div>
-<p>Cells with the same response sequence have the same shading. That shading is unchanged across the two schemes: changing how we sample changes the probabilities, not the responses of the people called.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th style="text-align: center;" data-quarto-table-cell-role="th">Call sequence</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">Response sequence</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">With replacement</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">Without replacement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(1, 1)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(0, 0)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(1, 2)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(0, 0)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(2, 1)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(0, 0)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(2, 2)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">(0, 0)</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(234, 223, 241, 1) !important;">0</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(1, 3)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(0, 1)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(1, 4)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(0, 1)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(2, 3)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(0, 1)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(2, 4)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">(0, 1)</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(219, 238, 245, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(3, 1)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(1, 0)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(3, 2)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(1, 0)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(4, 1)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(1, 0)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(4, 2)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">(1, 0)</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(249, 224, 231, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(3, 3)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(1, 1)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">0</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(3, 4)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(1, 1)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/12</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(4, 3)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(1, 1)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/12</td>
-</tr>
-<tr class="even">
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(4, 4)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">(1, 1)</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">1/16</td>
-<td style="text-align: center; background-color: rgba(223, 240, 223, 1) !important;">0</td>
-</tr>
-</tbody>
-</table>
-<p>For example, the response sequence <span class="math inline">(0,0)</span> comes from four call sequences: <span class="math inline">(1,1)</span>, <span class="math inline">(1,2)</span>, <span class="math inline">(2,1)</span>, and <span class="math inline">(2,2)</span>. With replacement, add four probabilities of <span class="math inline">1/16</span> to obtain <span class="math inline">1/4</span>. Without replacement, <span class="math inline">(1,1)</span> and <span class="math inline">(2,2)</span> are impossible, leaving two probabilities of <span class="math inline">1/12</span>, which sum to <span class="math inline">1/6</span>.</p>
-<p>Doing this for each response sequence produces the following distribution.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Response sequence <span class="math inline">(Y_1,Y_2)</span></th>
-<th style="text-align: right;">With replacement</th>
-<th style="text-align: right;">Without replacement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">(0,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(0,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/3</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">(1,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/3</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(1,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-</tbody>
-</table>
-<p>The distribution of the sum follows from this table. Write <span class="math inline">S=Y_1+Y_2</span> for the total response. The two middle rows have the same total, so combine their probabilities:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Total <span class="math inline">s</span></th>
-<th style="text-align: right;"><span class="math inline">P(S=s)</span> with replacement</th>
-<th style="text-align: right;"><span class="math inline">P(S=s)</span> without replacement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td style="text-align: right;"><span class="math inline">1/2</span></td>
-<td style="text-align: right;"><span class="math inline">2/3</span></td>
-</tr>
-<tr class="odd">
-<td>2</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-</tbody>
-</table>
-<p>These operations are <em>marginalization</em>: collect all the possibilities that produce the value of interest and add their probabilities.</p>
-</section>
-<section id="what-if-we-only-wanted-one-response" class="level2">
-<h2 class="anchored" data-anchor-id="what-if-we-only-wanted-one-response">What if we only wanted one response?</h2>
-<p>First find the distribution of one call, then replace the selected person by their response. We use the same call-sequence grids, but now we group cells by the person selected on just one call. For the first call, sum a row. For the second call, sum a column.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">First call: person 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">First call: person 2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">Second call: person 1</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<section id="two-calls" class="level2">
+<h2 class="anchored" data-anchor-id="two-calls">Two calls</h2>
+<p>Every call sequence is equally likely. That isn’t an assumption. It follows from how we sample. With replacement, each call is an independent uniform pick, so all sixteen ordered pairs of calls are equally likely. Without replacement, the calls are a shuffle, so every ordered pair of distinct people is equally likely, and a repeat is impossible.</p>
+<p>Let <span class="math inline">J_i</span> identify the person selected on call <span class="math inline">i</span>, and let <span class="math inline">Y_i</span> be that person’s response. The population is fixed. The calls and the responses are random variables, because they depend on whom we select.</p>
+<p>In each grid, the row is the first person called and the column is the second. A cell is a call sequence. Its top line is the probability of that call sequence, and the digits underneath are the responses in call order. Cells with the same response sequence have the same color.</p>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call1-person1-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call1-person1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call1-person1-1.svg" class="img-fluid figure-img">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-call-sequences-plot-1.svg" class="img-fluid"></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call1-person1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: With replacement
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call1-person1-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call1-person1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call1-person1-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call1-person1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Without replacement
-</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-call-sequences-plot-2.svg" class="img-fluid"></p>
 </div>
 </div>
 </div>
-</div>
-<p>The highlighted row contains every call sequence with person 1 first. With replacement, its four probabilities sum to <span class="math inline">4/16=1/4</span>. Without replacement, its diagonal cell has probability zero and the other three sum to <span class="math inline">3/12=1/4</span>. Thus <span class="math inline">P(J_1=1)=1/4</span> under either scheme.</p>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p>Collect the cells by color. That gives the distribution of the pair of responses, on a 2 by 2 grid with the first response down the rows and the second across the columns.</p>
 <div class="cell quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call1-person2-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call1-person2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call1-person2-1.svg" class="img-fluid figure-img">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-response-grid-balanced-plot-1.svg" class="img-fluid"></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call1-person2-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: With replacement
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call1-person2-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call1-person2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call1-person2-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call1-person2-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7: Without replacement
-</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-response-grid-balanced-plot-2.svg" class="img-fluid"></p>
 </div>
 </div>
 </div>
-</div>
-<p>Now sum the row for person 2. The impossible call sequence without replacement has moved to <span class="math inline">(2,2)</span>, but the row total has not changed: it is again <span class="math inline">4/16=1/4</span> with replacement and <span class="math inline">3/12=1/4</span> without replacement. Thus <span class="math inline">P(J_1=2)=1/4</span> under either scheme.</p>
-</div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call2-person1-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call2-person1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call2-person1-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call2-person1-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8: With replacement
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-call2-person1-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-call2-person1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-call2-person1-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-call2-person1-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9: Without replacement
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>For the second call, use a column instead. This column contains every sequence with person 1 second. Its probabilities sum to <span class="math inline">1/4</span> with or without replacement, so <span class="math inline">P(J_2=1)=1/4</span> under either scheme.</p>
-</div>
-</div>
-</div>
-<p>Every row and column has the same total. The resulting marginal distributions of the two calls are therefore the same under both sampling schemes:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Person <span class="math inline">j</span></th>
-<th style="text-align: right;"><span class="math inline">P(J_1=j)</span></th>
-<th style="text-align: right;"><span class="math inline">P(J_2=j)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-</tr>
-</tbody>
-</table>
-<p>Now make the final step from calls to responses. People 1 and 2 respond zero; people 3 and 4 respond one. For either call, add the probabilities of the two people with each response:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Response <span class="math inline">y</span></th>
-<th>People with that response</th>
-<th style="text-align: right;"><span class="math inline">P(Y_1=y)</span></th>
-<th style="text-align: right;"><span class="math inline">P(Y_2=y)</span></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>0</td>
-<td>1 and 2</td>
-<td style="text-align: right;"><span class="math inline">1/4+1/4=1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4+1/4=1/2</span></td>
-</tr>
-<tr class="even">
-<td>1</td>
-<td>3 and 4</td>
-<td style="text-align: right;"><span class="math inline">1/4+1/4=1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4+1/4=1/2</span></td>
-</tr>
-</tbody>
-</table>
-<p>This response distribution, too, is the same with and without replacement.</p>
+<p>Collect those cells by total. The two off-diagonal cells both total one, so adding them gives the middle bar of the distribution we started with. The two diagonal cells give the outer bars.</p>
+<p>The coloring is the same in both grids. What changed between them is the probabilities in the cells you’re coloring.</p>
 </section>
 <section id="changing-the-population" class="level2">
 <h2 class="anchored" data-anchor-id="changing-the-population">Changing the population</h2>
-<p>Suppose person 3’s response changes from one to zero, so the population is now <span class="math inline">0,0,0,1</span>. The call probabilities and the marginal distribution of each call are unchanged. Only the final step—grouping people by their responses—changes.</p>
-<p>For one response, people 1, 2, and 3 now form the zero group. Person 4 is the one group. Under either sampling scheme, each response is zero with probability <span class="math inline">3/4</span> and one with probability <span class="math inline">1/4</span>.</p>
-<p>For a pair of responses, the <span class="math inline">(0,0)</span> group now contains nine call sequences. Six remain possible without replacement. The <span class="math inline">(0,1)</span> and <span class="math inline">(1,0)</span> groups each contain three call sequences, and the <span class="math inline">(1,1)</span> group contains only <span class="math inline">(4,4)</span>:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 27%">
-<col style="width: 36%">
-<col style="width: 36%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Response sequence <span class="math inline">(Y_1,Y_2)</span></th>
-<th style="text-align: right;">With replacement</th>
-<th style="text-align: right;">Without replacement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><span class="math inline">(0,0)</span></td>
-<td style="text-align: right;"><span class="math inline">9/16</span></td>
-<td style="text-align: right;"><span class="math inline">6/12=1/2</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(0,1)</span></td>
-<td style="text-align: right;"><span class="math inline">3/16</span></td>
-<td style="text-align: right;"><span class="math inline">3/12=1/4</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">(1,0)</span></td>
-<td style="text-align: right;"><span class="math inline">3/16</span></td>
-<td style="text-align: right;"><span class="math inline">3/12=1/4</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(1,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/16</span></td>
-<td style="text-align: right;"><span class="math inline">0</span></td>
-</tr>
-</tbody>
-</table>
-<p>Combining the middle rows as before, the probabilities of totals zero, one, and two are <span class="math inline">9/16,6/16,1/16</span> with replacement and <span class="math inline">1/2,1/2,0</span> without replacement.</p>
-</section>
-<section id="dependence-and-independence" class="level2">
-<h2 class="anchored" data-anchor-id="dependence-and-independence">Dependence and independence</h2>
-<p>The individual response distributions agree across sampling schemes, but the response-pair distributions do not. For the population <span class="math inline">0,0,1,1</span>, each response is one with probability <span class="math inline">1/2</span>. With replacement, the probability that both are one is <span class="math inline">1/4=(1/2)(1/2)</span>. Without replacement, it is <span class="math inline">1/6</span>, not <span class="math inline">1/4</span>.</p>
-<p>With replacement, this product rule holds for every response pair: each joint probability is the product of the corresponding marginal probabilities. The responses are independent. Without replacement, the product rule fails: the responses are dependent. Knowing the individual distributions does not determine the distribution of the pair.</p>
-<p>The changed population shows the same distinction. With replacement, the probability of two ones is <span class="math inline">1/16=(1/4)(1/4)</span>. Without replacement it is zero, although each individual response still has probability <span class="math inline">1/4</span> of being one. We will use this distinction when calculating expectations of products in the next chapter.</p>
+<p>Now change person 3’s response from one to zero, so the population is <span class="math inline">0,0,0,1</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-population-unbal-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This time the probabilities in the cells stay where they were. What changed is which cells get which color.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-call-sequences-unbal-plot-1.svg" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-call-sequences-unbal-plot-2.svg" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Collect the cells by color for the response grid, then collect those by total for the distribution of the total.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-response-grid-unbal-plot-1.svg" class="img-fluid"></p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-response-grid-unbal-plot-2.svg" class="img-fluid"></p>
+</div>
+</div>
+</div>
 </section>
 <section id="three-calls" class="level2">
 <h2 class="anchored" data-anchor-id="three-calls">Three calls</h2>
-<p>For three calls, a cell must identify three people. The three digits inside it now record the three responses in call order. The four layers below correspond to the four possible people selected on call 3. Within each layer, rows still identify the person selected on call 1 and columns the person selected on call 2. We return to the population <span class="math inline">0,0,1,1</span>.</p>
-<section id="with-replacement" class="level3">
-<h3 class="anchored" data-anchor-id="with-replacement">With replacement</h3>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-with-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-with-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-with-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-with-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;10: Call 3: person 1
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-with-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-with-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-with-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-with-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11: Call 3: person 2
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-with-3" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-with-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-with-3.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-with-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12: Call 3: person 3
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-with-4" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-with-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-with-4.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-with-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13: Call 3: person 4
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="without-replacement" class="level3">
-<h3 class="anchored" data-anchor-id="without-replacement">Without replacement</h3>
-<div class="cell quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-without-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-without-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-without-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-without-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14: Call 3: person 1
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-without-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-without-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-without-2.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-without-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;15: Call 3: person 2
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-without-3" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-without-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-without-3.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-without-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;16: Call 3: person 3
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-means-three-calls-without-4" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-three-calls-without-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-three-calls-without-4.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-means-three-calls-without-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;17: Call 3: person 4
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>There are <span class="math inline">4^3=64</span> ordered call sequences with replacement, each with probability <span class="math inline">1/64</span>. Without replacement, only <span class="math inline">4\cdot3\cdot2=24</span> are possible, each with probability <span class="math inline">1/24</span>.</p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
+<p>You can do it. We include it here. But the whole point is that you don’t want to do this. Go ahead and skim.</p>
+<div class="callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Use the four layers to find the distribution of the response sequence <span class="math inline">(Y_1,Y_2,Y_3)</span> under each sampling scheme. For example, which cells produce <span class="math inline">(0,0,1)</span>? Add their probabilities across the layers. Repeat for the other response sequences, then obtain the distribution of the total <span class="math inline">S=Y_1+Y_2+Y_3</span>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
+<span class="screen-reader-only">Note</span>The three-call calculation
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>With replacement, each response sequence comes from eight call sequences: two choices of person for each of the three responses. Each therefore has probability <span class="math inline">8/64=1/8</span>.</p>
-<p>Without replacement, three zeros and three ones are impossible because the population has only two people with either response. For <span class="math inline">(0,0,1)</span>, there are two orders for the two zero responders and two choices of one responder: four call sequences, with total probability <span class="math inline">4/24=1/6</span>. Each of the other sequences containing both responses has the same count.</p>
+<p>For three calls a cell has to identify three people. Each of the four layers below fixes the person selected on call 3. Within a layer, rows are the first call and columns the second, and the three digits in a cell are the three responses in call order. We stay with the population <span class="math inline">0,0,0,1</span>. The layers shown are with replacement: there are <span class="math inline">4^3=64</span> call sequences, each with probability <span class="math inline">1/64</span>. For without replacement, read the same layers with every cell that repeats a person struck out, which leaves six cells in each layer and <span class="math inline">4\cdot3\cdot2=24</span> in all, each with probability <span class="math inline">1/24</span>.</p>
+<div class="cell quarto-layout-panel" data-layout="[[1,-3],[-1,1,-2],[-2,1,-1],[-3,1]]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-three-calls-with-plot-1.svg" class="img-fluid"></p>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 75.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-three-calls-with-plot-2.svg" class="img-fluid"></p>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-three-calls-with-plot-3.svg" class="img-fluid"></p>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 75.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-three-calls-with-plot-4.svg" class="img-fluid"></p>
+</div>
+</div>
+</div>
+<p>Collect the cells by color across the layers. With replacement, <span class="math inline">(0,0,0)</span> comes from every ordered triple of zero-responders, which is <span class="math inline">3\cdot3\cdot3=27</span> of the 64 call sequences. A sequence with exactly one 1 uses person 4 on that one call and a zero-responder on each of the others, which is <span class="math inline">3\cdot3=9</span> call sequences. Two ones leave one call free for a zero-responder, which is 3 call sequences. And <span class="math inline">(1,1,1)</span> is the single call sequence <span class="math inline">(4,4,4)</span>. Without replacement, person 4 is the only one-responder, so no sequence with two or three ones is possible. <span class="math inline">(0,0,0)</span> comes from <span class="math inline">3\cdot2\cdot1=6</span> of the 24 call sequences, and each sequence with exactly one 1 comes from <span class="math inline">3\cdot2=6</span>.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>Response sequence</th>
+<th><span class="math inline">Y_1</span></th>
+<th style="text-align: right;"><span class="math inline">Y_2</span></th>
+<th style="text-align: right;"><span class="math inline">Y_3</span></th>
 <th style="text-align: right;">With replacement</th>
 <th style="text-align: right;">Without replacement</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">(0,0,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">27/64</span></td>
+<td style="text-align: right;"><span class="math inline">6/24</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">9/64</span></td>
+<td style="text-align: right;"><span class="math inline">6/24</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">9/64</span></td>
+<td style="text-align: right;"><span class="math inline">6/24</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">9/64</span></td>
+<td style="text-align: right;"><span class="math inline">6/24</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">3/64</span></td>
 <td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(0,0,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">3/64</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">(0,1,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">3/64</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(1,0,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">(0,1,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(1,0,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="odd">
-<td><span class="math inline">(1,1,0)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-</tr>
-<tr class="even">
-<td><span class="math inline">(1,1,1)</span></td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1/64</span></td>
 <td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 </tbody>
 </table>
-<p>Combining sequences by their totals produces:</p>
+<p>Now collect those by total. Three sequences have total one and three have total two.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1266,265 +1067,144 @@ Figure&nbsp;17: Call 3: person 4
 <tbody>
 <tr class="odd">
 <td>0</td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
-<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">27/64</span></td>
+<td style="text-align: right;"><span class="math inline">6/24</span></td>
 </tr>
 <tr class="even">
 <td>1</td>
-<td style="text-align: right;"><span class="math inline">3/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/2</span></td>
+<td style="text-align: right;"><span class="math inline">27/64</span></td>
+<td style="text-align: right;"><span class="math inline">18/24</span></td>
 </tr>
 <tr class="odd">
 <td>2</td>
-<td style="text-align: right;"><span class="math inline">3/8</span></td>
-<td style="text-align: right;"><span class="math inline">1/2</span></td>
+<td style="text-align: right;"><span class="math inline">9/64</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 <tr class="even">
 <td>3</td>
-<td style="text-align: right;"><span class="math inline">1/8</span></td>
+<td style="text-align: right;"><span class="math inline">1/64</span></td>
 <td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 </tbody>
 </table>
+<p>That is what the marginalization bought. And it was not fun.</p>
 </div>
 </div>
 </div>
-</div>
-<p>The method is unchanged, but the bookkeeping is growing. If we only want an average, do we need the whole distribution?</p>
 </section>
+<section id="one-or-two-calls-out-of-three" class="level2">
+<h2 class="anchored" data-anchor-id="one-or-two-calls-out-of-three">One or two calls out of three</h2>
+<p>To get from three calls to two, add across the layers: each cell of the two-call grid collects the four cells stacked above it. That gives back the two-call grid for calls 1 and 2. Sum over a different call instead and you get the grid for one of the other pairs, and it is the same grid.</p>
+<p>Every row sums to <span class="math inline">1/4</span>, and so does every column. Group the people by response and you have the response’s distribution: zero with probability <span class="math inline">3/4</span>, one with probability <span class="math inline">1/4</span>. It is the same for either call, with or without replacement, and whether there were one, two, three, or <span class="math inline">n</span> calls.</p>
+<p>Now, why didn’t you have to do that? The first call, obviously: everyone is equally likely to be picked. But what’s special about the first? Nothing. That’s the argument.</p>
+<p>The principle behind each of these sampling schemes is uniformity among all possible call sequences. The possible set varies — every sequence of <span class="math inline">n</span> people with replacement, every sequence of <span class="math inline">n</span> distinct people without — but on that set, all sequences are equally likely. If all sequences are equally likely, then the subsequences sitting in any pair of slots are equally likely too. So is the one sitting in any single slot. Otherwise the whole premise was false.</p>
+<p>If you’re rolling a die, it doesn’t matter how many times you roll it. On each individual roll, or each pair of rolls, the same thing happens. It’s maybe a little less obvious when you shuffle a deck. But if you shuffle a deck and draw the top card, or shuffle a deck and then cut it and draw the top card, or the top two, the cut isn’t going to change anything. All configurations are equally likely after the cut. And that’s true if you cut twice: the slots you take don’t have to be consecutive. If you could change the distribution of a deck by cutting it, you wouldn’t be allowed to cut it.</p>
+<p>So the calculation was a painstaking way of seeing that. The calculation is useful to get the distribution of the sum. But to get down to a smaller sample size, we didn’t really have to do it. It just falls off the principle of the thing. From sequences to subsequences.</p>
+<p>If we just want to know the distribution of one or two things, that’s great, because that’s not an overwhelming problem. But what can this do for us?</p>
 </section>
 </section>
 <section id="sec-expectation" class="level1">
 <h1>Expectations</h1>
-<p>Often we do not need to know the whole distribution. We want a summary, such as the average response or total. We can calculate that summary directly, without first doing all the marginalization above.</p>
-<section id="expectation-and-location" class="level2">
-<h2 class="anchored" data-anchor-id="expectation-and-location">Expectation and location</h2>
-<p>The <em>expectation</em> of a random variable <span class="math inline">X</span> is its probability-weighted average. If its possible values are <span class="math inline">x</span>, then <span class="math display">
-\mathop{\mathrm{E}}[X]=\sum_x xP(X=x).
-</span> This means summing, over the horizontal axis, each value times the probability at that value. Histograms count dots: a bar’s height records the fraction at that value. Averaging the dots weights each value by that fraction. For a uniformly selected member of a finite population, those fractions are exactly the probabilities of its responses.</p>
-<p>Does that tell us where the distribution is located—where draws are likely to be?</p>
-<section id="a-single-bump" class="level3">
-<h3 class="anchored" data-anchor-id="a-single-bump">A single bump</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-means-single-mean" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-single-mean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-single-mean-1.svg" id="fig-means-single-mean" class="img-fluid figure-img">
+<p>What’s so special about expectations, that they don’t make us do all of that? Linearity. Expectations depend only on the marginals. Here is what that means on the grid.</p>
+<p>Take the population <span class="math inline">0,0,0,1</span> and the total of the two responses, <span class="math inline">S=Y_1+Y_2</span>. Here are its grids again. Each cell’s total is the sum of the two digits in it.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-grids-expectation-plot-1.svg" class="img-fluid"></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-single-mean-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;18
-</figcaption>
-</figure>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-grids-expectation-plot-2.svg" class="img-fluid"></p>
 </div>
 </div>
 </div>
-<p>The purple dots are a population of values. The gray bars count them, and the green line marks their average. In this example, the expectation is near the middle of the bump, where many of the values are. It looks like a reasonable summary of location.</p>
-</section>
-<section id="binary-responses" class="level3">
-<h3 class="anchored" data-anchor-id="binary-responses">Binary responses</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-means-binary" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-binary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-binary-1.svg" id="fig-means-binary" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-binary-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;19
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Now every value is zero or one. The average lies between them, where there are no dots at all. The same probability-weighted average no longer describes a typical individual response.</p>
-<p>Write <span class="math inline">\theta=P(X=1)</span> for the probability of one. Then <span class="math inline">P(X=0)=1-\theta</span>, and <span class="math display">
-\mathop{\mathrm{E}}[X]=0(1-\theta)+1\theta=\theta.
-</span> The expectation is the fraction of ones in the population.</p>
-</section>
-<section id="two-bumps" class="level3">
-<h3 class="anchored" data-anchor-id="two-bumps">Two bumps</h3>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-means-two-bumps" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-two-bumps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-two-bumps-1.svg" id="fig-means-two-bumps" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-two-bumps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;20
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p>Here there are two separated groups of values. Their average falls between the bumps. Again, the average need not be a place where individual draws are likely to be.</p>
-<p>It is reasonable to question whether any one location is a useful description of a coin flip or a pair of bumps. Why use the mean anyway? Because we will average many observations. If we average many independent draws, the average concentrates around the expectation, even when one draw is usually far from it. Linearity will explain the center of that average; variance will help us understand its spread in the next chapter.</p>
-</section>
-</section>
-<section id="calculate-the-expectation-two-ways" class="level2">
-<h2 class="anchored" data-anchor-id="calculate-the-expectation-two-ways">Calculate the expectation two ways</h2>
-<p>Return to the population <span class="math inline">0,0,1,1</span> and the two-call total <span class="math inline">S=Y_1+Y_2</span>. We have its distribution already. With replacement, <span class="math display">
-\mathop{\mathrm{E}}[S]=0\cdot\frac14+1\cdot\frac12+2\cdot\frac14=1.
-</span> Without replacement, <span class="math display">
-\mathop{\mathrm{E}}[S]=0\cdot\frac16+1\cdot\frac23+2\cdot\frac16=1.
+<p>To get the expectation of the total we don’t need its distribution. Multiply each cell’s total by that cell’s probability and add. With replacement every cell has probability <span class="math inline">1/16</span>, so reading the left grid row by row, <span class="math display">
+\mathop{\mathrm{E}}[S]=\frac{(0+0+0+1)+(0+0+0+1)+(0+0+0+1)+(1+1+1+2)}{16}=\frac12.
+</span> Without replacement the diagonal cells are impossible, and each remaining cell has probability <span class="math inline">1/12</span>, so reading the right grid row by row, <span class="math display">
+\mathop{\mathrm{E}}[S]=\frac{(0+0+1)+(0+0+1)+(0+0+1)+(1+1+1)}{12}=\frac12.
 </span></p>
-<p>We can also average directly over call sequences. This table lists the total response in every call cell, before combining any probabilities:</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>First person <span class="math inline">J_1</span> / second person <span class="math inline">J_2</span></th>
-<th style="text-align: right;">1</th>
-<th style="text-align: right;">2</th>
-<th style="text-align: right;">3</th>
-<th style="text-align: right;">4</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">2</td>
-</tr>
-</tbody>
-</table>
-<p>With replacement, multiply each entry by its call probability <span class="math inline">1/16</span> and sum: <span class="math display">
-\mathop{\mathrm{E}}[S]=\frac{(0+0+1+1)+(0+0+1+1)+(1+1+2+2)+(1+1+2+2)}{16}=1.
-</span> Without replacement, omit the diagonal cells and weight each remaining entry by <span class="math inline">1/12</span>: <span class="math display">
-\mathop{\mathrm{E}}[S]=\frac{(0+1+1)+(0+1+1)+(1+1+2)+(1+1+2)}{12}=1.
+<p>Now regroup. Each cell’s total is its first response plus its second, so we can add up all the first-response contributions, then all the second-response contributions.</p>
+<p>The first-response pass only uses the row totals. With replacement each row has total probability <span class="math inline">4/16</span>, so it is <span class="math display">
+\frac{4\cdot0+4\cdot0+4\cdot0+4\cdot1}{16}=\frac14.
+</span> Without replacement each row has total probability <span class="math inline">3/12</span>, so it is <span class="math display">
+\frac{3\cdot0+3\cdot0+3\cdot0+3\cdot1}{12}=\frac14.
+</span> The second-response pass is the same calculation down the columns. Under either scheme, <span class="math display">
+\mathop{\mathrm{E}}[Y_1+Y_2]=\mathop{\mathrm{E}}[Y_1]+\mathop{\mathrm{E}}[Y_2]=\frac14+\frac14=\frac12.
 </span></p>
-<p>This is the same average as before. Marginalization groups equal totals and adds their probabilities first. The direct calculation weights each call sequence’s total first and then adds. Neither changes what is being averaged.</p>
-<p>We can change the order once more. Each cell’s total is its first response plus its second. Sum all the first-response contributions separately from the second-response contributions. With replacement, the first-response calculation is <span class="math display">
-\frac{4\cdot0+4\cdot0+4\cdot1+4\cdot1}{16}=\frac12.
-</span> Without replacement, it is <span class="math display">
-\frac{3\cdot0+3\cdot0+3\cdot1+3\cdot1}{12}=\frac12.
-</span> The second-response calculation is the same, using columns instead of rows. Under either sampling scheme, <span class="math display">
-\mathop{\mathrm{E}}[Y_1+Y_2]=\mathop{\mathrm{E}}[Y_1]+\mathop{\mathrm{E}}[Y_2]=\frac12+\frac12=1.
-</span></p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>Repeat the distribution calculation and the direct call-sequence calculation for the population <span class="math inline">0,0,0,1</span>, under both sampling schemes.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>With replacement, the distribution calculation is <span class="math display">
-0\cdot\frac9{16}+1\cdot\frac6{16}+2\cdot\frac1{16}=\frac12.
-</span> The rows of call totals are now <span class="math inline">(0,0,0,1)</span> for each of people 1, 2, and 3, and <span class="math inline">(1,1,1,2)</span> for person 4. Averaging all sixteen cells directly produces <span class="math display">
-\frac{(0+0+0+1)+(0+0+0+1)+(0+0+0+1)+(1+1+1+2)}{16}=\frac12.
-</span> Without replacement, the distribution calculation is <span class="math inline">0\cdot1/2+1\cdot1/2=1/2</span>. Omitting the diagonal from the call table instead produces <span class="math display">
-\frac{(0+0+1)+(0+0+1)+(0+0+1)+(1+1+1)}{12}=\frac12.
-</span></p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="linearity" class="level2">
-<h2 class="anchored" data-anchor-id="linearity">Linearity</h2>
-<p>There are two things going on here. To average a sum of two things, we can take two averages and sum. To average a constant times a random variable, we multiply the random variable’s average by the constant. In other words, we can <em>distribute</em> expectations and can pull constants out of them. For random variables <span class="math inline">Y</span> and <span class="math inline">Z</span> and numbers <span class="math inline">a</span> and <span class="math inline">b</span>, these rules do not require independence: <span class="math display">
-\mathop{\mathrm{E}}[aY+bZ]=a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
-</span> The proof is the regrouping we just did. For finite-valued random variables, <span class="math display">
+<p>The row totals are the first call’s marginal distribution. The column totals are the second call’s. So we didn’t need this whole thing, and the part we did need we never needed this for. The same regrouping works for three calls, or <span class="math inline">n</span>, without drawing the cube.</p>
+<p>There are two things going on here. To average a sum of two things, we can take two averages and sum. To average a constant times a random variable, we multiply the random variable’s average by the constant. In other words, we can <em>distribute</em> expectations and can pull constants out of them. For random variables <span class="math inline">Y</span> and <span class="math inline">Z</span> and numbers <span class="math inline">a</span> and <span class="math inline">b</span>, <span class="math display">
+\mathop{\mathrm{E}}\p*{aY+bZ}=a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
+</span> These rules do not require the two random variables to be independent.</p>
+<p>In essence it comes down to the fact that all we’re doing is summing. Expectations are probability-weighted sums, and we’re looking at the expectation of a sum. And we can change the order we sum in without changing what we get. The marginalization step sums along a row or a column of the grid. <span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}[aY+bZ]
-&amp;\overset{\texttip{\small{\text{?}}}{definition of expectation}}{=}\sum_y\sum_z(ay+bz)P(Y=y,Z=z)\\
+\mathop{\mathrm{E}}\p*{aY+bZ}
+&amp;\overset{\texttip{\small{\text{?}}}{by definition of expectation}}{=}\sum_y\sum_z(ay+bz)P(Y=y,Z=z)\\
 &amp;\overset{\texttip{\small{\text{?}}}{changing the order in which we sum}}{=}\sum_y\sum_z ayP(Y=y,Z=z)+\sum_z\sum_y bzP(Y=y,Z=z)\\
 &amp;\overset{\texttip{\small{\text{?}}}{pulling constants out of the inner sums}}{=}\sum_y ay\sum_zP(Y=y,Z=z)+\sum_z bz\sum_yP(Y=y,Z=z)\\
-&amp;\overset{\texttip{\small{\text{?}}}{summing to obtain marginal probabilities}}{=}\sum_y ayP(Y=y)+\sum_z bzP(Z=z)\\
-&amp;\overset{\texttip{\small{\text{?}}}{pulling constants out of the remaining sums}}{=}a\sum_y yP(Y=y)+b\sum_z zP(Z=z)\\
-&amp;\overset{\texttip{\small{\text{?}}}{definition of expectation}}{=}a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
+&amp;\overset{\texttip{\small{\text{?}}}{summing to get marginal probabilities from our joint}}{=}\sum_y ayP(Y=y)+\sum_z bzP(Z=z)\\
+&amp;\overset{\texttip{\small{\text{?}}}{pulling constants out of the remaining sum}}{=}a\sum_y yP(Y=y)+b\sum_z zP(Z=z)\\
+&amp;\overset{\texttip{\small{\text{?}}}{by definition}}{=}a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
 \end{aligned}
-</span> The fourth line sums rows and columns to obtain marginal probabilities. It does not factor joint probabilities. That is why independence is unnecessary.</p>
+</span></p>
 </section>
-<section id="indicators-and-probabilities" class="level2">
-<h2 class="anchored" data-anchor-id="indicators-and-probabilities">Indicators and probabilities</h2>
-<p>An indicator records whether a condition holds: it is one when the condition holds and zero otherwise. For example, <span class="math inline">1_{=j}(J_i)</span> indicates that call <span class="math inline">i</span> selects person <span class="math inline">j</span>: <span class="math display">
+<section id="sec-unbiasedness" class="level1">
+<h1>Unbiasedness</h1>
+<p>The margins are free, so the expectation of the sample mean is the population mean under every one of these sampling schemes.</p>
+<p>A tool we use here is understanding probability as an expectation. An indicator records whether a condition holds: it is one when the condition holds and zero otherwise. Write <span class="math inline">1_{=j}(J_i)</span> for the indicator that call <span class="math inline">i</span> selects person <span class="math inline">j</span>, <span class="math display">
 1_{=j}(J_i)=
 \begin{cases}
 1 &amp; \text{if } J_i=j,\\
 0 &amp; \text{otherwise.}
 \end{cases}
-</span> This is a binary random variable. Its expectation is the probability that it is one: <span class="math display">
+</span> It is a binary random variable, and its probability-weighted average is the probability that it is one, <span class="math display">
 \mathop{\mathrm{E}}[1_{=j}(J_i)]
 =0P(J_i\ne j)+1P(J_i=j)
 =P(J_i=j).
-</span> We use indicators to express probabilities as expectations.</p>
-</section>
-<section id="uniform-sampling-and-unbiasedness" class="level2">
-<h2 class="anchored" data-anchor-id="uniform-sampling-and-unbiasedness">Uniform sampling and unbiasedness</h2>
-<p>Let the fixed population responses be <span class="math inline">y_1 \ldots y_m</span>, where <span class="math inline">m</span> is the number of people. Write <span class="math inline">\mu=m^{-1}\sum_{j=1}^m y_j</span> for the population mean. Call <span class="math inline">i</span> selects person <span class="math inline">J_i</span> and observes <span class="math inline">Y_i=y_{J_i}</span>.</p>
-<p>Sampling uniformly means that each call, considered on its own, is equally likely to go to anyone in the population: <span class="math inline">P(J_i=j)=1/m</span> for every person <span class="math inline">j</span>. Our marginalization example showed this for both sampling schemes. It does not say that different calls are independent.</p>
-<p>Exactly one selection indicator is one, so <span class="math display">
+</span> This is a principle, not a notational trick: probabilities are expectations of indicators. Every rule we prove for expectations is also a tool for probabilities.</p>
+<p>For sampling, the possibilities are people. Number the people in a population from 1 to <span class="math inline">m</span> and write <span class="math inline">y_1 \ldots y_m</span> for their responses, with population mean <span class="math inline">\mu=m^{-1}\sum_{j=1}^m y_j</span>. Sampling one person uniformly at random means each person has probability <span class="math inline">1/m</span> of being selected, so <span class="math inline">P(J_i=j)=1/m</span>.</p>
+<p>The population in the figure below has 100 people: 40 respond one and 60 respond zero. The figure shows samples of 5, 20, and 80 people under three mechanisms.</p>
+<ul>
+<li><strong>With replacement:</strong> select each person uniformly and independently from the whole population.</li>
+<li><strong>Without replacement:</strong> select uniformly from the people not yet chosen.</li>
+<li><strong>Random-start cycle:</strong> arrange the 40 ones followed by the 60 zeros around a circle. Select a starting person uniformly, then take consecutive people.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-uniform-schemes-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>On call <span class="math inline">i</span> we select person <span class="math inline">J_i</span> and observe <span class="math inline">Y_i=y_{J_i}</span>. Exactly one of the selection indicators is one, so this sum picks out the selected person’s value, <span class="math display">
 Y_i=\sum_{j=1}^m y_j1_{=j}(J_i).
-</span> Taking its expectation, using linearity and then uniform sampling, <span class="math display">
+</span> Linearity and the indicator turn its expectation into the population average, <span class="math display">
 \begin{aligned}
 \mathop{\mathrm{E}}[Y_i]
-&amp;=\sum_{j=1}^m y_j\mathop{\mathrm{E}}[1_{=j}(J_i)]\\
-&amp;=\sum_{j=1}^m y_jP(J_i=j)\\
-&amp;=\frac1m\sum_{j=1}^m y_j=\mu.
+&amp;\overset{\texttip{\small{\text{?}}}{linearity}}{=}\sum_{j=1}^m y_j\mathop{\mathrm{E}}[1_{=j}(J_i)]\\
+&amp;\overset{\texttip{\small{\text{?}}}{probability as expectation}}{=}\sum_{j=1}^m y_jP(J_i=j)\\
+&amp;\overset{\texttip{\small{\text{?}}}{uniform sampling}}{=}\frac1m\sum_{j=1}^m y_j\\
+&amp;=\mu.
 \end{aligned}
-</span> The same calculation works for a function <span class="math inline">f</span> of the response: replace each population value <span class="math inline">y_j</span> by <span class="math inline">f(y_j)</span>. Thus <span class="math display">
+</span></p>
+<p>That holds for every call, under each of the three mechanisms.</p>
+<p>The same calculation with any function of the response in place of the response itself gives <span class="math display">
 \mathop{\mathrm{E}}[f(Y_i)]=\frac1m\sum_{j=1}^m f(y_j).
 </span></p>
-<p>Now take <span class="math inline">n</span> calls and write <span class="math inline">\hat\mu=n^{-1}\sum_{i=1}^nY_i</span> for their sample mean. Linearity implies <span class="math display">
+<p>The sample mean of <span class="math inline">n</span> calls is <span class="math inline">\hat\mu=n^{-1}\sum_{i=1}^nY_i</span>, and linearity adds the calls up, <span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}[\hat\mu]
-&amp;=\mathop{\mathrm{E}}\left[\frac1n\sum_{i=1}^nY_i\right]\\
-&amp;=\frac1n\sum_{i=1}^n\mathop{\mathrm{E}}[Y_i]
-=\frac1n\sum_{i=1}^n\mu
-=\mu.
+\mathop{\mathrm{E}}\sb*{\frac1n\sum_{i=1}^n Y_i}
+&amp;\overset{\texttip{\small{\text{?}}}{via linearity}}{=}\frac1n\sum_{i=1}^n \mathop{\mathrm{E}}[Y_i]\\
+&amp;\overset{\texttip{\small{\text{?}}}{via uniform sampling}}{=}\frac1n\sum_{i=1}^n \mu\\
+&amp;=\frac1n \times n \times \mu = \mu.
 \end{aligned}
 </span></p>
-<p>The <strong>bias</strong> of an estimator is the difference between its expected value and the value of the thing it estimates. Here that difference is zero: the sample mean is an <strong>unbiased estimator</strong> of the population mean. This is true with or without replacement. The calculation used uniformity of each call and linearity, not independence.</p>
-<p>Why care? If we calibrate intervals to cover the estimator’s mean 95% of the time, how often will they cover the thing we are estimating? For an unbiased estimator, those centers agree. For a biased estimator, they do not. The distinction matters for coverage even if the sampling distribution has the same shape and spread.</p>
-</section>
+<p>The sample mean is an <em>unbiased estimator</em> of the population mean, under each of the three mechanisms. The blue line is on top of the green line, and we never built the distribution. Lack of independence does <em>not</em> make calculating the expectation of a mean any harder, because linearity of expectation doesn’t require independence.</p>
+<p>So it did in fact matter which center. We calibrated to contain a fraction of the distribution around it. But that only works because the estimator is unbiased.</p>
 </section>
 <section id="from-an-expectation-to-a-probability-bound" class="level1">
 <h1>From an expectation to a probability bound</h1>
+<p>An expectation alone bounds a probability.</p>
 <section id="indicators-count-the-observations-in-an-event" class="level2">
 <h2 class="anchored" data-anchor-id="indicators-count-the-observations-in-an-event">Indicators count the observations in an event</h2>
 <p>Consider the vote histories of a small town. Each dot is a resident, and its value is how many of the last five elections they voted in. The histogram counts these same residents. The blue region selects those who voted in at least four elections. Replace each selected resident’s value by one and each remaining value by zero. Averaging these indicators counts the selected residents and divides by the population size. This is the fraction in the blue region. For a random variable <span class="math inline">X</span> and a threshold <span class="math inline">t</span>, write <span class="math inline">1_{\ge t}(X)</span> for the indicator that <span class="math inline">X\ge t</span>. More generally, <span class="math display">
@@ -1532,97 +1212,29 @@ Y_i=\sum_{j=1}^m y_j1_{=j}(J_i).
 =0P(X&lt;t)+1P(X\ge t)
 =P(X\ge t).
 </span></p>
-<div class="cell quarto-layout-panel" data-layout="[[2,1]]">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 66.7%;justify-content: flex-start;">
-<div id="fig-means-indicator-1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The town's residents and their vote-history histogram with the selected tail shaded blue.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-indicator-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-indicator-1.svg" id="fig-means-indicator-1" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with the selected tail shaded blue.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-indicator-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;21
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-means-indicator-2" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The town's residents and their vote-history histogram with the selected tail shaded blue.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-indicator-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-indicator-2.svg" id="fig-means-indicator-2" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with the selected tail shaded blue.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-indicator-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22
-</figcaption>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-markov-indicator-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<p>The town has 100 residents; 39 are in the blue region. Their indicator average is <span class="math inline">(61\cdot0+39\cdot1)/100</span>.</p>
+<p>The town has 100 residents; 39 are in the blue region. The average of the indicators is <span class="math inline">(61\cdot0+39\cdot1)/100</span>.</p>
+<p>The blue line is the indicator function: zero below the threshold, one at or above it. The area of each resident’s dot is that indicator value.</p>
 </section>
 <section id="markovs-inequality" class="level2">
 <h2 class="anchored" data-anchor-id="markovs-inequality">Markov’s inequality</h2>
 <p>Suppose <span class="math inline">X</span> is nonnegative and <span class="math inline">t&gt;0</span>. Compare the indicator with the ramp <span class="math inline">X/t</span>. Below the threshold, the indicator is zero and the ramp is nonnegative. At or above the threshold, the indicator is one and the ramp is at least one. At every possible value, <span class="math display">
 1_{\ge t}(X)\le\frac Xt.
 </span> In the picture, dot area represents the function value. Replacing the indicator by the ramp never decreases a dot’s area. The unit of area stays fixed: an indicator value of one and a ramp value of one have the same area.</p>
-<section id="from-an-indicator-to-a-ramp" class="level3">
-<h3 class="anchored" data-anchor-id="from-an-indicator-to-a-ramp">From an indicator to a ramp</h3>
-<div class="cell quarto-layout-panel" data-layout="[[2,1]]">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 66.7%;justify-content: flex-start;">
-<div id="fig-means-markov-indicator-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-markov-indicator-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-markov-indicator-1.svg" id="fig-means-markov-indicator-1" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-markov-indicator-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23
-</figcaption>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-markov-ramp-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-means-markov-indicator-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-markov-indicator-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-markov-indicator-2.svg" id="fig-means-markov-indicator-2" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-markov-indicator-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;24
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<p>The graph on the right is the indicator function: zero below the threshold, one at or above it. On the left, the area of each resident’s dot is that indicator value. Averaging these zero-or-one areas produces the fraction of residents in the selected event.</p>
-<div class="cell quarto-layout-panel" data-layout="[[2,1]]">
-<div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 66.7%;justify-content: flex-start;">
-<div id="fig-means-markov-ramp-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-markov-ramp-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-markov-ramp-1.svg" id="fig-means-markov-ramp-1" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-markov-ramp-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;25
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;">
-<div id="fig-means-markov-ramp-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-markov-ramp-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-markov-ramp-2.svg" id="fig-means-markov-ramp-2" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-markov-ramp-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;26
-</figcaption>
-</figure>
-</div>
 </div>
 </div>
 </div>
@@ -1635,7 +1247,37 @@ P(X\ge t)
 &amp;=\frac{\mathop{\mathrm{E}}[X]}t.
 \end{aligned}
 </span></p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<p>Markov’s inequality needs two things: that the random variable is nonnegative, and its expectation. It does not care where the expectation sits. Here are three populations. In each, the purple dots are the values, the gray bars count them, and the green line marks the expectation.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-single-mean-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-binary-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-two-bumps-plot-1.svg" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the first, the expectation is in the middle of the bump, where many values are. In the second, every value is zero or one, and the expectation is between them, where no value is. In the third, the expectation is between the two bumps. In all three, Markov’s bound on <span class="math inline">P(X\ge t)</span> is <span class="math inline">\mathop{\mathrm{E}}[X]/t</span>. The same expectation, the same bound, whether or not a draw ever lands there.</p>
+<div id="exr-nonnegative-markov" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 18.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1651,7 +1293,7 @@ P(X\ge t)
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1660,20 +1302,15 @@ P(X\ge t)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>For negative <span class="math inline">x</span>, the indicator is zero but <span class="math inline">x/t</span> is negative. The ramp no longer bounds the indicator. A centered random variable can have mean zero while some of its values exceed one: its positive and negative values cancel in the mean.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-means-nonnegative-counterexample" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-nonnegative-counterexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-nonnegative-counterexample-1.svg" id="fig-means-nonnegative-counterexample" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-nonnegative-counterexample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;27
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-nonnegative-counterexample-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1682,91 +1319,49 @@ Figure&nbsp;27
 </div>
 </div>
 </div>
-</section>
 </section>
 <section id="what-markov-misses-about-a-sample-mean" class="level2">
 <h2 class="anchored" data-anchor-id="what-markov-misses-about-a-sample-mean">What Markov misses about a sample mean</h2>
-<p>Can we use Markov to calibrate an interval for a population mean? Consider a binary response with population frequency <span class="math inline">\theta</span> and sample frequency <span class="math inline">\hat\theta</span>, using uniform sampling as above. We know <span class="math inline">\mathop{\mathrm{E}}[\hat\theta]=\theta</span>. Markov implies that, with probability at least <span class="math inline">97.5\%</span>, <span class="math display">
-0.025\hat\theta\le\theta.
-</span> Apply the same argument to <span class="math inline">1-\hat\theta</span>, whose expectation is <span class="math inline">1-\theta</span>. With probability at least <span class="math inline">97.5\%</span>, <span class="math display">
-\theta\le1-0.025(1-\hat\theta).
-</span> Either inequality can fail with probability at most <span class="math inline">2.5\%</span>, so the probability that at least one fails is at most <span class="math inline">5\%</span>. We have a guaranteed <span class="math inline">95\%</span> interval, <span class="math display">
-\left[0.025\hat\theta,\;1-0.025(1-\hat\theta)\right].
-</span> Its width is <span class="math inline">0.975</span>. If our observed frequency is <span class="math inline">0.7</span>, the interval is <span class="math inline">[0.0175,0.9925]</span>. We have ruled out almost nothing.</p>
-<p>Compare this with the bootstrap/binomial intervals. For binary responses, resampling from the observed sample produces the binomial model with its success probability set to <span class="math inline">\hat\theta</span>. Those calibrated intervals narrow as the sample grows. The Markov interval above does not: the expectation of the sample frequency remains <span class="math inline">\theta</span> for every sample size.</p>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mcal.theta <span class="ot">=</span> <span class="fl">0.7</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mcal.n <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>, <span class="dv">320</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mcal.p <span class="ot">=</span> <span class="fu">lapply</span>(<span class="fu">setNames</span>(mcal.n, mcal.n), <span class="cf">function</span>(nn)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">100</span>, nn, mcal.theta)<span class="sc">/</span>nn))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mcal.lo <span class="ot">=</span> mcal.hi <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mcal.lo<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="fl">0.025</span><span class="sc">*</span>p)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mcal.hi<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="dv">1</span><span class="fl">-0.025</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p))</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(mcal.p)) {</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  nn <span class="ot">=</span> <span class="fu">as.numeric</span>(nm)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  hw.plugin <span class="ot">=</span> <span class="fu">vapply</span>(mcal.p[[nm]], <span class="cf">function</span>(pp) <span class="fu">width_binom</span>(pp, nn)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>hw.plugin</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">+</span>hw.plugin</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p>The panels show the same construction for three sample sizes. Each purple dot is a sample frequency. For one highlighted sample, the <span class="pink">bootstrap/binomial interval is pink</span>; the dark interval is Markov’s. The green line is the population frequency. Both intervals use the same sample.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">20 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">80 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-3" role="tab" aria-controls="tabset-2-3" aria-selected="false" href="">320 observations</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p>Can we use Markov to calibrate an interval for a population mean? Consider a binary response with population frequency <span class="math inline">\theta</span> and sample frequency <span class="math inline">\hat\theta</span>, using uniform sampling as above. We know <span class="math inline">\mathop{\mathrm{E}}[\hat\theta]=\theta</span>, and <span class="math inline">\hat\theta</span> is nonnegative, so Markov applies to it. Taking the threshold <span class="math inline">t=20\theta</span>, <span class="math display">
+P(\hat\theta\ge20\theta)\le\frac{\theta}{20\theta}=0.05.
+</span> So with probability at least <span class="math inline">95\%</span>, our sample frequency is below <span class="math inline">20\theta</span>. That is a statement about <span class="math inline">\hat\theta</span>, which we observe; it rearranges into one about <span class="math inline">\theta</span>, which we do not. <span class="math display">
+\theta\ge0.05\hat\theta \qqtext{ with probability at least } 95\%
+</span> If our observed frequency is <span class="math inline">0.7</span>, we learn that <span class="math inline">\theta\ge0.035</span>. A frequency cannot exceed one, so our guaranteed <span class="math inline">95\%</span> interval is <span class="math inline">[0.035,1]</span>. We have ruled out almost nothing.</p>
+<p>One side is all Markov can give us. It bounds the probability of landing far <em>above</em> the mean and says nothing about landing far below, so it supplies a lower bound on <span class="math inline">\theta</span> and no upper bound at all.</p>
+<p>That is less of a limitation than it sounds, because plenty of the questions we actually have are one-sided. How low could turnout really be, given what we saw? How bad might this be for us? Those never needed an upper bound. So the fair comparison is not against a two-sided interval but against a one-sided bound built the way our earlier ones were, from the binomial model with its frequency set to <span class="math inline">\hat\theta</span>: take the <span class="math inline">95</span>th percentile of the error <span class="math inline">\hat\theta-\theta</span> under that model and subtract it from our estimate.</p>
+<p>Those calibrated bounds narrow as the sample grows. The Markov bound above does not: the expectation of the sample frequency remains <span class="math inline">\theta</span> for every sample size.</p>
+<p>The panels show the same construction for three sample sizes. Each purple dot is a sample frequency. For one highlighted sample, the <span class="pink">bootstrap/binomial bound is pink</span> and the dark one is Markov’s. Both are one-sided, so both run to the right edge; what differs is where each one starts. The green line is the population frequency, and both use the same sample.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-means-calibration-20" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-calibration-20-1.svg" id="fig-means-calibration-20" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;28
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-calibration-20-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-means-calibration-80" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-calibration-80-1.svg" id="fig-means-calibration-80" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;29
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-calibration-80-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-2-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-3-tab">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-means-calibration-320" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-means-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-random-variables-and-moments_files/figure-html/fig-means-calibration-320-1.svg" id="fig-means-calibration-320" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-means-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;30
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-random-variables-and-moments_files/figure-html/means-calibration-320-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
-<p>The Markov guarantee is valid without knowing the full sampling distribution, and even without independence. The bootstrap/binomial calibration uses more information and is much more informative here; its plug-in calibration is not itself a distribution-free guarantee. What can we learn about the narrowing spread without calculating the full distribution?</p>
+<p>The Markov guarantee is valid without knowing the full sampling distribution, and even without independence. The bootstrap/binomial calibration uses more information and is much more informative here; its plug-in calibration is not itself a distribution-free guarantee. Our one-sided bound says that <span class="math inline">\theta</span> is not much smaller than what we observed, and nothing at all about its being much larger.</p>
+<p>To get both sides out of Markov we would have to apply it to a quantity that is large whenever our error is large in <em>either</em> direction. Squared error is such a quantity, and its mean is the subject of the next chapter.</p>
+
+
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
@@ -1781,228 +1376,17 @@ eyJjb250ZW50cyI6W119
 <script type="vfs-file">
 W10=
 </script>
-<script>
-function toggleDrawable(id) {
-  var overlay = document.getElementById(id);
-  var btn = overlay.nextElementSibling;
-  var resetBtn = overlay.resetBtn;
-  
-  // Lazy init on first click
-  if (!overlay.dataset.drawableInit) {
-    initDrawable(id);
-  }
-  
-  var isDrawing = overlay.dataset.drawing === 'true';
-  var syncCamera = overlay.dataset.syncCamera === 'true';
-  if (!isDrawing) {
-    // Enable drawing mode
-    overlay.dataset.drawing = 'true';
-    overlay.style.pointerEvents = 'auto';
-    // Reveal walks up from the touch target looking for this attribute, so it
-    // covers every touch landing on the tldraw surface. Without it a pen stroke
-    // across the figure swipes the slide.
-    overlay.setAttribute('data-prevent-swipe', '');
-    btn.textContent = '✕';
-    if (resetBtn) {
-      resetBtn.style.pointerEvents = 'auto';
-    }
-    // Add drawing-active class after a delay to let TLDraw mount
-    setTimeout(function() {
-      overlay.classList.add('drawing-active');
-    }, 100);
-    Drawable.setDrawingMode(id, true);
-    if (syncCamera) {
-      Drawable.setCameraActive(id, true);
-    }
-  } else {
-    // Disable drawing mode (but keep canvas visible)
-    overlay.dataset.drawing = 'false';
-    overlay.style.pointerEvents = 'none';
-    overlay.removeAttribute('data-prevent-swipe');
-    overlay.classList.remove('drawing-active');
-    btn.textContent = '✏️';
-    if (resetBtn) {
-      resetBtn.style.pointerEvents = 'none';
-    }
-    Drawable.setDrawingMode(id, false);
-    if (syncCamera) {
-      Drawable.setCameraActive(id, false);
-    }
-  }
-}
-
-// Initialize drawable lazily when first clicked
-function initDrawable(id) {
-  var overlay = document.getElementById(id);
-  if (!overlay || overlay.dataset.drawableInit) return;
-  
-  var syncCamera = overlay.dataset.syncCamera === 'true';
-  var isScrolly = overlay.dataset.scrolly === 'true';
-  overlay.dataset.drawableInit = 'true';
-  overlay.dataset.drawing = 'false';
-  
-  // For scrolly, find the image-toggle container
-  var scrollyContainer = null;
-  if (isScrolly) {
-    var figureCol = overlay.closest('.image-toggle-figure');
-    scrollyContainer = figureCol?.querySelector('.image-toggle');
-  }
-  
-  Drawable.mount(overlay, { 
-    persist: overlay.dataset.persist === 'true', 
-    id: id,
-    syncCamera: syncCamera,
-    scrolly: isScrolly,
-    scrollyContainer: scrollyContainer
-  });
-  
-  // Register linked camera group if specified
-  var linkedGroup = overlay.dataset.linkedGroup;
-  if (linkedGroup) {
-    // Small delay to ensure editor is mounted
-    setTimeout(function() {
-      Drawable.registerLinkedCamera(id, linkedGroup);
-    }, 100);
-  }
-}
-
-// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
-// Run after a delay to let image-toggle do its work first
-setTimeout(function() {
-  // Check if image-toggle has run yet
-  if (!document.querySelector('.image-toggle-sidebar')) {
-    setTimeout(arguments.callee, 500);
-    return;
-  }
-  var figCounter = 0;
-  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
-    figCounter++;
-    var id = 'drawable-toggle-' + figCounter;
-    
-    // For sidebar layout, find the figure column; otherwise use the toggle itself
-    var sidebar = toggle.closest('.image-toggle-sidebar');
-    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
-    
-    // Make the target position:relative if not already
-    figureCol.style.position = 'relative';
-    
-    // Create overlay
-    var overlay = document.createElement('div');
-    overlay.className = 'drawable-overlay';
-    overlay.id = id;
-    overlay.dataset.drawable = '';
-    overlay.dataset.persist = 'false';
-    overlay.dataset.syncCamera = 'true';
-    overlay.dataset.scrolly = 'true';
-    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
-    figureCol.appendChild(overlay);
-    
-    // Create toggle button
-    var btn = document.createElement('button');
-    btn.className = 'drawable-toggle';
-    btn.textContent = '✏️';
-    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
-    btn.onclick = function(e) { 
-      e.stopPropagation();
-      toggleDrawable(id); 
-    };
-    figureCol.appendChild(btn);
-    
-    // Create reset button
-    var resetBtn = document.createElement('button');
-    resetBtn.className = 'drawable-reset';
-    resetBtn.textContent = '⟲';
-    resetBtn.title = 'Reset view';
-    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
-    resetBtn.onclick = function(e) {
-      e.stopPropagation();
-      Drawable.resetCamera(id);
-    };
-    figureCol.appendChild(resetBtn);
-    
-    // Show reset button when drawing is active
-    overlay.resetBtn = resetBtn;
-  });
-  
-  // Handle linked-cameras groups
-  var linkedGroupCounter = 0;
-  document.querySelectorAll('.linked-cameras').forEach(function(group) {
-    linkedGroupCounter++;
-    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
-    var figCounter = 0;
-    
-    // Find all figures/plots inside this group
-    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
-      if (cell.closest('.image-toggle')) return; // Skip scrolly images
-      if (!cell.querySelector('svg, img')) return; // No image
-      
-      figCounter++;
-      var id = 'linked-' + groupName + '-' + figCounter;
-      
-      // Make cell position relative
-      cell.style.position = 'relative';
-      
-      // Create overlay
-      var overlay = document.createElement('div');
-      overlay.className = 'drawable-overlay';
-      overlay.id = id;
-      overlay.dataset.drawable = '';
-      overlay.dataset.persist = 'false';
-      overlay.dataset.syncCamera = 'true';
-      overlay.dataset.linkedGroup = groupName;
-      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
-      cell.appendChild(overlay);
-      
-      // Create toggle button
-      var btn = document.createElement('button');
-      btn.className = 'drawable-toggle';
-      btn.textContent = '✏️';
-      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
-      btn.onclick = function(e) { 
-        e.stopPropagation();
-        // Init all drawables in this linked group first
-        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
-          if (!o.dataset.drawableInit) {
-            initDrawable(o.id);
-          }
-        });
-        toggleDrawable(id); 
-      };
-      cell.appendChild(btn);
-      
-      // Create reset button
-      var resetBtn = document.createElement('button');
-      resetBtn.className = 'drawable-reset';
-      resetBtn.textContent = '⟲';
-      resetBtn.title = 'Reset view';
-      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
-      resetBtn.onclick = function(e) {
-        e.stopPropagation();
-        // Reset all cameras in the group
-        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
-          Drawable.resetCamera(o.id);
-        });
-      };
-      cell.appendChild(resetBtn);
-      
-      overlay.resetBtn = resetBtn;
-    });
-  });
-}, 100);
-</script>
-
 </section>
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
-window._ojs.paths.runtimeToDoc = "../../..";
-window._ojs.paths.runtimeToRoot = "../../../..";
+window._ojs.paths.runtimeToDoc = "../../chapters";
+window._ojs.paths.runtimeToRoot = "../..";
 window._ojs.paths.docToRoot = "..";
 window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
@@ -2446,6 +1830,18 @@ window._ojs.runtime.interpretFromScriptTags();
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../part1-moments.html" class="pagination-link" aria-label="1.2 Moments and approximate calibration">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">1.2 Moments and approximate calibration</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../homework/homework-sample-size-coverage.html" class="pagination-link" aria-label="Homework: Sample Size Calculation and Coverage">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
