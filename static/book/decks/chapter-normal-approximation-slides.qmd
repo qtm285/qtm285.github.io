@@ -1,0 +1,1080 @@
+---
+title: "Normal Approximation and Sample Size Calculation"
+format: "tlda-labs/tlda-revealjs"
+# knitr caching off for this deck: the build box fails writing the cache (2026-10-06)
+execute:
+  cache: false
+---
+
+
+
+# Review
+
+{{< include shared/shared-code.qmd >}}
+{{< include ga-turnout.qmd >}}
+
+## Where We Left Off: Exact and Guaranteed
+
+```{r}
+#| label: intcomp-data
+#| include: false
+library(ggplot2)
+
+# Plot helper only. All statistical work lives in visible intcomp-calc.
+# No legend is drawn on the plot: the slide text beside each figure carries
+# the pink/teal key in matching colors.
+intcomp.plot = function(estimator, state=3) {
+  stopifnot(estimator %in% c("binomial", "hypergeometric"), state %in% 1:3)
+  if (estimator == "binomial") {
+    samples = intcomp.samples.binom
+    hw.exact = intcomp.hw.exact.binom
+    hw.cheb = intcomp.hw.cheb.binom
+    pmf = intcomp.pmf.binom
+  } else {
+    samples = intcomp.samples.hyper
+    hw.exact = intcomp.hw.exact.hyper
+    hw.cheb = intcomp.hw.cheb.hyper
+    pmf = intcomp.pmf.hyper
+  }
+  # bootstrap = binomial plug-in at each sample's own proportion; it doesn't know m
+  hw.boot = sapply(samples[1:100], \(p) width_binom(p, intcomp.n)/2)
+  hws = list(hw.exact, hw.cheb, hw.boot)
+  colors = c(pink, teal, 'black')
+  offsets = c(0, .04, -.04)
+  # all 100 sample means carry the current technique's interval; the highlighted
+  # sample keeps every technique so far: exact, Chebyshev above it, bootstrap below.
+  current = with_annotations(samples, height=1, dots=100, highlight.dots=1,
+                 interval.width=2*hws[[state]], vline.alpha=NA, seed=default.seed)
+  current[[3]]$data$color[1] = colors[state]
+  current[[3]]$data$y[1] = current[[3]]$data$y[1] + offsets[state]
+  hero = lapply(seq_len(state - 1), function(k) {
+    g = with_annotations(samples, height=1, dots=100, highlight.dots=1,
+          interval.width=2*hws[[k]], vline.alpha=NA, seed=default.seed,
+          unhighlighted.dot.alpha=0)
+    g[[3]]$data$color[1] = colors[k]
+    g[[3]]$data$y[1] = g[[3]]$data$y[1] + offsets[k]
+    g
+  })
+  sampling.dist = geom_col(aes(x=(0:intcomp.n)/intcomp.n, y=pmf/max(pmf)),
+                           alpha=.1, linewidth=.1, fill='black', color='black')
+  estimand = geom_vline(xintercept=intcomp.theta, color='green', linewidth=3, alpha=.8)
+  limits = range(c(intcomp.samples.binom[1:100]-intcomp.hw.cheb.binom,
+                   intcomp.samples.binom[1:100]+intcomp.hw.cheb.binom,
+                   intcomp.samples.hyper[1:100]-intcomp.hw.cheb.hyper,
+                   intcomp.samples.hyper[1:100]+intcomp.hw.cheb.hyper))
+  ggplot() + sampling.dist + estimand + current + hero +
+    coord_cartesian(xlim=limits+c(-.005,.005), ylim=c(0,1.01)) +
+    scale_y_continuous(breaks=NULL) +
+    labs(x=NULL, y=NULL) +
+    simplified.theme
+}
+```
+
+```{r}
+#| label: intcomp-calc
+# Model parameters (explicit; change them here). Hypergeometric population
+# m chosen so its proportion matches theta (m*theta must be an integer
+# count); FPC = (m-n)/(m-1) enters its actual variance.
+intcomp.n = 625
+intcomp.theta = 0.7
+intcomp.m = 2000
+intcomp.samples.binom = with_seed(
+  rbinom(10000, intcomp.n, intcomp.theta)/intcomp.n)
+intcomp.samples.hyper = with_seed(
+  rhyper(10000, intcomp.m*intcomp.theta,
+         intcomp.m*(1-intcomp.theta), intcomp.n)/intcomp.n)
+# Actual PMFs and true SDs.
+intcomp.pmf.binom = dbinom(0:intcomp.n, intcomp.n, intcomp.theta)
+intcomp.pmf.hyper = dhyper(0:intcomp.n, intcomp.m*intcomp.theta,
+                           intcomp.m*(1-intcomp.theta), intcomp.n)
+intcomp.sigma.binom = sqrt(intcomp.theta*(1-intcomp.theta)/intcomp.n)
+intcomp.sigma.hyper =
+  sqrt(intcomp.theta*(1-intcomp.theta)/intcomp.n *
+       (intcomp.m-intcomp.n)/(intcomp.m-1))
+# Exact central-95 half-widths from SHARED width_binom/width_hyper only.
+intcomp.hw.exact.binom = width_binom(intcomp.theta, intcomp.n)/2
+intcomp.hw.exact.hyper = width_hyper(intcomp.theta, intcomp.n, intcomp.m)/2
+# Chebyshev 95% half-widths: 1/t^2 = .05 gives t = sqrt(20); each estimator
+# uses its ACTUAL true model sigma, never a sample plug-in.
+intcomp.hw.cheb.binom = sqrt(20)*intcomp.sigma.binom
+intcomp.hw.cheb.hyper = sqrt(20)*intcomp.sigma.hyper
+# Measured integer-support coverage of those widths (measurement only: sums
+# the pmf over counts inside each interval; finds no widths).
+intcomp.measured.coverage = function(pmf, hw) {
+  k = 0:intcomp.n
+  inside = k >= ceiling(intcomp.n*(intcomp.theta - hw)) &
+           k <= floor(intcomp.n*(intcomp.theta + hw))
+  sum(pmf[inside])
+}
+intcomp.cov.exact.binom = intcomp.measured.coverage(intcomp.pmf.binom,
+                                                    intcomp.hw.exact.binom)
+intcomp.cov.exact.hyper = intcomp.measured.coverage(intcomp.pmf.hyper,
+                                                    intcomp.hw.exact.hyper)
+intcomp.cov.cheb.binom = intcomp.measured.coverage(intcomp.pmf.binom,
+                                                   intcomp.hw.cheb.binom)
+intcomp.cov.cheb.hyper = intcomp.measured.coverage(intcomp.pmf.hyper,
+                                                   intcomp.hw.cheb.hyper)
+```
+
+::::: columns
+:::: column
+Sampling with replacement
+
+:::: {.r-stack}
+::: {.fragment .fade-out fragment-index="0"}
+```{r}
+#| label: fig-intcomp-binom-0
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3."
+intcomp.plot("binomial", 1)
+```
+:::
+::: {.fragment .current-visible fragment-index="0"}
+```{r}
+#| label: fig-intcomp-binom-1
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3."
+intcomp.plot("binomial", 2)
+```
+:::
+::: {.fragment fragment-index="1"}
+```{r}
+#| label: fig-intcomp-binom-2
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Binomial sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3."
+intcomp.plot("binomial", 3)
+```
+:::
+::::
+::::
+:::: column
+Sampling without replacement
+
+:::: {.r-stack}
+::: {.fragment .fade-out fragment-index="0"}
+```{r}
+#| label: fig-intcomp-hyper-0
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 1 of 3."
+intcomp.plot("hypergeometric", 1)
+```
+:::
+::: {.fragment .current-visible fragment-index="0"}
+```{r}
+#| label: fig-intcomp-hyper-1
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 2 of 3."
+intcomp.plot("hypergeometric", 2)
+```
+:::
+::: {.fragment fragment-index="1"}
+```{r}
+#| label: fig-intcomp-hyper-2
+#| echo: false
+#| fig-width: 5.5
+#| fig-height: 3.2
+#| fig-alt: "Hypergeometric sampling distribution with one hundred sample means; every sample mean carries its interval: exact in the first state, Chebyshev in the second, bootstrap in the third, with one sample highlighted. Green line at the population proportion. State 3 of 3."
+intcomp.plot("hypergeometric", 3)
+```
+:::
+::::
+::::
+:::::
+
+We now have three ways to calibrate an interval estimate.
+
+1. [**Exact.**]{.pink}
+   - Needs the whole sampling distribution.
+   - We have it for binary responses, sampled with or without replacement.
+   - Outside that, a pain.
+2. [**Chebyshev.**]{.teal}
+   - Needs only the standard deviation.
+   - Conservative. Who wants to deny themselves precision that's really there?
+3. **The bootstrap.**
+   - Works, often.
+   - Not when sampling without replacement, unless $n$ is tiny relative to $m$.
+   - A thing you do, not a thing that helps you understand.
+
+## The Bootstrap
+
+```{r}
+#| cache: false 
+set.seed(default.seed)
+samples = 1:10000 |> map(\(.) {
+    J = sample(1:m, n, replace=TRUE)
+    X = x[J]
+    Y = y[J]
+    p0 = mean(Y[X==0])
+    p1 = mean(Y[X==1])
+    data.frame(turnout=mean(Y), 
+               difference=mean(Y[X==1]) - mean(Y[X==0]), 
+               difference.sd=sqrt(p1*(1-p1)/sum(X==1) + p0*(1-p0)/sum(X==0)))
+}) |> bind_rows() 
+
+bootstrap.samples = 1:10000 |> map(\(.) { 
+    I = sample(1:n, n, replace=TRUE)
+    Xstar = X[I]
+    Ystar = Y[I]
+    data.frame(turnout=mean(Ystar), 
+               difference=mean(Ystar[Xstar==1]) - mean(Ystar[Xstar==0]))
+}) |> bind_rows() 
+```
+```{r}
+#| cache: false
+
+m.small = 1200
+theta.small = mean(y[1:m.small])
+
+Jsmall = sample(1:m.small, n, replace=FALSE)
+Ysmall = y[Jsmall]
+Xsmall = x[Jsmall]
+
+samples.half = 1:10000 |> map(\(.) { 
+    Jsmall = sample(1:m.small, n, replace=FALSE)
+    Ysmall = y[Jsmall]
+    Xsmall = x[Jsmall]
+    data.frame(turnout=mean(Ysmall),
+               difference=mean(Ysmall[Xsmall==1]) - mean(Ysmall[Xsmall==0]))
+}) |> bind_rows() 
+
+bootstrap.samples.half = 1:10000 |> map(\(.) { 
+  I = sample(1:n, n, replace=TRUE)
+  Ystar = Ysmall[I]
+  Xstar = Xsmall[I]
+  data.frame(turnout=mean(Ystar),
+             difference=mean(Ystar[Xstar==1]) - mean(Ystar[Xstar==0]))
+}) |> bind_rows() 
+```
+```{r}
+#| label: bootstrap-dots-setup
+#| cache: false
+# Bootstrap slide figure. The actual sampling distribution of the turnout proportion with the
+# dot cloud; in state k, dot k is highlighted, its bootstrap sampling distribution is drawn in
+# its color with the middle 95% shaded, and the interval of that width sits on the dot.
+set.seed(default.seed)
+boot.J = list(sample(1:m, n, replace=TRUE), sample(1:m, n, replace=TRUE), sample(1:m, n, replace=TRUE))
+stopifnot(all(sapply(boot.J, \(J) mean(y[J])) == samples$turnout[1:3]))
+boot.dists = lapply(boot.J, \(J) { Yk = y[J]; map_vec(1:4000, \(.) mean(Yk[sample(1:n, n, replace=TRUE)])) })
+boot.height = max(hist(samples$turnout, breaks=100, plot=FALSE)$density)
+boot.xlim = range(samples$turnout)
+boot.heights = annotation_dot_heights(100, 3, boot.height, default.seed)
+boot.plot = function(k) {
+  q = quantile(boot.dists[[k]], c(.025, .975))
+  color = default.highlight.colors[k]
+  ggplot() + 
+    geom_histogram(aes(x=samples$turnout, y=after_stat(density)), bins=100, alpha=.1, linewidth=.1, fill='black', color='black') +
+    with_annotations(samples$turnout, estimand=mean(y), height=boot.height, dots=100, highlight.dots=0, vline.alpha=NA, seed=default.seed) +
+    geom_histogram(aes(x=boot.dists[[k]], y=after_stat(density)), bins=100, alpha=.2, linewidth=.1, fill=color, color=color) +
+    annotate("rect", xmin=q[1], xmax=q[2], ymin=0, ymax=Inf, fill=color, alpha=.15) +
+    annotate("pointrange", x=samples$turnout[k], y=boot.heights[k], xmin=q[1] - mean(boot.dists[[k]]) + samples$turnout[k], xmax=q[2] - mean(boot.dists[[k]]) + samples$turnout[k], color=color) +
+    coord_cartesian(xlim=boot.xlim) + scale_y_continuous(breaks=NULL) + labs(x=NULL, y=NULL) + simplified.theme
+}
+```
+
+:::: {.r-stack}
+::: {.fragment .fade-out fragment-index="0"}
+```{r}
+#| label: fig-bootstrap-dot-1
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.4
+#| fig-alt: "Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 1 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot."
+boot.plot(1)
+```
+:::
+::: {.fragment .current-visible fragment-index="0"}
+```{r}
+#| label: fig-bootstrap-dot-2
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.4
+#| fig-alt: "Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 2 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot."
+boot.plot(2)
+```
+:::
+::: {.fragment fragment-index="1"}
+```{r}
+#| label: fig-bootstrap-dot-3
+#| echo: false
+#| fig-width: 11
+#| fig-height: 3.4
+#| fig-alt: "Sampling distribution of the turnout proportion in gray with one hundred sample means floating over it. Sample 3 is highlighted in its color with its bootstrap sampling distribution drawn over the actual one, the middle 95 percent of it shaded, and an interval of that width on the dot."
+boot.plot(3)
+```
+:::
+::::
+
+- The bootstrap. A general method for estimating sampling distributions.
+  1. Draw a sample of size $n$ from your sample. *A bootstrap sample.*
+  2. Calculate your estimator on it. *A bootstrap estimate.*
+  3. Repeat. *The bootstrap sampling distribution.*
+- This simulates sampling with replacement.
+  - Not sampling without. There's no natural analog.
+- Great for what we *have learned* after we have data.
+  - Not for what we *can learn* before we have it.
+- Today: a tool for that. *Normal approximation.*
+  - And a job for it: *sample size calculation*. Choosing $n$ so your interval is as narrow as you want.
+
+
+# Normal Approximation
+
+## The Normal Distribution
+
+::: zoom-free
+```{r}
+#| layout-ncol: 2
+#| fig-width: 7
+
+expand.grid(x=seq(-5,5,by=.1), theta=c(-2,0,2)) |>
+  ggplot() + 
+  geom_area(aes(x=x, y=dnorm(x, theta, 1), fill=factor(theta)), position='identity', alpha=.3) +
+  guides(fill=guide_legend(title='θ'), color='none')
+
+expand.grid(x=seq(-5,5,by=.1), sigma=c(.5,1,2)) |>
+  ggplot() + 
+  geom_area(aes(x=x, y=dnorm(x, 0, sigma), fill=factor(sigma)), position='identity', alpha=.3) +
+  guides(fill=guide_legend(title='σ'), color='none')
+```
+:::
+
+- The normal distribution is a parametric family of distributions involving two parameters.
+  1. Its mean, $\theta$. 
+  2. Its standard deviation, $\sigma$.
+- We say a random variable $X$ is normally distributed with mean $\theta$ and standard deviation $\sigma$ ...
+- ... if the probability that it's in an interval $[a,b]$ is given by this integral of its *probability density*.
+$$
+P_{\theta,\sigma}(X \in [a,b]) = \int_a^b  f_{\theta,\sigma}(x)dx \qfor f_{\theta, \sigma}(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\theta)^2}{2\sigma^2}}
+$$
+
+
+- We have to talk about the probability that it's 'in an interval' rather than that it 'takes a value' because ...
+- ... the probability it actually takes on any particular value is $x$ zero: it's an integral from $x$ to $x$. 
+
+## Normal Approximation
+```{r}
+p.even = ggplot() + 
+  geom_col(aes(x=(0:10)/10,  y=10*dbinom(0:10,  10,  .5)), alpha=.2, linewidth=.1,       fill=pollb, color=pollb) +
+  geom_col(aes(x=(0:30)/30,  y=30*dbinom(0:30, 30, .5)), alpha=.2, linewidth=.1, fill=pollc, color=pollc) + 
+  geom_col(aes(x=(0:90)/90,  y=90*dbinom(0:90, 90, .5)), alpha=.2, linewidth=.1, fill=polld, color=polld) +
+           labs(x='', y='')
+
+p.uneven = ggplot() + 
+  geom_col(aes(x=(0:10)/10,    y=10*dbinom(0:10,  10,  .5)), alpha=.2, linewidth=.1, fill=pollb, color=pollb) +
+  geom_col(aes(x=(0:25)/25,    y=25*dbinom(0:25, 25, .5)), alpha=.2, linewidth=.1, fill=pollc, color=pollc) + 
+  geom_col(aes(x=(0:83)/83,    y=83*dbinom(0:83, 83,  .5)), alpha=.2, linewidth=.1, fill=polld, color=polld)
+
+xx = seq(0,1,by=.01)
+
+p.even.plus.normal = p.even +
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/10))), color=pollb) + 
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/30))), color=pollc) + 
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/90))), color=polld)
+
+p.uneven.plus.normal = p.uneven + 
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/10))), color=pollb) + 
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/25))), color=pollc) + 
+  geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/83))), color=polld)
+```
+
+```{r}
+#| fig-width: 4
+#| layout-ncol: 3
+ 
+pbinom.10 = ggplot() + geom_col(aes(x=(0:10)/10,  y=10*dbinom(0:10,  10,  .5)), 
+                    alpha=.2, linewidth=.1, fill=pollb, color=pollb) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/10))), color=pollb)
+
+pbinom.30 = ggplot() + geom_col(aes(x=(0:30)/30,  y=30*dbinom(0:30, 30, .5)), 
+                    alpha=.2, linewidth=.1, fill=pollc, color=pollc) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/30))), color=pollc)
+
+pbinom.90 = ggplot() + geom_col(aes(x=(0:90)/90,  y=90*dbinom(0:90, 90, .5)), 
+                    alpha=.2, linewidth=.1, fill=polld, color=polld) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt(.5*.5/90))), color=polld)
+
+scale_y = scale_y_continuous(breaks=seq(0,8,by=1), limits=c(0,8))
+scale_x = scale_x_continuous(breaks=seq(0,1,by=.25), limits=c(0,1))
+pbinom.10 + scale_x + scale_y
+pbinom.30 + scale_x + scale_y
+pbinom.90 + scale_x + scale_y
+```
+
+- A distribution's normal approximation is a normal distribution with the same mean $\theta$ and standard deviation $\sigma$.
+  - These show up everywhere because they're easy to work with and the approximation tends to be good.
+  - Approximation is good, in particular, for the distribution of a mean of independent random variables.
+  - Or independent enough ones.
+- Above, we see three Binomial distributions with their normal approximations:
+  - the distributions of the mean of [10]{.pollb}, [30]{.pollc}, and [90]{.polld} coin flips.
+  - These approximations get increasingly accurate as the number of flips $n$ increases. 
+  - That's universal. It always happens with means. It's called the *Central Limit Theorem*.
+
+::: {.callout-note}
+### The Central Limit Theorem
+The sampling distribution of a mean of independent random variables, $\faded \frac{1}{n}\sum\limits_{i=1}^n X_i$,
+gets arbitrarily close to its normal approximation \
+as the number of random variables $\faded n$ increases to infinity. 
+
+*Caveats*.
+
+- Finite variance. Without it, there is no normal limit.
+- No single term dominates. Each one's share of the mean's variance has to be infinitesimal as $\faded n \to \infty$.
+- Independence, or close to it. Dependence changes the variance, and enough of it changes the shape.
+:::
+
+## The Width of Normal Distributions 
+
+```{r}
+#| out-height: 300px
+#| fig-asp: .3 
+
+breaks = seq(-4, 4, 1) 
+signs = case_when(
+  breaks < 0 ~ '-', 
+  breaks == 0 ~ '',
+  breaks > 0 ~ '+')
+offsets = case_when(
+  breaks != 0 ~ ifelse(abs(breaks)==1, 'σ', sprintf('%dσ', abs(breaks))),
+  breaks == 0 ~ '')
+labels.abstract = sprintf('θ %s %s', signs, offsets)
+
+x=seq(-4,4,by=.01)
+normal.dist.plot = ggplot() + 
+       geom_area(aes(x=x,y=dnorm(x)), alpha=.1, color='black', fill='black') + 
+       geom_vline(aes(xintercept=qnorm(.5)), linetype='solid', color='blue') +
+       geom_vline(aes(xintercept=qnorm(c(.16,.84))), linetype='dashed', color='blue') +
+       geom_vline(aes(xintercept=qnorm(c(.025,.975))), linetype='dotted', color='blue') +
+       scale_x_continuous(breaks=seq(-4,4,by=1), labels=labels.abstract) 
+
+normal.dist.plot
+```
+
+- One thing that's convenient about the normal distribution is that it's easy to reason about.
+- In particular, it's easy to reason about the width of its middle *x*%.
+  - To include `r 100*round(pnorm(1)-pnorm(-1),3)`% of draws, you go out 1 standard deviation from its mean.
+  - To include `r 100*round(pnorm(2)-pnorm(-2),3)`% of draws, you go out 2 standard deviations.
+  - To include `r 100*round(pnorm(3)-pnorm(-3),3)`% of draws, you go out 3 standard deviations.
+- To get almost exactly 95% of draws, we go out 1.96 standard deviations: $\theta \pm 1.96\sigma$.
+  - Chebyshev got us 95% at $\sqrt{20} \approx 4.5$ standard deviations. The normal gets it at $1.96$.
+  - Same standard deviation. An interval $2.3\times$ narrower.
+- Two is close enough in practice, but we tend to write 1.96 anyway.
+  - It's a signal about what we're doing. You can get a 2 anywhere in a calculation. 
+  - When you see a 1.96, you know you're talking about the middle 95% of the normal.
+
+## Calibration Using Normal Approximation
+
+```{r}
+#| out-height: 300px
+#| fig-asp: .3 
+
+theta = .5
+sigma = sqrt(theta*(1-theta)/90)  
+binom.90.draws = rbinom(1000, 90, .5)/90
+theta.hat = binom.90.draws[1]
+sigma.hat = sqrt(theta.hat*(1-theta.hat)/90)  
+wbinom = width_binom(theta.hat, 90)
+wnorm = 2*1.96*sigma.hat 
+
+breaks = seq(-4, 4, 1) 
+signs = case_when(
+  breaks < 0 ~ '-', 
+  breaks == 0 ~ '',
+  breaks > 0 ~ '+')
+offsets = case_when(
+  breaks != 0 ~ ifelse(abs(breaks)==1, 'σ', sprintf('%dσ', abs(breaks))),
+  breaks == 0 ~ '')
+labels.abstract = sprintf('θ %s %s', signs, offsets)
+
+x=seq(theta-4*sigma, theta+4*sigma,by=.01)
+proportion.normal.dist.plot = ggplot() + 
+       geom_area(aes(x=x,y=dnorm(x, theta.hat, sigma.hat)), alpha=.1, color='blue', fill='blue', linewidth=.1) + 
+       geom_vline(aes(xintercept=qnorm(.5, theta.hat, sigma.hat)), linetype='solid', color='blue') +
+       geom_vline(aes(xintercept=qnorm(c(.16,.84), theta.hat, sigma.hat)), linetype='dashed', color='blue') +
+       geom_vline(aes(xintercept=qnorm(c(.025,.975), theta.hat, sigma.hat)), linetype='dotted', color='blue') +
+       scale_x_continuous(breaks=seq(theta.hat-4*sigma.hat,theta.hat+4*sigma.hat, by=sigma.hat), labels=labels.abstract, limits=c(theta-4*sigma, theta+4*sigma)) 
+```
+
+```{r}
+#| fig-width: 7
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - The (Binomial) sampling distribution and its normal approximation.
+#|   - Binomial and normal estimates of the sampling distribution.
+
+actual.sampling.dist.plot = pbinom.90 + 
+  with_annotations(binom.90.draws,  estimand=theta, highlight.dots=0, height=8) +
+  geom_pointrange(aes(y=3, x=theta.hat, xmin=theta.hat-wbinom/2, xmax=theta.hat+wbinom/2), color='red') +
+  geom_pointrange(aes(y=3.2, x=theta.hat, xmin=theta.hat-wnorm/2,  xmax=theta.hat+wnorm/2), color='blue') +
+  scale_x_continuous(limits=c(theta-4*sigma, theta+4*sigma))
+
+xdiscrete = seq(0,1,by=1/90)
+estimated.sampling.dist.plot = proportion.normal.dist.plot + 
+  geom_vline(xintercept=theta, color='green', linewidth=3, alpha=.8) +
+   geom_col(aes(x=xdiscrete, y=90*dbinom(90*xdiscrete, 90, theta.hat)), 
+            alpha=.1, color='red', fill='red', linewidth=.1) +
+  scale_x_continuous(limits=c(theta-4*sigma, theta+4*sigma)) + 
+  geom_pointrange(aes(y=3, x=theta.hat, xmin=theta.hat-wbinom/2, xmax=theta.hat+wbinom/2), color='red') +
+  geom_pointrange(aes(y=3.2, x=theta.hat, xmin=theta.hat-wnorm/2,  xmax=theta.hat+wnorm/2), color='blue') 
+
+actual.sampling.dist.plot
+estimated.sampling.dist.plot
+```
+
+- Calibrating interval estimates using normal approximation is easy.
+  - You estimate the standard deviation of your point estimator.
+  - You go out &plusmn; 1.96 (estimated) standard deviations from your point estimate.
+
+$$
+\text{interval estimate} = \hat\theta \pm 1.96 \hat\sigma
+$$
+
+- We're choosing our interval's width essentially the same way we always have.
+  - We're still using the middle 95% of an estimate of the sample distribution.
+  - It just looks different because we have a convenient formula for that width.
+- Above left, you can see two interval estimates superimposed on the sampling distribution of a sample proportion.
+  - The [red one]{.red} is calibrated using the binomial as before.
+  - The [blue one]{.blue} is calibrated using normal approximation.
+- Above right, you can see the [binomial]{.red} and [normal]{.blue} sampling distribution estimates these are based on.
+
+## When This Works
+
+```{r}
+#| fig-width: 7
+#| layout-ncol: 2
+#| fig-cap: 
+#|   - The (Binomial) sampling distribution and its normal approximation.
+#|   - Binomial and normal estimates of the sampling distribution.
+
+actual.sampling.dist.plot
+estimated.sampling.dist.plot
+```
+
+::: {style="text-align: center"}
+This works if three things are true.
+:::
+
+1. The sampling distribution needs to be in the right place, i.e. centered on the estimation target.
+   - This is called *unbiasedness* of our point estimator.
+   - Most of the estimators we'll talk about in this class are unbiased or almost unbiased.
+2. The sampling distribution needs to be approximately normal.
+   - The CLT tells us this tends to happen, especially for large $n$.
+   - We'll talk about how accurate it is next week. For most of the estimators we'll study, you can take it as a given.
+3. The estimated sampling distribution has approximately the right width.
+   - This amounts to getting a good estimate of our point estimator's standard deviation.
+   - We'll work on this, again for the sample proportion, later today. And for other estimators throughout the semester.
+   - It is, however, a bit of a pain. That's one reason you might prefer the bootstrap.
+
+
+# Normal Approximation in Context
+
+## A Proportion when Sampling with Replacement
+
+```{r}
+#| fig-width: 4
+#| layout-ncol: 3 
+
+scale_y = scale_y_continuous(breaks=seq(0,12,by=1), limits=c(0,12))
+
+pbinom.10 + scale_x + scale_y
+pbinom.30 + scale_x + scale_y
+pbinom.90 + scale_x + scale_y
+```
+
+- When we sample from a binary population with replacement, our sample proportion's distribution is Binomial.
+  - And we can estimate that distribution by plugging our sample proportion into the Binomial formula.
+  - But its normal approximation tends to be very good, so we can get away with estimating that instead.
+  - Its standard deviation is the one we worked out last class.
+
+$$
+\begin{aligned}
+\text{normal approximation}     & \ f_{\theta,\sigma}(x) \qfor  \sigma^2 = \frac{\theta(1-\theta)}{n} \\
+\text{corresponding estimate}   & \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n}. 
+\end{aligned}
+$$
+
+- Pictured: three Binomial distributions with their normal approximations. 
+  - These are the distributions of the sample proportion when we draw a samples of size [10]{.pollb}, [30]{.pollc}, and [90]{.polld} ...
+  - ... with replacement from a binary population in which the proportion of ones is $\theta=.5$.
+
+## A Proportion when Sampling without Replacement
+
+```{r}
+#| fig-width: 4
+#| layout-ncol: 3 
+
+
+phyper.10 = ggplot() + geom_col(aes(x=(0:10)/10,  y=10*dhyper(0:10, 10, 10, 10)), 
+                    alpha=.2, linewidth=.1, fill=pollb, color=pollb) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt((.5*.5/10) * (10-1)/(2*10-1)))), color=pollb)
+
+phyper.30 = ggplot() + geom_col(aes(x=(0:30)/30,  y=30*dhyper(0:30, 30, 30, 30)), 
+                    alpha=.2, linewidth=.1, fill=pollc, color=pollc) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt((.5*.5/30) * (30-1)/(2*30 - 1)))), color=pollc)
+
+phyper.90 = ggplot() + geom_col(aes(x=(0:90)/90,  y=90*dhyper(0:90, 90, 90, 90)), 
+                    alpha=.2, linewidth=.1, fill=polld, color=polld) +
+            geom_line(aes(x=xx, y=dnorm(xx, .5, sqrt((.5*.5/90) * (90-1)/(2*90 - 1)))), color=polld)
+
+phyper.10 + scale_x + scale_y
+phyper.30 + scale_x + scale_y
+phyper.90 + scale_x + scale_y
+```
+
+- Sampling *without* replacement from a binary population, our sample proportion is Hypergeometric.
+  - We can estimate it by plugging our sample proportion into the Hypergeometric formula.
+  - But again, its normal approximation is very good, so we can estimate that instead.
+- This shows where we go wrong using the Binomial---or equivalently the bootstrap.
+  - When $\faded n$ is a meaningful fraction of $\faded m$, the Binomial is too wide.
+  - Its standard deviation is the Binomial's times $\faded \sqrt{\frac{m-n}{m-1}}$. A homework problem.
+  - When we're sampling half our population, i.e. $n=m/2$, that's roughly $\faded \sqrt{1/2} \approx .7$. 
+  
+
+$$
+\begin{aligned}
+\text{normal approximation}     & \ f_{\theta,\sigma}(x) \qfor \sigma^2 = \frac{\theta(1-\theta)}{n} \times  \frac{m-n}{m-1} \\
+\text{corresponding estimate}   & \ f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1}. 
+\end{aligned}
+$$
+
+- Pictured: three Hypergeometric distributions with their normal approximations. 
+  - Sample proportions for samples of size [10]{.pollb}, [30]{.pollc}, and [90]{.polld} ...
+  - ... drawn without replacement from a binary population twice the size with $\faded \theta=.5$.
+
+## A Mean when Sampling with Replacement
+
+```{r}
+#| label: vote-history-setup
+# Vote history: number of elections voted in out of the last 5, as in the bootstrap chapter.
+set.seed(42)
+h = rep(NA, m)
+h[y == 1] = rbinom(sum(y == 1), size = 5, prob = 0.7)
+h[y == 0] = rbinom(sum(y == 0), size = 5, prob = 0.3)
+H = h[J1]
+H.bar = mean(H)
+sigma.hat.H = sd(H)/sqrt(n)
+```
+
+```{r}
+#| label: fig-vote-history-normal
+#| fig-width: 7
+#| fig-height: 3.8
+#| layout-ncol: 2
+#| fig-alt:
+#|   - "Histogram of the 625 sampled voters' vote histories, 0 through 5 elections, with a point at the sample mean and arms one sample standard deviation to either side."
+#|   - "Histogram of ten thousand sample means of vote history drawn from the population, with the normal approximation drawn over it in blue."
+ggplot() + 
+  geom_bar(aes(x=H, y=after_stat(prop)), alpha=.3) +
+  geom_pointrange(aes(x=H.bar, xmin=H.bar-sd(H), xmax=H.bar+sd(H), y=max(prop.table(table(H)))/2), color='blue') +
+  labs(x='elections voted in, of the last 5', y='')
+
+mean.history.samples = map_vec(1:10000, \(.) mean(h[sample(1:m, n, replace=TRUE)]))
+xx.h = seq(min(mean.history.samples), max(mean.history.samples), length.out=500)
+ggplot() + 
+  geom_histogram(aes(x=mean.history.samples, y=after_stat(density)), bins=100, alpha=.3) +
+  geom_area(aes(x=xx.h, y=dnorm(xx.h, mean(h), sd(h)/sqrt(n))), color='blue', fill='blue', alpha=.3, linewidth=.1) +
+  labs(x='sample mean vote history', y='')
+```
+
+- Not special to proportions. Take the average vote history $\bar H_n$.
+- Its standard deviation is the population standard deviation over $\sqrt{n}$. Plug in the sample's.
+
+$$
+\begin{aligned}
+\text{normal approximation}     & \ f_{\mu,\sigma_n}(x) \qfor \sigma_n^2 = \frac{\sigma_H^2}{n} \qqtext{for} \sigma_H^2 = \frac{1}{m}\sum_{j=1}^m (h_j - \mu)^2 \\
+\text{corresponding estimate}   & \ f_{\bar H_n, \hat \sigma_n}(x) \qfor \hat\sigma_n^2 = \frac{\hat\sigma_H^2}{n} \qqtext{for} \hat\sigma_H^2 = \frac{1}{n}\sum_{i=1}^n (H_i - \bar H_n)^2.
+\end{aligned}
+$$
+
+- Pictured: left, the `r n` sampled voters' vote histories with $\bar H_n$ and the sample standard deviation.
+  - Right, the sampling distribution of $\bar H_n$ over draws from the population, with its normal approximation.
+
+## Using Normal Approximation 
+
+```{r}
+#| label: fig-using-normal-approx-strip
+#| fig-width: 4
+#| layout-ncol: 3
+#| fig-alt:
+#| - "Binomial distribution and normal approximation for the sample proportion from 10 fair draws."
+#| - "Binomial distribution and normal approximation for the sample proportion from 30 fair draws."
+#| - "Binomial distribution and normal approximation for the sample proportion from 90 fair draws."
+pbinom.10 + scale_x + scale_y
+pbinom.30 + scale_x + scale_y
+pbinom.90 + scale_x + scale_y
+```
+
+\begin{aligned}
+&f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} && \text{a proportion when sampling with replacement} \\
+&f_{\hat\theta, \hat \sigma}(x) \qfor \hat\sigma^2 = \frac{\hat \theta(1-\hat \theta)}{n} \times \frac{m-n}{m-1} && \text{a proportion when sampling without replacement} \\
+&f_{\bar H_n, \hat \sigma_n}(x) \qfor \hat\sigma_n^2 = \frac{1}{n} \times \frac{1}{n}\sum_{i=1}^n (H_i - \bar H_n)^2 && \text{a mean when sampling with replacement}
+\end{aligned}
+
+
+- What makes all this work is that we're using good estimates of our estimator's standard deviation.
+  - If we have a formula for the estimator's standard deviation, this is usuallly not so hard.
+  - We estimate whatever population summaries show up in the formula and plug them in.
+
+
+# Sample Size Calculation
+
+## An Interval for Turnout in 2020
+
+```{r}
+#| out-height: 300px 
+#| fig-asp: .3
+ 
+theta = mean(y)
+theta.hat = mean(Y)
+hbinom = n*max(dbinom(0:n, n, theta.hat))
+wbinom = width_binom(theta.hat, n)
+wnorm = 2*1.96*sqrt(theta.hat*(1-theta.hat)/n)
+w95 = wbinom
+
+xx = seq(.6,.8, length=1000)
+turnout.histogram = ggplot() + 
+  geom_col(aes(x=(0:n)/n, y=n*dbinom(0:n, n, theta.hat)), alpha=.3, color='red', fill='red',linewidth=.1) + 
+  geom_area(aes(x=xx, y=dnorm(xx, theta.hat, sqrt(theta.hat*(1-theta.hat)/n))), color='blue', fill='blue', alpha=.3, linewidth=.1) + 
+  geom_pointrange(aes(y=.3*hbinom, x=theta.hat, xmin=theta.hat-wbinom/2, xmax=theta.hat+wbinom/2), color='red') +
+  geom_pointrange(aes(y=.34*hbinom, x=theta.hat, xmin=theta.hat-wnorm/2,  xmax=theta.hat+wnorm/2), color='blue') 
+turnout.histogram + scale_x_continuous(limits=c(.6, .8))
+```
+
+- Let's compare our two approaches to calibration in our turnout poll.
+
+$$
+\begin{aligned}
+\textcolor{red}{\text{binomial interval}} &= `r sprintf("%0.4f", round(theta.hat,4))`  \pm `r sprintf("%0.4f", round(wbinom/2,4))`  \\
+\textcolor{blue}{\text{normal interval}}    &= `r sprintf("%0.4f", round(theta.hat,4))`  \pm `r sprintf("%0.4f", round(wnorm/2,4))` 
+\end{aligned}
+$$
+
+- We have to go out to 4 digits, way beyond what's statistically meaningful, to see any difference in these intervals.
+  - Our interval estimate---either one---is telling you might be off by a few hundredths. 
+  - Who cares about another couple ten-thousandths at the edge of the interval?
+
+## Thinking Speculatively About Intervals
+
+
+```{r}
+#| out-height: 300px 
+#| fig-asp: .3
+ 
+turnout.histogram + scale_x_continuous(limits=c(.6, .8))  
+```
+
+- Suppose we're not satisfied with this level of precision, so we're going to collect more data.
+- Suppose we want our interval to be $\pm .01$ instead of $\pm `r round(w95/2, 3)`$. 
+- How many people, in total, do we need to call?  We can use the normal approximation to figure that out.
+
+$$
+\hat \theta \pm 1.96\sigma_n \qfor \sigma_n = \sqrt{\frac{\theta (1-\theta)}{n}} \qqtext{ is } \hat\theta \pm .01 \qqtext{if} 1.96\sqrt{\frac{\theta (1-\theta)}{n}} = .01
+$$
+
+- Now all we have to do is solve for $n$. And, since we don't know $\theta$, use our best guess, $\hat\theta=`r mean(Y)`$.
+
+::: fragment
+
+$$ 
+n = \frac{1.96^2 \ \hat\theta (1-\hat\theta)}{.01^2} \approx `r round(1.96^2*mean(Y)*(1-mean(Y))/.01^2,-3)`
+$$
+
+:::
+
+## The Easy Version
+
+- There's a trick to this. Let's compare the interval width we have to the one we want.
+
+$$
+\begin{aligned}
+\pm `r round(w95/2,3)` &= \pm 1.96\hat\sigma_{625} \qfor \hat\sigma_{625} = \sqrt{\frac{\hat\theta (1-\hat\theta)}{625}}  \\
+\pm 0.01 &= \pm 1.96\hat\sigma_{n} \qfor \hat\sigma_{n} = \sqrt{\frac{\hat\theta (1-\hat\theta)}{n}}   
+\end{aligned}
+$$
+
+- All that changes in this formula is the sample size. And the *sample size ratio* falls out of the interval width ratio.
+
+$$
+\frac{`r round(w95/2,3)`}{.01} 
+= \frac{1.96\hat\sigma_{625}}{1.96\hat\sigma_n}
+= \frac{\sqrt{\frac{\hat\theta (1-\hat\theta)}{625}}}{\sqrt{\frac{\hat\theta (1-\hat\theta)}{n}}}
+ = \sqrt{\frac{n}{625}}
+\qqtext{ so } n = 625\left(\frac{`r round(wnorm/2,3)`}{.01}\right)^2 \approx `r round(625*((wnorm/2)/.01)^2,-3)`
+$$
+
+- To get the new sample size, multiply ...
+  - the sample size we have
+  - the square of the desired ratio of the interval widths.
+- To double precision, quadruple the sample size. To triple it, increase it 9x.
+- To get another digit, i.e. increase precision 10x, increase the sample size 100x.
+
+## Starting from Scratch
+
+```{r}
+#| label: fig-binomials-across-thetas
+#| out-height: 300px
+#| fig-asp: .3
+#| fig-alt: "Nine binomial sampling distributions of the sample proportion for population proportions from 0.1 through 0.9 at n = 625, each with its calibrated 95 percent interval drawn as a horizontal belt; the belt is widest at one half."
+thetas = seq(.1, .9, by=.1)
+pmfs = expand_grid(theta = thetas, x = (0:n)/n) |>
+  mutate(p = dbinom(x*n, n, theta), y=0, width=0)
+
+for(theta in thetas) {
+  w = width_binom(theta, n, alpha=.05)
+  thispmf = pmfs[pmfs$theta==theta,] 
+  belt.y = thispmf$p[which.min(abs(thispmf$x - (theta-.5*w)))] 
+  pmfs$y[pmfs$theta==theta] = belt.y
+  pmfs$width[pmfs$theta==theta] = w
+}
+
+binomials.across.thetas = ggplot(pmfs) +
+    geom_area(aes(x=x, y=p, fill=factor(theta), color=factor(theta)), position='identity', alpha=.1) +
+    geom_linerange(aes(xmin=theta-.5*width, xmax=theta+.5*width, y=y, color=factor(theta))) +
+    scale_x_continuous(breaks=seq(0,1,by=.1), limits=c(0,1)) +
+    scale_fill_discrete(name="theta") + guides(color='none') 
+binomials.across.thetas
+```
+
+- What do we do if we don't have any data yet? 
+  - Then we don't have a 'current interval width' to compare to the 'desired interval width'.
+  - And we don't have a sample proportion $\hat\theta$ to plug in for the population proportion $\theta$.
+- But we can still use the formula we worked out earlier to get somewhere.
+$$
+1.96\sqrt{\frac{\theta (1-\theta)}{n}} = .01 \qqtext{so} n = \frac{1.96^2 \ \theta (1-\theta)}{.01^2}
+$$
+
+- We don't have an estimate of $\theta$, but we do know it's between 0 and 1. And, consequently, so is $\theta(1-\theta)$.
+- So we know that if we just substitute $1$ into our formula, we'll get a number that's bigger than we need.
+
+$$
+n < n' = \frac{1.96^2 \cdot 1}{.01^2} \approx `r sprintf("%d", round(1.96^2/.01^2,-2))`
+$$
+
+- That's a bit excessive. In fact, we can substitute in $1/4$ instead of $1$. 
+$$
+n < n' = \frac{1.96^2 \cdot 1/4}{.01^2} \approx `r sprintf("%d", round(1.96^2/4/.01^2,-2))`
+$$
+
+- Much better. That's pretty close to the number we got *with* preliminary data. 
+
+## Why Can We Use 1/4?
+```{r}
+#| label: fig-why-a-quarter
+#| layout-ncol: 2
+#| fig-width: 7
+#| fig-alt:
+#|   - "Nine binomial sampling distributions for population proportions from 0.1 through 0.9 with their 95 percent belts, widest at one half."
+#|   - "Curve of the Bernoulli variance theta times one minus theta from zero to one; largest at theta equal to one half."
+binomials.across.thetas
+xx = seq(0,1,by=.001)
+ggplot() + geom_line(aes(x=xx, y=xx*(1-xx)))
+```
+
+- Here's the claim. Why is it true? 
+$$ 
+n := \frac{1.96^2 \ \theta (1-\theta)}{.01^2} < n' := \frac{1.96^2 \ \times 1/4}{.01^2}
+$$
+
+- **Hint.** Look at the graph of $f(x) = x(1-x)$ above.
+
+
+::: fragment
+
+ - Because $1/4$ is the biggest $\theta (1-\theta)$ gets for $\theta \in [0,1]$.
+ - And it happens, for what it's worth, when $\theta = 1/2$. 
+ - That is, we'll have the least precision --- at a given sample size --- when the proportion we're estimating is 1/2. 
+
+:::
+
+
+# Case Study  
+The NSW Experiment
+
+## The National Supported Work Demonstration
+
+```{r}
+#| label: nsw-load
+nsw.data = read.csv('data/nsw.csv')
+nsw = nsw.data |> filter(dataset=='nsw', treated)
+nsw.Y = as.numeric(nsw$income78)
+nsw.n = length(nsw.Y)
+mu.hat = mean(nsw.Y)
+sd.hat = sd(nsw.Y)
+sigma.hat = sd.hat / sqrt(nsw.n)
+# 1978 dollars to today's: CPI-U averaged 65.2 in 1978 and about 330 in 2026, a factor of 5.
+nsw.inflation = 5
+```
+```{r}
+#| label: nsw-bootstrap
+nsw.bootstrap.samples = map_vec(1:10000, function(.) {
+    I = sample(1:nsw.n, nsw.n, replace=TRUE)
+    mean(nsw.Y[I])
+})
+```
+```{r}
+#| label: nsw-width
+nsw.w95.boot = width(nsw.bootstrap.samples, alpha=.05)
+nsw.interval = mu.hat + c(-1,1)*nsw.w95.boot/2
+```
+```{r}
+#| label: nsw-interval-plot
+nsw.interval.plot = ggplot() +
+  geom_histogram(aes(x=nsw.bootstrap.samples), alpha=.3, bins=100) +
+  geom_vline(xintercept=mu.hat, color='blue', alpha=.4) +
+  geom_pointrange(aes(x=mu.hat, xmin=nsw.interval[1], xmax=nsw.interval[2], y=150), color='blue') +
+  scale_x_continuous(labels=dollar) + labs(x='bootstrap sample means', y='')
+```
+
+
+:::: columns 
+::: column
+```{r}
+#| label: fig-nsw-bootstrap
+#| fig-width: 7
+#| fig-height: 3.4
+#| fig-alt: "Histogram of ten thousand bootstrap sample means of treated 1978 income, with a blue point at the sample mean and a blue interval spanning the middle 95 percent."
+nsw.interval.plot
+``` 
+
+::: 
+::: column
+
+$n$ |  $\hat \mu$ | sample SD
+--- | --- | ---
+`r nsw.n` | `r round(mu.hat, -2)` | `r round(sd.hat, -2)`
+
+:::
+::::
+
+::: {.panel-tabset}
+### The Program
+
+- The National Supported Work Demonstration was an experimental program in the 1970s that provided job training and other services.
+- Here 'experimental' doesn't just mean untested. It was run as a big experiment.
+- From a population of eligible people, they drew a sample of size `r sum(nsw.data$dataset=='nsw')` to participate.
+- To help estimate the impact of the program, participants were randomized into two groups.
+  - The 'treated' group received the training and services.
+  - The 'control' group did not. 
+- Today we'll look at the treated group only: `r nsw.n` people.
+
+### The Result 
+
+- A year or two after the program ended, they looked at the incomes of the people who'd been treated.
+  - The average within the sample was about \$`r round(mu.hat, -2)` per year. In 1978 dollars.
+  - A dollar in 1978 was worth about what \$`r nsw.inflation` is today.
+  - So adjusting for inflation, that's an in-sample average of about \$`r sprintf("%d", round(mu.hat*nsw.inflation, -2))`.
+- But the sample was relatively small. And, as a result, the interval estimate is pretty wide.
+
+$$
+\begin{aligned}
+\mu 
+&\in `r round(mu.hat,-2)` \pm `r round(nsw.w95.boot/2,-2)` \approx [`r round(nsw.interval[1], -2)`, \ `r round(nsw.interval[2], -2)`] 
+&&\qqtext{is a 95\% confidence interval in 1978 dollars} \\
+&\in `r sprintf("%d", round(mu.hat*nsw.inflation, -2))` \pm `r sprintf("%d", round(nsw.w95.boot*nsw.inflation/2, -2))` \approx [`r sprintf("%d", round(nsw.interval[1]*nsw.inflation, -2))`, \ `r sprintf("%d", round(nsw.interval[2]*nsw.inflation, -2))`] 
+&&\qqtext{adjusted for inflation}
+\end{aligned}
+$$
+
+:::
+
+
+## Activities
+
+:::: columns 
+::: column
+```{r}
+#| label: fig-nsw-bootstrap-again
+#| fig-width: 7
+#| fig-height: 3.2
+#| fig-alt: "The same bootstrap histogram of treated mean income with its blue 95 percent interval."
+nsw.interval.plot
+``` 
+
+::: 
+::: column
+
+$n$ |  $\hat \mu$ | sample SD
+--- | --- | ---
+`r nsw.n` | `r round(mu.hat, -2)` | `r round(sd.hat, -2)`
+
+:::
+::::
+
+::: {.panel-tabset}
+### Warm-Up 
+
+- Use the information in this table to calculate a 95% interval based on normal approximation.
+- Compare it to the interval we got using the bootstrap sampling distribution for calibration.
+
+
+### Resizing 
+  
+  - Suppose we want to know the population mean to within \$500 (1978 dollars).
+  - How can we resize our study to make that happen?
+  - We could run a second wave, drawing more people from the same population exactly as before, to get a larger sample like the one we have. 
+  - What sample size would we need to be able to get a 95% confidence interval this accurate?
+
+:::
+
+## Solutions and Discussion
+
+```{r}
+#| label: nsw-normal-width
+nsw.w95.norm = 2*1.96*sigma.hat
+```
+
+```{r}
+#| label: fig-nsw-two-intervals
+#| fig-width: 11
+#| fig-height: 3.2
+#| fig-alt: "The bootstrap histogram of treated mean income with the normal approximation drawn over it. Two interval bars: the blue bootstrap interval and the red normal-approximation interval, nearly the same length."
+xx.nsw = seq(min(nsw.bootstrap.samples), max(nsw.bootstrap.samples), length.out=500)
+nsw.interval.plot + 
+  geom_line(aes(x=xx.nsw, y=10000*diff(range(nsw.bootstrap.samples))/100 * dnorm(xx.nsw, mu.hat, sigma.hat)), color='red') +
+  geom_pointrange(aes(x=mu.hat, xmin=mu.hat-nsw.w95.norm/2, xmax=mu.hat+nsw.w95.norm/2, y=170), color='red')
+```
+
+::: {.fragment}
+- **Warm-Up.** $\hat\mu \pm 1.96\,\hat\sigma_n$, with $\hat\sigma_n$ the sample standard deviation over $\sqrt{n}$.
+  - $`r round(mu.hat, -2)` \pm 1.96 \times `r round(sd.hat, -2)`/\sqrt{`r nsw.n`} \approx `r round(mu.hat, -2)` \pm `r round(nsw.w95.norm/2, -2)`$. The bootstrap gave $\pm `r round(nsw.w95.boot/2, -2)`$.
+:::
+
+::: {.fragment}
+- **Resizing, the hard way.** Just like the turnout poll: we want $\pm 500$ instead of $\pm `r round(nsw.w95.norm/2, -1)`$.
+
+$$
+\hat\mu \pm 1.96\hat\sigma_n \qfor \hat\sigma_n = \frac{\hat\sigma_Y}{\sqrt{n}} \qqtext{ is } \hat\mu \pm 500 \qqtext{if} 1.96\frac{\hat\sigma_Y}{\sqrt{n}} = 500
+$$
+
+- Now all we have to do is solve for $n$, using the sample standard deviation $\hat\sigma_Y = `r round(sd.hat, -2)`$.
+
+$$
+n = \frac{1.96^2 \ \hat\sigma_Y^2}{500^2} \approx `r round((1.96*sd.hat/500)^2, -1)`
+$$
+:::
+
+::: {.fragment}
+- **Resizing, the easy way.** Compare the interval width we have to the one we want.
+
+$$
+\begin{aligned}
+\pm `r round(nsw.w95.norm/2, -1)` &= \pm 1.96\hat\sigma_{`r nsw.n`} \qfor \hat\sigma_{`r nsw.n`} = \frac{\hat\sigma_Y}{\sqrt{`r nsw.n`}} \\
+\pm 500 &= \pm 1.96\hat\sigma_n \qfor \hat\sigma_n = \frac{\hat\sigma_Y}{\sqrt{n}}
+\end{aligned}
+$$
+
+- All that changes is the sample size. The *sample size ratio* falls out of the interval width ratio.
+
+$$
+\frac{`r round(nsw.w95.norm/2, -1)`}{500} = \frac{1.96\hat\sigma_{`r nsw.n`}}{1.96\hat\sigma_n} = \sqrt{\frac{n}{`r nsw.n`}}
+\qqtext{ so } n = `r nsw.n`\left(\frac{`r round(nsw.w95.norm/2, -1)`}{500}\right)^2 \approx `r round(nsw.n*((nsw.w95.norm/2)/500)^2, -1)`
+$$
+:::
