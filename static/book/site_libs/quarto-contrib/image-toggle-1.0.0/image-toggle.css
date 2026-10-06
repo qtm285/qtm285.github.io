@@ -42,25 +42,25 @@
 
 .image-toggle-btn {
   padding: 0.1em 0.4em;
-  border: 1px solid #ddd;
+  border: 1px solid var(--bs-border-color, #ddd);
   border-radius: 2px;
   background: transparent;
   cursor: pointer;
   font-size: 0.65em;
-  color: #999;
+  color: var(--bs-secondary-color, #999);
   transition: all 0.2s ease;
 }
 
 .image-toggle-btn:hover {
-  background: #f5f5f5;
-  border-color: #bbb;
-  color: #666;
+  background: transparent;
+  border-color: currentColor;
+  color: var(--bs-body-color, #666);
 }
 
 .image-toggle-btn.active {
-  background: #e8e8e8;
-  color: #555;
-  border-color: #ccc;
+  background: transparent;
+  color: var(--bs-body-color, #555);
+  border-color: currentColor;
 }
 
 /* Hide caption, show figure label inline with controls */
@@ -86,7 +86,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(to right, #333 0%, #333 var(--scroll-progress, 0%), #ddd var(--scroll-progress, 0%), #ddd 100%);
+  background: linear-gradient(to right, currentColor 0%, currentColor var(--scroll-progress, 0%), rgba(128,128,128,.25) var(--scroll-progress, 0%), rgba(128,128,128,.25) 100%);
   opacity: 0.5;
 }
 
@@ -144,8 +144,10 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  /* Opaque so step text scrolling underneath passes behind the figure. */
-  background: var(--bs-body-bg, #fff);
+  /* Transparent, because the course pages paint nothing: html, body, main
+     and the content column are all rgba(0,0,0,0) so the app canvas shows
+     through. A painted card here is the one light rectangle on the page. */
+  background: transparent;
   padding: 0.4em 0 0.7em;
 }
 
@@ -214,7 +216,7 @@
 
 .substep {
   padding: 0.5em 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--bs-border-color-translucent, rgba(128,128,128,.2));
   font-size: 0.9em;
   transition: background-color 0.2s ease;
 }
@@ -224,8 +226,8 @@
 }
 
 .substep.active-step {
-  background-color: #f8f8ff;
-  border-left: 2px solid #6366f1;
+  background-color: transparent;
+  border-left: 2px solid var(--bs-primary, #6366f1);
   margin-left: -1.2em;
   padding-left: calc(1.2em - 2px);
 }

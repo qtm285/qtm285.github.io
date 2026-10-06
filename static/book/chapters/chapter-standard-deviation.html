@@ -866,14 +866,9 @@ window.Quarto = {
 <p>We do not need a new inequality. Markov’s applies to any nonnegative random variable, and last chapter we fed it our estimate. That gave one side only, a bound on landing far above the mean and nothing about landing far below:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-recall-one-sided" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it.">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-recall-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-recall-one-sided-1.svg" id="fig-recall-one-sided" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it.">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-recall-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;17.1
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/recall-one-sided-plot-1.svg" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it."></p>
 </figure>
 </div>
 </div>
@@ -883,20 +878,15 @@ Figure&nbsp;17.1
 <section id="from-distance-to-squared-distance" class="level2">
 <h2 class="anchored" data-anchor-id="from-distance-to-squared-distance">From distance to squared distance</h2>
 <p>The events <span class="math inline">|Z|\ge t</span> and <span class="math inline">Z^2\ge t^2</span> select exactly the same observations. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold.</p>
-<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Signed distances,Fold,Square" data-layout="sidebar" data-mode="steps" data-steps=".fig-chebyshev-transformation-step">
+<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Signed distances,Fold,Square" data-mode="steps" data-layout="sidebar" data-steps=".fig-chebyshev-transformation-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-chebyshev-signed" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-signed-1.svg" id="fig-chebyshev-signed" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-signed-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -905,14 +895,9 @@ Figure&nbsp;17.1
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-chebyshev-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-folded-1.svg" id="fig-chebyshev-folded" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-folded-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -921,14 +906,9 @@ Figure&nbsp;17.1
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-chebyshev-squared" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-squared-1.svg" id="fig-chebyshev-squared" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-squared-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -936,7 +916,7 @@ Figure&nbsp;17.1
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;17.2
+Figure&nbsp;17.1
 </figcaption>
 </figure>
 </div>
@@ -949,99 +929,49 @@ Figure&nbsp;17.2
 <div class="fig-chebyshev-transformation-step">
 <p><strong>Square.</strong> Square every absolute distance and square the threshold. The same observations are now at or above <span class="math inline">t^2</span>, and every value is nonnegative.</p>
 </div>
-<div id="exr-chebyshev-from-markov" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 17.1</strong></span> &nbsp;</p>
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>For <span class="math inline">t&gt;0</span>, use Markov’s inequality to prove <span class="math display">
+<p>Chebyshev’s inequality is Markov’s inequality applied to squared distance: for <span class="math inline">t&gt;0</span>, <span class="math display">
 P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 \le\frac{\mathop{\mathrm{E}}[(X-\mathop{\mathrm{E}}[X])^2]}{t^2}.
 </span></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>The squared distance is nonnegative. What is its expectation?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>The first two pictures change the event’s description without changing which observations it contains. Then the indicator-to-ramp comparison bounds its probability:</p>
-<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Indicator average,Ramp average" data-layout="sidebar" data-mode="steps" data-steps=".fig-chebyshev-area-comparison-step">
+<p>The first two pictures changed the event’s description without changing which observations it contains. The indicator-to-ramp comparison bounds its probability:</p>
+<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Indicator average,Ramp average" data-mode="steps" data-layout="sidebar" data-steps=".fig-chebyshev-area-comparison-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-chebyshev-indicator" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-indicator-1.svg" id="fig-chebyshev-indicator" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-indicator-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p><span class="math inline">P(Z^2\ge t^2)=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]</span>.</p>
 </div>
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-chebyshev-ramp" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-ramp-1.svg" id="fig-chebyshev-ramp" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-ramp-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
-<p><span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;17.3
+Figure&nbsp;17.2
 </figcaption>
 </figure>
 </div>
 <div class="fig-chebyshev-area-comparison-step">
-<p><strong>Indicator average.</strong> Assign one to each selected observation and zero to every other observation. The average is the probability we want to bound.</p>
+<p><strong>Indicator average.</strong> Assign one to each selected observation and zero to every other observation. The average is the probability we want to bound: <span class="math inline">P(Z^2\ge t^2)=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]</span>.</p>
 </div>
 <div class="fig-chebyshev-area-comparison-step">
-<p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average.</p>
+<p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average: <span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
 </div>
-<p><span class="math display">
+<p>Putting those together, <span class="math display">
 \begin{aligned}
 P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 &amp;=P(Z^2\ge t^2)\\
@@ -1049,11 +979,7 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 &amp;\le\mathop{\mathrm{E}}[Z^2/t^2]\\
 &amp;=\frac{\mathop{\mathrm{E}}[Z^2]}{t^2}.
 \end{aligned}
-</span> It is Markov’s inequality applied to squared distance.</p>
-</div>
-</div>
-</div>
-</div>
+</span></p>
 </section>
 </section>
 <section id="variance-measures-spread" class="level1">
@@ -1067,20 +993,15 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 </span> Positive and negative distances cancel. To measure their size, square them before averaging. The <em>variance</em> is the expected squared distance from the mean: <span class="math display">
 \operatorname{Var}(Y)=\mathop{\mathrm{E}}[(Y-\mathop{\mathrm{E}}[Y])^2]=\mathop{\mathrm{E}}[Z^2].
 </span> The picture follows twenty centered observations. The gray dots are their signed distances from the mean, so the green mean line starts at zero. A bar’s height records the fraction of observations at that distance. To square a distance, first square its length on its original side of zero, then fold the negative side over. The original dots and the barbells connecting them to their signed squares stay visible as the distribution changes. Teal tracks observations from the negative side; pink tracks those from the positive side. The final histogram counts squared distances, whose average is the variance.</p>
-<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Data,Barbells,Signed-square distribution,Fold and average" data-layout="sidebar" data-mode="steps" data-steps=".fig-variance-transformation-step">
+<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Data,Barbells,Signed-square distribution,Fold and average" data-mode="steps" data-layout="sidebar" data-steps=".fig-variance-transformation-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-distances" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-distances-1.svg" id="fig-variance-distances" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-distances-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-distances-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1089,14 +1010,9 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-signed-squares" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-signed-squares-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-signed-squares-1.svg" id="fig-variance-signed-squares" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-signed-squares-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-signed-squares-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1105,14 +1021,9 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-signed-histogram" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-signed-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-signed-histogram-1.svg" id="fig-variance-signed-histogram" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-signed-histogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-signed-histogram-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1121,14 +1032,9 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-folded-1.svg" id="fig-variance-folded" class="img-fluid figure-img" data-ref-parent="fig-variance-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-folded-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1172,7 +1078,7 @@ Figure&nbsp;18.1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1181,7 +1087,7 @@ Figure&nbsp;18.1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>Adding a constant moves the mean by the same amount, leaving all distances unchanged. Multiplying by <span class="math inline">a</span> multiplies signed distances by <span class="math inline">a</span>, squared distances by <span class="math inline">a^2</span>, and standard deviation by <span class="math inline">|a|</span>: <span class="math display">
@@ -1433,7 +1339,7 @@ Figure&nbsp;18.1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1442,7 +1348,7 @@ Figure&nbsp;18.1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The population variance is <span class="math display">
@@ -1470,7 +1376,7 @@ Figure&nbsp;18.1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1479,7 +1385,7 @@ Figure&nbsp;18.1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The mean is <span class="math inline">2</span> and the variance is <span class="math inline">(4+1+0+9)/4=3.5</span>. The sample mean’s standard deviation is <span class="math inline">\sqrt{3.5/n}</span>: approximately <span class="math inline">0.935</span> for four draws and <span class="math inline">0.468</span> for sixteen. The population variance changes; the independent-sampling calculation is the same.</p>
@@ -1522,14 +1428,9 @@ Figure&nbsp;18.1
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-sampling-return" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-sampling-return-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-sampling-return-1.svg" id="fig-variance-sampling-return" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-sampling-return-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;21.1
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-sampling-return-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1551,7 +1452,7 @@ Figure&nbsp;21.1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1560,7 +1461,7 @@ Figure&nbsp;21.1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The step that replaced the distinct-index products by zero used independence. All the other steps still hold. The without-replacement distribution is narrower, so the total contribution of those products must be negative.</p>
@@ -1578,41 +1479,19 @@ Figure&nbsp;21.1
 <p>Write <span class="math inline">\sigma=\operatorname{sd}(X)&gt;0</span>. Chebyshev implies <span class="math display">
 P\left(|X-\mathop{\mathrm{E}}[X]|\ge k\sigma\right)\le\frac1{k^2}.
 </span> The bound has the same form for every distribution with finite variance. If <span class="math inline">\sigma=0</span>, <span class="math inline">X</span> equals its expectation with probability one and there is no deviation to bound.</p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>How many standard deviations are sufficient to include at least <span class="math inline">95\%</span> of a distribution’s probability? Use this to construct an interval around an unbiased estimator that covers its target with probability at least <span class="math inline">95\%</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/chebyshev-sd-scaling-plot-1.svg" class="img-fluid figure-img" alt="A distribution with dotted lines a multiple of the standard deviation either side of the mean, the probability outside them shaded."></p>
+</figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>Solve <span class="math inline">1/k^2=0.05</span>: <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span>, the interval <span class="math display">
+<p>Measuring the deviation in standard deviations is what makes the bound usable: the width scales with <span class="math inline">\sigma</span>, and the probability outside it does not depend on the distribution at all.</p>
+<p>So how many standard deviations include at least <span class="math inline">95\%</span> of a distribution’s probability? Solve <span class="math inline">1/k^2=0.05</span> to get <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span>, that makes <span class="math display">
 [\hat\mu-\sqrt{20}\operatorname{sd}(\hat\mu),\;\hat\mu+\sqrt{20}\operatorname{sd}(\hat\mu)]
-</span> covers <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">\operatorname{sd}(\hat\mu)=\sigma/\sqrt n</span>.</p>
-</div>
-</div>
-</div>
-</div>
+</span> an interval covering <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">\operatorname{sd}(\hat\mu)=\sigma/\sqrt n</span>, so the width shrinks like <span class="math inline">1/\sqrt n</span> — which is what Markov’s bound never did.</p>
 </section>
 <section id="compare-the-intervals" class="level2">
 <h2 class="anchored" data-anchor-id="compare-the-intervals">Compare the intervals</h2>
@@ -1640,56 +1519,30 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge k\sigma\right)\le\frac1{k^2}.
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(mcal.p)) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  nn <span class="ot">=</span> <span class="fu">as.numeric</span>(nm)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  hw.cheb <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span><span class="fu">sqrt</span>(mcal.theta<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>mcal.theta)<span class="sc">/</span>nn)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>chebyshev[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>hw.cheb</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>chebyshev[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">+</span>hw.cheb</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p>The samples, positions, and scales are unchanged. The additional <span class="teal">blue intervals</span> use Chebyshev; pink still marks bootstrap/binomial calibration.</p>
+<p>The samples, positions, and scales are unchanged. The additional <span class="teal">blue intervals</span> use Chebyshev; pink still marks bootstrap/binomial calibration. The three pictures below are twenty, eighty and three hundred twenty observations per sample, in that order.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-calibration-20" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-20-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.1: 20 observations
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-calibration-20-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-calibration-80" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-80-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.2: 80 observations
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-calibration-80-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-calibration-320" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-320-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.3: 320 observations
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-calibration-320-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1699,50 +1552,40 @@ Figure&nbsp;22.3: 320 observations
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>intcomp.n <span class="ot">=</span> <span class="dv">625</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>intcomp.theta <span class="ot">=</span> <span class="fl">0.7</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>intcomp.m <span class="ot">=</span> <span class="dv">2000</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>intcomp.values <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>intcomp.n)<span class="sc">/</span>intcomp.n</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>intcomp.samples.binom <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">10000</span>, intcomp.n, intcomp.theta)<span class="sc">/</span>intcomp.n)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>intcomp.samples.hyper <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rhyper</span>(<span class="dv">10000</span>, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)<span class="sc">/</span>intcomp.n)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.binom <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.n, intcomp.theta)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.hyper <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>intcomp.error <span class="ot">=</span> intcomp.values<span class="sc">-</span>intcomp.theta</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.binom))</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.hyper))</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.binom <span class="ot">=</span> <span class="fu">width_binom</span>(intcomp.theta, intcomp.n)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.hyper <span class="ot">=</span> <span class="fu">width_hyper</span>(intcomp.theta, intcomp.n, intcomp.m)<span class="sc">/</span><span class="dv">2</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.binom</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>intcomp.n <span class="ot">=</span> <span class="dv">625</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>intcomp.theta <span class="ot">=</span> <span class="fl">0.7</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>intcomp.m <span class="ot">=</span> <span class="dv">2000</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>intcomp.values <span class="ot">=</span> (<span class="dv">0</span><span class="sc">:</span>intcomp.n)<span class="sc">/</span>intcomp.n</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>intcomp.samples.binom <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">10000</span>, intcomp.n, intcomp.theta)<span class="sc">/</span>intcomp.n)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>intcomp.samples.hyper <span class="ot">=</span> <span class="fu">with_seed</span>(<span class="fu">rhyper</span>(<span class="dv">10000</span>, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)<span class="sc">/</span>intcomp.n)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.binom <span class="ot">=</span> <span class="fu">dbinom</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.n, intcomp.theta)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>intcomp.pmf.hyper <span class="ot">=</span> <span class="fu">dhyper</span>(<span class="dv">0</span><span class="sc">:</span>intcomp.n, intcomp.m<span class="sc">*</span>intcomp.theta,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  intcomp.m<span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>intcomp.theta), intcomp.n)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>intcomp.error <span class="ot">=</span> intcomp.values<span class="sc">-</span>intcomp.theta</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.binom))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>intcomp.sigma.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>(intcomp.error<span class="sc">^</span><span class="dv">2</span><span class="sc">*</span>intcomp.pmf.hyper))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.binom <span class="ot">=</span> <span class="fu">width_binom</span>(intcomp.theta, intcomp.n)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>intcomp.hw.exact.hyper <span class="ot">=</span> <span class="fu">width_hyper</span>(intcomp.theta, intcomp.n, intcomp.m)<span class="sc">/</span><span class="dv">2</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.binom <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.binom</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>intcomp.hw.cheb.hyper <span class="ot">=</span> <span class="fu">sqrt</span>(<span class="dv">20</span>)<span class="sc">*</span>intcomp.sigma.hyper</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>Here the <span class="pink">pink interval</span> is calibrated from the exact sampling distribution, and the <span class="teal">blue interval</span> uses Chebyshev. Both use the same estimate on each row.</p>
+<p>Here the <span class="pink">pink interval</span> is calibrated from the exact sampling distribution, and the <span class="teal">blue interval</span> uses Chebyshev. Both use the same estimate on each row, with replacement first and then without.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-exact-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-binomial-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.4: With replacement
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-exact-binomial-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-exact-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-hypergeometric-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;22.5: Without replacement
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-exact-hypergeometric-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1755,29 +1598,11 @@ Figure&nbsp;22.5: Without replacement
 <p>Return to the two distance pictures. They follow the same centered observations <span class="math inline">Z</span>. The green lines mark two different averages: the average of <span class="math inline">|Z|</span> and the average of <span class="math inline">Z^2</span>.</p>
 <div class="cell quarto-layout-panel" data-layout="[[1,1]]">
 <div class="quarto-layout-row">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-two-moment-comparison-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-two-moment-comparison-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-two-moment-comparison-1.svg" id="fig-two-moment-comparison-1" class="img-fluid figure-img">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-standard-deviation_files/figure-html/two-moment-comparison-plot-1.svg" class="img-fluid"></p>
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.1
-</figcaption>
-</figure>
-</div>
-</div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div id="fig-two-moment-comparison-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-two-moment-comparison-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-two-moment-comparison-2.svg" id="fig-two-moment-comparison-2" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.2
-</figcaption>
-</figure>
-</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="chapter-standard-deviation_files/figure-html/two-moment-comparison-plot-2.svg" class="img-fluid"></p>
 </div>
 </div>
 </div>
@@ -1792,55 +1617,40 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>intcomp.mae.binom <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.binom)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>intcomp.mae.hyper <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.hyper)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.binom <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.binom<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.binom)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.hyper <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.hyper<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.hyper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>intcomp.mae.binom <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.binom)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>intcomp.mae.hyper <span class="ot">=</span> <span class="fu">sum</span>(<span class="fu">abs</span>(intcomp.error)<span class="sc">*</span>intcomp.pmf.hyper)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.binom <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.binom<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.binom)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.hyper <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.hyper<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.hyper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-lower-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-binomial-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.3: With replacement
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-lower-binomial-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-lower-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-hypergeometric-1.svg" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.4: Without replacement
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-lower-hypergeometric-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Why is variance alone insufficient? Consider an error that is zero with probability <span class="math inline">95\%</span> and is <span class="math inline">-L</span> or <span class="math inline">L</span> with probability <span class="math inline">2.5\%</span> each. Its mean is zero and its variance is <span class="math inline">0.05L^2</span>. Push the two tails farther out: the variance grows, but the interval containing just zero still contains <span class="math inline">95\%</span> of the probability. A large variance need not mean that most errors are large.</p>
-<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-layout="sidebar" data-mode="steps" data-steps=".fig-rare-large-errors-step">
+<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-mode="steps" data-layout="sidebar" data-steps=".fig-rare-large-errors-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-rare-1" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-rare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-1-1.svg" id="fig-variance-rare-1" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-rare-1-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1849,14 +1659,9 @@ Figure&nbsp;23.4: Without replacement
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-rare-2" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-rare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-2-1.svg" id="fig-variance-rare-2" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-rare-2-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1865,14 +1670,9 @@ Figure&nbsp;23.4: Without replacement
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-rare-4" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-rare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-4-1.svg" id="fig-variance-rare-4" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-rare-4-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1881,14 +1681,9 @@ Figure&nbsp;23.4: Without replacement
 <div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-variance-rare-8" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-variance-rare-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-rare-8-1.svg" id="fig-variance-rare-8" class="img-fluid figure-img" data-ref-parent="fig-rare-large-errors">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-variance-rare-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(d)
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="chapter-standard-deviation_files/figure-html/variance-rare-8-plot-1.svg" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1896,7 +1691,7 @@ Figure&nbsp;23.4: Without replacement
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;23.5
+Figure&nbsp;23.1
 </figcaption>
 </figure>
 </div>
