@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Variance and Chebyshev’s Inequality</title>
+<title>16&nbsp; Chebyshev’s Inequality and Variance – Prediction, Inference, and Causality</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -61,27 +61,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="chapter-standard-deviation_files/libs/clipboard/clipboard.min.js"></script>
-<script src="chapter-standard-deviation_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="chapter-standard-deviation_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="chapter-standard-deviation_files/libs/quarto-html/popper.min.js"></script>
-<script src="chapter-standard-deviation_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="chapter-standard-deviation_files/libs/quarto-html/anchor.min.js"></script>
-<link href="chapter-standard-deviation_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="chapter-standard-deviation_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="chapter-standard-deviation_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="chapter-standard-deviation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="chapter-standard-deviation_files/libs/bootstrap/bootstrap-a972a42294ee7f24f78cc846a459d063.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="chapter-standard-deviation_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
-<link href="chapter-standard-deviation_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
-<script src="chapter-standard-deviation_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.js"></script>
-<link href="chapter-standard-deviation_files/libs/quarto-contrib/drawable-tldraw-1.0.0/drawable.css" rel="stylesheet">
-<script src="chapter-standard-deviation_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
-<link href="chapter-standard-deviation_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
-<script type="module" src="chapter-standard-deviation_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
-<link href="chapter-standard-deviation_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
-<link href="chapter-standard-deviation_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="chapter-standard-deviation_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../homework/homework-random-variables-and-moments.html" rel="next">
+<link href="../homework/homework-sample-size-coverage.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-5484b9e1c4940b5d511665f5d5339770.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="../site_libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="../site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="../site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+<link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script>
 // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
 // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
@@ -364,6 +397,7 @@ window.__tldaKatexMacros = {
     window.katex.render = function (tex, el, opts) {
       opts = opts || {}
       if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+      if (opts.globalGroup === undefined) opts.globalGroup = true
       if (opts.trust == null) opts.trust = tldaTrust
       const out = inner(tex, el, opts)
       // Reveal reads data-fragment-index from the .fragment node itself,
@@ -573,15 +607,232 @@ window.Quarto = {
 
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Prediction, Inference, and Causality</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prediction, Inference, and Causality I</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-social-pressure-experiment.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Social Pressure Experiment</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Homework: Setting Up</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-descriptive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Homework: Basic Descriptive Statistics</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-one-sample.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.1 Calibration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-point-and-interval-estimates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Point and Interval Estimates</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Homework: The Idea of Calibration</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates with Binary Observations</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-with-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sampling with Replacement and the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-calibration-binary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Homework: Calibration with Binary Outcomes</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-sampling-without-replacement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Sampling without Replacement and the Hypergeometric Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-calibration-with-the-binomial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Calibration using the Binomial Distribution</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Calibrating Interval Estimates using the Bootstrap</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-bootstrap.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Homework: Bootstrap</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../part1-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">1.2 Moments and approximate calibration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Means and Markov’s Inequality</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-sample-size-coverage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-standard-deviation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../homework/homework-random-variables-and-moments.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="-1">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#chebyshevs-inequality" id="toc-chebyshevs-inequality" class="nav-link active" data-scroll-target="#chebyshevs-inequality">Chebyshev’s inequality</a>
+  <ul class="collapse">
+  <li><a href="#from-distance-to-squared-distance" id="toc-from-distance-to-squared-distance" class="nav-link" data-scroll-target="#from-distance-to-squared-distance">From distance to squared distance</a></li>
+  </ul></li>
+  <li><a href="#variance-measures-spread" id="toc-variance-measures-spread" class="nav-link" data-scroll-target="#variance-measures-spread">Variance measures spread</a>
+  <ul class="collapse">
+  <li><a href="#variance-is-an-expectation" id="toc-variance-is-an-expectation" class="nav-link" data-scroll-target="#variance-is-an-expectation">Variance is an expectation</a></li>
+  </ul></li>
+  <li><a href="#calculating-variance-from-two-calls" id="toc-calculating-variance-from-two-calls" class="nav-link" data-scroll-target="#calculating-variance-from-two-calls">Calculating variance from two calls</a>
+  <ul class="collapse">
+  <li><a href="#with-replacement-products-factor" id="toc-with-replacement-products-factor" class="nav-link" data-scroll-target="#with-replacement-products-factor">With replacement: products factor</a></li>
+  <li><a href="#without-replacement-keep-the-joint-probabilities" id="toc-without-replacement-keep-the-joint-probabilities" class="nav-link" data-scroll-target="#without-replacement-keep-the-joint-probabilities">Without replacement: keep the joint probabilities</a></li>
+  </ul></li>
+  <li><a href="#variance-of-a-sample-mean" id="toc-variance-of-a-sample-mean" class="nav-link" data-scroll-target="#variance-of-a-sample-mean">Variance of a sample mean</a></li>
+  <li><a href="#dependence-changes-the-spread" id="toc-dependence-changes-the-spread" class="nav-link" data-scroll-target="#dependence-changes-the-spread">Dependence changes the spread</a></li>
+  <li><a href="#calibrating-intervals-with-variance" id="toc-calibrating-intervals-with-variance" class="nav-link" data-scroll-target="#calibrating-intervals-with-variance">Calibrating intervals with variance</a>
+  <ul class="collapse">
+  <li><a href="#standard-deviation-is-standard" id="toc-standard-deviation-is-standard" class="nav-link" data-scroll-target="#standard-deviation-is-standard">Standard deviation is standard</a></li>
+  <li><a href="#compare-the-intervals" id="toc-compare-the-intervals" class="nav-link" data-scroll-target="#compare-the-intervals">Compare the intervals</a></li>
+  </ul></li>
+  <li><a href="#how-narrow-can-the-right-interval-be" id="toc-how-narrow-can-the-right-interval-be" class="nav-link" data-scroll-target="#how-narrow-can-the-right-interval-be">How narrow can the right interval be?</a></li>
+  <li><a href="#algebra-reference" id="toc-algebra-reference" class="nav-link" data-scroll-target="#algebra-reference">Algebra Reference</a>
+  <ul class="collapse">
+  <li><a href="#sec-sds-squaring-sums" id="toc-sec-sds-squaring-sums" class="nav-link" data-scroll-target="#sec-sds-squaring-sums">Squaring sums</a></li>
+  <li><a href="#squaring-sums-more-terms" id="toc-squaring-sums-more-terms" class="nav-link" data-scroll-target="#squaring-sums-more-terms">Squaring sums: more terms</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../part1-moments.html">1.2 Moments and approximate calibration</a></li><li class="breadcrumb-item"><a href="../chapters/chapter-standard-deviation.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Variance and Chebyshev’s Inequality</h1>
+<h1 class="title"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Chebyshev’s Inequality and Variance</span></h1>
 </div>
 
 
@@ -609,17 +860,214 @@ window.Quarto = {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>markov.H <span class="ot">=</span> markov.town.full[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
+<p>In the last chapter, Markov’s inequality turned a mean into a bound on a probability. Every bound we got that way was a statement about how <em>big</em> our estimate was, because that is the only question Markov answers: how often is this thing large? None of those bounds changed when the sample grew, and the reason is not that our estimates fail to concentrate — we have watched sampling distributions tighten as <span class="math inline">n</span> grows, so we know they do. The reason is that we never asked about concentration. How far our estimate lands from the mean is a different question from how big it is, and we only ever asked the second one. So let’s ask the first.</p>
+<section id="chebyshevs-inequality" class="level1">
+<h1>Chebyshev’s inequality</h1>
+<p>We do not need a new inequality. Markov’s applies to any nonnegative random variable, and last chapter we fed it our estimate. That gave one side only, a bound on landing far above the mean and nothing about landing far below:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-recall-one-sided" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-recall-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-recall-one-sided-1.svg" id="fig-recall-one-sided" class="img-fluid figure-img" alt="The town's residents and their vote-history histogram with only the upper tail shaded blue, beside the indicator function that selects it.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-recall-one-sided-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17.1
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The distance from the mean is different. Write <span class="math inline">Z=X-\mathop{\mathrm{E}}[X]</span> for the centered outcome. The distance is large when our estimate lands far above the mean and also when it lands far below, so bounding its size bounds both sides at once. And Markov will take it, because a distance is never negative.</p>
+<p>There are two obvious ways to turn our error into a distance. We can take the absolute value, <span class="math inline">|Z|</span>, or we can square it. Absolute values are unpleasant to calculate with — they do not come apart when we add things up, and adding things up is most of what we do here. Squaring is just arithmetic by comparison. So let’s square, and we will see shortly why squaring, of all the options, is the one that pays.</p>
+<section id="from-distance-to-squared-distance" class="level2">
+<h2 class="anchored" data-anchor-id="from-distance-to-squared-distance">From distance to squared distance</h2>
+<p>The events <span class="math inline">|Z|\ge t</span> and <span class="math inline">Z^2\ge t^2</span> select exactly the same observations. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold.</p>
+<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Signed distances,Fold,Square" data-layout="sidebar" data-mode="steps" data-steps=".fig-chebyshev-transformation-step">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-signed" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-signed-1.svg" id="fig-chebyshev-signed" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-folded-1.svg" id="fig-chebyshev-folded" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-squared" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-squared-1.svg" id="fig-chebyshev-squared" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17.2
+</figcaption>
+</figure>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Signed distances.</strong> Select observations at distance at least <span class="math inline">t</span> from zero, on either side. These are precisely the observations at distance at least <span class="math inline">t</span> from the original mean.</p>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Fold.</strong> Replace each distance by its absolute value. The selected observations are now at or above <span class="math inline">t</span>; their number and probability have not changed.</p>
+</div>
+<div class="fig-chebyshev-transformation-step">
+<p><strong>Square.</strong> Square every absolute distance and square the threshold. The same observations are now at or above <span class="math inline">t^2</span>, and every value is nonnegative.</p>
+</div>
+<div id="exr-chebyshev-from-markov" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 17.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Exercise</span>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="callout-exercise">
+<p>For <span class="math inline">t&gt;0</span>, use Markov’s inequality to prove <span class="math display">
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
+\le\frac{\mathop{\mathrm{E}}[(X-\mathop{\mathrm{E}}[X])^2]}{t^2}.
+</span></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-tip no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The squared distance is nonnegative. What is its expectation?</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-solution no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Solution</span>Solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="callout-solution" data-collapse="true">
+<p>The first two pictures change the event’s description without changing which observations it contains. Then the indicator-to-ramp comparison bounds its probability:</p>
+<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Indicator average,Ramp average" data-layout="sidebar" data-mode="steps" data-steps=".fig-chebyshev-area-comparison-step">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-indicator" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-indicator-1.svg" id="fig-chebyshev-indicator" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="math inline">P(Z^2\ge t^2)=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]</span>.</p>
+</div>
+<div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-chebyshev-ramp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-ramp-1.svg" id="fig-chebyshev-ramp" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17.3
+</figcaption>
+</figure>
+</div>
+<div class="fig-chebyshev-area-comparison-step">
+<p><strong>Indicator average.</strong> Assign one to each selected observation and zero to every other observation. The average is the probability we want to bound.</p>
+</div>
+<div class="fig-chebyshev-area-comparison-step">
+<p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average.</p>
+</div>
+<p><span class="math display">
+\begin{aligned}
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
+&amp;=P(Z^2\ge t^2)\\
+&amp;=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\\
+&amp;\le\mathop{\mathrm{E}}[Z^2/t^2]\\
+&amp;=\frac{\mathop{\mathrm{E}}[Z^2]}{t^2}.
+\end{aligned}
+</span> It is Markov’s inequality applied to squared distance.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
 <section id="variance-measures-spread" class="level1">
 <h1>Variance measures spread</h1>
-<p>In the last chapter, we calculated the mean of a total without finding its whole distribution. But the mean did not tell Markov’s inequality how tightly a sample average concentrates. We now turn to spread. Can we calculate it with the same table method?</p>
+<p>Chebyshev’s inequality is only as good as our ability to evaluate the average inside it. Everything else in that bound is ours to choose; the average squared distance from the mean, <span class="math inline">\mathop{\mathrm{E}}[Z^2]</span>, is not. Until we can calculate that number, we have an inequality we cannot use.</p>
+<p>We do have a reason to expect it to be worth the trouble. Our new bound is built out of a distance, and distances are what shrink when a sampling distribution tightens — so unlike the mean of our estimate, this average has every reason to depend on the sample size. If it does, a bound built out of it will too. So: can we calculate it with the same table method we used for means?</p>
 <section id="variance-is-an-expectation" class="level2">
 <h2 class="anchored" data-anchor-id="variance-is-an-expectation">Variance is an expectation</h2>
 <p>Subtract the mean from a random variable <span class="math inline">Y</span>. The centered variable <span class="math inline">Z=Y-\mathop{\mathrm{E}}[Y]</span> records a signed distance from the mean. Its expectation is zero: <span class="math display">
 \mathop{\mathrm{E}}[Z]=\mathop{\mathrm{E}}[Y]-\mathop{\mathrm{E}}[Y]=0.
 </span> Positive and negative distances cancel. To measure their size, square them before averaging. The <em>variance</em> is the expected squared distance from the mean: <span class="math display">
 \operatorname{Var}(Y)=\mathop{\mathrm{E}}[(Y-\mathop{\mathrm{E}}[Y])^2]=\mathop{\mathrm{E}}[Z^2].
-</span> The picture follows twenty centered observations. The gray dots are their signed distances from the mean, so the green mean line starts at zero. A bar counts the fraction of observations at that distance. To square a distance, first square its length on its original side of zero, then fold the negative side over. The original dots and the barbells connecting them to their signed squares stay visible as the distribution changes. Teal tracks observations from the negative side; pink tracks those from the positive side. The final histogram counts squared distances, whose average is the variance.</p>
-<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-variance-transformation-step" data-labels="Data,Barbells,Signed-square distribution,Fold and average" data-mode="steps">
+</span> The picture follows twenty centered observations. The gray dots are their signed distances from the mean, so the green mean line starts at zero. A bar’s height records the fraction of observations at that distance. To square a distance, first square its length on its original side of zero, then fold the negative side over. The original dots and the barbells connecting them to their signed squares stay visible as the distribution changes. Teal tracks observations from the negative side; pink tracks those from the positive side. The final histogram counts squared distances, whose average is the variance.</p>
+<div id="fig-variance-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Data,Barbells,Signed-square distribution,Fold and average" data-layout="sidebar" data-mode="steps" data-steps=".fig-variance-transformation-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -688,7 +1136,7 @@ window.Quarto = {
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1
+Figure&nbsp;18.1
 </figcaption>
 </figure>
 </div>
@@ -707,7 +1155,8 @@ Figure&nbsp;1
 <p>Squaring changes the units. The <em>standard deviation</em> takes us back to the units of <span class="math inline">Y</span>: <span class="math display">
 \operatorname{sd}(Y)=\sqrt{\operatorname{Var}(Y)}.
 </span></p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div id="exr-variance-shift-scale" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 18.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -723,7 +1172,7 @@ Figure&nbsp;1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -732,7 +1181,7 @@ Figure&nbsp;1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>Adding a constant moves the mean by the same amount, leaving all distances unchanged. Multiplying by <span class="math inline">a</span> multiplies signed distances by <span class="math inline">a</span>, squared distances by <span class="math inline">a^2</span>, and standard deviation by <span class="math inline">|a|</span>: <span class="math display">
@@ -748,8 +1197,9 @@ Figure&nbsp;1
 </section>
 <section id="calculating-variance-from-two-calls" class="level1">
 <h1>Calculating variance from two calls</h1>
+<p>Variance involves squares. We use the same tables, adding the quantities we want to average.</p>
 <p>Remember how we calculated an expectation in the last chapter. We could average over the call sequences directly, or first collect them into response sequences. For a sum, linearity let us go further: calculate each response’s expectation separately, then add.</p>
-<p>Variance involves squares. We use the same tables, adding the quantities we want to average. Return to the population <span class="math inline">0,0,1,1</span>. Its mean is <span class="math inline">\mu=1/2</span>. For person <span class="math inline">j</span>, write <span class="math inline">z_j=y_j-\mu</span> for the centered response:</p>
+<p>Take the population <span class="math inline">0,0,0,1</span>. Its mean is <span class="math inline">\mu=1/4</span>. For person <span class="math inline">j</span>, write <span class="math inline">z_j=y_j-\mu</span> for the centered response:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 20%">
@@ -769,225 +1219,182 @@ Figure&nbsp;1
 <tr class="odd">
 <td>1</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;"><span class="math inline">-1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
 </tr>
 <tr class="even">
 <td>2</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;"><span class="math inline">-1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
 </tr>
 <tr class="odd">
 <td>3</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;"><span class="math inline">1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"><span class="math inline">-1/4</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
 </tr>
 <tr class="even">
 <td>4</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: right;"><span class="math inline">1/2</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">3/4</span></td>
+<td style="text-align: right;"><span class="math inline">9/16</span></td>
 </tr>
 </tbody>
 </table>
-<p>The centered population averages to zero. Its squares average to <span class="math inline">1/4</span>, the population variance. On call <span class="math inline">i</span> we select person <span class="math inline">J_i</span>, observe <span class="math inline">Y_i=y_{J_i}</span>, and obtain the centered response <span class="math inline">Z_i=z_{J_i}=Y_i-\mu</span>. Under either sampling scheme, each person has marginal probability <span class="math inline">1/4</span>, so <span class="math inline">\mathop{\mathrm{E}}[Z_i]=0</span> and <span class="math inline">\mathop{\mathrm{E}}[Z_i^2]=1/4</span>.</p>
-<p>For the variance of a two-call total, we must average a square of a sum: <span class="math display">
-(Z_1+Z_2)^2=Z_1^2+Z_1Z_2+Z_2Z_1+Z_2^2.
+<p>The centered population averages to zero. Its squares average to <span class="math inline">3/16</span>, the population variance. On call <span class="math inline">i</span> we select person <span class="math inline">J_i</span>, observe <span class="math inline">Y_i=y_{J_i}</span>, and obtain the centered response <span class="math inline">Z_i=z_{J_i}=Y_i-\mu</span>. Under either sampling scheme, each person has marginal probability <span class="math inline">1/4</span>, so <span class="math inline">\mathop{\mathrm{E}}[Z_i]=0</span> and <span class="math inline">\mathop{\mathrm{E}}[Z_i^2]=3/16</span>.</p>
+<p>For the variance of a two-call total, we must average a square of a sum. Write the square as a product of two copies of the sum, one <span class="pink">pink</span> and one <span class="teal">teal</span>: <span class="math display">
+(Z_1+Z_2)^2=\textcolor{#EF476F}{(Z_1+Z_2)}\textcolor{#118AB2}{(Z_1+Z_2)}
+=\textcolor{#EF476F}{Z_1}\textcolor{#118AB2}{Z_1}
++\textcolor{#EF476F}{Z_1}\textcolor{#118AB2}{Z_2}
++\textcolor{#EF476F}{Z_2}\textcolor{#118AB2}{Z_1}
++\textcolor{#EF476F}{Z_2}\textcolor{#118AB2}{Z_2}.
 </span> We already know the expectations of the squares. The middle terms use two calls together. Add their products to the joint table and calculate them in the same way.</p>
 <section id="with-replacement-products-factor" class="level2">
 <h2 class="anchored" data-anchor-id="with-replacement-products-factor">With replacement: products factor</h2>
-<p>Each of the sixteen call sequences has probability <span class="math inline">1/16</span>. As in the last chapter, group them into the four response sequences, each with probability <span class="math inline">1/4</span>:</p>
+<p>Each of the sixteen call sequences has probability <span class="math inline">1/16</span>. As in the last chapter, group them into the four response sequences:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 22%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Responses <span class="math inline">(Y_1,Y_2)</span></th>
-<th>Centered responses <span class="math inline">(Z_1,Z_2)</span></th>
+<th><span class="math inline">Y_1</span></th>
+<th style="text-align: right;"><span class="math inline">Y_2</span></th>
 <th style="text-align: right;">Probability</th>
-<th style="text-align: right;">Product <span class="math inline">Z_1Z_2</span></th>
+<th style="text-align: right;"><span class="math inline">Z_1Z_2</span></th>
 <th style="text-align: right;">Product times probability</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">(0,0)</span></td>
-<td><span class="math inline">(-1/2,-1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">9/16</span></td>
 <td style="text-align: right;"><span class="math inline">1/16</span></td>
+<td style="text-align: right;"><span class="math inline">9/256</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(0,1)</span></td>
-<td><span class="math inline">(-1/2,1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/16</span></td>
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-9/256</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">(1,0)</span></td>
-<td><span class="math inline">(1/2,-1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/16</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-9/256</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(1,1)</span></td>
-<td><span class="math inline">(1/2,1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
 <td style="text-align: right;"><span class="math inline">1/16</span></td>
+<td style="text-align: right;"><span class="math inline">9/16</span></td>
+<td style="text-align: right;"><span class="math inline">9/256</span></td>
 </tr>
 </tbody>
 </table>
 <p>Add the last column: <span class="math display">
-\mathop{\mathrm{E}}[Z_1Z_2]=\frac1{16}-\frac1{16}-\frac1{16}+\frac1{16}=0.
-</span> We can also obtain this expectation from the two marginal distributions. Each centered response is <span class="math inline">-1/2</span> or <span class="math inline">1/2</span> with probability <span class="math inline">1/2</span>. Every joint probability in the table is the product <span class="math inline">(1/2)(1/2)</span>. Substituting that product lets us factor the sum: <span class="math display">
+\mathop{\mathrm{E}}[Z_1Z_2]=\frac9{256}-\frac9{256}-\frac9{256}+\frac9{256}=0.
+</span> We can also obtain this expectation from the two marginal distributions. Each centered response is <span class="math inline">-1/4</span> with probability <span class="math inline">3/4</span> and <span class="math inline">3/4</span> with probability <span class="math inline">1/4</span>. Every joint probability in the table is the product of its two marginal probabilities. Substituting that product lets us factor the sum: <span class="math display">
 \begin{aligned}
 \mathop{\mathrm{E}}[Z_1Z_2]
-&amp;=\left(-\frac12\right)\left(-\frac12\right)\frac12\frac12
-+\left(-\frac12\right)\left(\frac12\right)\frac12\frac12\\
-&amp;\quad+\left(\frac12\right)\left(-\frac12\right)\frac12\frac12
-+\left(\frac12\right)\left(\frac12\right)\frac12\frac12\\
-&amp;=\left\{\left(-\frac12\right)\frac12+\left(\frac12\right)\frac12\right\}
-\left\{\left(-\frac12\right)\frac12+\left(\frac12\right)\frac12\right\}\\
+&amp;=\left(-\frac14\right)\left(-\frac14\right)\textcolor{#EF476F}{\frac34}\textcolor{#118AB2}{\frac34}
++\left(-\frac14\right)\left(\frac34\right)\textcolor{#EF476F}{\frac34}\textcolor{#118AB2}{\frac14}\\
+&amp;\quad+\left(\frac34\right)\left(-\frac14\right)\textcolor{#EF476F}{\frac14}\textcolor{#118AB2}{\frac34}
++\left(\frac34\right)\left(\frac34\right)\textcolor{#EF476F}{\frac14}\textcolor{#118AB2}{\frac14}\\
+&amp;=\left\{\left(-\frac14\right)\textcolor{#EF476F}{\frac34}+\left(\frac34\right)\textcolor{#EF476F}{\frac14}\right\}
+\left\{\left(-\frac14\right)\textcolor{#118AB2}{\frac34}+\left(\frac34\right)\textcolor{#118AB2}{\frac14}\right\}\\
 &amp;=\mathop{\mathrm{E}}[Z_1]\mathop{\mathrm{E}}[Z_2]=0.
 \end{aligned}
-</span> This time the calculation factors multiplicatively. The reason is the product structure of the joint probabilities—the property we called <strong>independence</strong> in the last chapter.</p>
-<p>The same reasoning works for any functions <span class="math inline">f</span> and <span class="math inline">g</span> of independent finite-valued random variables <span class="math inline">Y</span> and <span class="math inline">W</span>: <span class="math display">
+</span> Here the calculation factors multiplicatively. The joint probabilities have the product structure we called <strong>independence</strong> in the last chapter.</p>
+<p>The same reasoning works for any functions <span class="math inline">f</span> and <span class="math inline">g</span> of independent finite-valued random variables <span class="math inline">X</span> and <span class="math inline">Y</span>: <span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}[f(Y)g(W)]
-&amp;=\sum_y\sum_w f(y)g(w)P(Y=y,W=w)\\
-&amp;=\sum_y\sum_w f(y)g(w)P(Y=y)P(W=w)\\
-&amp;=\left\{\sum_y f(y)P(Y=y)\right\}
-  \left\{\sum_w g(w)P(W=w)\right\}\\
-&amp;=\mathop{\mathrm{E}}[f(Y)]\mathop{\mathrm{E}}[g(W)].
+\mathop{\mathrm{E}}[f(X)g(Y)]
+&amp;=\sum_x\sum_y f(x)g(y)P(X=x,Y=y)\\
+&amp;=\sum_x\sum_y f(x)g(y)P(X=x)P(Y=y)\\
+&amp;=\left\{\sum_x f(x)P(X=x)\right\}
+  \left\{\sum_y g(y)P(Y=y)\right\}\\
+&amp;=\mathop{\mathrm{E}}[f(X)]\mathop{\mathrm{E}}[g(Y)].
 \end{aligned}
 </span> Conversely, if this holds for every <span class="math inline">f</span> and <span class="math inline">g</span>, choose indicators of individual values. The result is the factorization of joint probabilities that defines independence.</p>
 </section>
 <section id="without-replacement-keep-the-joint-probabilities" class="level2">
 <h2 class="anchored" data-anchor-id="without-replacement-keep-the-joint-probabilities">Without replacement: keep the joint probabilities</h2>
-<p>Now change the sampling scheme. The population table stays exactly the same. So do the individual response distributions: each centered response still has expectation zero and square expectation <span class="math inline">1/4</span>.</p>
+<p>Now change the sampling scheme. The population table stays exactly the same. So do the individual response distributions: each centered response still has expectation zero and square expectation <span class="math inline">3/16</span>.</p>
 <p>The joint probabilities change. Diagonal call sequences are impossible, and each of the twelve remaining sequences has probability <span class="math inline">1/12</span>. Grouping those calls into responses produces:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 16%">
-<col style="width: 22%">
-<col style="width: 22%">
-<col style="width: 22%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Responses <span class="math inline">(Y_1,Y_2)</span></th>
-<th>Centered responses <span class="math inline">(Z_1,Z_2)</span></th>
+<th><span class="math inline">Y_1</span></th>
+<th style="text-align: right;"><span class="math inline">Y_2</span></th>
 <th style="text-align: right;">Probability</th>
-<th style="text-align: right;">Product <span class="math inline">Z_1Z_2</span></th>
+<th style="text-align: right;"><span class="math inline">Z_1Z_2</span></th>
 <th style="text-align: right;">Product times probability</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><span class="math inline">(0,0)</span></td>
-<td><span class="math inline">(-1/2,-1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/24</span></td>
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1/2</span></td>
+<td style="text-align: right;"><span class="math inline">1/16</span></td>
+<td style="text-align: right;"><span class="math inline">1/32</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(0,1)</span></td>
-<td><span class="math inline">(-1/2,1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/3</span></td>
-<td style="text-align: right;"><span class="math inline">-1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/12</span></td>
+<td><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-3/64</span></td>
 </tr>
 <tr class="odd">
-<td><span class="math inline">(1,0)</span></td>
-<td><span class="math inline">(1/2,-1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/3</span></td>
-<td style="text-align: right;"><span class="math inline">-1/4</span></td>
-<td style="text-align: right;"><span class="math inline">-1/12</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">1/4</span></td>
+<td style="text-align: right;"><span class="math inline">-3/16</span></td>
+<td style="text-align: right;"><span class="math inline">-3/64</span></td>
 </tr>
 <tr class="even">
-<td><span class="math inline">(1,1)</span></td>
-<td><span class="math inline">(1/2,1/2)</span></td>
-<td style="text-align: right;"><span class="math inline">1/6</span></td>
-<td style="text-align: right;"><span class="math inline">1/4</span></td>
-<td style="text-align: right;"><span class="math inline">1/24</span></td>
+<td><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">1</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
+<td style="text-align: right;"><span class="math inline">9/16</span></td>
+<td style="text-align: right;"><span class="math inline">0</span></td>
 </tr>
 </tbody>
 </table>
 <p>The probabilities no longer factor into the two marginal probabilities. We can still average the product, but must use these joint probabilities: <span class="math display">
-\mathop{\mathrm{E}}[Z_1Z_2]=\frac1{24}-\frac1{12}-\frac1{12}+\frac1{24}=-\frac1{12}.
-</span> That is not <span class="math inline">\mathop{\mathrm{E}}[Z_1]\mathop{\mathrm{E}}[Z_2]=0</span>. Opposite-sign pairs are more likely than same-sign pairs, so the negative products outweigh the positive ones.</p>
-<p>Linearity has not failed. For the total, it still implies <span class="math display">
+\mathop{\mathrm{E}}[Z_1Z_2]=\frac1{32}-\frac3{64}-\frac3{64}+0=-\frac1{16}.
+</span> That is not <span class="math inline">\mathop{\mathrm{E}}[Z_1]\mathop{\mathrm{E}}[Z_2]=0</span>. Opposite-sign pairs now carry half the probability, so the negative products outweigh the positive ones.</p>
+<p>The same expansion works without independence, but we must keep the cross terms: <span class="math display">
 \begin{aligned}
 \operatorname{Var}(Y_1+Y_2)
 &amp;=\mathop{\mathrm{E}}[(Z_1+Z_2)^2]\\
 &amp;=\mathop{\mathrm{E}}[Z_1^2]+\mathop{\mathrm{E}}[Z_1Z_2]+\mathop{\mathrm{E}}[Z_2Z_1]+\mathop{\mathrm{E}}[Z_2^2]\\
-&amp;=\frac14-\frac1{12}-\frac1{12}+\frac14=\frac13.
+&amp;=\frac3{16}-\frac1{16}-\frac1{16}+\frac3{16}=\frac14.
 \end{aligned}
-</span> With replacement the same expansion has two zero middle terms, so the total’s variance is <span class="math inline">1/2</span>. The negative product expectations explain the smaller spread without replacement.</p>
+</span> With replacement the same expansion has two zero middle terms, so the total’s variance is <span class="math inline">3/8</span>.</p>
 </section>
 </section>
 <section id="variance-of-a-sample-mean" class="level1">
 <h1>Variance of a sample mean</h1>
-<p>Remember the bookkeeping for the three-call distribution: four layers of call sequences, then response sequences, then totals. For variance, we need not build that whole distribution. However many calls we take, squaring a sum produces products involving at most two calls. Linearity lets us average those terms one at a time.</p>
-<p>Let the population have <span class="math inline">m</span> responses <span class="math inline">y_1\ldots y_m</span>, mean <span class="math inline">\mu</span>, and variance <span class="math inline">\sigma^2</span>. Write <span class="math inline">z_j=y_j-\mu</span> for each centered population response and <span class="math inline">Z_i=Y_i-\mu</span> for the centered response on call <span class="math inline">i</span>. Uniform sampling implies <span class="math display">
-\mathop{\mathrm{E}}[Z_i]=\frac1m\sum_{j=1}^m z_j=0,
-\qquad
-\mathop{\mathrm{E}}[Z_i^2]=\frac1m\sum_{j=1}^m z_j^2=\sigma^2.
-</span> For <span class="math inline">n</span> calls, the sample mean is <span class="math inline">\hat\mu=n^{-1}\sum_iY_i</span>. It is unbiased, as we proved in the last chapter, so its variance is the expected square of <span class="math inline">\hat\mu-\mu=n^{-1}\sum_iZ_i</span>.</p>
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Squaring sums
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>Here’s a version where I’m very explicit: it’s a product of two copies of <span class="math inline">(a+b)</span>: one <span class="pink">pink</span> and one <span class="teal">teal</span>. <span class="math display">
+<p>However many calls we take, squaring a sum produces products involving at most two calls. Remember the bookkeeping for the three-call distribution: four layers of call sequences, then response sequences, then totals. For variance, we need not build that whole distribution. Linearity lets us average those terms one at a time.</p>
+<p>Let the population have <span class="math inline">m</span> responses <span class="math inline">y_1\ldots y_m</span>, mean <span class="math inline">\mu</span>, and variance <span class="math inline">\sigma^2</span>. Write <span class="math inline">z_j=y_j-\mu</span> for each centered population response and <span class="math inline">Z_i=Y_i-\mu</span> for the centered response on call <span class="math inline">i</span>. Sample uniformly with replacement. Recall the calculation for a function of a uniform draw: <span class="math display">
+\mathop{\mathrm{E}}[f(Y_i)]=\frac1m\sum_{j=1}^m f(y_j).
+</span> Choose <span class="math inline">f(y)=(y-\mu)^2</span> in the squared-distance picture, <span class="math display">
+\mathop{\mathrm{E}}[\textcolor{#118AB2}{Z_i^2}]=\frac1m\sum_{j=1}^m(y_j-\mu)^2=\textcolor{#06D6A0}{\sigma^2}.
+</span> The centered responses have mean zero: <span class="math display">
 \begin{aligned}
-(a+b)^2
-&amp;=\textcolor{#EF476F}{(a+b)}\textcolor{#118AB2}{(a+b)}\\
-&amp;=\textcolor{#EF476F}{a}\textcolor{#118AB2}{a}
-+\textcolor{#EF476F}{a}\textcolor{#118AB2}{b}
-+\textcolor{#EF476F}{b}\textcolor{#118AB2}{a}
-+\textcolor{#EF476F}{b}\textcolor{#118AB2}{b}\\
-&amp;=a^2+2ab+b^2.
+\mathop{\mathrm{E}}[\textcolor{#EF476F}{Z_i}]
+&amp;\overset{\texttip{\small{\text{?}}}{definition of the centered response}}{=}\mathop{\mathrm{E}}[Y_i-\mathop{\mathrm{E}}[Y_i]]\\
+&amp;\overset{\texttip{\small{\text{?}}}{linearity}}{=}\mathop{\mathrm{E}}[Y_i]-\mathop{\mathrm{E}}[Y_i]=0.
 \end{aligned}
-</span> It helps to count out the terms in our <span class="pink">pink copy</span> using <span class="math inline">i</span> and in our <span class="teal">teal copy</span> using <span class="math inline">j</span>. When we multiply out our sums, we get a product term for each pair of terms in the sum. <span class="math display">
-\left(\sum_{i=1}^nZ_i\right)^2
-=\textcolor{#EF476F}{\sum_{i=1}^nZ_i}\textcolor{#118AB2}{\sum_{j=1}^nZ_j}
-=\textcolor{#EF476F}{\sum_{i=1}^n}\textcolor{#118AB2}{\sum_{j=1}^n}
-\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j}.
-</span></p>
-</div>
-</div>
-</div>
-<p>Expanding the square and using linearity, under either sampling scheme, <span class="math display">
-\begin{aligned}
-\operatorname{Var}(\hat\mu)
-&amp;=\frac1{n^2}\sum_{i=1}^n\sum_{j=1}^n\mathop{\mathrm{E}}[Z_iZ_j]\\
-&amp;=\frac1{n^2}\left\{n\sigma^2+\sum_{i\ne j}\mathop{\mathrm{E}}[Z_iZ_j]\right\}.
-\end{aligned}
-</span> There are <span class="math inline">n</span> square terms, one for each call, and <span class="math inline">n(n-1)</span> ordered products of distinct calls. Each product expectation uses only the joint distribution of those two calls. Under uniform sampling with replacement, every distinct pair has the same joint distribution; the same is true under uniform sampling without replacement. In either case, one two-call calculation supplies every cross term. We have lost the product shortcut without replacement, not the saving from linearity.</p>
-<section id="independent-calls" class="level2">
-<h2 class="anchored" data-anchor-id="independent-calls">Independent calls</h2>
+</span> For <span class="math inline">n</span> calls, the sample mean is <span class="math inline">\hat\mu=n^{-1}\sum_iY_i</span>. It is unbiased, as we proved in the last chapter, so its variance is the expected square of <span class="math inline">\hat\mu-\mu=n^{-1}\sum_iZ_i</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>There are <span class="math inline">n</span> square terms, one for each call, and <span class="math inline">n(n-1)</span> ordered products of distinct calls. Each product expectation uses only the joint distribution of those two calls. Under uniform sampling with replacement, every distinct pair has the same joint distribution; the same is true under uniform sampling without replacement. In either case, one two-call calculation supplies every cross term. We have lost the product shortcut without replacement, not the saving from linearity.</p>
 <p>With replacement, distinct calls are independent. The factorization just proved and the zero mean of each centered response imply <span class="math display">
 \mathop{\mathrm{E}}[Z_iZ_j]=\mathop{\mathrm{E}}[Z_i]\mathop{\mathrm{E}}[Z_j]=0 \qquad (i\ne j).
-</span> For equal indices, the product is a square, whose expectation is <span class="math inline">\sigma^2</span>. Substitute these two cases into the variance calculation. Keep the two copies of the sum separate when squaring: <span class="math display">
+</span> When <span class="math inline">i=j</span>, the product is a square: <span class="math inline">\mathop{\mathrm{E}}[Z_i^2]=\mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i]=\sigma^2</span>. These are the two cases we will use when we square the sample mean: <span class="math display">
 \begin{aligned}
 \operatorname{Var}(\hat\mu)
 &amp;\overset{\texttip{\small{\text{?}}}{center}}{=}\mathop{\mathrm{E}}\left[\left(\frac1n\sum_{i=1}^nZ_i\right)^2\right]\\
@@ -996,20 +1403,21 @@ Figure&nbsp;1
 \textcolor{#118AB2}{\sum_{j=1}^nZ_j}\right]\\
 &amp;\overset{\texttip{\small{\text{?}}}{linearity}}{=}\frac1{n^2}\textcolor{#EF476F}{\sum_{i=1}^n}
 \textcolor{#118AB2}{\sum_{j=1}^n}\mathop{\mathrm{E}}[\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j}]\\
-&amp;\overset{\texttip{\small{\text{?}}}{equal indices produce a square; distinct independent centered terms have product expectation zero}}{=}\frac1{n^2}\textcolor{#EF476F}{\sum_{i=1}^n}
+&amp;\overset{\texttip{\small{\text{?}}}{equal indices give a squared centered response; distinct indices give a product with expectation zero}}{=}\frac1{n^2}\textcolor{#EF476F}{\sum_{i=1}^n}
 \textcolor{#118AB2}{\sum_{j=1}^n}
 \begin{cases}
 \sigma^2 &amp; \textcolor{#EF476F}{i}=\textcolor{#118AB2}{j},\\
 0 &amp; \textcolor{#EF476F}{i}\ne\textcolor{#118AB2}{j}
 \end{cases}\\
 &amp;\overset{\texttip{\small{\text{?}}}{only the equal-index terms remain}}{=}\frac1{n^2}\sum_{i=1}^n\mathop{\mathrm{E}}[Z_i^2]\\
-&amp;\overset{\texttip{\small{\text{?}}}{there are n such terms, each with expectation equal to the population variance}}{=}\frac{n\sigma^2}{n^2}
+&amp;\overset{\texttip{\small{\text{?}}}{there are n equal-index terms, each with expectation equal to the population variance}}{=}\frac{n\sigma^2}{n^2}
 =\frac{\sigma^2}{n}.
 \end{aligned}
-</span> Only the <span class="math inline">n</span> equal-index terms remain. Taking a square root, <span class="math display">
+</span> Taking a square root, <span class="math display">
 \operatorname{sd}(\hat\mu)=\frac{\sigma}{\sqrt n}.
 </span> Quadrupling the sample size halves the standard deviation.</p>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div id="exr-binary-variance" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 20.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1025,7 +1433,7 @@ Figure&nbsp;1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1034,7 +1442,7 @@ Figure&nbsp;1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The population variance is <span class="math display">
@@ -1045,7 +1453,8 @@ Figure&nbsp;1
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div id="exr-nonbinary-variance" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 20.2</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1061,7 +1470,7 @@ Figure&nbsp;1
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1070,7 +1479,7 @@ Figure&nbsp;1
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The mean is <span class="math inline">2</span> and the variance is <span class="math inline">(4+1+0+9)/4=3.5</span>. The sample mean’s standard deviation is <span class="math inline">\sqrt{3.5/n}</span>: approximately <span class="math inline">0.935</span> for four draws and <span class="math inline">0.468</span> for sixteen. The population variance changes; the independent-sampling calculation is the same.</p>
@@ -1079,10 +1488,9 @@ Figure&nbsp;1
 </div>
 </div>
 </section>
-</section>
 <section id="dependence-changes-the-spread" class="level1">
 <h1>Dependence changes the spread</h1>
-<p>The three sampling schemes in the part opening use the same population. Each draw position has the same marginal mean and variance. That explains their common center. The schemes differ in how the draws occur together.</p>
+<p>The three sampling schemes defined in <a href="../chapters/chapter-random-variables-and-moments.html">Means and Markov’s Inequality</a> use the same population. Each draw position has the same marginal mean and variance. That explains their common center. The schemes differ in how the draws occur together.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1120,13 +1528,14 @@ Figure&nbsp;1
 <img src="chapter-standard-deviation_files/figure-html/fig-variance-sampling-return-1.svg" id="fig-variance-sampling-return" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-sampling-return-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2
+Figure&nbsp;21.1
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
+<div id="exr-scheme-comparison" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 21.1</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
@@ -1142,7 +1551,7 @@ Figure&nbsp;2
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1151,7 +1560,7 @@ Figure&nbsp;2
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
 <p>The step that replaced the distinct-index products by zero used independence. All the other steps still hold. The without-replacement distribution is narrower, so the total contribution of those products must be negative.</p>
@@ -1161,211 +1570,14 @@ Figure&nbsp;2
 </div>
 <p>The random-start cycle illustrates the other direction. Consecutive people in this ordered population often have the same response. At the sample sizes shown, their cross terms contribute positively, and the sample average has more variation than under independent sampling. Its individual draws are still uniform.</p>
 </section>
-<section id="chebyshevs-inequality" class="level1">
-<h1>Chebyshev’s inequality</h1>
-<p>We now know the sample mean’s variance. How can we turn it into a calibration guarantee?</p>
-<section id="follow-the-same-event" class="level2">
-<h2 class="anchored" data-anchor-id="follow-the-same-event">Follow the same event</h2>
-<p>Let <span class="math inline">Z=X-\mathop{\mathrm{E}}[X]</span>. We want to bound the probability that <span class="math inline">X</span> is far from its mean. In the first picture, select the observations at distance at least <span class="math inline">t</span> on either side. Fold the negative side onto the positive side; those same observations are now above <span class="math inline">t</span>. Square the distances and the threshold; the same observations are above <span class="math inline">t^2</span>: <span class="math display">
-|X-\mathop{\mathrm{E}}[X]|\ge t
-\quad\Longleftrightarrow\quad
-|Z|\ge t
-\quad\Longleftrightarrow\quad
-Z^2\ge t^2.
-</span></p>
-<div id="fig-chebyshev-transformation" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-chebyshev-transformation-step" data-labels="Signed distances,Fold,Square" data-mode="steps">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-signed" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-signed-1.svg" id="fig-chebyshev-signed" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-signed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-folded" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-folded-1.svg" id="fig-chebyshev-folded" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-folded-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-squared" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-squared-1.svg" id="fig-chebyshev-squared" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-transformation">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-squared-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(c)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-transformation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3
-</figcaption>
-</figure>
-</div>
-<div class="fig-chebyshev-transformation-step">
-<p><strong>Signed distances.</strong> Select observations at distance at least <span class="math inline">t</span> from zero, on either side. These are precisely the observations at distance at least <span class="math inline">t</span> from the original mean.</p>
-</div>
-<div class="fig-chebyshev-transformation-step">
-<p><strong>Fold.</strong> Replace each distance by its absolute value. The selected observations are now at or above <span class="math inline">t</span>; their number and probability have not changed.</p>
-</div>
-<div class="fig-chebyshev-transformation-step">
-<p><strong>Square.</strong> Square every absolute distance and square the threshold. The same observations are now at or above <span class="math inline">t^2</span>, and every value is nonnegative.</p>
-</div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-exercise-hint" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-chebyshev-exercise-hint-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-exercise-hint-1.svg" id="fig-chebyshev-exercise-hint" class="img-fluid figure-img">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-exercise-hint-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-exercise no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Exercise</span>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<div class="callout-exercise">
-<p>For <span class="math inline">t&gt;0</span>, use Markov’s inequality to prove <span class="math display">
-P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
-\le\frac{\operatorname{Var}(X)}{t^2}.
-</span></p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>The squared distance is nonnegative. What is its expectation?</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Solution</span>Solution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="callout-solution" data-collapse="true">
-<p>The first two pictures change the event’s description without changing which observations it contains. Then the indicator-to-ramp comparison bounds its probability:</p>
-<div id="fig-chebyshev-area-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-chebyshev-area-comparison-step" data-labels="Indicator average,Ramp average" data-mode="steps">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-indicator" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-indicator-1.svg" id="fig-chebyshev-indicator" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-indicator-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><span class="math inline">P(Z^2\ge t^2)=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]</span>.</p>
-</div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-chebyshev-ramp" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-chebyshev-ramp-1.svg" id="fig-chebyshev-ramp" class="img-fluid figure-img" data-ref-parent="fig-chebyshev-area-comparison">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-chebyshev-ramp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-<p><span class="math inline">\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\le\mathop{\mathrm{E}}[Z^2/t^2]</span>.</p>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-chebyshev-area-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5
-</figcaption>
-</figure>
-</div>
-<div class="fig-chebyshev-area-comparison-step">
-<p><strong>Indicator average.</strong> Assign one to each selected observation and zero to every other observation. The average is the probability we want to bound.</p>
-</div>
-<div class="fig-chebyshev-area-comparison-step">
-<p><strong>Ramp average.</strong> Replace the indicator by squared distance divided by <span class="math inline">t^2</span>. Every value is at least as large, so its average bounds the indicator average.</p>
-</div>
-<p><span class="math display">
-\begin{aligned}
-P\left(|X-\mathop{\mathrm{E}}[X]|\ge t\right)
-&amp;=P(Z^2\ge t^2)\\
-&amp;=\mathop{\mathrm{E}}[1_{\ge t^2}(Z^2)]\\
-&amp;\le\mathop{\mathrm{E}}[Z^2/t^2]\\
-&amp;=\frac{\operatorname{Var}(X)}{t^2}.
-\end{aligned}
-</span> This is <strong>Chebyshev’s inequality</strong>. It is Markov’s inequality applied to squared distance.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</section>
 <section id="calibrating-intervals-with-variance" class="level1">
 <h1>Calibrating intervals with variance</h1>
+<p>Measure distance in multiples of <span class="math inline">\sigma</span>.</p>
 <section id="standard-deviation-is-standard" class="level2">
 <h2 class="anchored" data-anchor-id="standard-deviation-is-standard">Standard deviation is standard</h2>
-<p>Write <span class="math inline">s=\operatorname{sd}(X)&gt;0</span>. Measure distance in multiples of <span class="math inline">s</span>. Chebyshev implies <span class="math display">
-P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
-</span> The bound has the same form for every distribution with finite variance. If <span class="math inline">s=0</span>, <span class="math inline">X</span> equals its expectation with probability one and there is no deviation to bound.</p>
+<p>Write <span class="math inline">\sigma=\operatorname{sd}(X)&gt;0</span>. Chebyshev implies <span class="math display">
+P\left(|X-\mathop{\mathrm{E}}[X]|\ge k\sigma\right)\le\frac1{k^2}.
+</span> The bound has the same form for every distribution with finite variance. If <span class="math inline">\sigma=0</span>, <span class="math inline">X</span> equals its expectation with probability one and there is no deviation to bound.</p>
 <div class="callout callout-style-simple callout-exercise no-icon callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1382,7 +1594,7 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
 </div>
 </div>
 <div class="callout callout-style-simple callout-solution no-icon callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1391,12 +1603,12 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="callout-solution" data-collapse="true">
-<p>Solve <span class="math inline">1/k^2=0.05</span>: <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span> with known standard deviation <span class="math inline">s</span>, the interval <span class="math display">
-[\hat\mu-\sqrt{20}s,\;\hat\mu+\sqrt{20}s]
-</span> covers <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">s=\sigma/\sqrt n</span>.</p>
+<p>Solve <span class="math inline">1/k^2=0.05</span>: <span class="math inline">k=\sqrt{20}</span>. For an unbiased estimator <span class="math inline">\hat\mu</span>, the interval <span class="math display">
+[\hat\mu-\sqrt{20}\operatorname{sd}(\hat\mu),\;\hat\mu+\sqrt{20}\operatorname{sd}(\hat\mu)]
+</span> covers <span class="math inline">\mu</span> with probability at least <span class="math inline">95\%</span>. For an independent sample mean, <span class="math inline">\operatorname{sd}(\hat\mu)=\sigma/\sqrt n</span>.</p>
 </div>
 </div>
 </div>
@@ -1404,7 +1616,7 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
 </section>
 <section id="compare-the-intervals" class="level2">
 <h2 class="anchored" data-anchor-id="compare-the-intervals">Compare the intervals</h2>
-<p>Return to the bootstrap/binomial and Markov intervals from <a href="chapter-random-variables-and-moments.qmd">Means and Markov’s Inequality</a>. The new Chebyshev intervals remain wider than the binomial calibration, but they shrink as sample size grows. Squaring the centered estimator exposed the information the direct Markov calculation missed.</p>
+<p>Return to the bootstrap/binomial intervals from <a href="../chapters/chapter-random-variables-and-moments.html">Means and Markov’s Inequality</a>. The new Chebyshev intervals remain wider than the binomial calibration, but they shrink as sample size grows. Squaring the centered estimator exposed the information the direct Markov calculation missed.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1413,14 +1625,19 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>mcal.p <span class="ot">=</span> <span class="fu">lapply</span>(<span class="fu">setNames</span>(mcal.n, mcal.n), <span class="cf">function</span>(nn)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">with_seed</span>(<span class="fu">rbinom</span>(<span class="dv">100</span>, nn, mcal.theta)<span class="sc">/</span>nn))</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mcal.lo <span class="ot">=</span> mcal.hi <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mcal.lo<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="fl">0.025</span><span class="sc">*</span>p)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mcal.hi<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="dv">1</span><span class="fl">-0.025</span><span class="sc">*</span>(<span class="dv">1</span><span class="sc">-</span>p))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>mcal.lo<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="fl">0.05</span><span class="sc">*</span>p)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>mcal.hi<span class="sc">$</span>markov <span class="ot">=</span> <span class="fu">lapply</span>(mcal.p, <span class="cf">function</span>(p) <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(p)))</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (nm <span class="cf">in</span> <span class="fu">names</span>(mcal.p)) {</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  nn <span class="ot">=</span> <span class="fu">as.numeric</span>(nm)</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  hw.plugin <span class="ot">=</span> <span class="fu">vapply</span>(mcal.p[[nm]], <span class="cf">function</span>(pp) <span class="fu">width_binom</span>(pp, nn)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>hw.plugin</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>plugin[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">+</span>hw.plugin</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># one-sided plug-in: how far below our estimate the frequency could be, using the</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 95th percentile of the error under the same binomial model</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  c.plugin <span class="ot">=</span> <span class="fu">vapply</span>(mcal.p[[nm]], <span class="cf">function</span>(pp) <span class="fu">qbinom</span>(.<span class="dv">95</span>, nn, pp)<span class="sc">/</span>nn <span class="sc">-</span> pp, <span class="fu">numeric</span>(<span class="dv">1</span>))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  mcal.lo<span class="sc">$</span>plugin1[[nm]] <span class="ot">=</span> mcal.p[[nm]]<span class="sc">-</span>c.plugin</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  mcal.hi<span class="sc">$</span>plugin1[[nm]] <span class="ot">=</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(mcal.p[[nm]]))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -1434,57 +1651,46 @@ P\left(|X-\mathop{\mathrm{E}}[X]|\ge ks\right)\le\frac1{k^2}.
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>The samples, positions, and scales are unchanged. The additional <span class="teal">blue intervals</span> use Chebyshev; pink still marks bootstrap/binomial calibration and dark marks Markov.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">20 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">80 observations</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">320 observations</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>The samples, positions, and scales are unchanged. The additional <span class="teal">blue intervals</span> use Chebyshev; pink still marks bootstrap/binomial calibration.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-calibration-20" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-20-1.svg" id="fig-variance-calibration-20" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-20-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-20-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.1: 20 observations
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-calibration-80" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-80-1.svg" id="fig-variance-calibration-80" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-80-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;7
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-80-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.2: 80 observations
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-calibration-320" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-320-1.svg" id="fig-variance-calibration-320" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-calibration-320-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-calibration-320-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.3: 320 observations
 </figcaption>
 </figure>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1513,98 +1719,73 @@ Figure&nbsp;8
 </details>
 </div>
 <p>Here the <span class="pink">pink interval</span> is calibrated from the exact sampling distribution, and the <span class="teal">blue interval</span> uses Chebyshev. Both use the same estimate on each row.</p>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">With replacement</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Without replacement</a></li></ul>
-<div class="tab-content">
-<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-exact-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-binomial-1.svg" id="fig-variance-exact-binomial" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-binomial-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;9
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-exact-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.4: With replacement
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-exact-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-hypergeometric-1.svg" id="fig-variance-exact-hypergeometric" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-exact-hypergeometric-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;10
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-exact-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.5: Without replacement
 </figcaption>
 </figure>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
 </section>
-<section id="how-narrow-can-the-right-interval-be" class="level2">
-<h2 class="anchored" data-anchor-id="how-narrow-can-the-right-interval-be">How narrow can the right interval be?</h2>
+</section>
+<section id="how-narrow-can-the-right-interval-be" class="level1">
+<h1>How narrow can the right interval be?</h1>
 <p>Chebyshev tells us a width that is sufficient. Can the moments also tell us how narrow a calibrated interval could be? Almost: we need two summaries of the absolute error, its mean and its mean square.</p>
 <p>Return to the two distance pictures. They follow the same centered observations <span class="math inline">Z</span>. The green lines mark two different averages: the average of <span class="math inline">|Z|</span> and the average of <span class="math inline">Z^2</span>.</p>
-<div id="fig-two-moment-comparison" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-two-moment-comparison-step" data-labels="Average absolute distance,Average squared distance" data-mode="steps">
+<div class="cell quarto-layout-panel" data-layout="[[1,1]]">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-two-moment-comparison-1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-two-moment-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-lower-absolute-moment" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-lower-absolute-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-lower-absolute-moment-1.svg" id="fig-lower-absolute-moment" class="img-fluid figure-img" data-ref-parent="fig-two-moment-comparison">
+<div aria-describedby="fig-two-moment-comparison-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-two-moment-comparison-1.svg" id="fig-two-moment-comparison-1" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lower-absolute-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(a)
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.1
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-two-moment-comparison-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-two-moment-comparison-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="chapter-standard-deviation_files/figure-html/fig-two-moment-comparison-2.svg" id="fig-two-moment-comparison-2" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.2
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-lower-second-moment" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-lower-second-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-lower-second-moment-1.svg" id="fig-lower-second-moment" class="img-fluid figure-img" data-ref-parent="fig-two-moment-comparison">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-lower-second-moment-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-(b)
-</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-two-moment-comparison-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;11
-</figcaption>
-</figure>
-</div>
-<div class="fig-two-moment-comparison-step">
-<p><strong>Average absolute distance.</strong></p>
-</div>
-<div class="fig-two-moment-comparison-step">
-<p><strong>Average squared distance.</strong></p>
-</div>
+<p><strong>Average absolute distance.</strong> Every observation’s distance from the mean, averaged; the green line marks <span class="math inline">\mathop{\mathrm{E}}|Z|</span>. A point twice as far contributes twice as much.</p>
+<p><strong>Average squared distance.</strong> The same distances, squared before averaging; the green line marks <span class="math inline">\mathop{\mathrm{E}}[Z^2]</span>, the variance. Squaring makes far points count quadratically more — twice as far is four times the contribution — which is what makes this average sensitive to the largest errors.</p>
 <p>For a nonnegative random variable <span class="math inline">A</span> with finite, positive second moment, the <strong>Paley–Zygmund inequality</strong> implies, for <span class="math inline">0\le t&lt;\mathop{\mathrm{E}}[A]</span>, <span class="math display">
 P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
-</span> Apply it to <span class="math inline">A=|\hat\mu-\mu|</span>. For an unbiased estimator, <span class="math inline">\mathop{\mathrm{E}}[A^2]</span> is its variance; <span class="math inline">\mathop{\mathrm{E}}[A]</span> is its mean absolute error. This supplies lower control of the tail using those two moments. A derivation using the indicator split and Cauchy–Schwarz is in <a href="https://stat.cmu.edu/~cshalizi/sml/21/lectures/05/lecture-05.html#backup-lower-bounds-on-deviation-probabilities">these probability-bound notes</a>.</p>
+</span> Apply it to <span class="math inline">A=|\hat\mu-\mu|</span>. For an unbiased estimator, <span class="math inline">\mathop{\mathrm{E}}[A^2]</span> is its variance; <span class="math inline">\mathop{\mathrm{E}}[A]</span> is its mean absolute error. This supplies lower control of the tail using those two moments. A derivation using the indicator split and Cauchy–Schwarz is on <a href="https://en.wikipedia.org/wiki/Paley%E2%80%93Zygmund_inequality">Wikipedia</a>.</p>
 <p>For <span class="math inline">95\%</span> coverage, any symmetric half-width smaller than <span class="math display">
 \max\left\{0,\;\mathop{\mathrm{E}}[A]-\sqrt{0.05\mathop{\mathrm{E}}[A^2]}\right\}
 </span> misses more than <span class="math inline">5\%</span> of the probability. The dashed yellow intervals below mark that lower control of width; they are not another proposed <span class="math inline">95\%</span> interval. The exact calibrated widths lie between it and the sufficient Chebyshev widths.</p>
@@ -1617,45 +1798,36 @@ P(A\ge t)\ge\frac{(\mathop{\mathrm{E}}[A]-t)^2}{\mathop{\mathrm{E}}[A^2]}.
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>intcomp.hw.lower.hyper <span class="ot">=</span> <span class="fu">max</span>(<span class="dv">0</span>, intcomp.mae.hyper<span class="sc">-</span><span class="fu">sqrt</span>(.<span class="dv">05</span>)<span class="sc">*</span>intcomp.sigma.hyper)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">With replacement</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Without replacement</a></li></ul>
-<div class="tab-content">
-<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-lower-binomial" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-binomial-1.svg" id="fig-variance-lower-binomial" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-binomial-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;12
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-lower-binomial-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.3: With replacement
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-variance-lower-hypergeometric" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-hypergeometric-1.svg" id="fig-variance-lower-hypergeometric" class="img-fluid figure-img">
+<img src="chapter-standard-deviation_files/figure-html/fig-variance-lower-hypergeometric-1.svg" class="img-fluid figure-img">
 </div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;13
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-variance-lower-hypergeometric-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;23.4: Without replacement
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-</div>
-</div>
-</div>
 <p>Why is variance alone insufficient? Consider an error that is zero with probability <span class="math inline">95\%</span> and is <span class="math inline">-L</span> or <span class="math inline">L</span> with probability <span class="math inline">2.5\%</span> each. Its mean is zero and its variance is <span class="math inline">0.05L^2</span>. Push the two tails farther out: the variance grows, but the interval containing just zero still contains <span class="math inline">95\%</span> of the probability. A large variance need not mean that most errors are large.</p>
-<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-layout="sidebar" data-steps=".fig-rare-large-errors-step" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-mode="steps">
+<div id="fig-rare-large-errors" class="image-toggle quarto-float quarto-figure quarto-figure-center anchored" data-labels="Tail distance 1,Tail distance 2,Tail distance 4,Tail distance 8" data-layout="sidebar" data-mode="steps" data-steps=".fig-rare-large-errors-step">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -1724,23 +1896,46 @@ Figure&nbsp;13
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-rare-large-errors-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;14
+Figure&nbsp;23.5
 </figcaption>
 </figure>
 </div>
 <div class="fig-rare-large-errors-step">
-<p><strong>Tail distance 1.</strong></p>
+<p><strong>Tail distance 1.</strong> The error is <span class="math inline">0</span> with probability 95% and <span class="math inline">\pm 1</span> with probability 2.5% each. Mean <span class="math inline">0</span>; variance <span class="math inline">0.05</span>.</p>
 </div>
 <div class="fig-rare-large-errors-step">
-<p><strong>Tail distance 2.</strong></p>
+<p><strong>Tail distance 2.</strong> The tails move out; the probabilities do not. A narrow interval around zero still contains 95% of the probability, and the variance has quadrupled to <span class="math inline">0.2</span>.</p>
 </div>
 <div class="fig-rare-large-errors-step">
-<p><strong>Tail distance 4.</strong></p>
+<p><strong>Tail distance 4.</strong> Tails at <span class="math inline">\pm 4</span>; variance <span class="math inline">0.8</span> — sixteen times the first picture’s — and zero-alone still covers 95%.</p>
 </div>
 <div class="fig-rare-large-errors-step">
-<p><strong>Tail distance 8.</strong></p>
+<p><strong>Tail distance 8.</strong> Tails at <span class="math inline">\pm 8</span>; variance <span class="math inline">3.2</span>, sixty-four times the first. A large variance has not made the typical error large — which is the point: the variance alone cannot narrow a calibrated interval.</p>
 </div>
 <p>The lower-bound comparison therefore uses the mean absolute error as well as the variance. The binomial and hypergeometric examples let us calculate both, and place the exact calibrated width between the lower control and the sufficient Chebyshev width.</p>
+</section>
+<section id="algebra-reference" class="level1">
+<h1>Algebra Reference</h1>
+<section id="sec-sds-squaring-sums" class="level2">
+<h2 class="anchored" data-anchor-id="sec-sds-squaring-sums">Squaring sums</h2>
+<p><span class="math display">
+\cb*{\sum_{i=1}^n Z_i}^2 = \sum_{i=1}^n \sum_{j=1}^n Z_i Z_j
+</span></p>
+<p>This is a generalization of the identity <span class="math inline">(a+b)^2 = a^2 + 2ab + b^2</span> to more terms. You may be so used to that you don’t even think about what’s really happening. Here’s a version where I’m very explicit: it’s a product of two copies of <span class="math inline">(a+b)</span>, one <span class="pink">pink</span> and one <span class="teal">teal</span>.</p>
+<p><span class="math display">
+(a+b)^2 = \textcolor{#EF476F}{(a+b)}\textcolor{#118AB2}{(a+b)} = \textcolor{#EF476F}{a}\textcolor{#118AB2}{a} + \textcolor{#EF476F}{a}\textcolor{#118AB2}{b} + \textcolor{#EF476F}{b}\textcolor{#118AB2}{a} + \textcolor{#EF476F}{b}\textcolor{#118AB2}{b} = a^2 + 2ab + b^2
+</span></p>
+</section>
+<section id="squaring-sums-more-terms" class="level2">
+<h2 class="anchored" data-anchor-id="squaring-sums-more-terms">Squaring sums: more terms</h2>
+<p>How do we generalize this to more terms? We’ll use the same color-coded-copies trick. It helps to count out the terms in our <span class="pink">pink copy</span> using <span class="math inline">i</span> and in our <span class="teal">teal copy</span> using <span class="math inline">j</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> When we multiply out our sums, we get a product term for each pair of terms in the sum. Each product term involves <span class="pink">one term in the pink sum</span> and <span class="teal">one term in the teal one</span>.</p>
+<p><span class="math display">
+\cb*{\sum_{i=1}^n Z_i}^2
+= \textcolor{#EF476F}{\sum_{i=1}^n Z_i} \textcolor{#118AB2}{\sum_{j=1}^n Z_j}
+= \textcolor{#EF476F}{\sum_{i=1}^n} \textcolor{#118AB2}{\sum_{j=1}^n} \textcolor{#EF476F}{Z_i} \textcolor{#118AB2}{Z_j}
+</span></p>
+
+
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
@@ -1755,228 +1950,24 @@ eyJjb250ZW50cyI6W119
 <script type="vfs-file">
 W10=
 </script>
-<script>
-function toggleDrawable(id) {
-  var overlay = document.getElementById(id);
-  var btn = overlay.nextElementSibling;
-  var resetBtn = overlay.resetBtn;
-  
-  // Lazy init on first click
-  if (!overlay.dataset.drawableInit) {
-    initDrawable(id);
-  }
-  
-  var isDrawing = overlay.dataset.drawing === 'true';
-  var syncCamera = overlay.dataset.syncCamera === 'true';
-  if (!isDrawing) {
-    // Enable drawing mode
-    overlay.dataset.drawing = 'true';
-    overlay.style.pointerEvents = 'auto';
-    // Reveal walks up from the touch target looking for this attribute, so it
-    // covers every touch landing on the tldraw surface. Without it a pen stroke
-    // across the figure swipes the slide.
-    overlay.setAttribute('data-prevent-swipe', '');
-    btn.textContent = '✕';
-    if (resetBtn) {
-      resetBtn.style.pointerEvents = 'auto';
-    }
-    // Add drawing-active class after a delay to let TLDraw mount
-    setTimeout(function() {
-      overlay.classList.add('drawing-active');
-    }, 100);
-    Drawable.setDrawingMode(id, true);
-    if (syncCamera) {
-      Drawable.setCameraActive(id, true);
-    }
-  } else {
-    // Disable drawing mode (but keep canvas visible)
-    overlay.dataset.drawing = 'false';
-    overlay.style.pointerEvents = 'none';
-    overlay.removeAttribute('data-prevent-swipe');
-    overlay.classList.remove('drawing-active');
-    btn.textContent = '✏️';
-    if (resetBtn) {
-      resetBtn.style.pointerEvents = 'none';
-    }
-    Drawable.setDrawingMode(id, false);
-    if (syncCamera) {
-      Drawable.setCameraActive(id, false);
-    }
-  }
-}
-
-// Initialize drawable lazily when first clicked
-function initDrawable(id) {
-  var overlay = document.getElementById(id);
-  if (!overlay || overlay.dataset.drawableInit) return;
-  
-  var syncCamera = overlay.dataset.syncCamera === 'true';
-  var isScrolly = overlay.dataset.scrolly === 'true';
-  overlay.dataset.drawableInit = 'true';
-  overlay.dataset.drawing = 'false';
-  
-  // For scrolly, find the image-toggle container
-  var scrollyContainer = null;
-  if (isScrolly) {
-    var figureCol = overlay.closest('.image-toggle-figure');
-    scrollyContainer = figureCol?.querySelector('.image-toggle');
-  }
-  
-  Drawable.mount(overlay, { 
-    persist: overlay.dataset.persist === 'true', 
-    id: id,
-    syncCamera: syncCamera,
-    scrolly: isScrolly,
-    scrollyContainer: scrollyContainer
-  });
-  
-  // Register linked camera group if specified
-  var linkedGroup = overlay.dataset.linkedGroup;
-  if (linkedGroup) {
-    // Small delay to ensure editor is mounted
-    setTimeout(function() {
-      Drawable.registerLinkedCamera(id, linkedGroup);
-    }, 100);
-  }
-}
-
-// Inject drawable into image-toggle figures AFTER image-toggle has set up its structure
-// Run after a delay to let image-toggle do its work first
-setTimeout(function() {
-  // Check if image-toggle has run yet
-  if (!document.querySelector('.image-toggle-sidebar')) {
-    setTimeout(arguments.callee, 500);
-    return;
-  }
-  var figCounter = 0;
-  document.querySelectorAll('.image-toggle.drawable').forEach(function(toggle) {
-    figCounter++;
-    var id = 'drawable-toggle-' + figCounter;
-    
-    // For sidebar layout, find the figure column; otherwise use the toggle itself
-    var sidebar = toggle.closest('.image-toggle-sidebar');
-    var figureCol = sidebar?.querySelector('.image-toggle-figure') || toggle;
-    
-    // Make the target position:relative if not already
-    figureCol.style.position = 'relative';
-    
-    // Create overlay
-    var overlay = document.createElement('div');
-    overlay.className = 'drawable-overlay';
-    overlay.id = id;
-    overlay.dataset.drawable = '';
-    overlay.dataset.persist = 'false';
-    overlay.dataset.syncCamera = 'true';
-    overlay.dataset.scrolly = 'true';
-    overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
-    figureCol.appendChild(overlay);
-    
-    // Create toggle button
-    var btn = document.createElement('button');
-    btn.className = 'drawable-toggle';
-    btn.textContent = '✏️';
-    btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
-    btn.onclick = function(e) { 
-      e.stopPropagation();
-      toggleDrawable(id); 
-    };
-    figureCol.appendChild(btn);
-    
-    // Create reset button
-    var resetBtn = document.createElement('button');
-    resetBtn.className = 'drawable-reset';
-    resetBtn.textContent = '⟲';
-    resetBtn.title = 'Reset view';
-    resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
-    resetBtn.onclick = function(e) {
-      e.stopPropagation();
-      Drawable.resetCamera(id);
-    };
-    figureCol.appendChild(resetBtn);
-    
-    // Show reset button when drawing is active
-    overlay.resetBtn = resetBtn;
-  });
-  
-  // Handle linked-cameras groups
-  var linkedGroupCounter = 0;
-  document.querySelectorAll('.linked-cameras').forEach(function(group) {
-    linkedGroupCounter++;
-    var groupName = group.dataset.group || ('linked-group-' + linkedGroupCounter);
-    var figCounter = 0;
-    
-    // Find all figures/plots inside this group
-    group.querySelectorAll('.cell-output-display, .quarto-layout-cell').forEach(function(cell) {
-      if (cell.closest('.image-toggle')) return; // Skip scrolly images
-      if (!cell.querySelector('svg, img')) return; // No image
-      
-      figCounter++;
-      var id = 'linked-' + groupName + '-' + figCounter;
-      
-      // Make cell position relative
-      cell.style.position = 'relative';
-      
-      // Create overlay
-      var overlay = document.createElement('div');
-      overlay.className = 'drawable-overlay';
-      overlay.id = id;
-      overlay.dataset.drawable = '';
-      overlay.dataset.persist = 'false';
-      overlay.dataset.syncCamera = 'true';
-      overlay.dataset.linkedGroup = groupName;
-      overlay.style.cssText = 'position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 100; pointer-events: none;';
-      cell.appendChild(overlay);
-      
-      // Create toggle button
-      var btn = document.createElement('button');
-      btn.className = 'drawable-toggle';
-      btn.textContent = '✏️';
-      btn.style.cssText = 'position: absolute; top: 8px; right: 8px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);';
-      btn.onclick = function(e) { 
-        e.stopPropagation();
-        // Init all drawables in this linked group first
-        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
-          if (!o.dataset.drawableInit) {
-            initDrawable(o.id);
-          }
-        });
-        toggleDrawable(id); 
-      };
-      cell.appendChild(btn);
-      
-      // Create reset button
-      var resetBtn = document.createElement('button');
-      resetBtn.className = 'drawable-reset';
-      resetBtn.textContent = '⟲';
-      resetBtn.title = 'Reset view';
-      resetBtn.style.cssText = 'position: absolute; top: 8px; right: 52px; z-index: 101; width: 36px; height: 36px; background: rgba(255,255,255,0.9); border: 1px solid #ddd; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none;';
-      resetBtn.onclick = function(e) {
-        e.stopPropagation();
-        // Reset all cameras in the group
-        document.querySelectorAll('[data-linked-group="' + groupName + '"]').forEach(function(o) {
-          Drawable.resetCamera(o.id);
-        });
-      };
-      cell.appendChild(resetBtn);
-      
-      overlay.resetBtn = resetBtn;
-    });
-  });
-}, 100);
-</script>
-
 </section>
 </section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>See <a href="#sec-sds-squaring-sums" class="quarto-xref"><span>Section 24.1</span></a> for the squaring step beginning with <span class="math inline">(a+b)^2</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>If we used <span class="math inline">i</span> to count terms in both sums, we’d wind up with two different things we call <span class="math inline">i</span>: one pink and one teal. Using <span class="math inline">i</span> and <span class="math inline">j</span> keeps the two copies distinct.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script type="ojs-module-contents">
 eyJjb250ZW50cyI6W119
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
-window._ojs.paths.runtimeToDoc = "../../..";
-window._ojs.paths.runtimeToRoot = "../../../..";
+window._ojs.paths.runtimeToDoc = "../../chapters";
+window._ojs.paths.runtimeToRoot = "../..";
 window._ojs.paths.docToRoot = "..";
 window._ojs.selfContained = false;
 window._ojs.runtime.interpretFromScriptTags();
@@ -2420,6 +2411,18 @@ window._ojs.runtime.interpretFromScriptTags();
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../homework/homework-sample-size-coverage.html" class="pagination-link" aria-label="Homework: Sample Size Calculation and Coverage">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Homework: Sample Size Calculation and Coverage</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../homework/homework-random-variables-and-moments.html" class="pagination-link" aria-label="Homework — Random Variables, Moments, and the Standard Deviation">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Homework — Random Variables, Moments, and the Standard Deviation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
