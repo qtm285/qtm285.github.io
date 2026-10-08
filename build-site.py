@@ -184,10 +184,7 @@ def parse_schedule(today, unbuilt=()):
           re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0])
 
   sections, heading, note, rows = [], None, None, []
-  through_first_exam = False
   for line in body.splitlines():
-    if through_first_exam:
-      break
     if line.startswith('### '):
       if heading is not None:
         sections.append((heading, note, rows))
@@ -231,8 +228,6 @@ def parse_schedule(today, unbuilt=()):
                  'homework_date': dated_time(cells[0], '11:59'),
                  'session': cell_html(main, linked=True, unbuilt=unbuilt),
                  'homework': homework})
-    if main.strip() == '**Exam 1**':
-      through_first_exam = True
   if heading is not None:
     sections.append((heading, note, rows))
   # A section whose table produced no rows means a table went unread -- a
@@ -804,4 +799,29 @@ if __name__ == '__main__':
                     incomplete_ok=args.incomplete_ok, dropped=args.drop, drop_all=args.drop_all,
                     allow_solutions=args.allow_solutions)
   else:
-    render_site(args.site_dir)
+    # Rendering the landing page alone still has to know which scheduled
+    # material is absent from the site, or `book_href` raises on the first
+    # link whose page is not there and no page is written at all. The
+    # assembled path gets this from the book build; here it comes from the
+    # published tree, which is the same question asked of what is actually
+    # serving. Absent material stays as schedule text, so the term reads in
+    # full and only the links that resolve are links.
+    def published_name(source):
+      # A solutions source publishes as `-solutions.html`, not
+      # `.solutions.html`, the same mapping `book_href` resolves through.
+      # Getting this wrong marks every posted solutions page as absent and
+      # silently strips its link from the schedule.
+      if source.endswith('.solutions.qmd'):
+        return source.removesuffix('.solutions.qmd') + '-solutions.html'
+      return str(Path(source).with_suffix('.html'))
+
+    # Rendered as schedule text although its page is on the site. Skip,
+    # 2026-10-08: "there is no chapter" -- which beats the link typed into
+    # the schedule on 2026-10-06, and that row is being rewritten anyway.
+    # Remove this when the row is settled; it is a dated exception, not a rule.
+    WITHHELD_LINKS = ('chapters/chapter-bias-and-coverage.qmd',)
+
+    missing = tuple(source for source in declared_chapters()
+                    if source in WITHHELD_LINKS
+                    or not (args.site_dir / 'book' / published_name(source)).is_file())
+    render_site(args.site_dir, unbuilt=missing)
