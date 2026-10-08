@@ -1035,7 +1035,7 @@ window.Quarto = {
 <p>In notation, <span class="math display">
 \begin{aligned}
 &amp;P(X=x) \ge 0, \\
-&amp;P(X=x \text{ or } X=x') = P(X=x) + P(X=x') \qqtext{ if } x \ne x'.
+&amp;P(X=x \text{ or } X=x') = P(X=x) + P(X=x') \quad\text{ if }\quad x \ne x'.
 \end{aligned}
 </span></p>
 <p>What’s the <span class="math inline">x \ne x'</span> thing about? Well, in the case that <span class="math inline">x = x'</span>, if we said the probability that <span class="math inline">X=1</span> or <span class="math inline">X=1</span>, that’s just the probability that <span class="math inline">X=1</span>. So that can’t be two times the probability that <span class="math inline">X=1</span>. That’s obvious in this case. But sometimes people can get a little confused when they talk in more general terms. For example, they might talk about the probability that the total <span class="math inline">Y_1+Y_2</span> is at least one. Their way of thinking about that would be that it happens if <span class="math inline">Y_1=1</span> or if <span class="math inline">Y_2=1</span>, and then they would go to sum those two probabilities. But when you think about it in terms of the table, what they’re doing is summing the pink and green rows and then <em>adding it</em> to the sum of the blue and green rows. They’re counting the green rows twice. That’s making the same mistake: <span class="math display">
@@ -1078,9 +1078,9 @@ P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
 </div>
 <section id="expectations" class="level2">
 <h2 class="anchored" data-anchor-id="expectations">Expectations</h2>
-<p>The expectation of <span class="math inline">X</span> is its probability-weighted average, <span class="math inline">\mathop{\mathrm{E}}[X]=\sum_x xP(X=x)</span>. In the table, you’d get it by multiplying each row’s value of <span class="math inline">X</span> by that row’s probability and adding them up.</p>
+<p>The expectation of <span class="math inline">X</span> is its probability-weighted average, <span class="math inline">\operatorname{E}[X]=\sum_x xP(X=x)</span>. In the table, you’d get it by multiplying each row’s value of <span class="math inline">X</span> by that row’s probability and adding them up.</p>
 <p>Linearity says the expectation of a sum is the sum of the expectations, and constants come out in front: <span class="math display">
-\mathop{\mathrm{E}}[aY+bZ] = a\mathop{\mathrm{E}}[Y]+b\mathop{\mathrm{E}}[Z].
+\operatorname{E}[aY+bZ] = a\operatorname{E}[Y]+b\operatorname{E}[Z].
 </span> In the table, you could add a total column, the first-response column plus the second, and its expectation would be the two expectations added. This is true whether or not <span class="math inline">Y</span> and <span class="math inline">Z</span> are independent.</p>
 <p>Two things to remember.</p>
 <ol type="1">
@@ -1148,7 +1148,7 @@ P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
 </div>
 </div>
 <p><strong>Indicators.</strong> An indicator is one when something happens and zero when it doesn’t. We used them in class to turn a probability into an expectation. We’ll use one for each color in the table: <span class="math inline">1_{\textcolor{#7756a8}{P}}</span> is one in the purple rows, where both responses are zero; <span class="math inline">1_{\textcolor{#06D6A0}{G}}</span> in the green rows, where both are one; <span class="math inline">1_{\textcolor{#EF476F}{R}}</span> in the pink rows, where the first is one and the second zero; and <span class="math inline">1_{\textcolor{#118AB2}{B}}</span> in the blue rows, where the second is one and the first zero. An indicator only takes the values zero and one, so its probability-weighted average is the probability of its rows: <span class="math display">
-\mathop{\mathrm{E}}[1_{\textcolor{#7756a8}{P}}] = 0\cdot P(\text{not purple}) + 1\cdot P(\text{purple}) = P(Y_1=0 \text{ and } Y_2=0),
+\operatorname{E}[1_{\textcolor{#7756a8}{P}}] = 0\cdot P(\text{not purple}) + 1\cdot P(\text{purple}) = P(Y_1=0 \text{ and } Y_2=0),
 </span> <span class="math inline">9/16</span> with replacement and <span class="math inline">1/2</span> without.</p>
 <div id="exr-rules-indicators" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 18.3 (Adding Indicators)</strong></span> &nbsp;</p>
@@ -1201,7 +1201,7 @@ P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
 <div class="callout-exercise">
 <p>Roll a fair six-sided die <span class="math inline">n</span> times, independently. Let <span class="math inline">Y_i</span> be the number on roll <span class="math inline">i</span>.</p>
 <ol type="1">
-<li>Calculate <span class="math inline">\mathop{\mathrm{E}}[Y_1]</span> and <span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)</span>.</li>
+<li>Calculate <span class="math inline">\operatorname{E}[Y_1]</span> and <span class="math inline">\operatorname{V}(Y_1)</span>.</li>
 <li>Calculate the mean and variance of the total <span class="math inline">Y_1+\cdots+Y_n</span>.</li>
 <li>Calculate the mean and variance of the average <span class="math inline">\bar Y</span>.</li>
 </ol>
@@ -1235,7 +1235,7 @@ P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
 <div class="callout-exercise">
 <p>Now let <span class="math inline">Y_1\ldots Y_n</span> be independent draws, each equal to one with probability <span class="math inline">\theta</span> and zero with probability <span class="math inline">1-\theta</span>.</p>
 <ol type="1">
-<li>Calculate <span class="math inline">\mathop{\mathrm{E}}[Y_1]</span> and <span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}(Y_1)</span>.</li>
+<li>Calculate <span class="math inline">\operatorname{E}[Y_1]</span> and <span class="math inline">\operatorname{V}(Y_1)</span>.</li>
 <li>Calculate the mean and variance of the number of ones <span class="math inline">Y_1+\cdots+Y_n</span>.</li>
 <li>Calculate the mean and variance of the proportion of ones <span class="math inline">\bar Y</span>.</li>
 </ol>
@@ -1326,13 +1326,13 @@ P(Y_1+Y_2 \ge 1) \ne P(Y_1=1) + P(Y_2=1).
 <p>We’ve left a column open in the second table for you to use if you’d like. The population mean is <span class="math inline">\theta=m_1/m</span>, and the centered response is <span class="math display">
 Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta &amp; \text{if } Y_i = 1. \end{cases}
 </span></p>
-<p>Now let’s use this to calculate the variance of our sample proportion <span class="math inline">\hat\theta=\frac{1}{n}\sum_{i=1}^{n}Y_i</span>. In the <a href="../chapters/chapter-standard-deviation.html#variance-of-a-sample-mean">chapter</a>, we squared out <span class="math inline">\frac1n\sum_i Z_i</span> and took expectations. That left two kinds of term. The squares, <span class="math inline">\mathop{\mathrm{E}}[Z_i^2]=\theta(1-\theta)</span>, the same for every call. And the cross terms, <span class="math inline">\mathop{\mathrm{E}}[Z_iZ_j]</span> for <span class="math inline">i \ne j</span>. With replacement, the cross terms are zero. Without replacement, they aren’t. We get them from the table above.</p>
+<p>Now let’s use this to calculate the variance of our sample proportion <span class="math inline">\hat\theta=\frac{1}{n}\sum_{i=1}^{n}Y_i</span>. In the <a href="../chapters/chapter-standard-deviation.html#variance-of-a-sample-mean">chapter</a>, we squared out <span class="math inline">\frac1n\sum_i Z_i</span> and took expectations. That left two kinds of term. The squares, <span class="math inline">\operatorname{E}[Z_i^2]=\theta(1-\theta)</span>, the same for every call. And the cross terms, <span class="math inline">\operatorname{E}[Z_iZ_j]</span> for <span class="math inline">i \ne j</span>. With replacement, the cross terms are zero. Without replacement, they aren’t. We get them from the table above.</p>
 <p>Do either version of <strong>The Cross Term</strong> below.</p>
 <section id="the-easy-way" class="level3">
 <h3 class="anchored" data-anchor-id="the-easy-way">The Easy Way</h3>
 <p>Let’s start by rewriting this expression so it’s a little easier to work with. Like this.</p>
 <p><span class="math display">
-\mathop{\mathrm{E}}[Z_iZ_j] = \mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \mathop{\mathrm{E}}[Y_i Y_j] - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
+\operatorname{E}[Z_iZ_j] = \operatorname{E}\left[ (Y_i - \operatorname{E}[Y_i])(Y_j - \operatorname{E}[Y_j]) \right] = \operatorname{E}[Y_i Y_j] - \operatorname{E}[Y_i]\operatorname{E}[Y_j]
 </span></p>
 <div class="callout callout-style-simple callout-tip no-icon callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
@@ -1346,14 +1346,14 @@ Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>To show that these two expressions are equivalent, we ‘multiply out’ <span class="math inline">(Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j])</span> to get four terms, distribute the expectation and pull out constants, and cancel some equal-and-opposite terms in the result.</p>
+<p>To show that these two expressions are equivalent, we ‘multiply out’ <span class="math inline">(Y_i - \operatorname{E}[Y_i])(Y_j - \operatorname{E}[Y_j])</span> to get four terms, distribute the expectation and pull out constants, and cancel some equal-and-opposite terms in the result.</p>
 <p><span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) }
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j - Y_i\mathop{\mathrm{E}}[Y_j] - Y_j\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}\sb*{ Y_i\mathop{\mathrm{E}}[Y_j] } - \mathop{\mathrm{E}}\sb*{ Y_j\mathop{\mathrm{E}}[Y_i] } + \mathop{\mathrm{E}}\sb*{ \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] } \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] - \mathop{\mathrm{E}}[Y_j]\mathop{\mathrm{E}}[Y_i] + \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j] \\
-&amp;= \mathop{\mathrm{E}}\sb*{ Y_i Y_j } - \mathop{\mathrm{E}}[Y_i]\mathop{\mathrm{E}}[Y_j]
+\operatorname{E}\left[ (Y_i - \operatorname{E}[Y_i])(Y_j - \operatorname{E}[Y_j]) \right]
+&amp;= \operatorname{E}\left[ Y_i Y_j - Y_i\operatorname{E}[Y_j] - Y_j\operatorname{E}[Y_i] + \operatorname{E}[Y_i]\operatorname{E}[Y_j] \right] \\
+&amp;= \operatorname{E}\left[ Y_i Y_j \right] - \operatorname{E}\left[ Y_i\operatorname{E}[Y_j] \right] - \operatorname{E}\left[ Y_j\operatorname{E}[Y_i] \right] + \operatorname{E}\left[ \operatorname{E}[Y_i]\operatorname{E}[Y_j] \right] \\
+&amp;= \operatorname{E}\left[ Y_i Y_j \right] - \operatorname{E}[Y_i]\operatorname{E}[Y_j] - \operatorname{E}[Y_j]\operatorname{E}[Y_i] + \operatorname{E}[Y_i]\operatorname{E}[Y_j] \\
+&amp;= \operatorname{E}\left[ Y_i Y_j \right] - \operatorname{E}[Y_i]\operatorname{E}[Y_j]
 \end{aligned}
 </span></p>
 </div>
@@ -1374,7 +1374,7 @@ Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta
 <div class="callout-exercise">
 <p>You can write out the joint probability table above in your solution, adding a column for <span class="math inline">Y_1Y_2</span>.</p>
 <p>Using this equivalent form, and the tables above, show that the following identity is true. <span class="math display">
-\mathop{\mathrm{E}}\sb*{ (Y_i - \mathop{\mathrm{E}}[Y_i])(Y_j - \mathop{\mathrm{E}}[Y_j]) } = \frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
+\operatorname{E}\left[ (Y_i - \operatorname{E}[Y_i])(Y_j - \operatorname{E}[Y_j]) \right] = \frac{m_1(m_1-1)}{m(m-1)}-\frac{m_1^2}{m^2}
 </span></p>
 </div>
 </div>
@@ -1440,7 +1440,7 @@ Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta
 <ol type="1">
 <li>Write out the joint probability table above in your solution, adding a column for <span class="math inline">Z_1Z_2</span>. Calculate the entries using <span class="math inline">\theta=m_1/m</span>.</li>
 <li>Multiply each product by its probability and add, and show that <span class="math display">
-\mathop{\mathrm{E}}[Z_iZ_j] = \frac{m_0(m_0-1)\,\theta^2 - 2\,m_0m_1\,\theta(1-\theta) + m_1(m_1-1)\,(1-\theta)^2}{m(m-1)}.
+\operatorname{E}[Z_iZ_j] = \frac{m_0(m_0-1)\,\theta^2 - 2\,m_0m_1\,\theta(1-\theta) + m_1(m_1-1)\,(1-\theta)^2}{m(m-1)}.
 </span></li>
 </ol>
 </div>
@@ -1474,7 +1474,7 @@ Z_i = Y_i - \theta = \begin{cases} -\theta &amp; \text{if } Y_i = 0, \\ 1-\theta
 <div class="callout-body-container callout-body">
 <p><span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}[Z_iZ_j]
+\operatorname{E}[Z_iZ_j]
 &amp;= \frac{m_0(m_0-1)m_1^2 - 2m_0^2m_1^2 + m_1(m_1-1)m_0^2}{m^2\,m(m-1)} &amp;&amp; \text{for } \theta=\tfrac{m_1}{m},\ 1-\theta=\tfrac{m_0}{m} \\
 &amp;= \frac{m_0^2m_1^2 - m_0m_1^2 - 2m_0^2m_1^2 + m_0^2m_1^2 - m_0^2m_1}{m^3(m-1)} &amp;&amp; \text{expanding products} \\
 &amp;= \frac{-m_0m_1^2 - m_0^2m_1}{m^3(m-1)} &amp;&amp; \text{canceling equal and opposite terms} \\
@@ -1745,9 +1745,9 @@ Figure&nbsp;19.1
 <section id="using-prior-information" class="level1">
 <h1>Using Prior Information</h1>
 <p>So far, we’ve exclusively talked about <em>unbiased estimators</em>. That is, estimators with the property that their expected value is equal to the estimation target. <span class="math display">
-\hat\theta \qqtext{ is called unbiased if } \mathop{\mathrm{E}}[\hat{\theta}] = \theta.
+\hat\theta \quad\text{ is called unbiased if }\quad \operatorname{E}[\hat{\theta}] = \theta.
 </span> We say an estimator is <em>biased</em> if this isn’t true. To get a sense of what that means, let’s consider a simple example of a biased estimator. <span class="math display">
-\tilde{Y}_1 = \frac{1}{n+1}\p*{\frac{1}{2} + \sum_{i=1}^{n}Y_i}
+\tilde{Y}_1 = \frac{1}{n+1}\left(\frac{1}{2} + \sum_{i=1}^{n}Y_i\right)
 </span></p>
 <div id="exr-bias-1" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.1</strong></span> &nbsp;</p>
@@ -1761,7 +1761,7 @@ Figure&nbsp;19.1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Suppose that we’ve drawn a sample <span class="math inline">Y_1 \ldots Y_n</span> with replacement from a binary population <span class="math inline">y_1 \ldots y_m</span> in which the proportion of ones is <span class="math inline">\theta</span>. Calculate the expected value of the estimator <span class="math inline">\hat\theta =\tilde{Y}_1</span>. Then calculate its bias <span class="math inline">\mathop{\mathrm{E}}[\hat\theta] - \theta</span> and its standard deviation <span class="math inline">\sqrt{\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\theta]}</span>. Report all three.</p>
+<p>Suppose that we’ve drawn a sample <span class="math inline">Y_1 \ldots Y_n</span> with replacement from a binary population <span class="math inline">y_1 \ldots y_m</span> in which the proportion of ones is <span class="math inline">\theta</span>. Calculate the expected value of the estimator <span class="math inline">\hat\theta =\tilde{Y}_1</span>. Then calculate its bias <span class="math inline">\operatorname{E}[\hat\theta] - \theta</span> and its standard deviation <span class="math inline">\sqrt{\operatorname{V}[\hat\theta]}</span>. Report all three.</p>
 </div>
 </div>
 </div>
@@ -1785,8 +1785,8 @@ Figure&nbsp;19.1
 <p><span class="math display">
 \begin{aligned}
 \tilde{Y}_{\nprior}
-&amp;= \frac{1}{\nprior + n} \p*{\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i} \\
-&amp;= \frac{1}{\nprior + n}  \p*{ \nprior\thetaprior + n\bar Y }
+&amp;= \frac{1}{\nprior + n} \left(\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i\right) \\
+&amp;= \frac{1}{\nprior + n}  \left( \nprior\thetaprior + n\bar Y \right)
 \end{aligned}
 </span></p>
 <p>We treat these prior observations, and therefore their mean <span class="math inline">\thetaprior</span>, as deterministic. The simple example we started with, <span class="math inline">\tilde{Y}_1</span>, is a special case where we have a single prior observation <span class="math inline">\yprior_1 = \frac{1}{2}</span>.</p>
@@ -1958,10 +1958,10 @@ Figure&nbsp;21.1
 <div class="callout-exercise">
 <p>Our prior-based estimator is <span class="math inline">\tilde Y_{\nprior}</span>, which from this point on we’ll refer to as <span class="math inline">\tilde Y</span>. To start, let’s pretend we know its standard deviation <span class="math inline">\sigma</span>, and think about the interval that goes <span class="math inline">c</span> standard deviations out on either side of <span class="math inline">\tilde Y</span>.</p>
 <ol type="1">
-<li>That interval covers <span class="math inline">\theta</span> when <span class="math inline">\tilde Y</span> lands within <span class="math inline">c\sigma</span> of it, <span class="math inline">|\tilde Y-\theta|\le c\sigma</span>. How far <span class="math inline">\tilde Y</span> lands from <span class="math inline">\theta</span> comes in two pieces: how far it is from its own mean, and how far its mean is from <span class="math inline">\theta</span>. The second piece is the bias, <span class="math inline">b=\mathop{\mathrm{E}}[\tilde Y]-\theta</span>. <span class="math display">
-\tilde Y-\theta=(\tilde Y-\mathop{\mathrm{E}}[\tilde Y])+b.
-</span> In the plot you made with <code>show_intervals</code> in the last exercise, where are <span class="math inline">\mathop{\mathrm{E}}[\tilde Y]</span> and <span class="math inline">\theta</span>? What does the sign of <span class="math inline">b</span> tell you? What is <span class="math inline">b</span> for our estimator?</li>
-<li>Both pieces are easier to think about in standard deviations. The first, <span class="math inline">Z=(\tilde Y-\mathop{\mathrm{E}}[\tilde Y])/\sigma</span>, is random. The second, <span class="math inline">d=b/\sigma</span>, is just a number. In these units, the interval covers when <span class="math inline">-c-d\le Z\le c-d</span>. How is that different from what you’d have for an unbiased estimator? What is <span class="math inline">d</span> for ours?</li>
+<li>That interval covers <span class="math inline">\theta</span> when <span class="math inline">\tilde Y</span> lands within <span class="math inline">c\sigma</span> of it, <span class="math inline">|\tilde Y-\theta|\le c\sigma</span>. How far <span class="math inline">\tilde Y</span> lands from <span class="math inline">\theta</span> comes in two pieces: how far it is from its own mean, and how far its mean is from <span class="math inline">\theta</span>. The second piece is the bias, <span class="math inline">b=\operatorname{E}[\tilde Y]-\theta</span>. <span class="math display">
+\tilde Y-\theta=(\tilde Y-\operatorname{E}[\tilde Y])+b.
+</span> In the plot you made with <code>show_intervals</code> in the last exercise, where are <span class="math inline">\operatorname{E}[\tilde Y]</span> and <span class="math inline">\theta</span>? What does the sign of <span class="math inline">b</span> tell you? What is <span class="math inline">b</span> for our estimator?</li>
+<li>Both pieces are easier to think about in standard deviations. The first, <span class="math inline">Z=(\tilde Y-\operatorname{E}[\tilde Y])/\sigma</span>, is random. The second, <span class="math inline">d=b/\sigma</span>, is just a number. In these units, the interval covers when <span class="math inline">-c-d\le Z\le c-d</span>. How is that different from what you’d have for an unbiased estimator? What is <span class="math inline">d</span> for ours?</li>
 <li>Chebyshev’s inequality tells us about <span class="math inline">Z</span>, so that’s where we use it. If <span class="math inline">|d|&lt;c</span>, the interval covers whenever <span class="math inline">|Z|&lt;c-|d|</span>. Show that, and use it with Chebyshev’s inequality to get <span class="math display">
 P(|\tilde Y-\theta|\le c\sigma)
 \ge \max\left(0,1-\frac1{(c-|d|)^2}\right).
