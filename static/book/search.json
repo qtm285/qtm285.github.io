@@ -2149,61 +2149,6 @@
     ]
   },
   {
-    "objectID": "chapters/chapter-bias-and-coverage.html",
-    "href": "chapters/chapter-bias-and-coverage.html",
-    "title": "23  Bias and Coverage",
-    "section": "",
-    "text": "Why Bias Matters\nIn the homework, you simulated coverage for two estimators: the sample mean \\(\\bar{Y}\\) and a prior-based estimator \\(\\tilde{Y}_{100}\\). The sample mean gave you intervals that covered roughly 95% of the time. The prior-based estimator covered less often—around 90%. And you saw from the homework figure that estimator c, with bias equal to two standard deviations, would cover only about 50% of the time.\nWhy does bias hurt coverage? And can we predict exactly how much?\nThe answer comes down to geometry. When we build a 95% confidence interval, we’re centering it at our estimate and extending it \\(\\pm 1.96\\) standard errors. If the estimator is unbiased, the estimate is centered (on average) at the target, so the interval is centered at the right place. If the estimator is biased, the estimate is centered somewhere else, and the interval misses the target more often than it should.",
-    "crumbs": [
-      "One-Sample Problems",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Bias and Coverage</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/chapter-bias-and-coverage.html#biasse-12",
-    "href": "chapters/chapter-bias-and-coverage.html#biasse-12",
-    "title": "23  Bias and Coverage",
-    "section": "Bias/SE = 1/2",
-    "text": "Bias/SE = 1/2\n\n\n\n\n\nWhen bias is half a standard error, coverage is about 92%.\n\n\n\n\nWhen the bias is half a standard error, the interval shifts but still covers the target most of the time. Coverage is 92%.",
-    "crumbs": [
-      "One-Sample Problems",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Bias and Coverage</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/chapter-bias-and-coverage.html#biasse-1",
-    "href": "chapters/chapter-bias-and-coverage.html#biasse-1",
-    "title": "23  Bias and Coverage",
-    "section": "Bias/SE = 1",
-    "text": "Bias/SE = 1\n\n\n\n\n\nWhen bias equals one standard error, coverage drops to about 83%.\n\n\n\n\nWhen the bias equals the standard error, we’re starting to miss more often. Coverage is 83%.",
-    "crumbs": [
-      "One-Sample Problems",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Bias and Coverage</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/chapter-bias-and-coverage.html#biasse-2",
-    "href": "chapters/chapter-bias-and-coverage.html#biasse-2",
-    "title": "23  Bias and Coverage",
-    "section": "Bias/SE = 2",
-    "text": "Bias/SE = 2\n\n\n\n\n\nWhen bias is two standard errors, coverage is about 50%.\n\n\n\n\nWhen the bias is twice the standard error, the target is at the edge of where we’d expect the estimator to land. Coverage is 48%—a coin flip.",
-    "crumbs": [
-      "One-Sample Problems",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Bias and Coverage</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/chapter-bias-and-coverage.html#biasse-3",
-    "href": "chapters/chapter-bias-and-coverage.html#biasse-3",
-    "title": "23  Bias and Coverage",
-    "section": "Bias/SE = 3",
-    "text": "Bias/SE = 3\n\n\n\n\n\nWhen bias is three standard errors, coverage is only about 17%.\n\n\n\n\nWhen the bias is three standard errors, we almost never cover the target. Coverage is 15%.",
-    "crumbs": [
-      "One-Sample Problems",
-      "<span class='chapter-number'>23</span>  <span class='chapter-title'>Bias and Coverage</span>"
-    ]
-  },
-  {
     "objectID": "exams/practice-midterm-1.html",
     "href": "exams/practice-midterm-1.html",
     "title": "24  Practice Midterm 1",
