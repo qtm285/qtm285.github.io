@@ -1797,18 +1797,18 @@ Figure&nbsp;19.1
 <p><em>(your answer here)</em></p>
 </div>
 </div>
-<p>This is a specific example of a more general estimator that integrates information from a prior study. Maybe a real study or maybe a study we’re imagining. Suppose we have <span class="math inline">n^{\text{prior}}</span> observations <span class="math inline">y^{\text{prior}}_1 \ldots y^{\text{prior}}_{n^{\text{prior}}}</span> from this study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">
-\theta^{\text{prior}} = \frac{1}{n^{\text{prior}}}\sum_{i=1}^{n^{\text{prior}}}y^{\text{prior}}_i.
+<p>This is a specific example of a more general estimator that integrates information from a prior study. Maybe a real study or maybe a study we’re imagining. Suppose we have <span class="math inline">\nprior</span> observations <span class="math inline">\yprior_1 \ldots \yprior_{\nprior}</span> from this study<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">
+\thetaprior = \frac{1}{\nprior}\sum_{i=1}^{\nprior}\yprior_i.
 </span></p>
 <p>Then averaging all our observations — from our current study and this prior one — gives us the following estimator.</p>
 <p><span class="math display">
 \begin{aligned}
-\tilde{Y}_{n^{\text{prior}}}
-&amp;= \frac{1}{n^{\text{prior}} + n} \left(\sum_{i=1}^{n^{\text{prior}}}y^{\text{prior}}_i + \sum_{i=1}^{n} Y_i\right) \\
-&amp;= \frac{1}{n^{\text{prior}} + n}  \left( n^{\text{prior}}\theta^{\text{prior}} + n\bar Y \right)
+\tilde{Y}_{\nprior}
+&amp;= \frac{1}{\nprior + n} \left(\sum_{i=1}^{\nprior}\yprior_i + \sum_{i=1}^{n} Y_i\right) \\
+&amp;= \frac{1}{\nprior + n}  \left( \nprior\thetaprior + n\bar Y \right)
 \end{aligned}
 </span></p>
-<p>We treat these prior observations, and therefore their mean <span class="math inline">\theta^{\text{prior}}</span>, as deterministic. The simple example we started with, <span class="math inline">\tilde{Y}_1</span>, is a special case where we have a single prior observation <span class="math inline">y^{\text{prior}}_1 = \frac{1}{2}</span>.</p>
+<p>We treat these prior observations, and therefore their mean <span class="math inline">\thetaprior</span>, as deterministic. The simple example we started with, <span class="math inline">\tilde{Y}_1</span>, is a special case where we have a single prior observation <span class="math inline">\yprior_1 = \frac{1}{2}</span>.</p>
 <div id="exr-bias-general" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.2</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1821,7 +1821,7 @@ Figure&nbsp;19.1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Repeat <a href="#exr-bias-1" class="quarto-xref">Exercise&nbsp;<span>21.1</span></a> for <span class="math inline">\tilde{Y}_{n^{\text{prior}}}</span>. Compare your answers with the sample mean: its bias is zero and its standard deviation is <span class="math inline">\sqrt{\theta(1-\theta)/n}</span>. How does using more prior observations change the bias and standard deviation when <span class="math inline">\theta^{\text{prior}}\ne\theta</span>?</p>
+<p>Repeat <a href="#exr-bias-1" class="quarto-xref">Exercise&nbsp;<span>21.1</span></a> for <span class="math inline">\tilde{Y}_{\nprior}</span>. Compare your answers with the sample mean: its bias is zero and its standard deviation is <span class="math inline">\sqrt{\theta(1-\theta)/n}</span>. How does using more prior observations change the bias and standard deviation when <span class="math inline">\thetaprior\ne\theta</span>?</p>
 </div>
 </div>
 </div>
@@ -1842,8 +1842,8 @@ Figure&nbsp;19.1
 <h2 class="anchored" data-anchor-id="visualizing-the-impact-of-prior-information">Visualizing the Impact of Prior Information</h2>
 <p>Let’s try to get a sense of how using prior information like this impacts our inference. We’ll do it visually. The plot below shows the sampling distributions of three estimators of a population mean <span class="math inline">\theta</span> at three sample sizes <span class="math inline">n</span>: 10, 40, and 160. These are the estimators.</p>
 <ol type="1">
-<li>The estimator <span class="math inline">\hat\theta_1 = \tilde{Y}_{n^{\text{prior}}}</span> for <span class="math inline">\theta^{\text{prior}}=3/4</span> and <span class="math inline">n^{\text{prior}}=10</span> prior observations.</li>
-<li>The estimator <span class="math inline">\hat\theta_2 = \tilde{Y}_{n}</span> for <span class="math inline">\theta^{\text{prior}}=3/4</span> and <span class="math inline">n^{\text{prior}}=n</span> prior observations. The bigger the sample, the more prior observations we use.</li>
+<li>The estimator <span class="math inline">\hat\theta_1 = \tilde{Y}_{\nprior}</span> for <span class="math inline">\thetaprior=3/4</span> and <span class="math inline">\nprior=10</span> prior observations.</li>
+<li>The estimator <span class="math inline">\hat\theta_2 = \tilde{Y}_{n}</span> for <span class="math inline">\thetaprior=3/4</span> and <span class="math inline">\nprior=n</span> prior observations. The bigger the sample, the more prior observations we use.</li>
 <li>The sample mean, <span class="math inline">\hat\theta_3 = \bar Y</span>.</li>
 </ol>
 <p>As usual, the estimation target <span class="math inline">\theta</span> is indicated by a green line, the sampling distribution’s mean by a solid blue line, and its mean plus and minus two standard deviations by dotted blue lines. In this exercise, we’ll match estimators to pictures.</p>
@@ -1894,7 +1894,7 @@ Figure&nbsp;21.1
 </figcaption>
 </figure>
 </div>
-<p>We’re going to ask you to implement a Chebyshev interval estimator again, this time centered at <span class="math inline">\tilde Y_{100}</span>, the estimator <span class="math inline">\tilde Y_{n^{\text{prior}}}</span> from <a href="#exr-bias-general" class="quarto-xref">Exercise&nbsp;<span>21.2</span></a> with a second sample of <span class="math inline">n^{\text{prior}}=100</span> players as the prior observations, and compare it to a bootstrap one.</p>
+<p>We’re going to ask you to implement a Chebyshev interval estimator again, this time centered at <span class="math inline">\tilde Y_{100}</span>, the estimator <span class="math inline">\tilde Y_{\nprior}</span> from <a href="#exr-bias-general" class="quarto-xref">Exercise&nbsp;<span>21.2</span></a> with a second sample of <span class="math inline">\nprior=100</span> players as the prior observations, and compare it to a bootstrap one.</p>
 <div id="exr-calibration-prior" class="callout callout-style-simple callout-exercise no-icon callout-titled theorem exercise">
 <p><span class="theorem-title"><strong>Exercise 21.4 (The Estimator with Prior Observations)</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1975,7 +1975,7 @@ Figure&nbsp;21.1
 </div>
 <div class="callout-body-container callout-body">
 <div class="callout-exercise">
-<p>Our prior-based estimator is <span class="math inline">\tilde Y_{n^{\text{prior}}}</span>, which from this point on we’ll refer to as <span class="math inline">\tilde Y</span>. To start, let’s pretend we know its standard deviation <span class="math inline">\sigma</span>, and think about the interval that goes <span class="math inline">c</span> standard deviations out on either side of <span class="math inline">\tilde Y</span>.</p>
+<p>Our prior-based estimator is <span class="math inline">\tilde Y_{\nprior}</span>, which from this point on we’ll refer to as <span class="math inline">\tilde Y</span>. To start, let’s pretend we know its standard deviation <span class="math inline">\sigma</span>, and think about the interval that goes <span class="math inline">c</span> standard deviations out on either side of <span class="math inline">\tilde Y</span>.</p>
 <ol type="1">
 <li>That interval covers <span class="math inline">\theta</span> when <span class="math inline">\tilde Y</span> lands within <span class="math inline">c\sigma</span> of it, <span class="math inline">|\tilde Y-\theta|\le c\sigma</span>. How far <span class="math inline">\tilde Y</span> lands from <span class="math inline">\theta</span> comes in two pieces: how far it is from its own mean, and how far its mean is from <span class="math inline">\theta</span>. The second piece is the bias, <span class="math inline">b=\operatorname{E}[\tilde Y]-\theta</span>. <span class="math display">
 \tilde Y-\theta=(\tilde Y-\operatorname{E}[\tilde Y])+b.
