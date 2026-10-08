@@ -152,17 +152,6 @@ def cell_html(cell, linked, unbuilt=()):
   return html.replace('·', '&middot;').replace('\0', '[').replace('\1', ']')
 
 
-def declared_homeworks():
-  config_text = (COURSE_DIR / '_quarto_book.yml').read_text()
-  config = yaml.safe_load(config_text)
-  result = []
-  for part in config['book']['chapters']:
-    for chapter in part.get('chapters', []) if isinstance(part, dict) else []:
-      if chapter.startswith('homework/') and not chapter.endswith('.solutions.qmd'):
-        result.append(COURSE_DIR / chapter)
-  return iter(result)
-
-
 def homework_html(path, number, linked):
   stem = path.stem.removesuffix('.handout')
   if not linked:
@@ -368,13 +357,33 @@ def refuse_wrong_destination(site_dir):
                    f'Change `publication.repository` if the destination has moved.')
 
 
+# The book config was `_quarto_book.yml` and is now the conventional
+# `_quarto.yml`. Four places here named the old one: one raised
+# FileNotFoundError, one was dead code, one quietly dropped the file from the
+# provenance record, and one printed a path that does not exist. Resolve it in
+# one place so a message can never cite a file that was not read.
+BOOK_CONFIG_NAMES = ('_quarto_book.yml', '_quarto.yml')
+
+
+def book_config_name():
+  """The book config's filename as it exists here, or None if neither does."""
+  return next((name for name in BOOK_CONFIG_NAMES
+               if (COURSE_DIR / name).is_file()), None)
+
+
 def declared_chapters():
   """Every `.qmd` the book declares, whether or not it was rendered."""
   generator = COURSE_DIR / 'bin' / 'generate-index.py'
   if generator.is_file():
     spec = runpy.run_path(str(generator))['rolling_book_spec'](SCHEDULE_SOURCE)
     return spec['documents'] + spec['decks']
-  config = yaml.safe_load((COURSE_DIR / '_quarto_book.yml').read_text())
+  # Only reached if the generator is gone.
+  book_yml = book_config_name()
+  if not book_yml:
+    raise SystemExit(f'{COURSE_DIR} has none of {" or ".join(BOOK_CONFIG_NAMES)}, '
+                     f'and bin/generate-index.py is absent, so nothing declares '
+                     f'the book.')
+  config = yaml.safe_load((COURSE_DIR / book_yml).read_text())
   result = []
   for part in config['book']['chapters']:
     entries = part.get('chapters', []) if isinstance(part, dict) else [part]
@@ -498,7 +507,10 @@ def course_provenance(book_dir):
     return {'kind': 'tlda', 'checkout': str(COURSE_DIR),
             'revision': SOURCE_REVISION, 'committedAt': None,
             'subject': 'accepted tlda source snapshot', 'uncommittedSources': []}
-  sources = sorted(set(rendered_pages(book_dir).values()) | {'index.qmd', '_quarto_book.yml'})
+  # Both config names, not one: `present` filters to what exists, and naming
+  # only the old one meant an uncommitted change to the live `_quarto.yml` never
+  # showed up in `uncommittedSources`.
+  sources = sorted(set(rendered_pages(book_dir).values()) | {'index.qmd'} | set(BOOK_CONFIG_NAMES))
   present = [source for source in sources if (COURSE_DIR / source).exists()]
   uncommitted = [line[3:] for line in
                  git_output(['status', '--porcelain=v1', '--', *present]).splitlines()]
@@ -531,7 +543,8 @@ def refuse_unbuilt(book_dir, allowed):
   unbuilt = unbuilt_chapters(book_dir)
   if unbuilt and not allowed:
     rows = '\n'.join(f'  {chapter}' for chapter in unbuilt)
-    raise SystemExit(f'{len(unbuilt)} chapter(s) that {COURSE_DIR / "_quarto_book.yml"} declares '
+    declarer = COURSE_DIR / (book_config_name() or BOOK_CONFIG_NAMES[-1])
+    raise SystemExit(f'{len(unbuilt)} chapter(s) that {declarer} declares '
                      f'were never rendered into {book_dir}, so publishing would ship a partial '
                      f'book:\n{rows}\n'
                      f'Render them, or pass --incomplete-ok to publish without them and say so '
