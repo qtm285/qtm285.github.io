@@ -832,3 +832,11 @@ if __name__ == '__main__':
                     if source in WITHHELD_LINKS
                     or not (args.site_dir / 'book' / published_name(source)).is_file())
     render_site(args.site_dir, unbuilt=missing)
+    # Report when the live pages stop matching the schedule file. Advisory:
+    # this build writes a local file and the live site only changes on a push,
+    # so a mismatch here usually means the push has not happened yet. It is
+    # still worth printing, because the failure it exists for -- a page that
+    # quietly stopped reflecting the file -- looked exactly like silence.
+    checker = COURSE_DIR / 'bin' / 'check-site-matches-schedule.py'
+    if checker.is_file():
+      subprocess.run([sys.executable, str(checker)], check=False)
