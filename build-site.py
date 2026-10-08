@@ -140,7 +140,14 @@ def cell_html(cell, linked, unbuilt=()):
     result = f'<a href="{href}">{text}</a>'
     target = Path(match.group('target'))
     deck = Path('book/decks') / f'{target.stem}-slides.html'
-    if target.parts and target.parts[0] == 'chapters' and (ACTIVE_SITE / deck).exists():
+    # The schedule generator appends its own `· [slides](…)` to a chapter row
+    # that has a deck, so adding one here too renders the deck twice:
+    # "Sampling [slides] · slides" appeared on eight rows the moment the
+    # generator's link stopped being stripped. Only add it when the cell does
+    # not already point at that deck.
+    already_linked = f'decks/{target.stem}-slides.html' in cell
+    if (target.parts and target.parts[0] == 'chapters'
+        and (ACTIVE_SITE / deck).exists() and not already_linked):
       result += f' <a href="{deck}">[slides]</a>'
     return result
 
