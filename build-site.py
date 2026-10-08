@@ -191,11 +191,13 @@ def parse_schedule(today, unbuilt=()):
           re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0])
 
   sections, heading, note, rows = [], None, None, []
+  before, pending_before = [], []
   for line in body.splitlines():
     if line.startswith('### '):
       if heading is not None:
-        sections.append((heading, note, rows))
+        sections.append((heading, note, rows, before))
       heading, note, rows = line[4:].strip(), None, []
+      before, pending_before = pending_before, []
       continue
     if heading is None:
       continue
@@ -203,8 +205,17 @@ def parse_schedule(today, unbuilt=()):
     # "This unit is not on either exam." The landing page carried that inside the
     # heading, so dropping it here would quietly lose it.
     if not line.startswith('|'):
-      if line.strip() and not rows:
-        note = line.strip()
+      if line.strip().startswith('<!--'):
+        # The generator's own region markers, not anything to render.
+        continue
+      if line.strip():
+        if not rows:
+          note = line.strip()
+        else:
+          # Past this section's table and before the next heading: a block that
+          # belongs to neither table -- "About the Midterm" sits between the
+          # two parts. It used to be skipped here with no error at all.
+          pending_before.append(line.strip())
       continue
     cells = [cell.strip() for cell in line.strip().strip('|').split('|')]
     if len(cells) != 2 or cells[0] in ('Date', '') or set(cells[0]) <= set('-: '):
@@ -236,12 +247,16 @@ def parse_schedule(today, unbuilt=()):
                  'session': cell_html(main, linked=True, unbuilt=unbuilt),
                  'homework': homework})
   if heading is not None:
-    sections.append((heading, note, rows))
+    sections.append((heading, note, rows, before))
+  if pending_before:
+    raise ValueError(f'{SCHEDULE_SOURCE}: a block follows the last table with no '
+                     f'heading after it, so nothing would render it: '
+                     f'{pending_before[0]!r}')
   # A section whose table produced no rows means a table went unread -- a
   # different column count, a heading this loop did not recognise. Silently
   # covering half the term is worse than failing to build, and it is exactly
   # how the Part 2 rows were missed once already.
-  empty = [h for h, _, r in sections if not r]
+  empty = [h for h, _, r, _ in sections if not r]
   if empty:
     raise ValueError(f'{SCHEDULE_SOURCE}: schedule sections with no rows parsed: '
                      f'{empty} -- a table was not read')
@@ -252,7 +267,9 @@ def schedule_html(today=None, unbuilt=()):
   from zoneinfo import ZoneInfo
   today = today or datetime.datetime.now(ZoneInfo('America/New_York')).date()
   out = []
-  for heading, note, rows in parse_schedule(today, unbuilt):
+  for heading, note, rows, before in parse_schedule(today, unbuilt):
+    for para in before:
+      out.append(f'<p>{cell_html(para, linked=False)}</p>\n')
     out.append(f'<h5> {heading} </h5>\n')
     if note:
       out.append(f'<p>{cell_html(note, linked=False)}</p>\n')
