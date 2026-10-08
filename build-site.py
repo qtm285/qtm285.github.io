@@ -216,12 +216,20 @@ def parse_schedule(today, unbuilt=()):
         break
       markers.insert(0, match.group('markers'))
       main = main[:match.start()]
+    # Whether a link survives was decided upstream, by each document's own
+    # `ready:` front matter, when `bin/generate-index.py` generated this region.
+    # A link that reaches this parse is one the course released, so it is kept.
+    #
+    # This used to re-apply `date <= today` here, a second copy of a rule that
+    # had already run. Two copies of one decision meant the landing page could
+    # strip a link the schedule had deliberately published, and it made the
+    # calendar -- not the author -- the thing that released a chapter.
     homework = []
     for marker in markers:
-      homework.append(cell_html(marker, linked=date <= today, unbuilt=unbuilt))
+      homework.append(cell_html(marker, linked=True, unbuilt=unbuilt))
     rows.append({'date': meeting_date(cells[0]),
                  'homework_date': dated_time(cells[0], '11:59'),
-                 'session': cell_html(main, linked=date <= today, unbuilt=unbuilt),
+                 'session': cell_html(main, linked=True, unbuilt=unbuilt),
                  'homework': homework})
     if main.strip() == '**Exam 1**':
       through_first_exam = True
