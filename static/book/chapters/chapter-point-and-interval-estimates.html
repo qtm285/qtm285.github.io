@@ -791,12 +791,6 @@ window.Quarto = {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/chapter-programming-reference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Programming Reference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -2093,7 +2087,7 @@ Figure&nbsp;7.2: Comparing polls: different random samples yield different estim
 <section id="programming-the-sampling-distribution" class="level3">
 <h3 class="anchored" data-anchor-id="programming-the-sampling-distribution">Programming the sampling distribution</h3>
 <p>The function <code>draw.indices</code> names one repetition of the sampling process: it draws the row indices for one poll. <code>rep(list(y), 10000)</code> supplies the population to that function 10,000 times, and <code>map()</code> collects the 10,000 index vectors. The final matrix has one simulated poll in each row.</p>
-<p>This is the repeat-and-collect pattern from the <a href="../chapters/chapter-programming-reference.html#repeating-and-collecting">programming reference</a>. The statistical operation gets a name; <code>map()</code> handles where each result is stored.</p>
+<p>This is the repeat-and-collect pattern from the programming reference. The statistical operation gets a name; <code>map()</code> handles where each result is stored.</p>
 <p>We calculate the sample proportion for each poll.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>meanY.samples <span class="ot">=</span> <span class="fu">rowMeans</span>(Ys)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

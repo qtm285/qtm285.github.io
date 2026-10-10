@@ -219,15 +219,6 @@
       }
     },
     {
-      "file": "chapters/chapter-bias-and-coverage.html",
-      "title": "Bias and Coverage",
-      "source": {
-        "type": "project-source",
-        "format": "qmd",
-        "file": "chapters/chapter-bias-and-coverage.qmd"
-      }
-    },
-    {
       "file": "exams/practice-midterm-1.html",
       "title": "Practice Midterm 1",
       "source": {
