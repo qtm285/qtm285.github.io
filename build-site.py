@@ -183,12 +183,19 @@ def parse_schedule(today, unbuilt=()):
   year = schedule_year(text)
   if '## Schedule' not in text:
     raise ValueError(f'{SCHEDULE_SOURCE}: no "## Schedule" section to read')
+  # Read the generated region; do not generate it again. `bin/generate-index.py`
+  # runs as a Quarto pre-render (`_quarto.yml`) and writes this region into
+  # `index.qmd` between its own markers, which is what renders to the book's
+  # index page. Calling `render_region` here recomputed, from `bin/schedule.json`,
+  # a region already committed in the file being read -- a second build of a
+  # thing already built, and the reason the landing page could carry a different
+  # link set from the book index. Reading it also means the `ready:` release rule
+  # cannot be bypassed here: whatever the generator withheld is simply not
+  # present to parse.
+  #
   # Stop at the next top-level heading, or the practices and policies further
   # down the page contribute their own `###` headings as empty sections.
-  generator = COURSE_DIR / 'bin' / 'generate-index.py'
-  body = (runpy.run_path(str(generator))['render_region'](today=today, year=year)
-          if generator.is_file() else
-          re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0])
+  body = re.split(r'^## (?!Schedule)', text.split('## Schedule', 1)[1], maxsplit=1, flags=re.M)[0]
 
   sections, heading, note, rows = [], None, None, []
   before, pending_before = [], []
