@@ -1,0 +1,2238 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="chapter-normal-approximation-proof-slides_files/libs/clipboard/clipboard.min.js"></script>
+<script src="chapter-normal-approximation-proof-slides_files/libs/quarto-html/tabby.min.js"></script>
+<script src="chapter-normal-approximation-proof-slides_files/libs/quarto-html/popper.min.js"></script>
+<script src="chapter-normal-approximation-proof-slides_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="chapter-normal-approximation-proof-slides_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="chapter-normal-approximation-proof-slides_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="chapter-normal-approximation-proof-slides_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="chapter-normal-approximation-proof-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="chapter-normal-approximation-proof-slides_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="chapter-normal-approximation-proof-slides_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="chapter-normal-approximation-proof-slides_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <title>Normal Approximation: the Proof</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="chapter-normal-approximation-proof-slides_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="chapter-normal-approximation-proof-slides_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="chapter-normal-approximation-proof-slides_files/libs/revealjs/dist/theme/quarto-5a14feb3a0fd8d1a5399f7a55cff0f68.css">
+  <script defer="" src="../_assets/mvl5cop3-1/katex-assets/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet" href="../_assets/mvl5cop3-1/katex-assets/dist/katex.min.css">
+  <link href="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="chapter-normal-approximation-proof-slides_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="chapter-normal-approximation-proof-slides_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <link href="chapter-normal-approximation-proof-slides_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="chapter-normal-approximation-proof-slides_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+  <script>
+  // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
+  // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
+  // re-run the generator, or the two copies drift and the book renders
+  // different mathematics from the app.
+  //
+  // Course-side entries below are NOT generated and NOT in the tlda
+  // source: \rmse, \MSE, \class, \texttip, \mathtip, \unicode. Edit them here.
+
+  // Universal KaTeX base macros — given to everybody, superseded by a paper's own
+  // extracted definitions.
+  //
+  // KaTeX has NO `\usepackage` mechanism and ships only a fixed built-in macro set
+  // (plus the mhchem contrib). So commands provided by the LaTeX `physics` package
+  // — \qty, \norm, \abs, \grad, the \q… text helpers, etc. — are unknown to KaTeX
+  // unless we define them. This file is that physics.sty → KaTeX port.
+  //
+  // It contains ONLY commands that live in a package (nothing a paper writes in its
+  // own preamble). Paper-specific macros (\chis, \hgamma, \dzetase, …) come from the
+  // build's `*-macros.json` extraction and override anything here via merge order:
+  //   { ...baseMacros, ...extractedPaperMacros }
+  //
+  // Single source of truth: imported by the browser renderer (src/katexMacros.ts)
+  // and the server-side chat linter (mcp-server/fleet-tools.mjs).
+
+  // Bare is fixed, starred stretches. KaTeX has no \DeclarePairedDelimiter and no
+  // \@ifstar, so the star is read here by peeking at the next token.
+  function pairedDelimiter(open, close) {
+    return (ctx) => {
+      const next = ctx.future()
+      if (next && next.text === "*") {
+        ctx.popToken()
+        return `\\left${open}#1\\right${close}`
+      }
+      return `${open}#1${close}`
+    }
+  }
+
+  // TeX source of a consumed group, spaces intact. Token texts alone lose
+  // whitespace (the lexer skips it); the token offsets recover it exactly.
+  // Falls back to joined texts if the lexer internals ever move.
+  function groupSource(toks) {
+    const first = toks[toks.length - 1];
+    const last = toks[0];
+    const input = first && first.loc && first.loc.lexer && first.loc.lexer.input;
+    if (typeof input === 'string' && first.loc.start != null && last.loc.end != null) {
+      return input.slice(first.loc.start, last.loc.end);
+    }
+    return toks.map((t) => t.text).reverse().join('');
+  }
+
+  // Tip payload encoding for the hover script below. The tip TeX travels
+  // in an htmlData attribute, whose values split on commas and take no
+  // escapes, so raw TeX cannot ride there. Unpadded base64url carries
+  // arbitrary TeX (dollars, commas, braces, backslashes) in [A-Za-z0-9-_].
+  function tipEncode(str) {
+    const bytes = new TextEncoder().encode(str)
+    let bin = ''
+    bytes.forEach((b) => { bin += String.fromCharCode(b) })
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
+  // The one trust rule for course math. KaTeX gates its html extension
+  // (\htmlClass, \htmlData, \htmlId, \htmlStyle, \href, \url,
+  // \includegraphics) on this callback; anything it rejects renders as
+  // an unsupported-command error rather than HTML. Only the commands
+  // our own macros emit are admitted, and only in the shapes they emit:
+  // fragment classes, lone data-tip attributes, and data-tip plus a
+  // data-mode of math (the mathtip marker). Strict is untouched.
+  function tldaTrust(ctx) {
+    if (ctx.command === '\\htmlClass') {
+      return typeof ctx.class === 'string' &&
+        ctx.class.split(/\s+/).every((c) => c === 'fragment')
+    }
+    if (ctx.command === '\\htmlData') {
+      const attrs = ctx.attributes || {}
+      const keys = Object.keys(attrs)
+      // Numeric fragment grouping only: exactly that one attribute, digits
+      // only. Deliberately not a general data-* admission.
+      if (keys.length === 1 && keys[0] === 'data-fragment-index') {
+        return /^\d+$/.test(String(attrs['data-fragment-index']))
+      }
+      return keys.length <= 2 &&
+        ('data-tip' in attrs) &&
+        keys.every((k) => k === 'data-tip' || k === 'data-mode') &&
+        (!('data-mode' in attrs) || attrs['data-mode'] === 'math')
+    }
+    return false
+  }
+  window.__tldaKatexMacros = {
+    // physics: text spacers (\q… family)
+    "\\qq": "\\quad\\text{#1}\\quad",
+    // physics spells this one both ways and the long form is the one the course
+    // actually writes -- 358 uses against \qq's handful. It was absent here, so a
+    // course moving to KaTeX would have lost all 358 SILENTLY: an undefined macro
+    // renders as literal text with a clean console. Same expansion as \qq; they
+    // are the same command in physics.
+    "\\qqtext": "\\quad\\text{#1}\\quad",
+    "\\qwhere": "\\quad\\text{where}\\quad",
+    "\\qfor": "\\quad\\text{for}\\quad",
+    "\\qand": "\\quad\\text{and}\\quad",
+    "\\qor": "\\quad\\text{or}\\quad",
+    "\\qthen": "\\quad\\text{then}\\quad",
+    "\\qif": "\\quad\\text{if}\\quad",
+    "\\qelse": "\\quad\\text{else}\\quad",
+    "\\qotherwise": "\\quad\\text{otherwise}\\quad",
+    "\\qgiven": "\\quad\\text{given}\\quad",
+    "\\qall": "\\quad\\text{for all}\\quad",
+    "\\qsince": "\\quad\\text{since}\\quad",
+    "\\qlet": "\\quad\\text{let}\\quad",
+    "\\qimplies": "\\quad\\Rightarrow\\quad",
+    "\\qas": "\\quad\\text{as}\\quad",
+    "\\qc": ",",
+
+    // physics: delimiters & operators
+    // \qty dispatches on its delimiter: \qty(x) → (x), \qty[x] → [x], and
+    // \qty{x} keeps visible braces. The old "" no-op was exact for parens and
+    // brackets but dropped the curlies — 288 such sites in the course, rendering
+    // bare content where physics puts braces. KaTeX binds the following group to
+    // #1 once the expansion names it, so only the curly branch needs one.
+    "\\qty": (ctx) => {
+      const next = ctx.future();
+      if (next && next.text === '{') {
+        return '\\left\\{#1\\right\\}';
+      }
+      return '';
+    },
+    "\\abs": "\\left|#1\\right|",
+    "\\norm": "\\left\\|#1\\right\\|",
+    "\\eval": "\\left.#1\\right|",
+    "\\order": "\\mathcal{O}\\left(#1\\right)",
+    "\\dv": "\\frac{d#1}{d#2}",
+    "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+    "\\fdv": "\\frac{\\delta #1}{\\delta #2}",
+    "\\bra": "\\left\\langle #1\\right|",
+    "\\ket": "\\left|#1\\right\\rangle",
+    "\\braket": "\\left\\langle #1\\middle|#2\\right\\rangle",
+    "\\expval": "\\left\\langle #1\\right\\rangle",
+    "\\ev": "\\left\\langle #1\\right\\rangle",
+    "\\comm": "\\left[#1,\\,#2\\right]",
+    "\\acomm": "\\left\\{#1,\\,#2\\right\\}",
+    "\\vb": "\\mathbf{#1}",
+    "\\vbu": "\\hat{#1}",
+    "\\grad": "\\nabla",
+    "\\curl": "\\nabla\\times",
+    // physics defines \cross and this port had omitted it, so it would have gone
+    // silently literal at the renderer switch. Found by the used-minus-defined
+    // gate rather than by anyone noticing a formula.
+    "\\cross": "\\times",
+    // Course shorthands that arrive undefined: single-use spellings, each with one
+    // meaning in the tree. Defined here (not edited at the call sites) per the
+    // course owner's call — the call sites render literal-or-red without them,
+    // and these restore the evidently intended mathematics.
+    "\\rmse": "\\operatorname{rmse}",
+    "\\MSE": "\\operatorname{MSE}",
+    // reveal.js fragment wrapper. Emits a real fragment class so reveal
+    // steps the content on decks; in the book the span is inert (no
+    // reveal runtime, no fragment styling) and the content reads as
+    // before. Any other class name falls back to bare content.
+    "\\class": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      const cls = groupSource(args[0]).trim();
+      if (cls === 'fragment') {
+        return '\\htmlClass{fragment}{' + groupSource(args[1]) + '}';
+      }
+      // fragment=N puts both cells of an aligned row in one reveal step:
+      // reveal groups fragments sharing a data-fragment-index. KaTeX emits
+      // htmlClass and htmlData on separate nested spans, so the index is
+      // carried here and the fragment class is added after render, below.
+      const grouped = cls.match(/^fragment=(\d+)$/);
+      if (grouped) {
+        return '\\htmlData{fragment-index=' + grouped[1] + '}{' + groupSource(args[1]) + '}';
+      }
+      ctx.pushTokens(args[1]);
+      return '';
+    },
+    "\\tr": "\\operatorname{Tr}",
+    "\\Tr": "\\operatorname{Tr}",
+    "\\rank": "\\operatorname{rank}",
+    "\\diag": "\\operatorname{diag}",
+    "\\sgn": "\\operatorname{sgn}",
+
+    // The course's \DeclareMathOperator declarations, as plain entries. KaTeX has
+    // no \DeclareMathOperator and fails silently on it -- literal text, no console
+    // error -- so the operators have to live here instead.
+    //
+    // Skip, 2026-09-12: "um just define \E to be \operatorname{E} no? ... like
+    // it's not that hard?" It is not. The alarming 2,577-call-site number came
+    // from costing a TeX-level rewrite, where \newcommand vs \renewcommand is
+    // fragile -- one line changed there killed eight working operators while the
+    // error count went from 1 to 0. Here each declaration is one string and no
+    // call site changes at all.
+    //
+    // \argmin is defined by stock KaTeX; a later key wins, which is what makes
+    // redefining it safe here and was NOT safe in the TeX route.
+    "\\E": "\\operatorname{E}",
+    "\\P": "\\operatorname{P}",
+    "\\V": "\\operatorname{V}",
+    "\\Var": "\\operatorname{V}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\CATE": "\\operatorname{CATE}",
+    "\\RMSE": "\\operatorname{RMSE}",
+    "\\sd": "\\operatorname{sd}",
+    "\\bias": "\\operatorname{bias}",
+    "\\argmin": "\\operatorname{argmin}",
+    "\\invlogit": "\\operatorname{logit}^{-1}",
+    "\\hVar": "\\widehat{\\operatorname{V}}",
+
+    // Course annotations: \explain{X}{tip} is \overset{\texttip{marker}{tip}}{X}
+    // (and \mathexplain the math-mode twin). The marker renders; the tip
+    // rides encoded in a data-tip attribute (plus a data-mode marker on the
+    // math-mode twin) for the hover script below,
+    // which typesets it with this same KaTeX. Encoding (not parsing)
+    // carries dollars, commas and braces through the attribute intact.
+    "\\texttip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + '}{' + groupSource(args[0]) + '}';
+    },
+    "\\mathtip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + ',mode=math}{' + groupSource(args[0]) + '}';
+    },
+    // MathJax's [tex]/unicode package. KaTeX has no
+    // \unicode: hex or decimal becomes the character, anything else renders as
+    // text rather than literal backslash-soup. (The course's `r square` /
+    // `r triangle` / `r circle` shapes are not valid \unicode args —
+    // decimal-or-hex only — and the real glyph mapping is a content call, not this.)
+    "\\unicode": (ctx) => {
+      const raw = groupSource(ctx.consumeArgs(1)[0]);
+      const m = raw.match(/^x([0-9a-fA-F]{1,6})$/) || raw.match(/^([0-9]{1,7})$/);
+      if (m) {
+        const cp = parseInt(m[1], m[0][0] === 'x' ? 16 : 10);
+        if (cp <= 0x10ffff) {
+          return String.fromCodePoint(cp);
+        }
+      }
+      return `\\text{${raw}}`;
+    },
+
+    // Paired delimiters. Skip, 2026-09-12: "i said \p \cb \sb".
+    //
+    // Bare is fixed, starred stretches -- he uses * for tacit \left\right
+    // consistently. KaTeX has no \DeclarePairedDelimiter and no \@ifstar, so the
+    // star is read by a function macro peeking at the next token. Verified
+    // against KaTeX 0.16.47, including the counterfactual that a BARE macro on
+    // tall content stays fixed, so the check is not merely detecting \frac.
+    "\\p": pairedDelimiter("(", ")"),
+    "\\sb": pairedDelimiter("[", "]"),
+    "\\cb": pairedDelimiter("\\{", "\\}"),
+  }
+  </script>
+  <script>
+  // Give KaTeX the course's macro set.
+  //
+  // pandoc emits its own render loop and hardcodes `var macros = []` inside it --
+  // function-scoped, unreachable from config, and there is no Quarto option that
+  // reaches it either. Quarto's own re-render helper (window.Quarto.typesetMath)
+  // hardcodes the same empty array. So the macros cannot be delivered by
+  // configuration on the plain-HTML path; the only seam is katex.render itself,
+  // which both of those call.
+  //
+  // This wraps it. The capture listener below fires before pandoc's
+  // document-level bubble listener even when registered later; katex.min.js
+  // is deferred, so by DOMContentLoaded it has executed and window.katex exists.
+  //
+  // Deliberately does NOT override a caller that supplied its own non-empty macros
+  // object -- that is somebody meaning something specific, and this is a default.
+  // Trust gets the same treatment: a supplied value wins, otherwise
+  // the course allowlist above. Strict is untouched.
+  (function () {
+    function install() {
+      if (!window.katex || !window.katex.render || window.__tldaKatexShimmed) return
+      var base = window.__tldaKatexMacros
+      if (!base) { console.error('[tlda] katex macro set missing; math will render without it'); return }
+      var inner = window.katex.render.bind(window.katex)
+      // One shared object, because KaTeX writes \def definitions back into it and
+      // they are expected to persist across calls within a page.
+      var shared = {}
+      for (var k in base) shared[k] = base[k]
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {}
+        if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+        if (opts.trust == null) opts.trust = tldaTrust
+        const out = inner(tex, el, opts)
+        // Reveal reads data-fragment-index from the .fragment node itself,
+        // and KaTeX cannot put the class and the index on one span, so the
+        // class is added here -- scoped to the element just rendered.
+        if (el && el.querySelectorAll) {
+          el.querySelectorAll('[data-fragment-index]').forEach(function (n) {
+            if (/^\d+$/.test(n.getAttribute('data-fragment-index') || '')) n.classList.add('fragment')
+          })
+        }
+        return out
+      }
+      window.__tldaKatexShimmed = true
+    }
+    // Capture fires before pandoc's document-level bubble listener;
+    // immediate call if the document is already parsed.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, true)
+    else install()
+  })()
+  </script>
+  <style>
+  /* Explanation hover tips (see the script below). No visual change to
+     the equation itself besides the help cursor on the marker. */
+  [data-tip] { cursor: help; position: relative; z-index: 1; }
+  #tlda-tip {
+    position: fixed; z-index: 60; display: none; max-width: min(34em, 90vw);
+    background: #fff; color: #222; border: 1px solid #888; border-radius: 6px;
+    padding: .5em .7em; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    font-size: .85rem; line-height: 1.35; pointer-events: none;
+  }
+  #tlda-tip.on { display: block; }
+  .tlda-tip-err { color: #c00; font-weight: bold; }
+  </style>
+  <script>
+  // Explanation hovers. Marker spans carry the tip as encoded TeX in
+  // data-tip (see \texttip above); this typesets it with the page KaTeX
+  // on hover. Delegated listeners: no per-element binding, survives math
+  // re-renders. Markers inside unrevealed fragments are skipped.
+  (function () {
+    function markerOf(node) {
+      while (node && node !== document) {
+        if (node.getAttribute && node.getAttribute('data-tip') != null) return node
+        node = node.parentNode
+      }
+      return null
+    }
+    // Hidden markers never open: display:none ancestors (non-current slides)
+    // anywhere, plus any unrevealed ancestor fragment up to the reveal root —
+    // a visible inner fragment beneath a hidden outer stays hidden. The
+    // fragment walk runs only inside a reveal deck (book fragment spans never
+    // gain .visible, so it is deck-only there).
+    function isHidden(marker) {
+      if (marker.getClientRects().length === 0) return true
+      if (marker.closest && marker.closest('.reveal')) {
+        let node = marker.parentNode
+        while (node && node !== document) {
+          if (node.classList && node.classList.contains('reveal')) break
+          if (node.classList && node.classList.contains('fragment') && !node.classList.contains('visible')) return true
+          node = node.parentNode
+        }
+      }
+      return false
+    }
+    function tipDecode(s) {
+      const b64 = s.replace(/-/g, '+').replace(/_/g, '/')
+      const bin = atob(b64)
+      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
+      return new TextDecoder().decode(bytes)
+    }
+    function errSpan(text, detail) {
+      const err = document.createElement('span')
+      err.className = 'tlda-tip-err'
+      err.textContent = text
+      err.title = String(detail)
+      return err
+    }
+    // Mixed mode (texttip): text with $...$ math. Math mode (mathtip): the
+    // whole tip is math. Failed math shows an explicit error naming the
+    // failure; it never substitutes raw TeX silently.
+    function renderTip(tex, mode, box) {
+      box.textContent = ''
+      if (mode === 'math') {
+        const s = document.createElement('span')
+        box.appendChild(s)
+        try { window.katex.render(tex, s, {}) }
+        catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        return
+      }
+      const parts = tex.split(/(?<!\\)\$/)
+      parts.forEach((seg, i) => {
+        if (seg === '') return
+        if (i % 2 === 1) {
+          const s = document.createElement('span')
+          box.appendChild(s)
+          try { window.katex.render(seg, s, {}) }
+          catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        } else {
+          box.appendChild(document.createTextNode(seg))
+        }
+      })
+    }
+    var box = null
+    var current = null
+    function open(marker) {
+      if (!window.katex) return
+      if (isHidden(marker)) { close(); return }
+      const payload = marker.getAttribute('data-tip')
+      if (!payload) return
+      if (box && box.classList.contains('on') && current === marker) return
+      if (!box) {
+        box = document.createElement('div')
+        box.id = 'tlda-tip'
+        document.body.appendChild(box)
+      }
+      current = marker
+      try {
+        renderTip(tipDecode(payload), marker.getAttribute('data-mode'), box)
+      } catch (e) {
+        box.textContent = ''
+        box.appendChild(errSpan('(tip error)', (e && e.message) || e))
+      }
+      var r = marker.getBoundingClientRect()
+      box.classList.add('on')
+      var bw = box.offsetWidth, bh = box.offsetHeight
+      var x = Math.min(Math.max(8, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 8)
+      var y = r.top - bh - 10
+      if (y < 8) y = r.bottom + 10
+      box.style.left = x + 'px'
+      box.style.top = y + 'px'
+    }
+    function close() {
+      current = null
+      if (box) box.classList.remove('on')
+    }
+    document.addEventListener('mouseover', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('mouseout', (e) => {
+      const m = markerOf(e.target)
+      if (m && !(e.relatedTarget && m.contains(e.relatedTarget))) close()
+    })
+    // Touch: a tap opens (and stays until tap elsewhere, scroll, or slide).
+    document.addEventListener('click', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close() })
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    // Reveal (a body-end synchronous script) exists by DOMContentLoaded, so
+    // the slide/fragment dismissal binds there rather than at parse time.
+    function bindReveal() {
+      if (!window.Reveal || !Reveal.on) return
+      Reveal.on('slidechanged', close)
+      Reveal.on('fragmenthidden', () => { if (current && isHidden(current)) close() })
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindReveal)
+    else bindReveal()
+  })()
+
+  </script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Normal Approximation: the Proof</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section>
+<section id="tools" class="title-slide slide level1 center">
+<h1 data-source-line="9" data-source-end-line="9">Tools</h1>
+
+
+
+
+
+<div class="hidden" data-source-line="1" data-source-end-line="17" data-source-file="decks/shared/shared-code.qmd">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
+
+
+
+
+
+
+
+<p data-source-line="122" data-source-end-line="130" data-source-file="shared/shared-style.qmd">$$</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+</section>
+<section id="integration-by-parts" class="slide level2">
+<h2 data-source-line="181" data-source-end-line="200" data-source-file="shared/shared-style.qmd">Integration by parts</h2>
+<style>
+/* Quarto's revealjs `.center` is a slide-heading attribute, not a div class, and
+   this deck loads no stylesheet, so `::: {.center}` was rendering unstyled.
+   Scoped inside .slides: reveal puts its own `center` class on the deck wrapper. */
+.reveal .slides div.center { text-align: center; }
+#only-the-normal-has-this-signature .cell-output-display,
+#solving-the-signature-equation .cell-output-display { width:100%; }
+#only-the-normal-has-this-signature .cell-output-display p,
+#solving-the-signature-equation .cell-output-display p { width:100%; }
+#only-the-normal-has-this-signature .cell-output-display img,
+#solving-the-signature-equation .cell-output-display img { width:100% !important; height:auto !important; max-width:none; }
+#linearization-and-the-normal-signature .cell-output-display { width:38%; margin:0 auto; }
+#linearization-and-the-normal-signature .cell-output-display img { width:100%; height:auto; }
+
+</style>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-parts-curves-1.svg" style="width:100.0%" class="r-stretch" data-source-line="116" data-source-end-line="139"><div class="center">
+
+<p data-source-line="142" data-source-end-line="159">I can never remember this formula, so I start with the product rule for derivatives. <span class="math display">
+(\textcolor{#118AB2}{u}\textcolor{#EF476F}{v})'=\textcolor{#073B4C}{u'}\textcolor{#EF476F}{v}+\textcolor{#118AB2}{u}\textcolor{#A020F0}{v'}
+\qqtext{so rearranging} \textcolor{#073B4C}{u'}\textcolor{#EF476F}{v} = (\textcolor{#118AB2}{u}\textcolor{#EF476F}{v})'-\textcolor{#118AB2}{u}\textcolor{#A020F0}{v'}.
+</span> Integrating, we get the integration by parts formula. <span class="math display">
+\int_a^b \textcolor{#073B4C}{u'(x)}\textcolor{#EF476F}{v(x)}\,dx
+=\textcolor{#118AB2}{u(x)}\textcolor{#EF476F}{v(x)} \mid_a^b-\int_a^b \textcolor{#118AB2}{u(x)}\textcolor{#A020F0}{v'(x)}\,dx.
+</span> Often the <em>boundary term</em> is zero: <span class="math inline">\textcolor{#118AB2}{u(x)}\textcolor{#EF476F}{v(x)}</span> is the same at both ends. This gives us a simple rule: flip the derivative, flip the sign. <span class="math display">
+\int_{a}^{b}\textcolor{#073B4C}{u'(x)}\textcolor{#EF476F}{v(x)}\,dx
+=-\int_{a}^{b}\textcolor{#118AB2}{u(x)}\textcolor{#A020F0}{v'(x)}\,dx.
+</span> Why zero? Today, it’s because we’ll be integrating from <span class="math inline">-\infty</span> to <span class="math inline">\infty</span>. And <span class="math inline">\textcolor{#118AB2}{u(x)}\textcolor{#EF476F}{v(x)} \to 0</span> as <span class="math inline">x \to \pm\infty</span>.</p>
+</div>
+</section>
+<section id="standardization" class="slide level2">
+<h2 data-source-line="162" data-source-end-line="162">Standardization</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-standardization-picture-1.svg" style="width:100.0%" class="r-stretch" data-source-line="164" data-source-end-line="225"><ul>
+<li data-source-line="227" data-source-end-line="227">Today, we’re going to be working with standardized averages.</li>
+<li data-source-line="228" data-source-end-line="228">What does standardized mean?
+<ul>
+<li data-source-line="229" data-source-end-line="229">Centered. We subtract its expected value.</li>
+<li data-source-line="230" data-source-end-line="230">Scaled: We divide by its standard deviation.</li>
+</ul></li>
+<li data-source-line="231" data-source-end-line="231">We can write a standardized average of independent random variables with the same distribution as a <em>sum</em> of random variables with standard deviation <span class="math inline">1/\sqrt{n}</span>.</li>
+</ul>
+
+<p data-source-line="233" data-source-end-line="242"><span class="math display">
+\textcolor{#118AB2}{W}
+=\frac{\textcolor{#EF476F}{\hat\mu}-\mu}{\sigma/\sqrt n}
+=\frac{\textcolor{#A020F0}{\frac 1n\sum_{i=1}^{n}(Y_i-\mu)}}{\textcolor{#A020F0}{\sigma/\sqrt n}}
+=\sum_{i=1}^{n}\textcolor{#A020F0}{X_i}\quad
+\text{with}\quad \operatorname{sd}(\textcolor{#A020F0}{X_i})
+=\frac{\operatorname{sd}(\textcolor{#A020F0}{Y_i-\mu})}{\textcolor{#A020F0}{\sigma\sqrt n}}
+=\frac{\sigma}{\sigma\sqrt n}
+=\frac{1}{\sqrt n}.
+</span></p>
+</section>
+<section id="tools-swapping-in-independent-copies" class="slide level2">
+<h2 data-source-line="244" data-source-end-line="244">Swapping in independent copies</h2>
+
+
+<style>
+#tools-swapping-in-independent-copies .r-stack > .fragment {
+  align-self:start; justify-self:stretch; width:100%;
+  grid-area:1 / 1; margin:0;
+}
+#tools-swapping-in-independent-copies .columns {
+  align-items:flex-start;
+}
+</style>
+<div class="columns" data-source-line="246" data-source-end-line="277">
+<div class="column" style="width:46%;">
+
+<div class="cell" data-source-line="342" data-source-end-line="349">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-swap-rows-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:54%;">
+<div class="r-stack" style="display:grid; align-items:start;">
+<div class="fragment fade-out" data-fragment-index="0">
+
+<div class="cell" data-source-line="354" data-source-end-line="361">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-swap-plot-0-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+
+<div class="cell" data-source-line="364" data-source-end-line="373">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-swap-plot-1-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+
+<div class="cell" data-source-line="376" data-source-end-line="385">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-swap-plot-2-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment fade-in" data-fragment-index="2">
+
+<div class="cell" data-source-line="388" data-source-end-line="403">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-swap-plot-3-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+<ul>
+<li data-source-line="409" data-source-end-line="409">One person runs a survey. Another person independently runs the same survey, the same way.
+<ul>
+<li data-source-line="410" data-source-end-line="410">We say their response sequence <span class="math inline">\textcolor{#EF476F}{X_1' \ldots X_n'}</span> is an <em>independent copy</em> of yours.</li>
+<li data-source-line="411" data-source-end-line="411">Same survey design, same population, same response distribution.</li>
+</ul></li>
+<li data-source-line="412" data-source-end-line="412">We do the swap. What changes?</li>
+</ul>
+
+<p data-source-line="414" data-source-end-line="420"><span class="math display">
+\begin{aligned}
+\textcolor{#073B4C}{W}&amp;=\textcolor{#073B4C}{X_1}+\cdots+\textcolor{#073B4C}{X_i}+\cdots+\textcolor{#073B4C}{X_n}&amp;&amp;\text{your original average}\\
+\textcolor{#A020F0}{W_i'}&amp;=\textcolor{#073B4C}{X_1}+\cdots+\textcolor{#EF476F}{X_i'}+\cdots+\textcolor{#073B4C}{X_n}&amp;&amp;\text{your post-swap average}\\
+\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'}&amp;=\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'}&amp;&amp;\text{the difference}.
+\end{aligned}
+</span></p>
+<ul>
+<li data-source-line="422" data-source-end-line="422">Does the value change? <span class="teal">A little.</span> The difference has standard deviation <span class="math inline">\textcolor{#118AB2}{\sqrt{2/n}}</span>.</li>
+<li data-source-line="423" data-source-end-line="423">Does the distribution change? Not at all.</li>
+</ul>
+</section>
+<section id="tools-product-by-cubes" class="slide level2">
+<h2 data-source-line="426" data-source-end-line="426">Bounding a product by cubes</h2>
+<ul>
+<li><p data-source-line="428" data-source-end-line="428">For nonnegative <span class="math inline">a</span> and <span class="math inline">b</span>, the product <span class="math inline">ab^2</span> is at most a weighted average of their cubes.</p>
+<p><span class="math display">
+ab^2\le\frac{a^3+2b^3}{3}.
+</span></p>
+<p><span class="math display">
+\frac{a^3+2b^3}{3}-ab^2
+\overset{\mathtip{\small{\text{?}}}{\text{Expand the product and collect terms.}}}{=}\frac{(a-b)^2(a+2b)}{3}
+\overset{\mathtip{\small{\text{?}}}{\text{Both factors are nonnegative when }a,b\ge 0.}}{\ge}0.
+</span></p></li>
+<li><p data-source-line="440" data-source-end-line="440">For centered <span class="math inline">\textcolor{#073B4C}{A}</span> and an independent copy <span class="math inline">\textcolor{#EF476F}{B}</span>, this bounds the average change from a swap.</p>
+<p><span class="math display">
+\mathbb E\{|\textcolor{#073B4C}{A}|(\textcolor{#073B4C}{A}-\textcolor{#EF476F}{B})^2\}
+\le2\mathbb E|\textcolor{#073B4C}{A}|^3.
+</span></p>
+<p><span class="math display">
+\begin{aligned}
+\mathbb E\{|\textcolor{#073B4C}{A}|(\textcolor{#073B4C}{A}-\textcolor{#EF476F}{B})^2\}
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Expand the square and use independence in the cross term.}}}{=}\mathbb E|\textcolor{#073B4C}{A}|^3
+  -2\mathbb E(|\textcolor{#073B4C}{A}|\textcolor{#073B4C}{A})\underbrace{\mathbb E\textcolor{#EF476F}{B}}_{0}
+  +\mathbb E(|\textcolor{#073B4C}{A}|\textcolor{#EF476F}{B}^2)\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\mathbb E\textcolor{#EF476F}{B}=0.\\\text{Apply the product bound to }|\textcolor{#073B4C}{A}|\,|\textcolor{#EF476F}{B}|^2.\end{gathered}}}{\le}\mathbb E|\textcolor{#073B4C}{A}|^3+
+  \frac{\mathbb E|\textcolor{#073B4C}{A}|^3+2\mathbb E|\textcolor{#EF476F}{B}|^3}{3}\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{The copy has the same absolute third moment.}}}{=}2\mathbb E|\textcolor{#073B4C}{A}|^3.
+\end{aligned}
+</span></p></li>
+</ul>
+</section>
+<section id="tools-taylor-approximation" class="slide level2">
+<h2 data-source-line="459" data-source-end-line="459">Taylor approximation</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/tools-taylor-curve-and-error-1.svg" style="width:100.0%" class="r-stretch" data-source-line="461" data-source-end-line="512"><ul>
+<li><p data-source-line="514" data-source-end-line="514">A first-order Taylor approximation replaces a curve by its tangent line.</p>
+<p><span class="math display">
+f(\textcolor{#073B4C}{x})\approx f(\textcolor{#A020F0}{a})+(\textcolor{#073B4C}{x}-\textcolor{#A020F0}{a})f'(\textcolor{#A020F0}{a}).
+</span></p></li>
+<li><p data-source-line="520" data-source-end-line="520">Curvature controls the gap between the curve and its tangent. The matching quadratic uses the curvature at an intermediate point.</p>
+<p><span class="math display">
+\begin{aligned}
+f(\textcolor{#073B4C}{x})-f(\textcolor{#A020F0}{a})-(\textcolor{#073B4C}{x}-\textcolor{#A020F0}{a})f'(\textcolor{#A020F0}{a})
+&amp;=\frac12 f''(\tilde x)(\textcolor{#073B4C}{x}-\textcolor{#A020F0}{a})^2\\
+&amp;\quad\text{where }\textcolor{#06D6A0}{\tilde x}\text{ lies between }\textcolor{#A020F0}{a}\text{ and }\textcolor{#073B4C}{x}.
+\end{aligned}
+</span></p></li>
+</ul>
+</section></section>
+<section>
+<section id="the-normal-is-universal" class="title-slide slide level1 center">
+<h1 data-source-line="530" data-source-end-line="530">The normal is universal</h1>
+
+</section>
+<section id="the-normal-is-stable" class="slide level2">
+<h2 data-source-line="532" data-source-end-line="532">The normal is stable</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-normal-stable-1.svg" style="width:100.0%" class="r-stretch" data-source-line="534" data-source-end-line="613"><ul>
+<li data-source-line="615" data-source-end-line="615">The average of normals is normal.</li>
+<li data-source-line="616" data-source-end-line="616">If averaging settles toward a shape, averaging again must leave that shape unchanged.
+<ul>
+<li data-source-line="617" data-source-end-line="617">The normal has that property. After standardizing, the bottom row stays the same.</li>
+<li data-source-line="618" data-source-end-line="618">Could this be why averages approach the normal?</li>
+</ul></li>
+</ul>
+</section>
+<section id="different-starting-distributions-approach-the-same-shape" class="slide level2">
+<h2 data-source-line="620" data-source-end-line="620">Averaging makes things normal</h2>
+
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-grid-3-1.svg" style="width:100.0%" class="r-stretch" data-source-line="622" data-source-end-line="629"><p>We look at standardized averages for three distributions. <span class="math display">
+W_n=\frac{\sum_{i=1}^n(Y_i-\mu)}{\sigma\sqrt n}=\sum_{i=1}^nX_i.
+</span></p>
+<ul>
+<li data-source-line="636" data-source-end-line="636">As we increase our sample size, the averages start to look more normal.</li>
+</ul>
+</section>
+<section id="how-well-show-this" class="slide level2 scrollable">
+<h2 data-source-line="638" data-source-end-line="638">How we’ll show this</h2>
+<ol type="1">
+<li data-source-line="640" data-source-end-line="640"><em>Characterization.</em> The normal’s signature is zero.</li>
+<li data-source-line="641" data-source-end-line="641"><em>Approximation.</em> Sums have signatures close to zero.</li>
+<li data-source-line="642" data-source-end-line="642"><em>Continuity.</em> Close signatures mean close distributions.</li>
+</ol>
+<div class="center">
+<p data-source-line="646" data-source-end-line="646">The same strategy works elsewhere</p>
+</div>
+<ol type="1">
+<li data-source-line="650" data-source-end-line="650">Find a property that identifies the object we want.</li>
+<li data-source-line="651" data-source-end-line="651">Show that our objects approximately have that property.</li>
+<li data-source-line="652" data-source-end-line="652">Show that approximately having the property makes them close to the object we want.</li>
+</ol>
+</section>
+<section id="wishful-thinking-a-strategy" class="slide level2">
+<h2 data-source-line="654" data-source-end-line="654">Wishful thinking: a strategy</h2>
+<p data-source-line="656" data-source-end-line="656">Wishful thinking gives us a next step before we can see the whole proof.</p>
+<ul>
+<li data-source-line="658" data-source-end-line="658">What do we want? What do we have? Can we make them the same thing?
+<ul>
+<li data-source-line="659" data-source-end-line="659">For standardization, we had <span class="math inline">Y</span> with mean <span class="math inline">\mu</span> and standard deviation <span class="math inline">\sigma</span>. We wanted mean zero and standard deviation one.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="661" data-source-end-line="667"><span class="math display">
+\underbrace{W=a+bY\ (b&gt;0)}_{\text{what we try}}
+\qquad
+\underbrace{a+b\mu=0\quad\text{and}\quad b\sigma=1}_{\text{what it must do}}
+\qquad\Longrightarrow\qquad
+W=\frac{Y-\mu}{\sigma}.
+</span></p>
+<ul>
+<li data-source-line="669" data-source-end-line="669">Writing down what it must do gives us equations. We solve them.
+<ul>
+<li data-source-line="670" data-source-end-line="670">Then we study the solutions to see whether they do what we need.</li>
+<li data-source-line="671" data-source-end-line="671">An explicit formula helps; even without one, existence and bounds can be enough.</li>
+</ul></li>
+<li data-source-line="672" data-source-end-line="672">We’ll use this strategy to connect differences in averages to signatures.
+<ul>
+<li data-source-line="673" data-source-end-line="673">This time our wish gives us a differential equation.</li>
+</ul></li>
+<li data-source-line="674" data-source-end-line="674">Once we have the connection, can we relax or simplify what remains?</li>
+</ul>
+</section></section>
+<section>
+<section id="characterization-the-normal-has-a-signature" class="title-slide slide level1 center">
+<h1 data-source-line="676" data-source-end-line="676">Characterization: The normal has a signature</h1>
+
+</section>
+<section id="what-is-its-signature" class="slide level2">
+<h2 data-source-line="678" data-source-end-line="678">What is its signature?</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-signature-integrands-1.svg" style="width:100.0%" class="r-stretch" data-source-line="680" data-source-end-line="719"><div class="center">
+
+<p data-source-line="722" data-source-end-line="726">The <span class="pollb">normal</span> satisfies this for every nice function <span class="math inline">u</span>. <span class="math display">
+\int \textcolor{#06D6A0}{\{u'(x)-xu(x)\}}\,\textcolor{#A020F0}{f_Z(x)}\,dx=0.
+</span> Not every <span class="pollb">distribution</span> does.</p>
+</div>
+</section>
+<section id="only-the-normal-has-this-signature" class="slide level2 nostretch">
+<h2 data-source-line="729" data-source-end-line="729">Only the normal has this signature</h2>
+
+<div class="cell" data-source-line="731" data-source-end-line="785">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-only-normal-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="center">
+
+<p data-source-line="789" data-source-end-line="797"><span class="math display">
+\begin{aligned}
+0 &amp;\overset{\mathtip{\small{\text{?}}}{\text{The defining signature is zero for every test function.}}}{=}\mathbb E\{u'(W)-Wu(W)\}\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Use linearity and write both expectations as density integrals.}}}{=}\int u'(x)f_W(x)\,dx-\int xu(x)f_W(x)\,dx\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Integrate the first term by parts; compact support of }u\text{ makes the boundary term zero.}}}{=}-\int u(x)f_W'(x)\,dx-\int xu(x)f_W(x)\,dx\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Factor }u(x)\text{ from the two integrands.}}}{=}-\int u(x)\{\textcolor{#118AB2}{f_W'(x)}+\textcolor{#EF476F}{xf_W(x)}\}\,dx.
+\end{aligned}
+</span> Because this is zero for every <span class="math inline">u</span>, the thing in brackets has to be zero.</p>
+
+<p data-source-line="799" data-source-end-line="805"><span class="math display">
+-\int u(x)\{\textcolor{#118AB2}{f_W'(x)}+\textcolor{#EF476F}{xf_W(x)}\}\,dx=0\quad\text{for every }u\qquad\overset{\mathtip{\small{\text{?}}}{\begin{gathered}
+\text{Take }u(x)=\textcolor{#118AB2}{f_W'(x)}+\textcolor{#EF476F}{xf_W(x)}.\\
+\text{Then the integral is }-\int\{\textcolor{#118AB2}{f_W'(x)}+\textcolor{#EF476F}{xf_W(x)}\}^2\,dx=0,\\
+\text{so the bracket is zero. Smooth cutoffs justify this test when needed.}
+\end{gathered}}}{\iff}\textcolor{#118AB2}{f_W'(x)}+\textcolor{#EF476F}{xf_W(x)}=0.
+</span></p>
+
+<p data-source-line="807" data-source-end-line="812">That gives us a differential equation. And the normal density solves it. <span class="math display">
+\textcolor{#118AB2}{f_W'(x)}\overset{\mathtip{\small{\text{?}}}{\text{Rearrange }f_W'(x)+xf_W(x)=0.}}{=}\textcolor{#EF476F}{-xf_W(x)}
+\qqtext{so} f_W(x)\overset{\mathtip{\small{\text{?}}}{\text{Solve the differential equation by separating variables and integrating.}}}{=}Ce^{-x^2/2}
+\qqtext{and} \int f_W\overset{\mathtip{\small{\text{?}}}{\text{A probability density has total integral one.}}}{=}1 \qqtext{gives} C\overset{\mathtip{\small{\text{?}}}{\text{Set the integral to one and solve for }C.}}{=}\frac1{\sqrt{2\pi}}.
+</span></p>
+</div>
+</section>
+<section id="solving-the-signature-equation" class="slide level2 nostretch">
+<h2 data-source-line="816" data-source-end-line="816">Solving the signature equation</h2>
+
+<div class="cell" data-source-line="818" data-source-end-line="825">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-only-normal-again-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="center">
+
+<p data-source-line="828" data-source-end-line="836">Divide by the density, and the left side is a derivative of a logarithm. <span class="math display">
+\begin{aligned}
+\textcolor{#118AB2}{f_W'(x)}&amp;=\textcolor{#EF476F}{-xf_W(x)}\\
+\frac{f_W'(x)}{f_W(x)}&amp;=-x\\
+\{\log f_W(x)\}'&amp;=-x\\
+\log f_W(x)&amp;=-\frac{x^2}{2}+c.
+\end{aligned}
+</span></p>
+<p data-source-line="838" data-source-end-line="838">How do we recover the density from its logarithm?</p>
+<div class="fragment">
+
+<p data-source-line="841" data-source-end-line="845">Exponentiate. The constant of integration becomes a factor, <span class="math inline">C=e^{c}</span>. <span class="math display">
+f_W(x)=Ce^{-x^2/2}.
+</span> How do we find the constant?</p>
+</div>
+<div class="fragment">
+
+<p data-source-line="849" data-source-end-line="856">A density integrates to one, which fixes it. <span class="math display">
+\begin{aligned}
+C &amp;= \frac{1}{\int_{-\infty}^{\infty}\exp(-x^2/2)\,dx}=\frac{1}{\sqrt{2\pi}}\\
+f_W(x) &amp;= C\exp(-x^2/2)=\frac{\exp(-x^2/2)}{\sqrt{2\pi}}.
+\end{aligned}
+</span> This is the standard normal density.</p>
+</div>
+</div>
+</section></section>
+<section>
+<section id="approximation-sums-almost-have-the-normal-signature" class="title-slide slide level1 center">
+<h1 data-source-line="860" data-source-end-line="860">Approximation: Sums almost have the normal signature</h1>
+
+</section>
+<section id="the-opening-examples-approach-the-normal-in-shape-and-signature" class="slide level2">
+<h2 data-source-line="862" data-source-end-line="862">Here’s the phenomenon we’re going to explain</h2>
+
+<div class="cell" data-source-line="864" data-source-end-line="898">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-signature-return-grid-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<div class="cell" data-source-line="899" data-source-end-line="922">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-signature-return-averages-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="center">
+<p data-source-line="926" data-source-end-line="926">As we increase our sample size, shapes get more normal, and the signature gets smaller.</p>
+
+<p data-source-line="928" data-source-end-line="932"><span class="math display">
+  \left|\mathbb E\{u'(\textcolor{#073B4C}{W_n})-\textcolor{#073B4C}{W_n}u(\textcolor{#073B4C}{W_n})\}\right|
+  \le\frac{M\mathbb E|Y_1-\mu|^3}{\sigma^3\sqrt n}
+  \quad\text{when }|u''|\le M.
+  </span></p>
+<p data-source-line="934" data-source-end-line="934">Now we’re gonna prove it.</p>
+</div>
+</section>
+<section id="linearization-and-the-normal-signature" class="slide level2 nostretch">
+<h2 data-source-line="938" data-source-end-line="938">Linearizing around Zero</h2>
+
+<div class="cell" data-source-line="940" data-source-end-line="946">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-copy-summands-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p data-source-line="948" data-source-end-line="948">The signature is the accumulated error of linearizing at zero change.</p>
+<ul>
+<li data-source-line="949" data-source-end-line="949">We want to show this when the responses are independent.</li>
+<li data-source-line="950" data-source-end-line="950">In each term, the change is <span class="math inline">\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'}</span>. The calculation on the next slide will show this exactly.</li>
+</ul></li>
+<li><p data-source-line="952" data-source-end-line="952">It’ll help to make each term small. To do that, we’ll subtract zero. We just have to write it the right way.</p></li>
+<li><p data-source-line="954" data-source-end-line="954">Swapping one contribution for an independent copy gives us the zero we need.</p>
+<p><span class="math display">
+\mathbb E\left\{\sum_i\textcolor{#073B4C}{X_i}u(\textcolor{#A020F0}{W_i'})\right\}
+\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\textcolor{#073B4C}{X_i}\text{ is independent of }\textcolor{#A020F0}{W_i'}.\\\mathbb E\textcolor{#073B4C}{X_i}=0.\end{gathered}}}{=}\sum_i\underbrace{\mathbb E\textcolor{#073B4C}{X_i}}_{0}
+  \,\mathbb E\{u(\textcolor{#A020F0}{W_i'})\}=0
+\quad\text{where }\textcolor{#A020F0}{W_i'}=\textcolor{#073B4C}{W}-\textcolor{#073B4C}{X_i}+\textcolor{#EF476F}{X_i'}.
+</span></p></li>
+<li><p data-source-line="963" data-source-end-line="963">Subtracting this zero leaves small differences. Their linear part gives the other half of the signature.</p>
+<p><span class="math display">
+\begin{aligned}
+\mathbb E\{\textcolor{#073B4C}{W}u(\textcolor{#073B4C}{W})\}
+&amp;=\mathbb E\{\textcolor{#073B4C}{W}u(\textcolor{#073B4C}{W})\}
+  -\underbrace{\mathbb E\left\{\sum_i\textcolor{#073B4C}{X_i}u(\textcolor{#A020F0}{W_i'})\right\}}_{0}\\
+&amp;=\sum_i\mathbb E\left[\textcolor{#073B4C}{X_i}\{u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})\}\right]\\
+&amp;\approx\sum_i\mathbb E\{\textcolor{#073B4C}{X_i}(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'})\}.
+\end{aligned}
+</span></p></li>
+<li><p data-source-line="975" data-source-end-line="975">How good is this approximation? Here <span class="math inline">\tilde W_i</span> lies between <span class="math inline">\textcolor{#A020F0}{W_i'}</span> and <span class="math inline">\textcolor{#073B4C}{W}</span>.</p>
+<p><span class="math display">
+\begin{aligned}
+u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})
+&amp;=(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'})\\
+&amp;\quad+\frac12u''(\tilde W_i)(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})^2.
+\end{aligned}
+</span></p></li>
+</ul>
+</section>
+<section id="after-averaging-the-linear-approximation-gives-the-signature-exactly" class="slide level2">
+<h2 data-source-line="985" data-source-end-line="985">The calculation</h2>
+<ul>
+<li data-source-line="987" data-source-end-line="987">The linear part averages to <span class="math inline">\mathbb E u'(\textcolor{#073B4C}{W})</span>. Only the Taylor errors remain.</li>
+</ul>
+
+<p data-source-line="989" data-source-end-line="1020"><span class="math display">
+\begin{aligned}
+\mathbb E\{\textcolor{#073B4C}{W}u(\textcolor{#073B4C}{W})\}
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Expand }\textcolor{#073B4C}{W}=\sum_i\textcolor{#073B4C}{X_i}\text{ and average the sum.}}}{=}
+\sum_i\mathbb E\{\textcolor{#073B4C}{X_i} u(\textcolor{#073B4C}{W})\}\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\text{Subtract zero: independence and centering give}\\
+\mathbb E\{\textcolor{#073B4C}{X_i} u(\textcolor{#A020F0}{W_i'})\}=\mathbb E \textcolor{#073B4C}{X_i}\,\mathbb E u(\textcolor{#A020F0}{W_i'})=0.\end{gathered}}}{=}
+\sum_i\mathbb E\left[\textcolor{#073B4C}{X_i}\{u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})\}\right]\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\text{Use the tangent at }\textcolor{#A020F0}{W_i'}:\\
+u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})\approx(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'}).\end{gathered}}}{\approx}
+\sum_i\mathbb E\{\textcolor{#073B4C}{X_i}(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'})\}\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'}=\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'}.}}{=}
+\sum_i\mathbb E\{\textcolor{#073B4C}{X_i}(\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'})u'(\textcolor{#A020F0}{W_i'})\}\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{Expand the product into two terms.}}}{=}
+\sum_i\left[\mathbb E\{\textcolor{#073B4C}{X_i}^2u'(\textcolor{#A020F0}{W_i'})\}
+-\mathbb E\{\textcolor{#073B4C}{X_i}\textcolor{#EF476F}{X_i'}u'(\textcolor{#A020F0}{W_i'})\}\right]\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\textcolor{#073B4C}{X_i}\text{ is independent of the pair }(\textcolor{#EF476F}{X_i'},\textcolor{#A020F0}{W_i'}).}}{=}
+\sum_i\left[\mathbb E(\textcolor{#073B4C}{X_i}^2)\,\mathbb E u'(\textcolor{#A020F0}{W_i'})
+-\mathbb E\textcolor{#073B4C}{X_i}\,\mathbb E\{\textcolor{#EF476F}{X_i'}u'(\textcolor{#A020F0}{W_i'})\}\right]\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\mathbb E\textcolor{#073B4C}{X_i}=0.}}{=}
+\sum_i\mathbb E(\textcolor{#073B4C}{X_i}^2)\,\mathbb E u'(\textcolor{#A020F0}{W_i'})\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\textcolor{#A020F0}{W_i'}\text{ and }\textcolor{#073B4C}{W}\text{ have the same distribution.}\\
+\text{The same function has the same expectation:}\\
+\mathbb E u'(\textcolor{#A020F0}{W_i'})=\mathbb E u'(\textcolor{#073B4C}{W}).\end{gathered}}}{=}
+\sum_i\mathbb E(\textcolor{#073B4C}{X_i}^2)\,\mathbb E u'(\textcolor{#073B4C}{W})\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\text{The expectation of the same function of }\textcolor{#073B4C}{W}\text{ is common to every term.}}}{=}
+\left\{\sum_i\mathbb E(\textcolor{#073B4C}{X_i}^2)\right\}\mathbb E u'(\textcolor{#073B4C}{W})\\
+&amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\text{The centered contributions' variances sum to one:}\\
+\sum_i\mathbb E(\textcolor{#073B4C}{X_i}^2)=1.\end{gathered}}}{=}
+\mathbb E u'(\textcolor{#073B4C}{W}).
+\end{aligned}
+</span></p>
+<div class="center">
+
+<p data-source-line="1024" data-source-end-line="1030">The signature is the error of this approximation. <span class="math display">
+\mathbb E\{u'(\textcolor{#073B4C}{W})-\textcolor{#073B4C}{W}u(\textcolor{#073B4C}{W})\}
+=-\sum_i\mathbb E(\textcolor{#073B4C}{X_i}r_i)
+\qwhere
+r_i=u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})-(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'}).
+</span></p>
+</div>
+</section>
+<section id="if-every-piece-is-small-so-is-the-error" class="slide level2">
+<h2 data-source-line="1034" data-source-end-line="1034">Bounding the remainder</h2>
+<ul>
+<li data-source-line="1036" data-source-end-line="1036">One swap gives a quadratic remainder. Here <span class="math inline">\tilde W_i</span> lies between <span class="math inline">\textcolor{#A020F0}{W_i'}</span> and <span class="math inline">\textcolor{#073B4C}{W}</span>.</li>
+</ul>
+
+<p data-source-line="1038" data-source-end-line="1048"><span class="math display">
+\begin{aligned}
+  r_i&amp;=u(\textcolor{#073B4C}{W})-u(\textcolor{#A020F0}{W_i'})
+    -(\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'})u'(\textcolor{#A020F0}{W_i'})\\
+  &amp;=\frac12u''(\tilde W_i)(\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'})^2
+  \quad\text{where }\textcolor{#073B4C}{W}-\textcolor{#A020F0}{W_i'}=\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'}.
+  \\
+|r_i|&amp;\le\frac M2(\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'})^2
+  \quad\text{when }|u''|\le M.
+\end{aligned}
+</span></p>
+<ul>
+<li data-source-line="1050" data-source-end-line="1050">The signature weights each remainder by one contribution. That is why third moments appear.
+<ul>
+<li data-source-line="1051" data-source-end-line="1051">The swap tool bounds each term. Identical distributions then give the factor <span class="math inline">n/n^{3/2}</span>.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1053" data-source-end-line="1065"><span class="math display">
+\begin{aligned}
+  \left|\mathbb E\{u'(\textcolor{#073B4C}{W})-\textcolor{#073B4C}{W}u(\textcolor{#073B4C}{W})\}\right|
+  &amp;\overset{\mathtip{\small{\text{?}}}{\text{Take absolute values inside the sum and expectation.}}}{\le}\sum_i\mathbb E|\textcolor{#073B4C}{X_i}r_i|\\
+  &amp;\overset{\mathtip{\small{\text{?}}}{\text{Apply the Taylor error bound to each remainder.}}}{\le}\frac M2\sum_i\mathbb E\{|\textcolor{#073B4C}{X_i}|(\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'})^2\}\\
+  &amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\text{Use the swap bound from Tools:}\\\mathbb E\{|\textcolor{#073B4C}{X_i}|(\textcolor{#073B4C}{X_i}-\textcolor{#EF476F}{X_i'})^2\}\le 2\mathbb E|\textcolor{#073B4C}{X_i}|^3.\end{gathered}}}{\le}M\sum_i\mathbb E|\textcolor{#073B4C}{X_i}|^3\\
+  &amp;\overset{\mathtip{\small{\text{?}}}{\begin{gathered}\text{The contributions have identical distributions.}\\\textcolor{#073B4C}{X_i}=\textcolor{#073B4C}{(Y_i-\mu)/(\sigma\sqrt n)}.\end{gathered}}}{=}M\textcolor{#118AB2}{n}\,
+    \mathbb E\left|\textcolor{#073B4C}{\frac{Y_1-\mu}{\sigma\sqrt n}}\right|^3\\
+  &amp;\overset{\mathtip{\small{\text{?}}}{\text{Cube the scale factor }1/(\sigma\sqrt n).}}{=}M\frac{\textcolor{#118AB2}{n}}{n^{3/2}}
+    \frac{\mathbb E|Y_1-\mu|^3}{\sigma^3}\\
+  &amp;\overset{\mathtip{\small{\text{?}}}{n/n^{3/2}=1/\sqrt n.}}{=}\frac{M\mathbb E|Y_1-\mu|^3}{\sigma^3\sqrt n}.
+  \end{aligned}
+</span></p>
+<ul>
+<li data-source-line="1067" data-source-end-line="1067">This bound tends to zero when the absolute third centered moment is finite. A larger third moment gives a larger bound.
+<ul>
+<li data-source-line="1068" data-source-end-line="1068">The sum-of-moments bound also applies to independent contributions with different distributions.</li>
+</ul></li>
+</ul>
+<div class="center">
+<p data-source-line="1072" data-source-end-line="1072">How does a small signature bound the distance from normal?</p>
+</div>
+</section></section>
+<section>
+<section id="continuity-if-signatures-are-close-so-are-distributions" class="title-slide slide level1 center">
+<h1 data-source-line="1076" data-source-end-line="1076">Continuity: If signatures are close, so are distributions</h1>
+
+</section>
+<section id="the-bound-well-show" class="slide level2">
+<h2 data-source-line="1078" data-source-end-line="1078">The bound</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/distance-sums-and-signatures-1.svg" style="width:100.0%" class="r-stretch" data-source-line="1080" data-source-end-line="1125"><ul>
+<li data-source-line="1127" data-source-end-line="1127">We measure distance by the largest difference between averages of functions with slope bounded by one.
+<ul>
+<li data-source-line="1128" data-source-end-line="1128">Such functions give nearby outcomes nearby values: <span class="math inline">|h(x)-h(y)|\le|x-y|</span>.</li>
+<li data-source-line="1129" data-source-end-line="1129">We’ll write this condition as <span class="math inline">|h'|\le1</span>, allowing corners.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1131" data-source-end-line="1134"><span class="math display">
+\textcolor{#118AB2}{d(W,Z)}=\max_{|h'|\le1}
+|\mathbb E h(W)-\mathbb E h(Z)|.
+</span></p>
+<div id="distance-opening">
+<ul>
+<li data-source-line="1138" data-source-end-line="1138">Why this distance? It’s continuous with respect to the signature.
+<ul>
+<li data-source-line="1139" data-source-end-line="1139">The distance goes to zero when the signature goes to zero uniformly.</li>
+<li data-source-line="1140" data-source-end-line="1140">Uniformly means over all functions with curvature at most two.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1142" data-source-end-line="1145"><span class="math display">
+\textcolor{#118AB2}{d(W,Z)}\le\textcolor{#EF476F}{\max_{|u''|\le 2}
+\left|\mathbb E\{u'(W)-Wu(W)\}\right|}.
+</span></p>
+</div>
+<ul>
+<li data-source-line="1149" data-source-end-line="1149">It’s a pretty reasonable distance too. We’ll see.</li>
+</ul>
+</section>
+<section id="for-any-allowed-h-the-normals-signature-can-compare-its-two-averages" class="slide level2">
+<h2 data-source-line="1151" data-source-end-line="1151">Why it holds</h2>
+
+<div class="cell" data-source-line="1153" data-source-end-line="1167">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-bridge-densities-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<div class="cell" data-source-line="1169" data-source-end-line="1203">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-bridges-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p data-source-line="1205" data-source-end-line="1205">We want to bound differences in averages. We have a bound on signatures.</p>
+<ul>
+<li data-source-line="1206" data-source-end-line="1206">Wishful thinking: make each difference a signature.</li>
+</ul></li>
+<li><p data-source-line="1207" data-source-end-line="1207">For each <span class="math inline">\textcolor{#06D6A0}{h}</span> with <span class="math inline">|h'|\le1</span>, what would a matching <span class="math inline">\textcolor{#A020F0}{u_h}</span> have to do?</p>
+<p><span class="math display">
+\textcolor{#A020F0}{u_h'}(x)-x\textcolor{#A020F0}{u_h}(x)=\textcolor{#06D6A0}{h}(x)-\mathbb E\textcolor{#06D6A0}{h}(Z).
+</span></p>
+<ul>
+<li data-source-line="1213" data-source-end-line="1213">Substitute <span class="math inline">W</span> for <span class="math inline">x</span> and average. The two sides are exactly the quantities we wanted to connect.</li>
+</ul></li>
+<li><p data-source-line="1215" data-source-end-line="1215">Solving gives us the match, with the curvature bound we need.</p>
+<p><span class="math display">
+\textcolor{#A020F0}{u_h}(x)=\frac{1}{f_Z(x)}
+\int_{-\infty}^{x}\{\textcolor{#06D6A0}{h}(t)-\mathbb E\textcolor{#06D6A0}{h}(Z)\}f_Z(t)\,dt
+\quad\text{and}\quad |\textcolor{#A020F0}{u_h''}|\le2.
+</span></p>
+<ul>
+<li data-source-line="1223" data-source-end-line="1223">We can check the solution by differentiating it.</li>
+<li data-source-line="1224" data-source-end-line="1224">And we can get the curvature bound from the differential equation.</li>
+</ul></li>
+<li><p data-source-line="1226" data-source-end-line="1226">Now we can simplify: maximize over all functions with curvature at most two.</p>
+<ul>
+<li data-source-line="1227" data-source-end-line="1227">Every match is included, so the maximum can only increase.</li>
+</ul>
+<p><span class="math display">
+\begin{aligned}
+d(W,Z)
+&amp;=\max_{|h'|\le1}\left|\mathbb E\{\textcolor{#A020F0}{u_h'}(W)-W\textcolor{#A020F0}{u_h}(W)\}\right|\\
+&amp;\le\max_{|u''|\le2}\left|\mathbb E\{u'(W)-Wu(W)\}\right|.
+\end{aligned}
+</span></p></li>
+</ul>
+</section>
+<section id="what-counts-as-close-depends-on-which-averages" class="slide level2">
+<h2 data-source-line="1237" data-source-end-line="1237">Why this distance?</h2>
+<div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1243" data-source-end-line="1295">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-allowed-curves-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded height doesn’t work.</strong> </p>
+<ul>
+<li data-source-line="1297" data-source-end-line="1297">There are functions with <span class="math inline">|h|\le1</span> that distinguish a discrete distribution from a continuous one.
+<ul>
+<li data-source-line="1300" data-source-end-line="1300">These spikes reach one at every possible outcome of <span class="math inline">W</span>.</li>
+<li data-source-line="1301" data-source-end-line="1301">Making them thinner leaves their average under <span class="math inline">W</span> at one.</li>
+<li data-source-line="1302" data-source-end-line="1302">Their average under the normal <span class="math inline">Z</span> goes to zero.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1304" data-source-end-line="1309"><span class="math display">
+\begin{aligned}
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;=\sum_w h(w)\mathbb P(W=w)=1,\\
+\textcolor{#EF476F}{\mathbb E h(Z)}&amp;=\int_{-\infty}^{\infty}h(x)f_Z(x)\,dx\longrightarrow0.
+\end{aligned}
+</span></p>
+</div>
+<div class="fragment current-visible" data-fragment-index="0" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1315" data-source-end-line="1321">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-height-2-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded height doesn’t work.</strong> </p>
+<ul>
+<li data-source-line="1323" data-source-end-line="1323">There are functions with <span class="math inline">|h|\le1</span> that distinguish a discrete distribution from a continuous one.
+<ul>
+<li data-source-line="1326" data-source-end-line="1326">These spikes reach one at every possible outcome of <span class="math inline">W</span>.</li>
+<li data-source-line="1327" data-source-end-line="1327">Making them thinner leaves their average under <span class="math inline">W</span> at one.</li>
+<li data-source-line="1328" data-source-end-line="1328">Their average under the normal <span class="math inline">Z</span> goes to zero.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1330" data-source-end-line="1335"><span class="math display">
+\begin{aligned}
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;=\sum_w h(w)\mathbb P(W=w)=1,\\
+\textcolor{#EF476F}{\mathbb E h(Z)}&amp;=\int_{-\infty}^{\infty}h(x)f_Z(x)\,dx\longrightarrow0.
+\end{aligned}
+</span></p>
+</div>
+<div class="fragment current-visible" data-fragment-index="1" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1341" data-source-end-line="1347">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-height-3-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded height doesn’t work.</strong> </p>
+<ul>
+<li data-source-line="1349" data-source-end-line="1349">There are functions with <span class="math inline">|h|\le1</span> that distinguish a discrete distribution from a continuous one.
+<ul>
+<li data-source-line="1352" data-source-end-line="1352">These spikes reach one at every possible outcome of <span class="math inline">W</span>.</li>
+<li data-source-line="1353" data-source-end-line="1353">Making them thinner leaves their average under <span class="math inline">W</span> at one.</li>
+<li data-source-line="1354" data-source-end-line="1354">Their average under the normal <span class="math inline">Z</span> goes to zero.</li>
+</ul></li>
+</ul>
+
+<p data-source-line="1356" data-source-end-line="1361"><span class="math display">
+\begin{aligned}
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;=\sum_w h(w)\mathbb P(W=w)=1,\\
+\textcolor{#EF476F}{\mathbb E h(Z)}&amp;=\int_{-\infty}^{\infty}h(x)f_Z(x)\,dx\longrightarrow0.
+\end{aligned}
+</span></p>
+</div>
+<div class="fragment current-visible" data-fragment-index="2" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1367" data-source-end-line="1373">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-allowed-slope-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded slope does work.</strong> </p>
+<ul>
+<li data-source-line="1375" data-source-end-line="1375">A function with bounded slope must give nearby outcomes nearby values.
+<ul>
+<li data-source-line="1378" data-source-end-line="1378">Even at the original width, the tents have to be shallow. Their averages under both <span class="math inline">W</span> and <span class="math inline">Z</span> are small.</li>
+</ul></li>
+<li data-source-line="1380" data-source-end-line="1380">A small move in outcomes changes the average of any allowed function only a little.</li>
+<li data-source-line="1381" data-source-end-line="1381">That lets a discrete distribution approach a continuous one in this distance.</li>
+</ul>
+
+<p data-source-line="1383" data-source-end-line="1387"><span class="math display">
+|h'|\le1
+\quad\Longrightarrow\quad
+\left|\frac{h(x)-h(y)}{x-y}\right|\le1.
+</span></p>
+</div>
+<div class="fragment current-visible" data-fragment-index="3" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1393" data-source-end-line="1427">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-slope-examples-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded slope does work.</strong> </p>
+<ul>
+<li data-source-line="1429" data-source-end-line="1429">These functions give nearly the same average under <span class="math inline">W</span> and <span class="math inline">Z</span>.</li>
+</ul>
+
+<p data-source-line="1433" data-source-end-line="1438"><span class="math display">
+\begin{aligned}
+h(x)&amp;=x,\quad\text{with }|h'|\le1,\\
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;\approx\textcolor{#EF476F}{\mathbb E h(Z)}.
+\end{aligned}
+</span></p>
+</div>
+<div class="fragment current-visible" data-fragment-index="4" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1444" data-source-end-line="1450">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-slope-example-2-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded slope does work.</strong> </p>
+<ul>
+<li data-source-line="1452" data-source-end-line="1452">These functions give nearly the same average under <span class="math inline">W</span> and <span class="math inline">Z</span>.</li>
+</ul>
+
+<p data-source-line="1456" data-source-end-line="1461"><span class="math display">
+\begin{aligned}
+h(x)&amp;=|x|,\quad\text{with }|h'|\le1,\\
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;\approx\textcolor{#EF476F}{\mathbb E h(Z)}.
+\end{aligned}
+</span></p>
+</div>
+<div class="fragment fade-in" data-fragment-index="5" style="width:100%;margin:0;align-self:start">
+
+<div class="cell" data-source-line="1467" data-source-end-line="1473">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/na-slope-example-3-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Bounded slope does work.</strong> </p>
+<ul>
+<li data-source-line="1475" data-source-end-line="1475">These functions give nearly the same average under <span class="math inline">W</span> and <span class="math inline">Z</span>.</li>
+</ul>
+
+<p data-source-line="1479" data-source-end-line="1484"><span class="math display">
+\begin{aligned}
+h(x)&amp;=\sin x,\quad\text{with }|h'|\le1,\\
+\textcolor{#118AB2}{\mathbb E h(W)}&amp;\approx\textcolor{#EF476F}{\mathbb E h(Z)}.
+\end{aligned}
+</span></p>
+</div>
+</div>
+</section>
+<section id="distance-characterization" class="slide level2">
+<h2 data-source-line="1490" data-source-end-line="1490">Visualizing our distance</h2>
+
+
+<img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/distance-two-cdfs-1.svg" style="width:100.0%" class="r-stretch" data-source-line="1492" data-source-end-line="1511"><div class="center">
+<p data-source-line="1515" data-source-end-line="1515">The distance is the area between the CDFs. We get this by integrating by parts.</p>
+</div>
+
+<p data-source-line="1519" data-source-end-line="1533"><span class="math display">
+\begin{aligned}
+d(W,Z)
+&amp;=\max_{|h'|\le1}|\mathbb E h(W)-\mathbb E h(Z)|\\
+&amp;=\max_{|h'|\le1}\left|\int_{-\infty}^{\infty}h(x)\{\textcolor{#118ab2}{f_W(x)}-\textcolor{#ef476f}{f_Z(x)}\}\,dx\right|\\
+&amp;=\max_{|h'|\le1}\left|\int_{-\infty}^{\infty}h'(x)\{\textcolor{#ef476f}{F_Z(x)}-\textcolor{#118ab2}{F_W(x)}\}\,dx\right|
+\quad\text{where }\textcolor{#ef476f}{F_Z(x)}=\int_{-\infty}^{x}\textcolor{#ef476f}{f_Z(t)}\,dt\\
+&amp;=\left|\int_{-\infty}^{\infty}h'(x)\{\textcolor{#ef476f}{F_Z(x)}-\textcolor{#118ab2}{F_W(x)}\}\,dx\right|
+\quad\text{for }h'(x)=\begin{cases}
++1&amp;\text{if }\textcolor{#ef476f}{F_Z(x)}-\textcolor{#118ab2}{F_W(x)}\ge0,\\
+-1&amp;\text{if }\textcolor{#ef476f}{F_Z(x)}-\textcolor{#118ab2}{F_W(x)}&lt;0
+\end{cases}\\
+&amp;=\int_{-\infty}^{\infty}|\textcolor{#ef476f}{F_Z(x)}-\textcolor{#118ab2}{F_W(x)}|\,dx.
+\end{aligned}
+</span></p>
+<div class="footnotestyle">
+<p data-source-line="1537" data-source-end-line="1537">We used densities here. This all works for distributions without densities—such as discrete distributions—but it requires a few extra steps or familiarity with some new ideas.</p>
+</div>
+</section></section>
+<section id="summary" class="title-slide slide level1 nostretch center scrollable">
+<h1 data-source-line="1541" data-source-end-line="1541">Summary</h1>
+
+<div class="cell" data-source-line="1543" data-source-end-line="1589">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="chapter-normal-approximation-proof-slides_files/figure-revealjs/summary-distance-and-final-bound-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+
+<p data-source-line="1591" data-source-end-line="1596">When <span class="math inline">Y_1\ldots Y_n</span> are independent responses drawn from the same distribution, with mean <span class="math inline">\mu</span> and variance <span class="math inline">\sigma^2</span>, <span class="math display">
+\small{
+W_n=\frac{\sum_{i=1}^n(Y_i-\mu)}{\sigma\sqrt n}\quad\text{satisfies}\quad d(W_n,Z)\le\frac{2\mathbb E|Y_1-\mu|^3}{\sigma^3\sqrt n}\quad\text{where }d(W,Z)=\max_{|h'|\le1}|\mathbb E h(W)-\mathbb E h(Z)|.
+}
+</span></p>
+<div class="center">
+<p data-source-line="1600" data-source-end-line="1600">How did we prove it?</p>
+</div>
+<ol type="1">
+<li><em>Characterization.</em> Only the normal has zero signature for every test function. <span class="math display">
+\mathbb E\{u'(W)-Wu(W)\}=0\ \text{ for every }u
+\quad\Longrightarrow\quad
+f_W'(x)=-xf_W(x)
+\quad\Longrightarrow\quad
+f_W(x)=\frac{e^{-x^2/2}}{\sqrt{2\pi}}.
+</span></li>
+<li><em>Approximation.</em> Sums have signatures close to zero. <span class="math display">
+\left|\mathbb E\{u'(W_n)-W_nu(W_n)\}\right|\le
+\frac{M\mathbb E|Y_1-\mu|^3}{\sigma^3\sqrt n}
+\qquad\text{when }|u''|\le M.
+</span></li>
+<li><em>Continuity.</em> Close signatures mean close distributions. <span class="math display">
+d(W_n,Z)\le\max_{|u''|\le2}
+\left|\mathbb E\{u'(W_n)-W_nu(W_n)\}\right|.
+</span></li>
+</ol>
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="chapter-normal-approximation-proof-slides_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': true,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1290,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 2.0e-2,
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../../..";
+    window._ojs.paths.docToRoot = "..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const xrefs = window.document.querySelectorAll('a.quarto-xref');
+        const processXRef = (id, note) => {
+          // Strip column container classes
+          const stripColumnClz = (el) => {
+            el.classList.remove("page-full", "page-columns");
+            if (el.children) {
+              for (const child of el.children) {
+                stripColumnClz(child);
+              }
+            }
+          }
+          stripColumnClz(note)
+          if (id === null || id.startsWith('sec-')) {
+            // Special case sections, only their first couple elements
+            const container = document.createElement("div");
+            if (note.children && note.children.length > 2) {
+              container.appendChild(note.children[0].cloneNode(true));
+              for (let i = 1; i < note.children.length; i++) {
+                const child = note.children[i];
+                if (child.tagName === "P" && child.innerText === "") {
+                  continue;
+                } else {
+                  container.appendChild(child.cloneNode(true));
+                  break;
+                }
+              }
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(container);
+              }
+              return container.innerHTML
+            } else {
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(note);
+              }
+              return note.innerHTML;
+            }
+          } else {
+            // Remove any anchor links if they are present
+            const anchorLink = note.querySelector('a.anchorjs-link');
+            if (anchorLink) {
+              anchorLink.remove();
+            }
+            if (window.Quarto?.typesetMath) {
+              window.Quarto.typesetMath(note);
+            }
+            if (note.classList.contains("callout")) {
+              return note.outerHTML;
+            } else {
+              return note.innerHTML;
+            }
+          }
+        }
+        for (var i=0; i<xrefs.length; i++) {
+          const xref = xrefs[i];
+          tippyHover(xref, undefined, function(instance) {
+            instance.disable();
+            let url = xref.getAttribute('href');
+            let hash = undefined; 
+            if (url.startsWith('#')) {
+              hash = url;
+            } else {
+              try { hash = new URL(url).hash; } catch {}
+            }
+            if (hash) {
+              const id = hash.replace(/^#\/?/, "");
+              const note = window.document.getElementById(id);
+              if (note !== null) {
+                try {
+                  const html = processXRef(id, note.cloneNode(true));
+                  instance.setContent(html);
+                } finally {
+                  instance.enable();
+                  instance.show();
+                }
+              } else {
+                // See if we can fetch this
+                fetch(url.split('#')[0])
+                .then(res => res.text())
+                .then(html => {
+                  const parser = new DOMParser();
+                  const htmlDoc = parser.parseFromString(html, "text/html");
+                  const note = htmlDoc.getElementById(id);
+                  if (note !== null) {
+                    const html = processXRef(id, note);
+                    instance.setContent(html);
+                  } 
+                }).finally(() => {
+                  instance.enable();
+                  instance.show();
+                });
+              }
+            } else {
+              // See if we can fetch a full url (with no hash to target)
+              // This is a special case and we should probably do some content thinning / targeting
+              fetch(url)
+              .then(res => res.text())
+              .then(html => {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(html, "text/html");
+                const note = htmlDoc.querySelector('main.content');
+                if (note !== null) {
+                  // This should only happen for chapter cross references
+                  // (since there is no id in the URL)
+                  // remove the first header
+                  if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                    note.children[0].remove();
+                  }
+                  const html = processXRef(null, note);
+                  instance.setContent(html);
+                } 
+              }).finally(() => {
+                instance.enable();
+                instance.show();
+              });
+            }
+          }, function(instance) {
+          });
+        }
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
