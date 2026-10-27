@@ -165,6 +165,16 @@
       }
     },
     {
+      "file": "homework/homework-random-variables-and-moments-solutions.html",
+      "title": "Homework — Random Variables, Moments, and the Standard Deviation",
+      "variant": "solutions",
+      "source": {
+        "type": "project-source",
+        "format": "qmd",
+        "file": "homework/homework-random-variables-and-moments.qmd"
+      }
+    },
+    {
       "file": "chapters/chapter-standard-deviation.html",
       "title": "The Standard Deviation is Standard",
       "source": {
