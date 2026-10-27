@@ -1,0 +1,1682 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="georgia-oct29_files/libs/clipboard/clipboard.min.js"></script>
+<script src="georgia-oct29_files/libs/quarto-html/tabby.min.js"></script>
+<script src="georgia-oct29_files/libs/quarto-html/popper.min.js"></script>
+<script src="georgia-oct29_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="georgia-oct29_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="georgia-oct29_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="georgia-oct29_files/libs/quarto-html/quarto-syntax-highlighting-2580600059c70f820f905c63c19e7fd5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="georgia-oct29_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="georgia-oct29_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.38">
+
+  <title>Georgia Turnout: How Precise Is a Difference? — working draft</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="georgia-oct29_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="georgia-oct29_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="georgia-oct29_files/libs/revealjs/dist/theme/quarto-dadc5e30687f5fea6d7a7b1168a05c4c.css">
+  <link href="georgia-oct29_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="georgia-oct29_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script type="module" src="georgia-oct29_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+  <link href="georgia-oct29_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+  <link href="georgia-oct29_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+  <script src="georgia-oct29_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+  <script>
+  // GENERATED by bin/generate-katex-macros.mjs from the tlda repo's
+  // shared/katex-base-macros.mjs. Do not edit here -- edit the source and
+  // re-run the generator, or the two copies drift and the book renders
+  // different mathematics from the app.
+  //
+  // Course-side entries below are NOT generated and NOT in the tlda
+  // source: \rmse, \MSE, \class, \texttip, \mathtip, \unicode. Edit them here.
+
+  // Universal KaTeX base macros — given to everybody, superseded by a paper's own
+  // extracted definitions.
+  //
+  // KaTeX has NO `\usepackage` mechanism and ships only a fixed built-in macro set
+  // (plus the mhchem contrib). So commands provided by the LaTeX `physics` package
+  // — \qty, \norm, \abs, \grad, the \q… text helpers, etc. — are unknown to KaTeX
+  // unless we define them. This file is that physics.sty → KaTeX port.
+  //
+  // It contains ONLY commands that live in a package (nothing a paper writes in its
+  // own preamble). Paper-specific macros (\chis, \hgamma, \dzetase, …) come from the
+  // build's `*-macros.json` extraction and override anything here via merge order:
+  //   { ...baseMacros, ...extractedPaperMacros }
+  //
+  // Single source of truth: imported by the browser renderer (src/katexMacros.ts)
+  // and the server-side chat linter (mcp-server/fleet-tools.mjs).
+
+  // Bare is fixed, starred stretches. KaTeX has no \DeclarePairedDelimiter and no
+  // \@ifstar, so the star is read here by peeking at the next token.
+  function pairedDelimiter(open, close) {
+    return (ctx) => {
+      const next = ctx.future()
+      if (next && next.text === "*") {
+        ctx.popToken()
+        return `\\left${open}#1\\right${close}`
+      }
+      return `${open}#1${close}`
+    }
+  }
+
+  // TeX source of a consumed group, spaces intact. Token texts alone lose
+  // whitespace (the lexer skips it); the token offsets recover it exactly.
+  // Falls back to joined texts if the lexer internals ever move.
+  function groupSource(toks) {
+    const first = toks[toks.length - 1];
+    const last = toks[0];
+    const input = first && first.loc && first.loc.lexer && first.loc.lexer.input;
+    if (typeof input === 'string' && first.loc.start != null && last.loc.end != null) {
+      return input.slice(first.loc.start, last.loc.end);
+    }
+    return toks.map((t) => t.text).reverse().join('');
+  }
+
+  // Tip payload encoding for the hover script below. The tip TeX travels
+  // in an htmlData attribute, whose values split on commas and take no
+  // escapes, so raw TeX cannot ride there. Unpadded base64url carries
+  // arbitrary TeX (dollars, commas, braces, backslashes) in [A-Za-z0-9-_].
+  function tipEncode(str) {
+    const bytes = new TextEncoder().encode(str)
+    let bin = ''
+    bytes.forEach((b) => { bin += String.fromCharCode(b) })
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
+
+  // The one trust rule for course math. KaTeX gates its html extension
+  // (\htmlClass, \htmlData, \htmlId, \htmlStyle, \href, \url,
+  // \includegraphics) on this callback; anything it rejects renders as
+  // an unsupported-command error rather than HTML. Only the commands
+  // our own macros emit are admitted, and only in the shapes they emit:
+  // fragment classes, lone data-tip attributes, and data-tip plus a
+  // data-mode of math (the mathtip marker). Strict is untouched.
+  function tldaTrust(ctx) {
+    if (ctx.command === '\\htmlClass') {
+      return typeof ctx.class === 'string' &&
+        ctx.class.split(/\s+/).every((c) => c === 'fragment')
+    }
+    if (ctx.command === '\\htmlData') {
+      const attrs = ctx.attributes || {}
+      const keys = Object.keys(attrs)
+      // Numeric fragment grouping only: exactly that one attribute, digits
+      // only. Deliberately not a general data-* admission.
+      if (keys.length === 1 && keys[0] === 'data-fragment-index') {
+        return /^\d+$/.test(String(attrs['data-fragment-index']))
+      }
+      return keys.length <= 2 &&
+        ('data-tip' in attrs) &&
+        keys.every((k) => k === 'data-tip' || k === 'data-mode') &&
+        (!('data-mode' in attrs) || attrs['data-mode'] === 'math')
+    }
+    return false
+  }
+  window.__tldaKatexMacros = {
+    // physics: text spacers (\q… family)
+    "\\qq": "\\quad\\text{#1}\\quad",
+    // physics spells this one both ways and the long form is the one the course
+    // actually writes -- 358 uses against \qq's handful. It was absent here, so a
+    // course moving to KaTeX would have lost all 358 SILENTLY: an undefined macro
+    // renders as literal text with a clean console. Same expansion as \qq; they
+    // are the same command in physics.
+    "\\qqtext": "\\quad\\text{#1}\\quad",
+    "\\qwhere": "\\quad\\text{where}\\quad",
+    "\\qfor": "\\quad\\text{for}\\quad",
+    "\\qand": "\\quad\\text{and}\\quad",
+    "\\qor": "\\quad\\text{or}\\quad",
+    "\\qthen": "\\quad\\text{then}\\quad",
+    "\\qif": "\\quad\\text{if}\\quad",
+    "\\qelse": "\\quad\\text{else}\\quad",
+    "\\qotherwise": "\\quad\\text{otherwise}\\quad",
+    "\\qgiven": "\\quad\\text{given}\\quad",
+    "\\qall": "\\quad\\text{for all}\\quad",
+    "\\qsince": "\\quad\\text{since}\\quad",
+    "\\qlet": "\\quad\\text{let}\\quad",
+    "\\qimplies": "\\quad\\Rightarrow\\quad",
+    "\\qas": "\\quad\\text{as}\\quad",
+    "\\qc": ",",
+
+    // physics: delimiters & operators
+    // \qty dispatches on its delimiter: \qty(x) → (x), \qty[x] → [x], and
+    // \qty{x} keeps visible braces. The old "" no-op was exact for parens and
+    // brackets but dropped the curlies — 288 such sites in the course, rendering
+    // bare content where physics puts braces. KaTeX binds the following group to
+    // #1 once the expansion names it, so only the curly branch needs one.
+    "\\qty": (ctx) => {
+      const next = ctx.future();
+      if (next && next.text === '{') {
+        return '\\left\\{#1\\right\\}';
+      }
+      return '';
+    },
+    "\\abs": "\\left|#1\\right|",
+    "\\norm": "\\left\\|#1\\right\\|",
+    "\\eval": "\\left.#1\\right|",
+    "\\order": "\\mathcal{O}\\left(#1\\right)",
+    "\\dv": "\\frac{d#1}{d#2}",
+    "\\pdv": "\\frac{\\partial #1}{\\partial #2}",
+    "\\fdv": "\\frac{\\delta #1}{\\delta #2}",
+    "\\bra": "\\left\\langle #1\\right|",
+    "\\ket": "\\left|#1\\right\\rangle",
+    "\\braket": "\\left\\langle #1\\middle|#2\\right\\rangle",
+    "\\expval": "\\left\\langle #1\\right\\rangle",
+    "\\ev": "\\left\\langle #1\\right\\rangle",
+    "\\comm": "\\left[#1,\\,#2\\right]",
+    "\\acomm": "\\left\\{#1,\\,#2\\right\\}",
+    "\\vb": "\\mathbf{#1}",
+    "\\vbu": "\\hat{#1}",
+    "\\grad": "\\nabla",
+    "\\curl": "\\nabla\\times",
+    // physics defines \cross and this port had omitted it, so it would have gone
+    // silently literal at the renderer switch. Found by the used-minus-defined
+    // gate rather than by anyone noticing a formula.
+    "\\cross": "\\times",
+    // Course shorthands that arrive undefined: single-use spellings, each with one
+    // meaning in the tree. Defined here (not edited at the call sites) per the
+    // course owner's call — the call sites render literal-or-red without them,
+    // and these restore the evidently intended mathematics.
+    "\\rmse": "\\operatorname{rmse}",
+    "\\MSE": "\\operatorname{MSE}",
+    // reveal.js fragment wrapper. Emits a real fragment class so reveal
+    // steps the content on decks; in the book the span is inert (no
+    // reveal runtime, no fragment styling) and the content reads as
+    // before. Any other class name falls back to bare content.
+    "\\class": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      const cls = groupSource(args[0]).trim();
+      if (cls === 'fragment') {
+        return '\\htmlClass{fragment}{' + groupSource(args[1]) + '}';
+      }
+      // fragment=N puts both cells of an aligned row in one reveal step:
+      // reveal groups fragments sharing a data-fragment-index. KaTeX emits
+      // htmlClass and htmlData on separate nested spans, so the index is
+      // carried here and the fragment class is added after render, below.
+      const grouped = cls.match(/^fragment=(\d+)$/);
+      if (grouped) {
+        return '\\htmlData{fragment-index=' + grouped[1] + '}{' + groupSource(args[1]) + '}';
+      }
+      ctx.pushTokens(args[1]);
+      return '';
+    },
+    "\\tr": "\\operatorname{Tr}",
+    "\\Tr": "\\operatorname{Tr}",
+    "\\rank": "\\operatorname{rank}",
+    "\\diag": "\\operatorname{diag}",
+    "\\sgn": "\\operatorname{sgn}",
+
+    // The course's \DeclareMathOperator declarations, as plain entries. KaTeX has
+    // no \DeclareMathOperator and fails silently on it -- literal text, no console
+    // error -- so the operators have to live here instead.
+    //
+    // Skip, 2026-09-12: "um just define \E to be \operatorname{E} no? ... like
+    // it's not that hard?" It is not. The alarming 2,577-call-site number came
+    // from costing a TeX-level rewrite, where \newcommand vs \renewcommand is
+    // fragile -- one line changed there killed eight working operators while the
+    // error count went from 1 to 0. Here each declaration is one string and no
+    // call site changes at all.
+    //
+    // \argmin is defined by stock KaTeX; a later key wins, which is what makes
+    // redefining it safe here and was NOT safe in the TeX route.
+    "\\E": "\\operatorname{E}",
+    "\\P": "\\operatorname{P}",
+    "\\V": "\\operatorname{V}",
+    "\\Var": "\\operatorname{V}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\CATE": "\\operatorname{CATE}",
+    "\\RMSE": "\\operatorname{RMSE}",
+    "\\sd": "\\operatorname{sd}",
+    "\\bias": "\\operatorname{bias}",
+    "\\argmin": "\\operatorname{argmin}",
+    "\\invlogit": "\\operatorname{logit}^{-1}",
+    "\\hVar": "\\widehat{\\operatorname{V}}",
+
+    // Course annotations: \explain{X}{tip} is \overset{\texttip{marker}{tip}}{X}
+    // (and \mathexplain the math-mode twin). The marker renders; the tip
+    // rides encoded in a data-tip attribute (plus a data-mode marker on the
+    // math-mode twin) for the hover script below,
+    // which typesets it with this same KaTeX. Encoding (not parsing)
+    // carries dollars, commas and braces through the attribute intact.
+    "\\texttip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + '}{' + groupSource(args[0]) + '}';
+    },
+    "\\mathtip": (ctx) => {
+      const args = ctx.consumeArgs(2);
+      return '\\htmlData{tip=' + tipEncode(groupSource(args[1])) + ',mode=math}{' + groupSource(args[0]) + '}';
+    },
+    // MathJax's [tex]/unicode package. KaTeX has no
+    // \unicode: hex or decimal becomes the character, anything else renders as
+    // text rather than literal backslash-soup. (The course's `r square` /
+    // `r triangle` / `r circle` shapes are not valid \unicode args —
+    // decimal-or-hex only — and the real glyph mapping is a content call, not this.)
+    "\\unicode": (ctx) => {
+      const raw = groupSource(ctx.consumeArgs(1)[0]);
+      const m = raw.match(/^x([0-9a-fA-F]{1,6})$/) || raw.match(/^([0-9]{1,7})$/);
+      if (m) {
+        const cp = parseInt(m[1], m[0][0] === 'x' ? 16 : 10);
+        if (cp <= 0x10ffff) {
+          return String.fromCodePoint(cp);
+        }
+      }
+      return `\\text{${raw}}`;
+    },
+
+    // Paired delimiters. Skip, 2026-09-12: "i said \p \cb \sb".
+    //
+    // Bare is fixed, starred stretches -- he uses * for tacit \left\right
+    // consistently. KaTeX has no \DeclarePairedDelimiter and no \@ifstar, so the
+    // star is read by a function macro peeking at the next token. Verified
+    // against KaTeX 0.16.47, including the counterfactual that a BARE macro on
+    // tall content stays fixed, so the check is not merely detecting \frac.
+    "\\p": pairedDelimiter("(", ")"),
+    "\\sb": pairedDelimiter("[", "]"),
+    "\\cb": pairedDelimiter("\\{", "\\}"),
+  }
+  </script>
+  <script>
+  // Give KaTeX the course's macro set.
+  //
+  // pandoc emits its own render loop and hardcodes `var macros = []` inside it --
+  // function-scoped, unreachable from config, and there is no Quarto option that
+  // reaches it either. Quarto's own re-render helper (window.Quarto.typesetMath)
+  // hardcodes the same empty array. So the macros cannot be delivered by
+  // configuration on the plain-HTML path; the only seam is katex.render itself,
+  // which both of those call.
+  //
+  // This wraps it. The capture listener below fires before pandoc's
+  // document-level bubble listener even when registered later; katex.min.js
+  // is deferred, so by DOMContentLoaded it has executed and window.katex exists.
+  //
+  // Deliberately does NOT override a caller that supplied its own non-empty macros
+  // object -- that is somebody meaning something specific, and this is a default.
+  // Trust gets the same treatment: a supplied value wins, otherwise
+  // the course allowlist above. Strict is untouched.
+  (function () {
+    function install() {
+      if (!window.katex || !window.katex.render || window.__tldaKatexShimmed) return
+      var base = window.__tldaKatexMacros
+      if (!base) { console.error('[tlda] katex macro set missing; math will render without it'); return }
+      var inner = window.katex.render.bind(window.katex)
+      // One shared object, because KaTeX writes \def definitions back into it and
+      // they are expected to persist across calls within a page.
+      var shared = {}
+      for (var k in base) shared[k] = base[k]
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {}
+        if (!opts.macros || Object.keys(opts.macros).length === 0) opts.macros = shared
+        if (opts.trust == null) opts.trust = tldaTrust
+        const out = inner(tex, el, opts)
+        // Reveal reads data-fragment-index from the .fragment node itself,
+        // and KaTeX cannot put the class and the index on one span, so the
+        // class is added here -- scoped to the element just rendered.
+        if (el && el.querySelectorAll) {
+          el.querySelectorAll('[data-fragment-index]').forEach(function (n) {
+            if (/^\d+$/.test(n.getAttribute('data-fragment-index') || '')) n.classList.add('fragment')
+          })
+        }
+        return out
+      }
+      window.__tldaKatexShimmed = true
+    }
+    // Capture fires before pandoc's document-level bubble listener;
+    // immediate call if the document is already parsed.
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, true)
+    else install()
+  })()
+  </script>
+  <style>
+  /* Explanation hover tips (see the script below). No visual change to
+     the equation itself besides the help cursor on the marker. */
+  [data-tip] { cursor: help; position: relative; z-index: 1; }
+  #tlda-tip {
+    position: fixed; z-index: 60; display: none; max-width: min(34em, 90vw);
+    background: #fff; color: #222; border: 1px solid #888; border-radius: 6px;
+    padding: .5em .7em; box-shadow: 0 4px 18px rgba(0,0,0,.25);
+    font-size: .85rem; line-height: 1.35; pointer-events: none;
+  }
+  #tlda-tip.on { display: block; }
+  .tlda-tip-err { color: #c00; font-weight: bold; }
+  </style>
+  <script>
+  // Explanation hovers. Marker spans carry the tip as encoded TeX in
+  // data-tip (see \texttip above); this typesets it with the page KaTeX
+  // on hover. Delegated listeners: no per-element binding, survives math
+  // re-renders. Markers inside unrevealed fragments are skipped.
+  (function () {
+    function markerOf(node) {
+      while (node && node !== document) {
+        if (node.getAttribute && node.getAttribute('data-tip') != null) return node
+        node = node.parentNode
+      }
+      return null
+    }
+    // Hidden markers never open: display:none ancestors (non-current slides)
+    // anywhere, plus any unrevealed ancestor fragment up to the reveal root —
+    // a visible inner fragment beneath a hidden outer stays hidden. The
+    // fragment walk runs only inside a reveal deck (book fragment spans never
+    // gain .visible, so it is deck-only there).
+    function isHidden(marker) {
+      if (marker.getClientRects().length === 0) return true
+      if (marker.closest && marker.closest('.reveal')) {
+        let node = marker.parentNode
+        while (node && node !== document) {
+          if (node.classList && node.classList.contains('reveal')) break
+          if (node.classList && node.classList.contains('fragment') && !node.classList.contains('visible')) return true
+          node = node.parentNode
+        }
+      }
+      return false
+    }
+    function tipDecode(s) {
+      const b64 = s.replace(/-/g, '+').replace(/_/g, '/')
+      const bin = atob(b64)
+      const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
+      return new TextDecoder().decode(bytes)
+    }
+    function errSpan(text, detail) {
+      const err = document.createElement('span')
+      err.className = 'tlda-tip-err'
+      err.textContent = text
+      err.title = String(detail)
+      return err
+    }
+    // Mixed mode (texttip): text with $...$ math. Math mode (mathtip): the
+    // whole tip is math. Failed math shows an explicit error naming the
+    // failure; it never substitutes raw TeX silently.
+    function renderTip(tex, mode, box) {
+      box.textContent = ''
+      if (mode === 'math') {
+        const s = document.createElement('span')
+        box.appendChild(s)
+        try { window.katex.render(tex, s, {}) }
+        catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        return
+      }
+      const parts = tex.split(/(?<!\\)\$/)
+      parts.forEach((seg, i) => {
+        if (seg === '') return
+        if (i % 2 === 1) {
+          const s = document.createElement('span')
+          box.appendChild(s)
+          try { window.katex.render(seg, s, {}) }
+          catch (e) { s.appendChild(errSpan('(math error)', (e && e.message) || e)) }
+        } else {
+          box.appendChild(document.createTextNode(seg))
+        }
+      })
+    }
+    var box = null
+    var current = null
+    function open(marker) {
+      if (!window.katex) return
+      if (isHidden(marker)) { close(); return }
+      const payload = marker.getAttribute('data-tip')
+      if (!payload) return
+      if (box && box.classList.contains('on') && current === marker) return
+      if (!box) {
+        box = document.createElement('div')
+        box.id = 'tlda-tip'
+        document.body.appendChild(box)
+      }
+      current = marker
+      try {
+        renderTip(tipDecode(payload), marker.getAttribute('data-mode'), box)
+      } catch (e) {
+        box.textContent = ''
+        box.appendChild(errSpan('(tip error)', (e && e.message) || e))
+      }
+      var r = marker.getBoundingClientRect()
+      box.classList.add('on')
+      var bw = box.offsetWidth, bh = box.offsetHeight
+      var x = Math.min(Math.max(8, r.left + r.width / 2 - bw / 2), window.innerWidth - bw - 8)
+      var y = r.top - bh - 10
+      if (y < 8) y = r.bottom + 10
+      box.style.left = x + 'px'
+      box.style.top = y + 'px'
+    }
+    function close() {
+      current = null
+      if (box) box.classList.remove('on')
+    }
+    document.addEventListener('mouseover', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('mouseout', (e) => {
+      const m = markerOf(e.target)
+      if (m && !(e.relatedTarget && m.contains(e.relatedTarget))) close()
+    })
+    // Touch: a tap opens (and stays until tap elsewhere, scroll, or slide).
+    document.addEventListener('click', (e) => {
+      const m = markerOf(e.target)
+      if (m) open(m); else close()
+    })
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close() })
+    window.addEventListener('scroll', close, true)
+    window.addEventListener('resize', close)
+    // Reveal (a body-end synchronous script) exists by DOMContentLoaded, so
+    // the slide/fragment dismissal binds there rather than at parse time.
+    function bindReveal() {
+      if (!window.Reveal || !Reveal.on) return
+      Reveal.on('slidechanged', close)
+      Reveal.on('fragmenthidden', () => { if (current && isHidden(current)) close() })
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindReveal)
+    else bindReveal()
+  })()
+
+  </script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">Georgia Turnout: How Precise Is a Difference? — working draft</h1>
+
+<div class="quarto-title-authors">
+</div>
+
+</section>
+<section id="after-voting-before-the-result" class="slide level2">
+<h2 data-source-line="10" data-source-end-line="10">After voting, before the result</h2>
+
+
+<div class="cell" data-source-line="1" data-source-end-line="32" data-source-file="_extensions/r-wasm/live/_knitr.qmd">
+<div>
+<div id="webr-1" class="exercise-cell">
+
+</div>
+<script type="webr-1-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImNhY2hlIjpmYWxzZSwiZWNobyI6ZmFsc2UsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJmaWctcmV0aW5hIjp0cnVlLCJpbmNsdWRlIjpmYWxzZSwibGFiZWwiOiJsb2FkLWxpYnJhcmllcy13ZWJyIiwib3V0cHV0IjpmYWxzZX0sImNvZGUiOiJcbmxpYnJhcnkoZ2dwbG90MilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KHB1cnJyKVxubGlicmFyeSh0aWR5cilcbmxpYnJhcnkoaHRtbHRvb2xzKVxubGlicmFyeShzY2FsZXMpXG5saWJyYXJ5KGtuaXRyKVxuXG5kZWZhdWx0LnNlZWQgPSAwXG5wZXJjZW50ID0gbGFiZWxfcGVyY2VudChhY2N1cmFjeT0xKVxucGVyY2VudHBvaW50ID0gbGFiZWxfcGVyY2VudChhY2N1cmFjeT0uMSlcbmFwcHJveCAgPSBmdW5jdGlvbih4LGFjY3VyYWN5PS4wMSkgeyBcbiAgICBsYWJlbF9udW1iZXIoYWNjdXJhY3k9YWNjdXJhY3ksIHNjYWxlX2N1dD1jdXRfc2hvcnRfc2NhbGUoKSkoeCkgXG59XG50aG91c2FuZCA9IGZ1bmN0aW9uKHgsIGFjY3VyYWN5PS4xKSB7XG4gICAgYXBwcm94KHJvdW5kKCh4LzEwMDApIC8gYWNjdXJhY3kpICogMTAwMCAqIGFjY3VyYWN5LCBhY2N1cmFjeSlcbn1cbnJvdW5kMiA9IGZ1bmN0aW9uKHgpIHsgcm91bmQoeCwgMikgfSJ9
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="28" data-source-end-line="80" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-2" class="exercise-cell">
+
+</div>
+<script type="webr-2-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImNhY2hlIjpmYWxzZSwiZWNobyI6ZmFsc2UsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJmaWctcmV0aW5hIjp0cnVlLCJsYWJlbCI6ImdncGxvdC10aGVtZXMtd2ViciJ9LCJjb2RlIjoiXG5jbGFzcy50aGVtZSA9IHRoZW1lKHBsb3QuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gXCJ0cmFuc3BhcmVudFwiLCBjb2xvdXIgPSBOQSksXG4gICAgICAgIHBhbmVsLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9IFwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICAgICAgICAgICAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsPVwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICAgICAgICAgICAgICBsZWdlbmQuYm94LmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbD1cInRyYW5zcGFyZW50XCIsIGNvbG91ciA9IE5BKSxcbiAgICAgICAgICAgICAgICAgICAgbGVnZW5kLmtleSA9IGVsZW1lbnRfcmVjdChmaWxsPVwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICBheGlzLnRpY2tzLnggPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgIGF4aXMudGlja3MueSA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgYXhpcy50ZXh0LnggID0gZWxlbWVudF90ZXh0KGNvbG91ciA9IFwiI2FhYWFhYVwiKSxcbiAgICAgICAgYXhpcy50ZXh0LnkgID0gZWxlbWVudF90ZXh0KGNvbG91ciA9IFwiI2FhYWFhYVwiKSxcbiAgICAgICAgYXhpcy50aXRsZS54ICA9IGVsZW1lbnRfdGV4dChjb2xvdXIgPSBcIiNhYWFhYWFcIiksXG4gICAgICAgIGF4aXMudGl0bGUueSAgPSBlbGVtZW50X3RleHQoY29sb3VyID0gXCIjYWFhYWFhXCIsIGFuZ2xlPTkwKVxuKVxuXG50aGVtZV9zZXQoY2xhc3MudGhlbWUpXG50aGVtZV91cGRhdGUoYXhpcy50aXRsZS54ICA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgICAgICBheGlzLnRpdGxlLnkgID0gZWxlbWVudF9ibGFuaygpKVxuc2ltcGxpZmllZC50aGVtZSA9IHRoZW1lX2dldCgpXG5cbnRoZW1lX3VwZGF0ZShheGlzLnRleHQueCAgID0gZWxlbWVudF9ibGFuaygpLCBcbiAgICAgICAgICAgICAgYXhpcy50ZXh0LnkgICA9IGVsZW1lbnRfYmxhbmsoKSlcbmJsYW5rLnRoZW1lID0gdGhlbWVfZ2V0KClcblxudGhlbWVfdXBkYXRlKHBhbmVsLmdyaWQubWFqb3I9ZWxlbWVudF9saW5lKGNvbG9yPXJnYigxLDAsMCwuMSwgIG1heENvbG9yVmFsdWU9MSkpLFxuICAgICAgICAgICBwYW5lbC5ncmlkLm1pbm9yPWVsZW1lbnRfbGluZShjb2xvcj1yZ2IoMCwxLDAsLjEsIG1heENvbG9yVmFsdWU9MSkpKVxuZ3JpZC50aGVtZSA9IHRoZW1lX2dldCgpXG5cbndoaXRlYmcudGhlbWUgPSBmdW5jdGlvbihsaWdodGdyYXk9XCIjY2NjY2NjXCIsIGdyaWRjb2xvcj1yZ2IoMCwwLDAsLjA3LCBtYXhDb2xvclZhbHVlPTEpLCBsYWJzPUZBTFNFKSB7XG4gICAgdGhlbWUoXG4gICAgICAgIHBsb3QuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsID0gXCJ0cmFuc3BhcmVudFwiLCBjb2xvdXIgPSBOQSksXG4gICAgICAgIHBhbmVsLmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbCA9IFwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICAgICAgICAgICAgICBsZWdlbmQuYmFja2dyb3VuZCA9IGVsZW1lbnRfcmVjdChmaWxsPVwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICAgICAgICAgICAgICBsZWdlbmQuYm94LmJhY2tncm91bmQgPSBlbGVtZW50X3JlY3QoZmlsbD1cInRyYW5zcGFyZW50XCIsIGNvbG91ciA9IE5BKSxcbiAgICAgICAgICAgICAgICAgICAgbGVnZW5kLmtleSA9IGVsZW1lbnRfcmVjdChmaWxsPVwidHJhbnNwYXJlbnRcIiwgY29sb3VyID0gTkEpLFxuICAgICAgICBheGlzLnRpY2tzLnggPSBlbGVtZW50X2JsYW5rKCksXG4gICAgICAgIGF4aXMudGlja3MueSA9IGVsZW1lbnRfYmxhbmsoKSxcbiAgICAgICAgYXhpcy50ZXh0LnggID0gZWxlbWVudF90ZXh0KGNvbG91ciA9IGxpZ2h0Z3JheSksXG4gICAgICAgIGF4aXMudGV4dC55ICA9IGVsZW1lbnRfdGV4dChjb2xvdXIgPSBsaWdodGdyYXkpLFxuICAgICAgICBheGlzLnRpdGxlLnggID0gaWYobGFicykgeyBlbGVtZW50X3RleHQoY29sb3VyPWxpZ2h0Z3JheSkgfSBlbHNlIHsgZWxlbWVudF9ibGFuaygpIH0sXG4gICAgICAgIGF4aXMudGl0bGUueSAgPSBpZihsYWJzKSB7IGVsZW1lbnRfdGV4dChjb2xvdXI9bGlnaHRncmF5LCBhbmdsZT05MCkgfSBlbHNlIHsgZWxlbWVudF9ibGFuaygpIH0sXG4gICAgICAgIHBhbmVsLmdyaWQubWFqb3I9ZWxlbWVudF9saW5lKGNvbG91cj1ncmlkY29sb3IpLFxuICAgICAgICBwYW5lbC5ncmlkLm1pbm9yPWVsZW1lbnRfbGluZShjb2xvdXI9Z3JpZGNvbG9yLCBsaW5ld2lkdGg9MC4yNSkpXG59XG5sYWJzID0gZnVuY3Rpb24oLi4uKSB7IGxpc3QoZ2dwbG90Mjo6bGFicyguLi4pLCB3aGl0ZWJnLnRoZW1lKGxhYnM9VFJVRSkpIH1cbndoaXRlYncudGhlbWUgPSB3aGl0ZWJnLnRoZW1lXG5cbiMgUGxvdHMgd2l0aG91dCBsYWJzKCkgaW5oZXJpdCB0aGUgZ2xvYmFsIHRoZW1lOiBsZWF2ZSBpdCBvbiBjbGFzcy50aGVtZSwgbm90IHRoZSBkZWJ1ZyBncmlkIGFib3ZlLlxudGhlbWVfc2V0KHNpbXBsaWZpZWQudGhlbWUpIn0=
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="83" data-source-end-line="92" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-3" class="exercise-cell">
+
+</div>
+<script type="webr-3-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImNhY2hlIjpmYWxzZSwiZWNobyI6ZmFsc2UsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJmaWctcmV0aW5hIjp0cnVlLCJsYWJlbCI6ImdncGxvdC1nZW9tLWRlZmF1bHRzLXdlYnIifSwiY29kZSI6IlxuIyBCYXJzIGNhcnJ5IGEgdGhpbiBvdXRsaW5lIHNvIHRoZWlyIHNoYXBlIHN1cnZpdmVzIGRvdHMgYW5kIGFubm90YXRpb24gbGluZXMuXG4jIGdlb21faGlzdG9ncmFtIGFuZCBnZW9tX2NvbCBib3RoIGRyYXcgdGhyb3VnaCBHZW9tQmFyLCBzbyB0aGlzIGNvdmVycyBhbGwgdGhyZWUuXG4jIEEgY2FsbCB0aGF0IHBhc3NlcyBjb2xvdXIgb3IgbGluZXdpZHRoIG92ZXJyaWRlcyBpdC5cbnVwZGF0ZV9nZW9tX2RlZmF1bHRzKFwiYmFyXCIsIGxpc3QoY29sb3VyID0gXCJncmF5XCIsIGxpbmV3aWR0aCA9IDAuMDIpKSJ9
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="95" data-source-end-line="115" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-4" class="exercise-cell">
+
+</div>
+<script type="webr-4-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZmlnLXJldGluYSI6dHJ1ZSwibGFiZWwiOiJkZWZpbmUtc2hhcGVzLXdlYnIifSwiY29kZSI6IlxuXG4jIFRoZXNlIGFyZSB0aGUgSFRNTCBlbnRpdGllcyBmb3Igc2hhcGVzIHdlIHVzZSBpbiB0aGUgdGV4dC4gXG4jIFRoaXMgbGV0cyB1cyB3cml0ZSBgciBjaXJjbGVgIGluc3RlYWQgb2YgJiM5Njc5OyB3aGVuIHdlIHdhbnQgYSBjaXJjbGUuXG50cmlhbmdsZSA9ICAnJiM5NjUwOydcbmNpcmNsZSA9ICcmIzk2Nzk7J1xucG9pbnRyYW5nZSA9ICcmIzkwODc7J1xuXG5maWxsZWQgPSBsaXN0KFxuICAgIGRvd250cmlhbmdsZSA9IDI1LCBcbiAgICB1cHRyaWFuZ2xlID0gMjQsXG4gICAgZGlhbW9uZCA9IDIzLFxuICAgIHNxdWFyZSA9IDIyLFxuICAgIGNpcmNsZSA9IDIxKVxuY29tcGFyaXNvbl9zdHlsZXMgPSBsaXN0KFxuICAgIHNjYWxlX3NoYXBlX21hbnVhbCh2YWx1ZXM9YygnMCc9ZmlsbGVkJGRvd250cmlhbmdsZSwgJzEnPWZpbGxlZCR1cHRyaWFuZ2xlKSksXG4gICAgZ3VpZGVzKHNoYXBlPSdub25lJywgY29sb3I9J25vbmUnLCBmaWxsPSdub25lJykpIn0=
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="118" data-source-end-line="141" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-5" class="exercise-cell">
+
+</div>
+<script type="webr-5-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZmlnLXJldGluYSI6dHJ1ZSwibGFiZWwiOiJkZWZpbmUtY29sb3JzLXdlYnIifSwiY29kZSI6IlxudHdvY29sb3IucmVkICAgPSByZ2IoMjQ4LDExOCwxMDksIG1heENvbG9yVmFsdWU9MjU1KVxudHdvY29sb3IuZ3JlZW4gPSByZ2IoMCwxOTEsMTk2LCAgIG1heENvbG9yVmFsdWU9MjU1KVxuZ3JvdXBhID0gdHdvY29sb3IucmVkXG5ncm91cGIgPSB0d29jb2xvci5ncmVlblxuXG5waW5rICAgICA9ICcjZWY0NzZmJyAgIyByZ2IoMjM5LDcxLDExMSlcbm11c3RhcmQgID0gJyNmZmQxNjYnICAjIHJnYigyNTUsMjA5LDEwMilcbmdyZWVuICAgID0gJyMwNmQ2YTAnICAjIHJnYig2LCAyMTQsMTYwKVxudGVhbCAgICAgPSAnIzExOGFiMicgICMgcmdiKDE3LDEzOCwxNzgpXG5taWRuaWdodCA9ICcjMDczYjRjJyAgIyByZ2IoNyw1OSw3NilcbiMgZndpdywgY29sMnJnYiBpcyBhIGZ1bmN0aW9uIHRoYXQgY29udmVydHMgYSBjb2xvciB0byBpdHMgUkdCIHZhbHVlc1xuXG5tYXAuYmFja2dyb3VuZCA9IGdyZWVuXG5wb2xsYSAgPSBtaWRuaWdodFxucG9sbGIgID0gcGlua1xucG9sbGMgID0gdGVhbFxucG9sbGQgID0gZ3JlZW5cbnBvbGxlICA9IG11c3RhcmRcbiMgVEhFU0UgQ09MT1JTIEFSRSBERUZJTkVEIElOIGNsYXNzLnNjc3MsIFRPTy4gSUYgWU9VIENIQU5HRSBUSEVNIEhFUkUsIENIQU5HRSBUSEVNIFRIRVJFLiJ9
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="144" data-source-end-line="164" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-6" class="exercise-cell">
+
+</div>
+<script type="webr-6-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImNhY2hlIjpmYWxzZSwiZWNobyI6ZmFsc2UsImVkaXQiOmZhbHNlLCJldmFsIjp0cnVlLCJmaWctcmV0aW5hIjp0cnVlLCJsYWJlbCI6InRhYmxlLXN0eWxpbmctd2ViciJ9LCJjb2RlIjoiXG5lbGxpcHNpcyA9IGZ1bmN0aW9uKGRmLCBuaGVhZD01TCwgbnRhaWw9Mikge1xuICAgIHJvd25hbWVzKGRmKSA9IGlmKGlzLm51bGwocm93bmFtZXMoZGYpKSkgeyBcbiAgICAgICAgYXMuY2hhcmFjdGVyKDE6bnJvdyhkZikpIFxuICAgIH0gZWxzZSB7IFxuICAgICAgICBhcy5jaGFyYWN0ZXIocm93bmFtZXMoZGYpKVxuICAgIH1cbiAgICBzdG9waWZub3QoXCJkYXRhLmZyYW1lXCIgJWluJSBjbGFzcyhkZikpXG4gICAgZWxzID0gcmVwKE5BLCBuY29sKGRmKSkgfD5cbiAgICAgICAgbWF0cml4KG5yb3c9MSwgZGltbmFtZXM9bGlzdChOVUxMLCBuYW1lcyhkZikpKSB8PlxuICAgICAgICBkYXRhLmZyYW1lKHN0cmluZ3NBc0ZhY3RvcnM9RkFMU0UpIHw+XG4gICAgICAgIGFzX3RpYmJsZSgpXG4gICAgcm93bmFtZXMoZWxzKSA9IFwi4ouuXCJcbiAgICBkcGx5cjo6YmluZF9yb3dzKGhlYWQoZGYsIG5oZWFkKSwgZWxzLCB0YWlsKGRmLCBudGFpbCkpXG59XG5vcHRpb25zKGtuaXRyLmthYmxlLk5BID0gJycpIn0=
+</script>
+</div>
+</div>
+
+<div class="cell" data-source-line="167" data-source-end-line="186" data-source-file="decks/shared/shared-code-webr.qmd">
+<div>
+<div id="webr-7" class="exercise-cell">
+
+</div>
+<script type="webr-7-contents">
+eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1ZSwiZmlnLXJldGluYSI6dHJ1ZSwibGFiZWwiOiJ3aXRoLXNlZWQtd2ViciJ9LCJjb2RlIjoiXG53aXRoX3NlZWQgPSBmdW5jdGlvbih4LCBzZWVkPWRlZmF1bHQuc2VlZCkge1xuICAgIGhhZF9zZWVkID0gZXhpc3RzKFwiLlJhbmRvbS5zZWVkXCIsIGVudmlyPS5HbG9iYWxFbnYsIGluaGVyaXRzPUZBTFNFKVxuICAgIGlmKGhhZF9zZWVkKSB7XG4gICAgICAgIG9sZF9zZWVkID0gZ2V0KFwiLlJhbmRvbS5zZWVkXCIsIGVudmlyPS5HbG9iYWxFbnYsIGluaGVyaXRzPUZBTFNFKVxuICAgIH1cbiAgICBvbi5leGl0KHtcbiAgICAgICAgaWYoaGFkX3NlZWQpIHtcbiAgICAgICAgICAgIGFzc2lnbihcIi5SYW5kb20uc2VlZFwiLCBvbGRfc2VlZCwgZW52aXI9Lkdsb2JhbEVudilcbiAgICAgICAgfSBlbHNlIGlmKGV4aXN0cyhcIi5SYW5kb20uc2VlZFwiLCBlbnZpcj0uR2xvYmFsRW52LCBpbmhlcml0cz1GQUxTRSkpIHtcbiAgICAgICAgICAgIHJtKFwiLlJhbmRvbS5zZWVkXCIsIGVudmlyPS5HbG9iYWxFbnYpXG4gICAgICAgIH1cbiAgICB9LCBhZGQ9VFJVRSlcbiAgICBzZXQuc2VlZChzZWVkKVxuICAgIGZvcmNlKHgpXG59In0=
+</script>
+</div>
+</div>
+
+
+
+
+
+
+<div class="hidden" data-source-line="1" data-source-end-line="18" data-source-file="decks/shared/shared-code.qmd">
+<p>$$ \newcommand{X}{} \newcommand{Y}{} % A hex digit after # inside a macro body is eaten by build-time expansion, so digit-leading hexes spell # via . </p>
+
+
+
+
+
+
+
+<p data-source-line="137" data-source-end-line="145" data-source-file="shared/shared-style.qmd">$$</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- candy-writer decision, 2026-10-25: real data (Georgia Secretary of State, 2024 general election) replaces the made-up frame; every number in this deck that describes the population follows from it. -->
+<ul>
+<li data-source-line="196" data-source-end-line="215" data-source-file="shared/shared-style.qmd">Imagine a retrospective poll: voting is over, but the result isn’t known.</li>
+<li data-source-line="19" data-source-end-line="19">We ask whether each person voted. Their turnout is now fixed. <!-- candy-writer decision, 2026-10-24: the frame is named here and the vote-share shares a, b are tied to it, so every denominator in the deck is the same frame (cloud-writer review 9791838). --></li>
+<li data-source-line="21" data-source-end-line="21">Compare turnout in two preexisting groups: Black and White registered voters in McIntosh County, Georgia. <!-- candy-writer decision, 2026-10-25: wording qualified per cloud-worker's check (9803405, 9803410): the registered counts are reconstructed from current records, not the preserved 2024 roll. --></li>
+<li data-source-line="23" data-source-end-line="23">Our frame: registration counts reconstructed from current state records, an approximate 2024 frame for teaching.
+<ul>
+<li data-source-line="24" data-source-end-line="24">They count records registered by the October 7, 2024 deadline that are active or inactive now, or cancelled with a last change after November 5, 2024.</li>
+<li data-source-line="25" data-source-end-line="25">Records deleted from the file are missing.</li>
+</ul></li>
+<li data-source-line="26" data-source-end-line="26">Our outcome: did they vote in the November 5, 2024 general election?
+<ul>
+<li data-source-line="27" data-source-end-line="27">Ballots are counted by the county where they were cast; registrations by the county on file today. <!-- candy-writer decision, 2026-10-25 (style pass): one line per beat; the qualifications are sub-bullets under the frame and the outcome, wording unchanged. --></li>
+</ul></li>
+<li data-source-line="29" data-source-end-line="29">Source: Georgia Secretary of State, <a href="https://sos.ga.gov/election-data-hub">Election Data Hub</a>, retrieved October 25, 2026.</li>
+<li data-source-line="30" data-source-end-line="30">Other groups and counties are outside this frame. It is not a statewide election forecast.</li>
+</ul>
+</section>
+<section id="why-would-eight-percentage-points-matter" class="slide level2">
+<h2 data-source-line="32" data-source-end-line="32">Why would eight percentage points matter?</h2>
+<ul>
+<li data-source-line="34" data-source-end-line="34">A group’s share of registered voters isn’t necessarily its share of the people who vote. <!-- candy-writer decision, 2026-10-25 (style pass): the frame is registered voters (a and b are shares of registered voters), so "eligible residents" named a different denominator. --></li>
+<li data-source-line="36" data-source-end-line="36">Turnout changes the weights in the aggregate vote share.</li>
+<li data-source-line="37" data-source-end-line="37">A turnout gap of eight points and uncertainty of seven points tell a different story from a gap of eight points and uncertainty of one point.</li>
+<li data-source-line="38" data-source-end-line="38">How many people should we ask to make this comparison useful?</li>
+</ul>
+</section>
+<section id="turnout-gaps-and-access-to-voting-in-georgia" class="slide level2">
+<h2 data-source-line="40" data-source-end-line="40">Turnout gaps and access to voting in Georgia</h2>
+<!-- candy-writer decision, 2026-10-25: context slide Skip asked for ("provide context re like, vote suppression w/ references", 9801268). Statewide rates are computed from the same Secretary of State records as our frame. -->
+<ul>
+<li data-source-line="43" data-source-end-line="43">Statewide in 2024, by the same reconstruction, 55% of Black registered voters and 70% of White registered voters cast a ballot.
+<ul>
+<li data-source-line="44" data-source-end-line="44">About 4% of ballots have no recorded race and are left out. <!-- candy-writer decision, 2026-10-25 (style pass): the caveat is a sub-bullet, wording unchanged. --></li>
+</ul></li>
+<li data-source-line="46" data-source-end-line="46">Until 2013, Georgia needed federal approval (“preclearance”) to change its voting rules. <em>Shelby County v. Holder</em>, 570 U.S. 529 (2013), ended that.</li>
+<li data-source-line="47" data-source-end-line="47">Georgia’s SB 202 (2021) added ID requirements for absentee ballots, limited drop boxes, and banned handing out food or water to voters in line.</li>
+<li data-source-line="48" data-source-end-line="48">Nationally, the gap between White and nonwhite turnout grew from 2008 to 2022. It grew almost twice as fast in places that had needed preclearance (Morris and Grange, <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022"><em>Growing Racial Disparities in Voter Turnout, 2008–2022</em></a>, Brennan Center, 2024).</li>
+<li data-source-line="49" data-source-end-line="49">In 2016, residents of entirely Black neighborhoods waited 29% longer to vote than residents of entirely White ones (Chen, Haggag, Pope and Rohla, “Racial Disparities in Voting Wait Times,” <em>Review of Economics and Statistics</em> 104(6), 2022).</li>
+<li data-source-line="50" data-source-end-line="50">A turnout gap describes; it doesn’t measure how much of the gap any law or practice causes.</li>
+</ul>
+</section>
+<section id="our-population-and-our-sample" class="slide level2">
+<h2 data-source-line="52" data-source-end-line="52">Our population and our sample</h2>
+<ul>
+<li data-source-line="54" data-source-end-line="54">The turnout counts come from state records. The locations on the map are made up, placed around McIntosh County.</li>
+<li data-source-line="55" data-source-end-line="55">The sampling frame is fixed. No response error or nonresponse is included in this demonstration.</li>
+<li data-source-line="56" data-source-end-line="56">Select 300 names without replacement within each group, independently.</li>
+</ul>
+
+
+<img data-src="georgia-oct29_files/figure-revealjs/ga-block-sample-map-1.svg" class="r-stretch" data-source-line="58" data-source-end-line="63"></section>
+<section id="what-stays-fixed" class="slide level2">
+<h2 data-source-line="65" data-source-end-line="65">What stays fixed?</h2>
+<ul>
+<li data-source-line="67" data-source-end-line="67"><span class="math inline">\(m_1=2729\)</span> Black registered voters (group 1); <span class="math inline">\(m_0=6959\)</span> White registered voters (group 0).</li>
+<li data-source-line="68" data-source-end-line="68"><span class="math inline">\(y_j=1\)</span> if person <span class="math inline">\(j\)</span> voted, <span class="math inline">\(0\)</span> otherwise.</li>
+<li data-source-line="69" data-source-end-line="69"><span class="math inline">\(\mu(1)=1745/2729\approx.639\)</span> and <span class="math inline">\(\mu(0)=4988/6959\approx.717\)</span>.</li>
+<li data-source-line="70" data-source-end-line="70">The population difference is <span class="math inline">\(\Delta=\mu(1)-\mu(0)\approx-.077\)</span>.</li>
+<li data-source-line="71" data-source-end-line="71">Each repeated study selects new names; it doesn’t generate new turnout values.</li>
+</ul>
+</section>
+<section id="the-familiar-estimator" class="slide level2">
+<h2 data-source-line="73" data-source-end-line="73">The familiar estimator</h2>
+
+<p data-source-line="75" data-source-end-line="78"><span class="math display">\[
+\hat\Delta=\hat\mu(1)-\hat\mu(0),\qquad
+\hat\mu(x)=\frac{1}{n_x}\sum_{i=1}^{n_x}Y_{xi}.
+\]</span></p>
+<ul>
+<li data-source-line="80" data-source-end-line="80"><span class="math inline">\(Y_{xi}\)</span> is the turnout of the <span class="math inline">\(i\)</span>th person selected within group <span class="math inline">\(x\)</span>.</li>
+<li data-source-line="81" data-source-end-line="81">Both <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_0\)</span> are chosen before sampling.</li>
+<li data-source-line="82" data-source-end-line="82">Tuesday’s elective Candy groups had this same sampling structure.</li>
+</ul>
+</section>
+<section id="first-repeat-the-study" class="slide level2">
+<h2 data-source-line="84" data-source-end-line="84">First, repeat the study</h2>
+
+
+
+<img data-src="georgia-oct29_files/figure-revealjs/ga-differences-distribution-1.svg" class="r-stretch" data-source-line="86" data-source-end-line="99"><ul>
+<li data-source-line="108" data-source-end-line="108">Each dot is one study’s difference, not one person’s outcome.</li>
+<li data-source-line="109" data-source-end-line="109">Does the distribution sit around the population difference?</li>
+<li data-source-line="110" data-source-end-line="110">How much does an estimate move when only the selected names change?</li>
+</ul>
+</section>
+<section id="where-is-its-center" class="slide level2">
+<h2 data-source-line="112" data-source-end-line="112">Where is its center?</h2>
+<ul>
+<li data-source-line="114" data-source-end-line="114">Each group’s sample mean is unbiased for that group’s population mean.</li>
+<li data-source-line="115" data-source-end-line="115">What happens when we subtract?</li>
+</ul>
+<div class="fragment">
+
+<p data-source-line="118" data-source-end-line="122"><span class="math display">\[
+\mathbb{E}(\hat\Delta)
+=\mathbb{E}\{\hat\mu(1)\}-\mathbb{E}\{\hat\mu(0)\}
+=\mu(1)-\mu(0)=\Delta.
+\]</span></p>
+<ul>
+<li data-source-line="124" data-source-end-line="124">Linearity gives the result. It doesn’t require independence.</li>
+</ul>
+</div>
+</section>
+<section id="how-much-does-one-mean-vary" class="slide level2">
+<h2 data-source-line="127" data-source-end-line="127">How much does one mean vary?</h2>
+<ul>
+<li data-source-line="129" data-source-end-line="129">Use the population-denominator convention from the sampling calculation.</li>
+</ul>
+
+<p data-source-line="131" data-source-end-line="137"><span class="math display">\[
+\sigma^2(x)=\frac{1}{m_x}\sum_{j:x_j=x}\{y_j-\mu(x)\}^2.
+\]</span> <span class="math display">\[
+V_x=\operatorname{Var}\{\hat\mu(x)\}
+=\frac{\sigma^2(x)}{n_x}\frac{m_x-n_x}{m_x-1}.
+\]</span></p>
+<ul>
+<li data-source-line="139" data-source-end-line="139">For a binary outcome, <span class="math inline">\(\sigma^2(x)=\mu(x)\{1-\mu(x)\}\)</span>.</li>
+<li data-source-line="140" data-source-end-line="140">With replacement, omit the last factor.</li>
+<li data-source-line="141" data-source-end-line="141">Sampling everybody makes the without-replacement variance zero.</li>
+</ul>
+</section>
+<section id="subtraction-still-adds-the-variances" class="slide level2">
+<h2 data-source-line="143" data-source-end-line="143">Subtraction still adds the variances</h2>
+
+<p data-source-line="145" data-source-end-line="148"><span class="math display">\[
+\operatorname{Var}(\hat\Delta)=V_1+V_0
+-2\operatorname{Cov}\{\hat\mu(1),\hat\mu(0)\}.
+\]</span></p>
+<ul>
+<li data-source-line="150" data-source-end-line="150">We shuffled the two fixed lists independently. What is the covariance?</li>
+</ul>
+<div class="fragment">
+
+<p data-source-line="153" data-source-end-line="157"><span class="math display">\[
+\operatorname{Var}(\hat\Delta)
+=\frac{\sigma^2(1)}{n_1}\frac{m_1-n_1}{m_1-1}
++\frac{\sigma^2(0)}{n_0}\frac{m_0-n_0}{m_0-1}.
+\]</span></p>
+<ul>
+<li data-source-line="159" data-source-end-line="159">The covariance is zero because the two sampling processes are independent.</li>
+<li data-source-line="160" data-source-end-line="160">The two errors can reinforce each other when we subtract.</li>
+</ul>
+</div>
+</section>
+<section id="the-calculation-for-300-per-group" class="slide level2">
+<h2 data-source-line="163" data-source-end-line="163">The calculation for 300 per group</h2>
+
+<p data-source-line="165" data-source-end-line="174"><span class="math display">\[
+\operatorname{Var}(\hat\Delta)
+=\frac{.639(.361)}{300}\frac{2429}{2728}
++\frac{.717(.283)}{300}\frac{6659}{6958}
+\approx .00133192.
+\]</span> <span class="math display">\[
+\operatorname{sd}(\hat\Delta)\approx .03650,\qquad
+1.96\operatorname{sd}(\hat\Delta)\approx .07153.
+\]</span></p>
+<ul>
+<li data-source-line="176" data-source-end-line="176">Under a suitable normal approximation, about 95% of estimates are within seven percentage points of the target.</li>
+<li data-source-line="177" data-source-end-line="177">An eight-point population gap can still produce an estimate of zero or the wrong sign. Unbiased doesn’t mean exact.</li>
+</ul>
+</section>
+<section id="how-much-faith-in-the-normal-approximation" class="slide level2">
+<h2 data-source-line="179" data-source-end-line="179">How much faith in the normal approximation?</h2>
+<ul>
+<li data-source-line="181" data-source-end-line="181">Here the counts of voters in our samples have hypergeometric distributions.</li>
+<li data-source-line="182" data-source-end-line="182">Both blocks have many voters and nonvoters; we aren’t nearly exhausting either block.</li>
+<li data-source-line="183" data-source-end-line="183">Compare the simulated error distribution with the normal approximation before using its quantiles.</li>
+<li data-source-line="184" data-source-end-line="184">The 1.96 calculation is approximate, not a finite-sample coverage guarantee.</li>
+<li data-source-line="185" data-source-end-line="185">Exact hypergeometric calculation gives 95.05% coverage for the known-variance margin in this example.</li>
+<li data-source-line="186" data-source-end-line="186">A tiny block or an almost constant outcome needs a separate check.</li>
+</ul>
+</section>
+<section id="what-if-we-dont-know-the-population-proportions" class="slide level2">
+<h2 data-source-line="188" data-source-end-line="188">What if we don’t know the population proportions?</h2>
+<ul>
+<li data-source-line="190" data-source-end-line="190">In a real study, those are what we’re estimating.</li>
+<li data-source-line="191" data-source-end-line="191">For <span class="math inline">\(n_x&gt;1\)</span>, the usual sample variance is <span class="math inline">\(s_x^2\)</span> (denominator <span class="math inline">\(n_x-1\)</span>).</li>
+</ul>
+
+<p data-source-line="193" data-source-end-line="196"><span class="math display">\[
+\widehat V=(1-n_1/m_1)\frac{s_1^2}{n_1}
+          +(1-n_0/m_0)\frac{s_0^2}{n_0}.
+\]</span></p>
+<ul>
+<li data-source-line="198" data-source-end-line="198"><span class="math inline">\(\hat\Delta\pm1.96\sqrt{\widehat V}\)</span> is a normal-approximation interval.</li>
+<li data-source-line="199" data-source-end-line="199">An unbiased variance estimate alone doesn’t guarantee its coverage.</li>
+</ul>
+</section>
+<section id="planning-for-three-percentage-points" class="slide level2">
+<h2 data-source-line="201" data-source-end-line="201">Planning for three percentage points</h2>
+<ul>
+<li data-source-line="203" data-source-end-line="203">Keep equal sample sizes <span class="math inline">\(n\)</span> in each block.</li>
+<li data-source-line="204" data-source-end-line="204">Use this frame’s proportions as planning values, then check how sensitive the answer is to them.</li>
+<li data-source-line="205" data-source-end-line="205">Let <span class="math inline">\(S_x^2=m_x\sigma^2(x)/(m_x-1)\)</span>, the same variance with denominator <span class="math inline">\(m_x-1\)</span>.</li>
+</ul>
+
+<p data-source-line="207" data-source-end-line="210"><span class="math display">\[
+\operatorname{Var}(\hat\Delta)
+=\frac{S_1^2+S_0^2}{n}-\frac{S_1^2}{m_1}-\frac{S_0^2}{m_0}.
+\]</span></p>
+<ul>
+<li data-source-line="212" data-source-end-line="212">How large must <span class="math inline">\(n\)</span> be so that <span class="math inline">\(1.96\operatorname{sd}(\hat\Delta)\le .03\)</span>?</li>
+</ul>
+</section>
+<section class="slide level2">
+
+
+<p data-source-line="216" data-source-end-line="219"><span class="math display">\[
+n\ge\frac{S_1^2+S_0^2}
+{(.03/1.96)^2+S_1^2/m_1+S_0^2/m_0}.
+\]</span></p>
+<ul>
+<li data-source-line="221" data-source-end-line="221">Round up: <strong>1247 per group</strong>, 2494 altogether.</li>
+<li data-source-line="222" data-source-end-line="222">At 1246 per group the planned half-width is .030006; at 1247 it is .029988.</li>
+<li data-source-line="223" data-source-end-line="223">McIntosh has only 2729 Black registered voters, so that is nearly half of group 1.</li>
+<li data-source-line="224" data-source-end-line="224">This uses known planning variances. Realized estimated interval widths can differ.</li>
+<li data-source-line="225" data-source-end-line="225">A census gives zero sampling error; neither nonresponse nor measurement error disappears with this calculation.</li>
+</ul>
+</section>
+<section id="from-turnout-to-vote-share" class="slide level2">
+<h2 data-source-line="227" data-source-end-line="227">From turnout to vote share</h2>
+<ul>
+<li data-source-line="229" data-source-end-line="229">In the same frame, the groups’ shares of its registered voters are <span class="math inline">\(a=2729/9688\approx.282\)</span> and <span class="math inline">\(b=6959/9688\approx.718\)</span>.</li>
+<li data-source-line="230" data-source-end-line="230">Suppose the candidate’s shares <strong>among voters</strong> are <span class="math inline">\(q_1=.90\)</span> and <span class="math inline">\(q_0=.35\)</span>.</li>
+<li data-source-line="231" data-source-end-line="231">Hold these quantities fixed for this calculation. <span class="math inline">\(q_1\)</span> and <span class="math inline">\(q_0\)</span> are hypothetical, not measured Georgia facts.</li>
+</ul>
+
+<p data-source-line="233" data-source-end-line="236"><span class="math display">\[
+V=\frac{a q_1\mu(1)+b q_0\mu(0)}{a\mu(1)+b\mu(0)}
+\approx\frac{.3423}{.6950}\approx .49254.
+\]</span></p>
+<ul>
+<li data-source-line="238" data-source-end-line="238">Numerator: candidate votes per registered voter in this frame.</li>
+<li data-source-line="239" data-source-end-line="239">Denominator: all votes per registered voter in this frame.</li>
+</ul>
+</section>
+<section id="why-the-gap-alone-isnt-a-forecast" class="slide level2">
+<h2 data-source-line="241" data-source-end-line="241">Why the gap alone isn’t a forecast</h2>
+<ul>
+<li data-source-line="243" data-source-end-line="243">If both groups turned out at the same rate, the share would be <span class="math inline">\(.282(.90)+.718(.35)\approx.505\)</span>.</li>
+<li data-source-line="244" data-source-end-line="244">With .639 versus .717 turnout, the share is about .493.</li>
+<li data-source-line="245" data-source-end-line="245">An eight-point turnout gap moves this candidate’s share by about one point under these assumptions.</li>
+<li data-source-line="246" data-source-end-line="246">Change the group shares or candidate preferences and that implication changes.</li>
+<li data-source-line="247" data-source-end-line="247">HW6: approximate uncertainty in this ratio. Its numerator and denominator share data.</li>
+</ul>
+</section>
+<section id="what-carries-over-and-what-doesnt" class="slide level2">
+<h2 data-source-line="249" data-source-end-line="249">What carries over — and what doesn’t?</h2>
+<ul>
+<li data-source-line="251" data-source-end-line="251">Independent sampling within fixed groups: add the two variances.</li>
+<li data-source-line="252" data-source-end-line="252">Descriptive turnout differences do not identify an intervention’s effect.</li>
+<li data-source-line="253" data-source-end-line="253">Randomly assigned treatment and control groups are complementary; their means need a different covariance calculation.</li>
+<li data-source-line="254" data-source-end-line="254">Next Tuesday: NSW, missing potential outcomes, and identification.</li>
+</ul>
+
+<script type="webr-data">
+eyJvcHRpb25zIjp7ImJhc2VVcmwiOiJodHRwczovL3dlYnIuci13YXNtLm9yZy92MC41LjgvIn0sInBhY2thZ2VzIjp7InBrZ3MiOlsiZXZhbHVhdGUiLCJrbml0ciIsImh0bWx0b29scyIsImdncGxvdDIiLCJwdXJyciIsImRwbHlyIiwidGlkeXIiLCJzY2FsZXMiXSwicmVwb3MiOltdfSwicmVuZGVyX2RmIjoiZGVmYXVsdCJ9
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3siY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC03IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV83O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJfd2Vicl92YWx1ZV83ID0ge1xuICBjb25zdCB7IGhpZ2hsaWdodFIsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTctY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV2YWx1YXRpb24gY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7XG4gICAgaWQ6IFwid2Vici03LWNvbnRlbnRzXCIsXG4gICAgZWNobzogdHJ1ZSxcbiAgICBvdXRwdXQ6IHRydWVcbiAgfSwgYmxvY2suYXR0cik7XG5cbiAgLy8gRXZhbHVhdGUgdGhlIHByb3ZpZGVkIFIgY29kZVxuICBjb25zdCByZXN1bHQgPSB3ZWJST2pzLnByb2Nlc3Moe2NvZGU6IGJsb2NrLmNvZGUsIG9wdGlvbnN9LCB7fSk7XG5cbiAgLy8gRWFybHkgeWllbGQgd2hpbGUgd2Ugd2FpdCBmb3IgdGhlIGZpcnN0IGV2YWx1YXRpb24gYW5kIHJlbmRlclxuICBpZiAob3B0aW9ucy5vdXRwdXQgJiYgIShcIjdcIiBpbiB3ZWJST2pzLnJlbmRlcmVkT2pzKSkge1xuICAgIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG4gICAgY29uc3Qgc3Bpbm5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG5cbiAgICBpZiAob3B0aW9ucy5lY2hvKSB7XG4gICAgICAvLyBTaG93IG91dHB1dCBhcyBoaWdobGlnaHRlZCBzb3VyY2VcbiAgICAgIGNvbnN0IHByZUVsZW0gPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwicHJlXCIpO1xuICAgICAgY29udGFpbmVyLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZVwiO1xuICAgICAgcHJlRWxlbS5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGUgclwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChoaWdobGlnaHRSKGJsb2NrLmNvZGUpKTtcbiAgICAgIHNwaW5uZXIuY2xhc3NOYW1lID0gXCJzcGlubmVyLWdyb3cgc3Bpbm5lci1ncm93LXNtIG0tMiBwb3NpdGlvbi1hYnNvbHV0ZSB0b3AtMCBlbmQtMFwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChwcmVFbGVtKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItYm9yZGVyIHNwaW5uZXItYm9yZGVyLXNtXCI7XG4gICAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQoc3Bpbm5lcik7XG4gICAgfVxuXG4gICAgeWllbGQgY29udGFpbmVyO1xuICB9XG5cbiAgd2ViUk9qcy5yZW5kZXJlZE9qc1tcIjdcIl0gPSB0cnVlO1xuICB5aWVsZCBhd2FpdCByZXN1bHQ7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtNiIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfNjtcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTYiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoiX3dlYnJfdmFsdWVfNiA9IHtcbiAgY29uc3QgeyBoaWdobGlnaHRSLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici02LWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBldmFsdWF0aW9uIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oe1xuICAgIGlkOiBcIndlYnItNi1jb250ZW50c1wiLFxuICAgIGVjaG86IHRydWUsXG4gICAgb3V0cHV0OiB0cnVlXG4gIH0sIGJsb2NrLmF0dHIpO1xuXG4gIC8vIEV2YWx1YXRlIHRoZSBwcm92aWRlZCBSIGNvZGVcbiAgY29uc3QgcmVzdWx0ID0gd2ViUk9qcy5wcm9jZXNzKHtjb2RlOiBibG9jay5jb2RlLCBvcHRpb25zfSwge30pO1xuXG4gIC8vIEVhcmx5IHlpZWxkIHdoaWxlIHdlIHdhaXQgZm9yIHRoZSBmaXJzdCBldmFsdWF0aW9uIGFuZCByZW5kZXJcbiAgaWYgKG9wdGlvbnMub3V0cHV0ICYmICEoXCI2XCIgaW4gd2ViUk9qcy5yZW5kZXJlZE9qcykpIHtcbiAgICBjb25zdCBjb250YWluZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuICAgIGNvbnN0IHNwaW5uZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuXG4gICAgaWYgKG9wdGlvbnMuZWNobykge1xuICAgICAgLy8gU2hvdyBvdXRwdXQgYXMgaGlnaGxpZ2h0ZWQgc291cmNlXG4gICAgICBjb25zdCBwcmVFbGVtID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInByZVwiKTtcbiAgICAgIGNvbnRhaW5lci5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGVcIjtcbiAgICAgIHByZUVsZW0uY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlIHJcIjtcbiAgICAgIHByZUVsZW0uYXBwZW5kQ2hpbGQoaGlnaGxpZ2h0UihibG9jay5jb2RlKSk7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ncm93IHNwaW5uZXItZ3Jvdy1zbSBtLTIgcG9zaXRpb24tYWJzb2x1dGUgdG9wLTAgZW5kLTBcIjtcbiAgICAgIHByZUVsZW0uYXBwZW5kQ2hpbGQoc3Bpbm5lcik7XG4gICAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQocHJlRWxlbSk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHNwaW5uZXIuY2xhc3NOYW1lID0gXCJzcGlubmVyLWJvcmRlciBzcGlubmVyLWJvcmRlci1zbVwiO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgIH1cblxuICAgIHlpZWxkIGNvbnRhaW5lcjtcbiAgfVxuXG4gIHdlYlJPanMucmVuZGVyZWRPanNbXCI2XCJdID0gdHJ1ZTtcbiAgeWllbGQgYXdhaXQgcmVzdWx0O1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTUiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzU7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici01IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6Il93ZWJyX3ZhbHVlXzUgPSB7XG4gIGNvbnN0IHsgaGlnaGxpZ2h0UiwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItNS1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXZhbHVhdGlvbiBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHtcbiAgICBpZDogXCJ3ZWJyLTUtY29udGVudHNcIixcbiAgICBlY2hvOiB0cnVlLFxuICAgIG91dHB1dDogdHJ1ZVxuICB9LCBibG9jay5hdHRyKTtcblxuICAvLyBFdmFsdWF0ZSB0aGUgcHJvdmlkZWQgUiBjb2RlXG4gIGNvbnN0IHJlc3VsdCA9IHdlYlJPanMucHJvY2Vzcyh7Y29kZTogYmxvY2suY29kZSwgb3B0aW9uc30sIHt9KTtcblxuICAvLyBFYXJseSB5aWVsZCB3aGlsZSB3ZSB3YWl0IGZvciB0aGUgZmlyc3QgZXZhbHVhdGlvbiBhbmQgcmVuZGVyXG4gIGlmIChvcHRpb25zLm91dHB1dCAmJiAhKFwiNVwiIGluIHdlYlJPanMucmVuZGVyZWRPanMpKSB7XG4gICAgY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcbiAgICBjb25zdCBzcGlubmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcblxuICAgIGlmIChvcHRpb25zLmVjaG8pIHtcbiAgICAgIC8vIFNob3cgb3V0cHV0IGFzIGhpZ2hsaWdodGVkIHNvdXJjZVxuICAgICAgY29uc3QgcHJlRWxlbSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwcmVcIik7XG4gICAgICBjb250YWluZXIuY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlXCI7XG4gICAgICBwcmVFbGVtLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZSByXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKGhpZ2hsaWdodFIoYmxvY2suY29kZSkpO1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItZ3JvdyBzcGlubmVyLWdyb3ctc20gbS0yIHBvc2l0aW9uLWFic29sdXRlIHRvcC0wIGVuZC0wXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHByZUVsZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ib3JkZXIgc3Bpbm5lci1ib3JkZXItc21cIjtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICB9XG5cbiAgICB5aWVsZCBjb250YWluZXI7XG4gIH1cblxuICB3ZWJST2pzLnJlbmRlcmVkT2pzW1wiNVwiXSA9IHRydWU7XG4gIHlpZWxkIGF3YWl0IHJlc3VsdDtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC00IiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV80O1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItNCIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJfd2Vicl92YWx1ZV80ID0ge1xuICBjb25zdCB7IGhpZ2hsaWdodFIsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTQtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV2YWx1YXRpb24gY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7XG4gICAgaWQ6IFwid2Vici00LWNvbnRlbnRzXCIsXG4gICAgZWNobzogdHJ1ZSxcbiAgICBvdXRwdXQ6IHRydWVcbiAgfSwgYmxvY2suYXR0cik7XG5cbiAgLy8gRXZhbHVhdGUgdGhlIHByb3ZpZGVkIFIgY29kZVxuICBjb25zdCByZXN1bHQgPSB3ZWJST2pzLnByb2Nlc3Moe2NvZGU6IGJsb2NrLmNvZGUsIG9wdGlvbnN9LCB7fSk7XG5cbiAgLy8gRWFybHkgeWllbGQgd2hpbGUgd2Ugd2FpdCBmb3IgdGhlIGZpcnN0IGV2YWx1YXRpb24gYW5kIHJlbmRlclxuICBpZiAob3B0aW9ucy5vdXRwdXQgJiYgIShcIjRcIiBpbiB3ZWJST2pzLnJlbmRlcmVkT2pzKSkge1xuICAgIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG4gICAgY29uc3Qgc3Bpbm5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG5cbiAgICBpZiAob3B0aW9ucy5lY2hvKSB7XG4gICAgICAvLyBTaG93IG91dHB1dCBhcyBoaWdobGlnaHRlZCBzb3VyY2VcbiAgICAgIGNvbnN0IHByZUVsZW0gPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwicHJlXCIpO1xuICAgICAgY29udGFpbmVyLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZVwiO1xuICAgICAgcHJlRWxlbS5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGUgclwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChoaWdobGlnaHRSKGJsb2NrLmNvZGUpKTtcbiAgICAgIHNwaW5uZXIuY2xhc3NOYW1lID0gXCJzcGlubmVyLWdyb3cgc3Bpbm5lci1ncm93LXNtIG0tMiBwb3NpdGlvbi1hYnNvbHV0ZSB0b3AtMCBlbmQtMFwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChwcmVFbGVtKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItYm9yZGVyIHNwaW5uZXItYm9yZGVyLXNtXCI7XG4gICAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQoc3Bpbm5lcik7XG4gICAgfVxuXG4gICAgeWllbGQgY29udGFpbmVyO1xuICB9XG5cbiAgd2ViUk9qcy5yZW5kZXJlZE9qc1tcIjRcIl0gPSB0cnVlO1xuICB5aWVsZCBhd2FpdCByZXN1bHQ7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici13aWRnZXQtMyIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXRRdWlldCIsInNvdXJjZSI6IntcbiAgLy8gV2FpdCBmb3Igb3V0cHV0IHRvIGJlIHdyaXR0ZW4gdG8gdGhlIERPTSwgdGhlbiB0cmlnZ2VyIHdpZGdldCByZW5kZXJpbmdcbiAgYXdhaXQgX3dlYnJfdmFsdWVfMztcbiAgaWYgKHdpbmRvdy5IVE1MV2lkZ2V0cykge1xuICAgIHdpbmRvdy5IVE1MV2lkZ2V0cy5zdGF0aWNSZW5kZXIoKTtcbiAgfVxuICBpZiAod2luZG93LlBhZ2VkVGFibGVEb2MpIHtcbiAgICB3aW5kb3cuUGFnZWRUYWJsZURvYy5pbml0QWxsKCk7XG4gIH1cbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLTMiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0Iiwic291cmNlIjoiX3dlYnJfdmFsdWVfMyA9IHtcbiAgY29uc3QgeyBoaWdobGlnaHRSLCBiNjREZWNvZGUgfSA9IHdpbmRvdy5fZXhlcmNpc2Vfb2pzX3J1bnRpbWU7XG4gIGNvbnN0IHNjcmlwdENvbnRlbnQgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBzY3JpcHRbdHlwZT1cXFwid2Vici0zLWNvbnRlbnRzXFxcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgYmxvY2sgPSBKU09OLnBhcnNlKGI2NERlY29kZShzY3JpcHRDb250ZW50KSk7XG5cbiAgLy8gRGVmYXVsdCBldmFsdWF0aW9uIGNvbmZpZ3VyYXRpb25cbiAgY29uc3Qgb3B0aW9ucyA9IE9iamVjdC5hc3NpZ24oe1xuICAgIGlkOiBcIndlYnItMy1jb250ZW50c1wiLFxuICAgIGVjaG86IHRydWUsXG4gICAgb3V0cHV0OiB0cnVlXG4gIH0sIGJsb2NrLmF0dHIpO1xuXG4gIC8vIEV2YWx1YXRlIHRoZSBwcm92aWRlZCBSIGNvZGVcbiAgY29uc3QgcmVzdWx0ID0gd2ViUk9qcy5wcm9jZXNzKHtjb2RlOiBibG9jay5jb2RlLCBvcHRpb25zfSwge30pO1xuXG4gIC8vIEVhcmx5IHlpZWxkIHdoaWxlIHdlIHdhaXQgZm9yIHRoZSBmaXJzdCBldmFsdWF0aW9uIGFuZCByZW5kZXJcbiAgaWYgKG9wdGlvbnMub3V0cHV0ICYmICEoXCIzXCIgaW4gd2ViUk9qcy5yZW5kZXJlZE9qcykpIHtcbiAgICBjb25zdCBjb250YWluZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuICAgIGNvbnN0IHNwaW5uZXIgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwiZGl2XCIpO1xuXG4gICAgaWYgKG9wdGlvbnMuZWNobykge1xuICAgICAgLy8gU2hvdyBvdXRwdXQgYXMgaGlnaGxpZ2h0ZWQgc291cmNlXG4gICAgICBjb25zdCBwcmVFbGVtID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcInByZVwiKTtcbiAgICAgIGNvbnRhaW5lci5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGVcIjtcbiAgICAgIHByZUVsZW0uY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlIHJcIjtcbiAgICAgIHByZUVsZW0uYXBwZW5kQ2hpbGQoaGlnaGxpZ2h0UihibG9jay5jb2RlKSk7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ncm93IHNwaW5uZXItZ3Jvdy1zbSBtLTIgcG9zaXRpb24tYWJzb2x1dGUgdG9wLTAgZW5kLTBcIjtcbiAgICAgIHByZUVsZW0uYXBwZW5kQ2hpbGQoc3Bpbm5lcik7XG4gICAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQocHJlRWxlbSk7XG4gICAgfSBlbHNlIHtcbiAgICAgIHNwaW5uZXIuY2xhc3NOYW1lID0gXCJzcGlubmVyLWJvcmRlciBzcGlubmVyLWJvcmRlci1zbVwiO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgIH1cblxuICAgIHlpZWxkIGNvbnRhaW5lcjtcbiAgfVxuXG4gIHdlYlJPanMucmVuZGVyZWRPanNbXCIzXCJdID0gdHJ1ZTtcbiAgeWllbGQgYXdhaXQgcmVzdWx0O1xufVxuIn0seyJjZWxsTmFtZSI6IndlYnItd2lkZ2V0LTIiLCJpbmxpbmUiOmZhbHNlLCJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJ7XG4gIC8vIFdhaXQgZm9yIG91dHB1dCB0byBiZSB3cml0dGVuIHRvIHRoZSBET00sIHRoZW4gdHJpZ2dlciB3aWRnZXQgcmVuZGVyaW5nXG4gIGF3YWl0IF93ZWJyX3ZhbHVlXzI7XG4gIGlmICh3aW5kb3cuSFRNTFdpZGdldHMpIHtcbiAgICB3aW5kb3cuSFRNTFdpZGdldHMuc3RhdGljUmVuZGVyKCk7XG4gIH1cbiAgaWYgKHdpbmRvdy5QYWdlZFRhYmxlRG9jKSB7XG4gICAgd2luZG93LlBhZ2VkVGFibGVEb2MuaW5pdEFsbCgpO1xuICB9XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici0yIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldCIsInNvdXJjZSI6Il93ZWJyX3ZhbHVlXzIgPSB7XG4gIGNvbnN0IHsgaGlnaGxpZ2h0UiwgYjY0RGVjb2RlIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuICBjb25zdCBzY3JpcHRDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XFxcIndlYnItMi1jb250ZW50c1xcXCJdYCkudGV4dENvbnRlbnQ7XG4gIGNvbnN0IGJsb2NrID0gSlNPTi5wYXJzZShiNjREZWNvZGUoc2NyaXB0Q29udGVudCkpO1xuXG4gIC8vIERlZmF1bHQgZXZhbHVhdGlvbiBjb25maWd1cmF0aW9uXG4gIGNvbnN0IG9wdGlvbnMgPSBPYmplY3QuYXNzaWduKHtcbiAgICBpZDogXCJ3ZWJyLTItY29udGVudHNcIixcbiAgICBlY2hvOiB0cnVlLFxuICAgIG91dHB1dDogdHJ1ZVxuICB9LCBibG9jay5hdHRyKTtcblxuICAvLyBFdmFsdWF0ZSB0aGUgcHJvdmlkZWQgUiBjb2RlXG4gIGNvbnN0IHJlc3VsdCA9IHdlYlJPanMucHJvY2Vzcyh7Y29kZTogYmxvY2suY29kZSwgb3B0aW9uc30sIHt9KTtcblxuICAvLyBFYXJseSB5aWVsZCB3aGlsZSB3ZSB3YWl0IGZvciB0aGUgZmlyc3QgZXZhbHVhdGlvbiBhbmQgcmVuZGVyXG4gIGlmIChvcHRpb25zLm91dHB1dCAmJiAhKFwiMlwiIGluIHdlYlJPanMucmVuZGVyZWRPanMpKSB7XG4gICAgY29uc3QgY29udGFpbmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcbiAgICBjb25zdCBzcGlubmVyID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKTtcblxuICAgIGlmIChvcHRpb25zLmVjaG8pIHtcbiAgICAgIC8vIFNob3cgb3V0cHV0IGFzIGhpZ2hsaWdodGVkIHNvdXJjZVxuICAgICAgY29uc3QgcHJlRWxlbSA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJwcmVcIik7XG4gICAgICBjb250YWluZXIuY2xhc3NOYW1lID0gXCJzb3VyY2VDb2RlXCI7XG4gICAgICBwcmVFbGVtLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZSByXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKGhpZ2hsaWdodFIoYmxvY2suY29kZSkpO1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItZ3JvdyBzcGlubmVyLWdyb3ctc20gbS0yIHBvc2l0aW9uLWFic29sdXRlIHRvcC0wIGVuZC0wXCI7XG4gICAgICBwcmVFbGVtLmFwcGVuZENoaWxkKHNwaW5uZXIpO1xuICAgICAgY29udGFpbmVyLmFwcGVuZENoaWxkKHByZUVsZW0pO1xuICAgIH0gZWxzZSB7XG4gICAgICBzcGlubmVyLmNsYXNzTmFtZSA9IFwic3Bpbm5lci1ib3JkZXIgc3Bpbm5lci1ib3JkZXItc21cIjtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICB9XG5cbiAgICB5aWVsZCBjb250YWluZXI7XG4gIH1cblxuICB3ZWJST2pzLnJlbmRlcmVkT2pzW1wiMlwiXSA9IHRydWU7XG4gIHlpZWxkIGF3YWl0IHJlc3VsdDtcbn1cbiJ9LHsiY2VsbE5hbWUiOiJ3ZWJyLXdpZGdldC0xIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoie1xuICAvLyBXYWl0IGZvciBvdXRwdXQgdG8gYmUgd3JpdHRlbiB0byB0aGUgRE9NLCB0aGVuIHRyaWdnZXIgd2lkZ2V0IHJlbmRlcmluZ1xuICBhd2FpdCBfd2Vicl92YWx1ZV8xO1xuICBpZiAod2luZG93LkhUTUxXaWRnZXRzKSB7XG4gICAgd2luZG93LkhUTUxXaWRnZXRzLnN0YXRpY1JlbmRlcigpO1xuICB9XG4gIGlmICh3aW5kb3cuUGFnZWRUYWJsZURvYykge1xuICAgIHdpbmRvdy5QYWdlZFRhYmxlRG9jLmluaXRBbGwoKTtcbiAgfVxufVxuIn0seyJjZWxsTmFtZSI6IndlYnItMSIsImlubGluZSI6ZmFsc2UsIm1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJzb3VyY2UiOiJfd2Vicl92YWx1ZV8xID0ge1xuICBjb25zdCB7IGhpZ2hsaWdodFIsIGI2NERlY29kZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZTtcbiAgY29uc3Qgc2NyaXB0Q29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVxcXCJ3ZWJyLTEtY29udGVudHNcXFwiXWApLnRleHRDb250ZW50O1xuICBjb25zdCBibG9jayA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKHNjcmlwdENvbnRlbnQpKTtcblxuICAvLyBEZWZhdWx0IGV2YWx1YXRpb24gY29uZmlndXJhdGlvblxuICBjb25zdCBvcHRpb25zID0gT2JqZWN0LmFzc2lnbih7XG4gICAgaWQ6IFwid2Vici0xLWNvbnRlbnRzXCIsXG4gICAgZWNobzogdHJ1ZSxcbiAgICBvdXRwdXQ6IHRydWVcbiAgfSwgYmxvY2suYXR0cik7XG5cbiAgLy8gRXZhbHVhdGUgdGhlIHByb3ZpZGVkIFIgY29kZVxuICBjb25zdCByZXN1bHQgPSB3ZWJST2pzLnByb2Nlc3Moe2NvZGU6IGJsb2NrLmNvZGUsIG9wdGlvbnN9LCB7fSk7XG5cbiAgLy8gRWFybHkgeWllbGQgd2hpbGUgd2Ugd2FpdCBmb3IgdGhlIGZpcnN0IGV2YWx1YXRpb24gYW5kIHJlbmRlclxuICBpZiAob3B0aW9ucy5vdXRwdXQgJiYgIShcIjFcIiBpbiB3ZWJST2pzLnJlbmRlcmVkT2pzKSkge1xuICAgIGNvbnN0IGNvbnRhaW5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG4gICAgY29uc3Qgc3Bpbm5lciA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoXCJkaXZcIik7XG5cbiAgICBpZiAob3B0aW9ucy5lY2hvKSB7XG4gICAgICAvLyBTaG93IG91dHB1dCBhcyBoaWdobGlnaHRlZCBzb3VyY2VcbiAgICAgIGNvbnN0IHByZUVsZW0gPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KFwicHJlXCIpO1xuICAgICAgY29udGFpbmVyLmNsYXNzTmFtZSA9IFwic291cmNlQ29kZVwiO1xuICAgICAgcHJlRWxlbS5jbGFzc05hbWUgPSBcInNvdXJjZUNvZGUgclwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChoaWdobGlnaHRSKGJsb2NrLmNvZGUpKTtcbiAgICAgIHNwaW5uZXIuY2xhc3NOYW1lID0gXCJzcGlubmVyLWdyb3cgc3Bpbm5lci1ncm93LXNtIG0tMiBwb3NpdGlvbi1hYnNvbHV0ZSB0b3AtMCBlbmQtMFwiO1xuICAgICAgcHJlRWxlbS5hcHBlbmRDaGlsZChzcGlubmVyKTtcbiAgICAgIGNvbnRhaW5lci5hcHBlbmRDaGlsZChwcmVFbGVtKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc3Bpbm5lci5jbGFzc05hbWUgPSBcInNwaW5uZXItYm9yZGVyIHNwaW5uZXItYm9yZGVyLXNtXCI7XG4gICAgICBjb250YWluZXIuYXBwZW5kQ2hpbGQoc3Bpbm5lcik7XG4gICAgfVxuXG4gICAgeWllbGQgY29udGFpbmVyO1xuICB9XG5cbiAgd2ViUk9qcy5yZW5kZXJlZE9qc1tcIjFcIl0gPSB0cnVlO1xuICB5aWVsZCBhd2FpdCByZXN1bHQ7XG59XG4ifSx7ImNlbGxOYW1lIjoid2Vici1wcmVsdWRlIiwiaW5saW5lIjpmYWxzZSwibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoid2ViUk9qcyA9IHtcbiAgY29uc3QgeyBXZWJSLCBDaGFubmVsVHlwZSB9ID0gd2luZG93Ll9leGVyY2lzZV9vanNfcnVudGltZS5XZWJSO1xuICBjb25zdCB7XG4gICAgV2ViUkV2YWx1YXRvcixcbiAgICBXZWJSRW52aXJvbm1lbnRNYW5hZ2VyLFxuICAgIHNldHVwUixcbiAgICBiNjREZWNvZGUsXG4gICAgY29sbGFwc2VQYXRoXG4gIH0gPSB3aW5kb3cuX2V4ZXJjaXNlX29qc19ydW50aW1lO1xuXG4gIGNvbnN0IHN0YXR1c0NvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1zdGF0dXNcIik7XG4gIGNvbnN0IGluZGljYXRvckNvbnRhaW5lciA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwiZXhlcmNpc2UtbG9hZGluZy1pbmRpY2F0b3JcIik7XG4gIGluZGljYXRvckNvbnRhaW5lci5jbGFzc0xpc3QucmVtb3ZlKFwiZC1ub25lXCIpO1xuXG4gIGxldCBzdGF0dXNUZXh0ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudChcImRpdlwiKVxuICBzdGF0dXNUZXh0LmNsYXNzTGlzdCA9IFwiZXhlcmNpc2UtbG9hZGluZy1kZXRhaWxzXCI7XG4gIHN0YXR1c1RleHQgPSBzdGF0dXNDb250YWluZXIuYXBwZW5kQ2hpbGQoc3RhdHVzVGV4dCk7XG4gIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgSW5pdGlhbGlzZWA7XG5cbiAgLy8gSG9pc3QgaW5kaWNhdG9yIG91dCBmcm9tIGZpbmFsIHNsaWRlIHdoZW4gcnVubmluZyB1bmRlciByZXZlYWxcbiAgY29uc3QgcmV2ZWFsU3RhdHVzID0gZG9jdW1lbnQucXVlcnlTZWxlY3RvcihcIi5yZXZlYWwgLmV4ZXJjaXNlLWxvYWRpbmctaW5kaWNhdG9yXCIpO1xuICBpZiAocmV2ZWFsU3RhdHVzKSB7XG4gICAgcmV2ZWFsU3RhdHVzLnJlbW92ZSgpO1xuICAgIGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoXCIucmV2ZWFsID4gLnNsaWRlc1wiKS5hcHBlbmRDaGlsZChyZXZlYWxTdGF0dXMpO1xuICB9XG5cbiAgLy8gTWFrZSBhbnkgcmV2ZWFsIHNsaWRlcyB3aXRoIGxpdmUgY2VsbHMgc2Nyb2xsYWJsZVxuICBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKFwiLnJldmVhbCAuZXhlcmNpc2UtY2VsbFwiKS5mb3JFYWNoKChlbCkgPT4ge1xuICAgIGVsLmNsb3Nlc3QoJ3NlY3Rpb24uc2xpZGUnKS5jbGFzc0xpc3QuYWRkKFwic2Nyb2xsYWJsZVwiKTtcbiAgfSlcblxuICAvLyB3ZWJSIHN1cHBsZW1lbnRhbCBkYXRhIGFuZCBvcHRpb25zXG4gIGNvbnN0IGRhdGFDb250ZW50ID0gZG9jdW1lbnQucXVlcnlTZWxlY3Rvcihgc2NyaXB0W3R5cGU9XCJ3ZWJyLWRhdGFcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZGF0YSA9IEpTT04ucGFyc2UoYjY0RGVjb2RlKGRhdGFDb250ZW50KSk7XG5cbiAgLy8gR3JhYiBsaXN0IG9mIHJlc291cmNlcyB0byBiZSBkb3dubG9hZGVkXG4gIGNvbnN0IGZpbGVzQ29udGVudCA9IGRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoYHNjcmlwdFt0eXBlPVwidmZzLWZpbGVcIl1gKS50ZXh0Q29udGVudDtcbiAgY29uc3QgZmlsZXMgPSBKU09OLnBhcnNlKGI2NERlY29kZShmaWxlc0NvbnRlbnQpKTtcblxuICBjb25zdCBmaW5kU2hhcmVkSW1hZ2UgPSBhc3luYyAoKSA9PiB7XG4gICAgLy8gUXVhcnRvIHBhY2thZ2VzIHRoaXMgaW1hZ2UgYmVzaWRlIHRoZSBsaXZlLXJ1bnRpbWUgbW9kdWxlLCBpbiBlaXRoZXJcbiAgICAvLyBzaXRlX2xpYnMgb3IgdGhlIGRlY2sncyBjb21wYW5pb24gZGlyZWN0b3J5LiBVc2UgdGhlIGVtaXR0ZWQgbW9kdWxlIFVSTFxuICAgIC8vIHNvIHJldGFpbmVkL3Njb3BlZCBidWlsZHMga2VlcCB0aGVpciBvd24gbWF0Y2hpbmcgaW1hZ2UuXG4gICAgY29uc3QgcnVudGltZVNjcmlwdCA9IEFycmF5LmZyb20oZG9jdW1lbnQuc2NyaXB0cykuZmluZChzY3JpcHQgPT5cbiAgICAgIHNjcmlwdC5zcmMgJiYgbmV3IFVSTChzY3JpcHQuc3JjKS5wYXRobmFtZS5lbmRzV2l0aChcIi9saXZlLXJ1bnRpbWUuanNcIilcbiAgICApO1xuICAgIGlmICghcnVudGltZVNjcmlwdCkgdGhyb3cgbmV3IEVycm9yKFwiQ2FuJ3QgbG9jYXRlIHRoZSBsb2FkZWQgbGl2ZS1ydW50aW1lIG1vZHVsZSBmb3IgdGhlIHNoYXJlZCBXZWJSIGltYWdlLlwiKTtcbiAgICBjb25zdCBjYW5kaWRhdGUgPSBuZXcgVVJMKFwicXRtMjg1LXNoYXJlZC5kYXRhLmd6XCIsIHJ1bnRpbWVTY3JpcHQuc3JjKTtcbiAgICBjb25zdCBtZXRhZGF0YVVybCA9IG5ldyBVUkwoXCJxdG0yODUtc2hhcmVkLmpzLm1ldGFkYXRhXCIsIHJ1bnRpbWVTY3JpcHQuc3JjKTtcbiAgICBjb25zdCBbcmVzcG9uc2UsIG1ldGFkYXRhUmVzcG9uc2VdID0gYXdhaXQgUHJvbWlzZS5hbGwoW1xuICAgICAgZmV0Y2goY2FuZGlkYXRlKSxcbiAgICAgIGZldGNoKG1ldGFkYXRhVXJsKSxcbiAgICBdKTtcbiAgICBpZiAoIXJlc3BvbnNlLm9rKSB0aHJvdyBuZXcgRXJyb3IoYENhbid0IGxvYWQgdGhlIHNoYXJlZCBXZWJSIGltYWdlIGF0ICR7Y2FuZGlkYXRlLmhyZWZ9OiBIVFRQICR7cmVzcG9uc2Uuc3RhdHVzfS5gKTtcbiAgICBpZiAoIW1ldGFkYXRhUmVzcG9uc2Uub2spIHRocm93IG5ldyBFcnJvcihgQ2FuJ3QgbG9hZCB0aGUgc2hhcmVkIFdlYlIgaW1hZ2UgbWV0YWRhdGEgYXQgJHttZXRhZGF0YVVybC5ocmVmfTogSFRUUCAke21ldGFkYXRhUmVzcG9uc2Uuc3RhdHVzfS5gKTtcbiAgICBjb25zdCBbY29tcHJlc3NlZCwgbWV0YWRhdGFdID0gYXdhaXQgUHJvbWlzZS5hbGwoW1xuICAgICAgcmVzcG9uc2UuYXJyYXlCdWZmZXIoKSxcbiAgICAgIG1ldGFkYXRhUmVzcG9uc2UuanNvbigpLFxuICAgIF0pO1xuICAgIGNvbnN0IGJ5dGVzID0gbWV0YWRhdGEuZ3ppcFxuICAgICAgPyBhd2FpdCBuZXcgUmVzcG9uc2UobmV3IEJsb2IoW2NvbXByZXNzZWRdKS5zdHJlYW0oKS5waXBlVGhyb3VnaChuZXcgRGVjb21wcmVzc2lvblN0cmVhbShcImd6aXBcIikpKS5hcnJheUJ1ZmZlcigpXG4gICAgICA6IGNvbXByZXNzZWQ7XG4gICAgaWYgKGJ5dGVzLmJ5dGVMZW5ndGggIT09IG1ldGFkYXRhLnJlbW90ZV9wYWNrYWdlX3NpemUpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcihgSW5jb21wbGV0ZSBzaGFyZWQgV2ViUiBpbWFnZTogcmVjZWl2ZWQgJHtieXRlcy5ieXRlTGVuZ3RofSBieXRlczsgZXhwZWN0ZWQgJHttZXRhZGF0YS5yZW1vdGVfcGFja2FnZV9zaXplfS5gKTtcbiAgICB9XG4gICAgcmV0dXJuIHsgbW91bnRwb2ludDogXCIvcWltZ1wiLCBieXRlcywgbWV0YWRhdGEgfTtcbiAgfTtcblxuICBsZXQgd2ViUlByb21pc2UgPSBudWxsO1xuICBsZXQgcmVzb2x2ZUJvb3Q7XG4gIGxldCByZWplY3RCb290O1xuICBjb25zdCBib290R2F0ZSA9IG5ldyBQcm9taXNlKChyZXNvbHZlLCByZWplY3QpID0+IHtcbiAgICByZXNvbHZlQm9vdCA9IHJlc29sdmU7XG4gICAgcmVqZWN0Qm9vdCA9IHJlamVjdDtcbiAgfSk7XG5cbiAgY29uc3QgZW5zdXJlV2ViUiA9ICgpID0+IHtcbiAgICBpZiAoIXdlYlJQcm9taXNlKSB7XG4gICAgICB3ZWJSUHJvbWlzZSA9IGluaXRMYXp5V2ViUigpLnRoZW4oXG4gICAgICAgICh3ZWJSKSA9PiB7XG4gICAgICAgICAgcmVzb2x2ZUJvb3Qod2ViUik7XG4gICAgICAgICAgcmV0dXJuIHdlYlI7XG4gICAgICAgIH0sXG4gICAgICAgIChlcnJvcikgPT4ge1xuICAgICAgICAgIHdlYlJQcm9taXNlID0gbnVsbDtcbiAgICAgICAgICByZWplY3RCb290KGVycm9yKTtcbiAgICAgICAgICB0aHJvdyBlcnJvcjtcbiAgICAgICAgfSxcbiAgICAgICk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSUHJvbWlzZTtcbiAgfTtcblxuICAvLyBJbml0aWFsaXNlIHdlYlIgb25seSB3aGVuIGEgY2VsbCBmaXJzdCByZXF1ZXN0cyBleGVjdXRpb24uXG4gIGNvbnN0IGluaXRMYXp5V2ViUiA9IGFzeW5jICgpID0+IHtcbiAgICBjb25zdCBpbWFnZSA9IGF3YWl0IGZpbmRTaGFyZWRJbWFnZSgpO1xuICAgIGNvbnN0IHdlYlIgPSBuZXcgV2ViUihkYXRhLm9wdGlvbnMpO1xuICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgd2ViUmA7XG4gICAgYXdhaXQgd2ViUi5pbml0KCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYE1vdW50aW5nIHNoYXJlZCBpbWFnZWA7XG4gICAgYXdhaXQgd2ViUi5GUy5ta2RpcihpbWFnZS5tb3VudHBvaW50KTtcbiAgICBhd2FpdCB3ZWJSLkZTLm1vdW50KFwiV09SS0VSRlNcIiwge1xuICAgICAgcGFja2FnZXM6IFt7IGJsb2I6IG5ldyBVaW50OEFycmF5KGltYWdlLmJ5dGVzKSwgbWV0YWRhdGE6IGltYWdlLm1ldGFkYXRhIH1dLFxuICAgIH0sIGltYWdlLm1vdW50cG9pbnQpO1xuICAgIGF3YWl0IHdlYlIuZXZhbFJWb2lkKGAubGliUGF0aHMoYyhtb3VudHBvaW50LCAubGliUGF0aHMoKSkpYCwge1xuICAgICAgZW52OiB7IG1vdW50cG9pbnQ6IGltYWdlLm1vdW50cG9pbnQgfSxcbiAgICB9KTtcblxuICAgIC8vIFRoZSBpbWFnZSByZXBsYWNlcyBwYWNrYWdlIGluc3RhbGxhdGlvbiwgbm90IHBhY2thZ2UgYXR0YWNobWVudC5cbiAgICBhd2FpdCBkYXRhLnBhY2thZ2VzLnBrZ3MubWFwKChwa2cpID0+ICgpID0+IHtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgTG9hZGluZyBwYWNrYWdlOiAke3BrZ31gO1xuICAgICAgcmV0dXJuIHdlYlIuZXZhbFJWb2lkKGBsaWJyYXJ5KHBrZywgY2hhcmFjdGVyLm9ubHkgPSBUUlVFKWAsIHtcbiAgICAgICAgZW52OiB7IHBrZyB9LFxuICAgICAgfSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICAvLyBEb3dubG9hZCBhbmQgaW5zdGFsbCByZXNvdXJjZXNcbiAgICBhd2FpdCBmaWxlcy5tYXAoKGZpbGUpID0+IGFzeW5jICgpID0+IHtcbiAgICAgIGNvbnN0IG5hbWUgPSBmaWxlLnN1YnN0cmluZyhmaWxlLmxhc3RJbmRleE9mKCcvJykgKyAxKTtcbiAgICAgIHN0YXR1c1RleHQudGV4dENvbnRlbnQgPSBgRG93bmxvYWRpbmcgcmVzb3VyY2U6ICR7bmFtZX1gO1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBmZXRjaChmaWxlKTtcbiAgICAgIGlmICghcmVzcG9uc2Uub2spIHtcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKGBDYW4ndCBkb3dubG9hZCBcXGAke2ZpbGV9XFxgLiBFcnJvciAke3Jlc3BvbnNlLnN0YXR1c306IFwiJHtyZXNwb25zZS5zdGF0dXNUZXh0fVwiLmApO1xuICAgICAgfVxuICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHJlc3BvbnNlLmFycmF5QnVmZmVyKCk7XG5cbiAgICAgIC8vIFN0b3JlIFVSTHMgaW4gdGhlIGN3ZCB3aXRob3V0IGFueSBzdWJkaXJlY3Rvcnkgc3RydWN0dXJlXG4gICAgICBpZiAoZmlsZS5pbmNsdWRlcyhcIjovL1wiKSkge1xuICAgICAgICBmaWxlID0gbmFtZTtcbiAgICAgIH1cblxuICAgICAgLy8gQ29sbGFwc2UgaGlnaGVyIGRpcmVjdG9yeSBzdHJ1Y3R1cmVcbiAgICAgIGZpbGUgPSBjb2xsYXBzZVBhdGgoZmlsZSk7XG5cbiAgICAgIC8vIENyZWF0ZSBkaXJlY3RvcnkgdHJlZSwgaWdub3JpbmcgXCJkaXJlY3RvcnkgZXhpc3RzXCIgVkZTIGVycm9yc1xuICAgICAgY29uc3QgcGFydHMgPSBmaWxlLnNwbGl0KCcvJykuc2xpY2UoMCwgLTEpO1xuICAgICAgbGV0IHBhdGggPSAnJztcbiAgICAgIHdoaWxlIChwYXJ0cy5sZW5ndGggPiAwKSB7XG4gICAgICAgIHBhdGggKz0gcGFydHMuc2hpZnQoKSArICcvJztcbiAgICAgICAgY29uc3QgYW5hbHlzaXMgPSBhd2FpdCB3ZWJSLkZTLmFuYWx5emVQYXRoKHBhdGgpO1xuICAgICAgICBpZiAoIWFuYWx5c2lzLmV4aXN0cykge1xuICAgICAgICAgIHRyeSB7XG4gICAgICAgICAgICBhd2FpdCB3ZWJSLkZTLm1rZGlyKHBhdGgpO1xuICAgICAgICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcihgRmlsZXN5c3RlbSBFcnJvcjogXCIke2UubWVzc2FnZX1cIi5gKTtcbiAgICAgICAgICB9XG4gICAgICAgIH1cbiAgICAgIH1cblxuICAgICAgLy8gV3JpdGUgdGhpcyBmaWxlIHRvIHRoZSBWRlNcbiAgICAgIHJldHVybiBhd2FpdCB3ZWJSLkZTLndyaXRlRmlsZShmaWxlLCBuZXcgVWludDhBcnJheShkYXRhKSk7XG4gICAgfSkucmVkdWNlKChjdXIsIG5leHQpID0+IGN1ci50aGVuKG5leHQpLCBQcm9taXNlLnJlc29sdmUoKSk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYEluc3RhbGxpbmcgd2ViUiBzaGltc2A7XG4gICAgYXdhaXQgd2ViUi5ldmFsUlZvaWQoYHdlYnI6OnNoaW1faW5zdGFsbCgpYCk7XG5cbiAgICBzdGF0dXNUZXh0LnRleHRDb250ZW50ID0gYFdlYlIgZW52aXJvbm1lbnQgc2V0dXBgO1xuICAgIGF3YWl0IHNldHVwUih3ZWJSLCBkYXRhKTtcblxuICAgIHN0YXR1c1RleHQucmVtb3ZlKCk7XG4gICAgaWYgKHN0YXR1c0NvbnRhaW5lci5jaGlsZHJlbi5sZW5ndGggPT0gMCkge1xuICAgICAgc3RhdHVzQ29udGFpbmVyLnBhcmVudE5vZGUucmVtb3ZlKCk7XG4gICAgfVxuICAgIHJldHVybiB3ZWJSO1xuICB9O1xuXG4gIC8vIEtlZXAgdHJhY2sgb2YgaW5pdGlhbCBPSlMgYmxvY2sgcmVuZGVyXG4gIGNvbnN0IHJlbmRlcmVkT2pzID0ge307XG5cbiAgY29uc3QgcHJvY2VzcyA9IGFzeW5jIChjb250ZXh0LCBpbnB1dHMpID0+IHtcbiAgICBjb25zdCB3ZWJSID0gYXdhaXQgZW5zdXJlV2ViUigpO1xuICAgIGNvbnN0IGV2YWx1YXRvciA9IG5ldyBXZWJSRXZhbHVhdG9yKHdlYlIsIGNvbnRleHQpXG4gICAgYXdhaXQgZXZhbHVhdG9yLnByb2Nlc3MoaW5wdXRzKTtcbiAgICByZXR1cm4gZXZhbHVhdG9yLmNvbnRhaW5lcjtcbiAgfVxuXG4gIHJldHVybiB7XG4gICAgcHJvY2VzcyxcbiAgICBlbnN1cmVXZWJSLFxuICAgIHdlYlJQcm9taXNlOiBib290R2F0ZSxcbiAgICByZW5kZXJlZE9qcyxcbiAgfTtcbn1cbiJ9XX0=
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="georgia-oct29_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="georgia-oct29_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="georgia-oct29_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="georgia-oct29_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': false,
+'pdfSeparateFragments': true,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1290,
+
+        height: 1000,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 2.0e-2,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script type="ojs-module-contents">
+    eyJjb250ZW50cyI6W119
+    </script>
+    <script type="module">
+    if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+    window._ojs.paths.runtimeToDoc = "../../..";
+    window._ojs.paths.runtimeToRoot = "../../../..";
+    window._ojs.paths.docToRoot = "..";
+    window._ojs.selfContained = false;
+    window._ojs.runtime.interpretFromScriptTags();
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const xrefs = window.document.querySelectorAll('a.quarto-xref');
+        const processXRef = (id, note) => {
+          // Strip column container classes
+          const stripColumnClz = (el) => {
+            el.classList.remove("page-full", "page-columns");
+            if (el.children) {
+              for (const child of el.children) {
+                stripColumnClz(child);
+              }
+            }
+          }
+          stripColumnClz(note)
+          if (id === null || id.startsWith('sec-')) {
+            // Special case sections, only their first couple elements
+            const container = document.createElement("div");
+            if (note.children && note.children.length > 2) {
+              container.appendChild(note.children[0].cloneNode(true));
+              for (let i = 1; i < note.children.length; i++) {
+                const child = note.children[i];
+                if (child.tagName === "P" && child.innerText === "") {
+                  continue;
+                } else {
+                  container.appendChild(child.cloneNode(true));
+                  break;
+                }
+              }
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(container);
+              }
+              return container.innerHTML
+            } else {
+              if (window.Quarto?.typesetMath) {
+                window.Quarto.typesetMath(note);
+              }
+              return note.innerHTML;
+            }
+          } else {
+            // Remove any anchor links if they are present
+            const anchorLink = note.querySelector('a.anchorjs-link');
+            if (anchorLink) {
+              anchorLink.remove();
+            }
+            if (window.Quarto?.typesetMath) {
+              window.Quarto.typesetMath(note);
+            }
+            if (note.classList.contains("callout")) {
+              return note.outerHTML;
+            } else {
+              return note.innerHTML;
+            }
+          }
+        }
+        for (var i=0; i<xrefs.length; i++) {
+          const xref = xrefs[i];
+          tippyHover(xref, undefined, function(instance) {
+            instance.disable();
+            let url = xref.getAttribute('href');
+            let hash = undefined; 
+            if (url.startsWith('#')) {
+              hash = url;
+            } else {
+              try { hash = new URL(url).hash; } catch {}
+            }
+            if (hash) {
+              const id = hash.replace(/^#\/?/, "");
+              const note = window.document.getElementById(id);
+              if (note !== null) {
+                try {
+                  const html = processXRef(id, note.cloneNode(true));
+                  instance.setContent(html);
+                } finally {
+                  instance.enable();
+                  instance.show();
+                }
+              } else {
+                // See if we can fetch this
+                fetch(url.split('#')[0])
+                .then(res => res.text())
+                .then(html => {
+                  const parser = new DOMParser();
+                  const htmlDoc = parser.parseFromString(html, "text/html");
+                  const note = htmlDoc.getElementById(id);
+                  if (note !== null) {
+                    const html = processXRef(id, note);
+                    instance.setContent(html);
+                  } 
+                }).finally(() => {
+                  instance.enable();
+                  instance.show();
+                });
+              }
+            } else {
+              // See if we can fetch a full url (with no hash to target)
+              // This is a special case and we should probably do some content thinning / targeting
+              fetch(url)
+              .then(res => res.text())
+              .then(html => {
+                const parser = new DOMParser();
+                const htmlDoc = parser.parseFromString(html, "text/html");
+                const note = htmlDoc.querySelector('main.content');
+                if (note !== null) {
+                  // This should only happen for chapter cross references
+                  // (since there is no id in the URL)
+                  // remove the first header
+                  if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                    note.children[0].remove();
+                  }
+                  const html = processXRef(null, note);
+                  instance.setContent(html);
+                } 
+              }).finally(() => {
+                instance.enable();
+                instance.show();
+              });
+            }
+          }, function(instance) {
+          });
+        }
+            let selectedAnnoteEl;
+            const selectorForAnnotation = ( cell, annotation) => {
+              let cellAttr = 'data-code-cell="' + cell + '"';
+              let lineAttr = 'data-code-annotation="' +  annotation + '"';
+              const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+              return selector;
+            }
+            const selectCodeLines = (annoteEl) => {
+              const doc = window.document;
+              const targetCell = annoteEl.getAttribute("data-target-cell");
+              const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+              const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+              const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+              const lineIds = lines.map((line) => {
+                return targetCell + "-" + line;
+              })
+              let top = null;
+              let height = null;
+              let parent = null;
+              if (lineIds.length > 0) {
+                  //compute the position of the single el (top and bottom and make a div)
+                  const el = window.document.getElementById(lineIds[0]);
+                  top = el.offsetTop;
+                  height = el.offsetHeight;
+                  parent = el.parentElement.parentElement;
+                if (lineIds.length > 1) {
+                  const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+                  const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+                  height = bottom - top;
+                }
+                if (top !== null && height !== null && parent !== null) {
+                  // cook up a div (if necessary) and position it 
+                  let div = window.document.getElementById("code-annotation-line-highlight");
+                  if (div === null) {
+                    div = window.document.createElement("div");
+                    div.setAttribute("id", "code-annotation-line-highlight");
+                    div.style.position = 'absolute';
+                    parent.appendChild(div);
+                  }
+                  div.style.top = top - 2 + "px";
+                  div.style.height = height + 4 + "px";
+                  div.style.left = 0;
+                  let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+                  if (gutterDiv === null) {
+                    gutterDiv = window.document.createElement("div");
+                    gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                    gutterDiv.style.position = 'absolute';
+                    const codeCell = window.document.getElementById(targetCell);
+                    const gutter = codeCell.querySelector('.code-annotation-gutter');
+                    gutter.appendChild(gutterDiv);
+                  }
+                  gutterDiv.style.top = top - 2 + "px";
+                  gutterDiv.style.height = height + 4 + "px";
+                }
+                selectedAnnoteEl = annoteEl;
+              }
+            };
+            const unselectCodeLines = () => {
+              const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+              elementsIds.forEach((elId) => {
+                const div = window.document.getElementById(elId);
+                if (div) {
+                  div.remove();
+                }
+              });
+              selectedAnnoteEl = undefined;
+            };
+              // Handle positioning of the toggle
+          window.addEventListener(
+            "resize",
+            throttle(() => {
+              elRect = undefined;
+              if (selectedAnnoteEl) {
+                selectCodeLines(selectedAnnoteEl);
+              }
+            }, 10)
+          );
+          function throttle(fn, ms) {
+          let throttle = false;
+          let timer;
+            return (...args) => {
+              if(!throttle) { // first call gets through
+                  fn.apply(this, args);
+                  throttle = true;
+              } else { // all the others get throttled
+                  if(timer) clearTimeout(timer); // cancel #2
+                  timer = setTimeout(() => {
+                    fn.apply(this, args);
+                    timer = throttle = false;
+                  }, ms);
+              }
+            };
+          }
+            const annoteTargets = window.document.querySelectorAll('.code-annotation-anchor');
+            for (let i=0; i<annoteTargets.length; i++) {
+              const annoteTarget = annoteTargets[i];
+              const targetCell = annoteTarget.getAttribute("data-target-cell");
+              const targetAnnotation = annoteTarget.getAttribute("data-target-annotation");
+              const contentFn = () => {
+                const content = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+                if (content) {
+                  const tipContent = content.cloneNode(true);
+                  tipContent.classList.add("code-annotation-tip-content");
+                  return tipContent.outerHTML;
+                }
+              }
+              const config = {
+                allowHTML: true,
+                content: contentFn,
+                onShow: (instance) => {
+                  selectCodeLines(instance.reference);
+                  instance.reference.classList.add('code-annotation-active');
+                  window.tippy.hideAll();
+                },
+                onHide: (instance) => {
+                  unselectCodeLines();
+                  instance.reference.classList.remove('code-annotation-active');
+                },
+                maxWidth: 300,
+                delay: [50, 0],
+                duration: [200, 0],
+                offset: [5, 10],
+                arrow: true,
+                appendTo: function(el) {
+                  return el.parentElement.parentElement.parentElement;
+                },
+                interactive: true,
+                interactiveBorder: 10,
+                theme: 'light-border',
+                placement: 'right',
+                popperOptions: {
+                  modifiers: [
+                  {
+                    name: 'flip',
+                    options: {
+                      flipVariations: false, // true by default
+                      allowedAutoPlacements: ['right'],
+                      fallbackPlacements: ['right', 'top', 'top-start', 'top-end', 'bottom', 'bottom-start', 'bottom-end', 'left'],
+                    },
+                  },
+                  {
+                    name: 'preventOverflow',
+                    options: {
+                      mainAxis: false,
+                      altAxis: false
+                    }
+                  }
+                  ]        
+                }      
+              };
+              window.tippy(annoteTarget, config); 
+            }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    
+
+</body></html>
