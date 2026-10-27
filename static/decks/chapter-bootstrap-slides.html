@@ -84715,6 +84715,18 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       return;
     }
 
+    // MathJax can lay out the scroll-view deck after navigation has settled.
+    // Reveal collapses stretch figures during that pass; restore them before
+    // it returns so a capture cannot paint between layout and a later timer.
+    if (deckMode && typeof Reveal.layout === 'function') {
+      var revealLayout = Reveal.layout;
+      Reveal.layout = function() {
+        var result = revealLayout.apply(this, arguments);
+        restoreStretchFigures();
+        return result;
+      };
+    }
+
     bindXrefHovers();
     bindSplitXrefNavigation();
 

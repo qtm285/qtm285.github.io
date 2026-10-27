@@ -386,6 +386,22 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     }
   </style>
   <link rel="stylesheet" href="georgia-oct29_files/libs/revealjs/dist/theme/quarto-dadc5e30687f5fea6d7a7b1168a05c4c.css">
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
   <link href="georgia-oct29_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="georgia-oct29_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -939,7 +955,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 
 </section>
 <section id="after-voting-before-the-result" class="slide level2">
-<h2 data-source-line="10" data-source-end-line="10">After voting, before the result</h2>
+<h2 data-source-line="11" data-source-end-line="11">After voting, before the result</h2>
 
 
 <div class="cell" data-source-line="1" data-source-end-line="32" data-source-file="_extensions/r-wasm/live/_knitr.qmd">
@@ -1057,257 +1073,257 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1
 <!-- candy-writer decision, 2026-10-25: real data (Georgia Secretary of State, 2024 general election) replaces the made-up frame; every number in this deck that describes the population follows from it. -->
 <ul>
 <li data-source-line="196" data-source-end-line="215" data-source-file="shared/shared-style.qmd">Imagine a retrospective poll: voting is over, but the result isn’t known.</li>
-<li data-source-line="19" data-source-end-line="19">We ask whether each person voted. Their turnout is now fixed. <!-- candy-writer decision, 2026-10-24: the frame is named here and the vote-share shares a, b are tied to it, so every denominator in the deck is the same frame (cloud-writer review 9791838). --></li>
-<li data-source-line="21" data-source-end-line="21">Compare turnout in two preexisting groups: Black and White registered voters in McIntosh County, Georgia. <!-- candy-writer decision, 2026-10-25: wording qualified per cloud-worker's check (9803405, 9803410): the registered counts are reconstructed from current records, not the preserved 2024 roll. --></li>
-<li data-source-line="23" data-source-end-line="23">Our frame: registration counts reconstructed from current state records, an approximate 2024 frame for teaching.
+<li data-source-line="20" data-source-end-line="20">We ask whether each person voted. Their turnout is now fixed. <!-- candy-writer decision, 2026-10-24: the frame is named here and the vote-share shares a, b are tied to it, so every denominator in the deck is the same frame (cloud-writer review 9791838). --></li>
+<li data-source-line="22" data-source-end-line="22">Compare turnout in two preexisting groups: Black and White registered voters in McIntosh County, Georgia. <!-- candy-writer decision, 2026-10-25: wording qualified per cloud-worker's check (9803405, 9803410): the registered counts are reconstructed from current records, not the preserved 2024 roll. --></li>
+<li data-source-line="24" data-source-end-line="24">Our frame: registration counts reconstructed from current state records, an approximate 2024 frame for teaching.
 <ul>
-<li data-source-line="24" data-source-end-line="24">They count records registered by the October 7, 2024 deadline that are active or inactive now, or cancelled with a last change after November 5, 2024.</li>
-<li data-source-line="25" data-source-end-line="25">Records deleted from the file are missing.</li>
+<li data-source-line="25" data-source-end-line="25">They count records registered by the October 7, 2024 deadline that are active or inactive now, or cancelled with a last change after November 5, 2024.</li>
+<li data-source-line="26" data-source-end-line="26">Records deleted from the file are missing.</li>
 </ul></li>
-<li data-source-line="26" data-source-end-line="26">Our outcome: did they vote in the November 5, 2024 general election?
+<li data-source-line="27" data-source-end-line="27">Our outcome: did they vote in the November 5, 2024 general election?
 <ul>
-<li data-source-line="27" data-source-end-line="27">Ballots are counted by the county where they were cast; registrations by the county on file today. <!-- candy-writer decision, 2026-10-25 (style pass): one line per beat; the qualifications are sub-bullets under the frame and the outcome, wording unchanged. --></li>
+<li data-source-line="28" data-source-end-line="28">Ballots are counted by the county where they were cast; registrations by the county on file today. <!-- candy-writer decision, 2026-10-25 (style pass): one line per beat; the qualifications are sub-bullets under the frame and the outcome, wording unchanged. --></li>
 </ul></li>
-<li data-source-line="29" data-source-end-line="29">Source: Georgia Secretary of State, <a href="https://sos.ga.gov/election-data-hub">Election Data Hub</a>, retrieved October 25, 2026.</li>
-<li data-source-line="30" data-source-end-line="30">Other groups and counties are outside this frame. It is not a statewide election forecast.</li>
+<li data-source-line="30" data-source-end-line="30">Source: Georgia Secretary of State, <a href="https://sos.ga.gov/election-data-hub">Election Data Hub</a>, retrieved October 25, 2026.</li>
+<li data-source-line="31" data-source-end-line="31">Other groups and counties are outside this frame. It is not a statewide election forecast.</li>
 </ul>
 </section>
 <section id="why-would-eight-percentage-points-matter" class="slide level2">
-<h2 data-source-line="32" data-source-end-line="32">Why would eight percentage points matter?</h2>
+<h2 data-source-line="33" data-source-end-line="33">Why would eight percentage points matter?</h2>
 <ul>
-<li data-source-line="34" data-source-end-line="34">A group’s share of registered voters isn’t necessarily its share of the people who vote. <!-- candy-writer decision, 2026-10-25 (style pass): the frame is registered voters (a and b are shares of registered voters), so "eligible residents" named a different denominator. --></li>
-<li data-source-line="36" data-source-end-line="36">Turnout changes the weights in the aggregate vote share.</li>
-<li data-source-line="37" data-source-end-line="37">A turnout gap of eight points and uncertainty of seven points tell a different story from a gap of eight points and uncertainty of one point.</li>
-<li data-source-line="38" data-source-end-line="38">How many people should we ask to make this comparison useful?</li>
+<li data-source-line="35" data-source-end-line="35">A group’s share of registered voters isn’t necessarily its share of the people who vote. <!-- candy-writer decision, 2026-10-25 (style pass): the frame is registered voters (a and b are shares of registered voters), so "eligible residents" named a different denominator. --></li>
+<li data-source-line="37" data-source-end-line="37">Turnout changes the weights in the aggregate vote share.</li>
+<li data-source-line="38" data-source-end-line="38">A turnout gap of eight points and uncertainty of seven points tell a different story from a gap of eight points and uncertainty of one point.</li>
+<li data-source-line="39" data-source-end-line="39">How many people should we ask to make this comparison useful?</li>
 </ul>
 </section>
 <section id="turnout-gaps-and-access-to-voting-in-georgia" class="slide level2">
-<h2 data-source-line="40" data-source-end-line="40">Turnout gaps and access to voting in Georgia</h2>
+<h2 data-source-line="41" data-source-end-line="41">Turnout gaps and access to voting in Georgia</h2>
 <!-- candy-writer decision, 2026-10-25: context slide Skip asked for ("provide context re like, vote suppression w/ references", 9801268). Statewide rates are computed from the same Secretary of State records as our frame. -->
 <ul>
-<li data-source-line="43" data-source-end-line="43">Statewide in 2024, by the same reconstruction, 55% of Black registered voters and 70% of White registered voters cast a ballot.
+<li data-source-line="44" data-source-end-line="44">Statewide in 2024, by the same reconstruction, 55% of Black registered voters and 70% of White registered voters cast a ballot.
 <ul>
-<li data-source-line="44" data-source-end-line="44">About 4% of ballots have no recorded race and are left out. <!-- candy-writer decision, 2026-10-25 (style pass): the caveat is a sub-bullet, wording unchanged. --></li>
+<li data-source-line="45" data-source-end-line="45">About 4% of ballots have no recorded race and are left out. <!-- candy-writer decision, 2026-10-25 (style pass): the caveat is a sub-bullet, wording unchanged. --></li>
 </ul></li>
-<li data-source-line="46" data-source-end-line="46">Until 2013, Georgia needed federal approval (“preclearance”) to change its voting rules. <em>Shelby County v. Holder</em>, 570 U.S. 529 (2013), ended that.</li>
-<li data-source-line="47" data-source-end-line="47">Georgia’s SB 202 (2021) added ID requirements for absentee ballots, limited drop boxes, and banned handing out food or water to voters in line.</li>
-<li data-source-line="48" data-source-end-line="48">Nationally, the gap between White and nonwhite turnout grew from 2008 to 2022. It grew almost twice as fast in places that had needed preclearance (Morris and Grange, <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022"><em>Growing Racial Disparities in Voter Turnout, 2008–2022</em></a>, Brennan Center, 2024).</li>
-<li data-source-line="49" data-source-end-line="49">In 2016, residents of entirely Black neighborhoods waited 29% longer to vote than residents of entirely White ones (Chen, Haggag, Pope and Rohla, “Racial Disparities in Voting Wait Times,” <em>Review of Economics and Statistics</em> 104(6), 2022).</li>
-<li data-source-line="50" data-source-end-line="50">A turnout gap describes; it doesn’t measure how much of the gap any law or practice causes.</li>
+<li data-source-line="47" data-source-end-line="47">Until 2013, Georgia needed federal approval (“preclearance”) to change its voting rules. <em>Shelby County v. Holder</em>, 570 U.S. 529 (2013), ended that.</li>
+<li data-source-line="48" data-source-end-line="48">Georgia’s SB 202 (2021) added ID requirements for absentee ballots, limited drop boxes, and banned handing out food or water to voters in line.</li>
+<li data-source-line="49" data-source-end-line="49">Nationally, the gap between White and nonwhite turnout grew from 2008 to 2022. It grew almost twice as fast in places that had needed preclearance (Morris and Grange, <a href="https://www.brennancenter.org/our-work/research-reports/growing-racial-disparities-voter-turnout-2008-2022"><em>Growing Racial Disparities in Voter Turnout, 2008–2022</em></a>, Brennan Center, 2024).</li>
+<li data-source-line="50" data-source-end-line="50">In 2016, residents of entirely Black neighborhoods waited 29% longer to vote than residents of entirely White ones (Chen, Haggag, Pope and Rohla, “Racial Disparities in Voting Wait Times,” <em>Review of Economics and Statistics</em> 104(6), 2022).</li>
+<li data-source-line="51" data-source-end-line="51">A turnout gap describes; it doesn’t measure how much of the gap any law or practice causes.</li>
 </ul>
 </section>
 <section id="our-population-and-our-sample" class="slide level2">
-<h2 data-source-line="52" data-source-end-line="52">Our population and our sample</h2>
+<h2 data-source-line="53" data-source-end-line="53">Our population and our sample</h2>
 <ul>
-<li data-source-line="54" data-source-end-line="54">The turnout counts come from state records. The locations on the map are made up, placed around McIntosh County.</li>
-<li data-source-line="55" data-source-end-line="55">The sampling frame is fixed. No response error or nonresponse is included in this demonstration.</li>
-<li data-source-line="56" data-source-end-line="56">Select 300 names without replacement within each group, independently.</li>
+<li data-source-line="55" data-source-end-line="55">The turnout counts come from state records. The locations on the map are made up, placed around McIntosh County.</li>
+<li data-source-line="56" data-source-end-line="56">The sampling frame is fixed. No response error or nonresponse is included in this demonstration.</li>
+<li data-source-line="57" data-source-end-line="57">Select 300 names without replacement within each group, independently.</li>
 </ul>
 
 
-<img data-src="georgia-oct29_files/figure-revealjs/ga-block-sample-map-1.svg" class="r-stretch" data-source-line="58" data-source-end-line="63"></section>
+<img data-src="georgia-oct29_files/figure-revealjs/ga-block-sample-map-1.svg" class="r-stretch" data-source-line="59" data-source-end-line="64"></section>
 <section id="what-stays-fixed" class="slide level2">
-<h2 data-source-line="65" data-source-end-line="65">What stays fixed?</h2>
+<h2 data-source-line="66" data-source-end-line="66">What stays fixed?</h2>
 <ul>
-<li data-source-line="67" data-source-end-line="67"><span class="math inline">\(m_1=2729\)</span> Black registered voters (group 1); <span class="math inline">\(m_0=6959\)</span> White registered voters (group 0).</li>
-<li data-source-line="68" data-source-end-line="68"><span class="math inline">\(y_j=1\)</span> if person <span class="math inline">\(j\)</span> voted, <span class="math inline">\(0\)</span> otherwise.</li>
-<li data-source-line="69" data-source-end-line="69"><span class="math inline">\(\mu(1)=1745/2729\approx.639\)</span> and <span class="math inline">\(\mu(0)=4988/6959\approx.717\)</span>.</li>
-<li data-source-line="70" data-source-end-line="70">The population difference is <span class="math inline">\(\Delta=\mu(1)-\mu(0)\approx-.077\)</span>.</li>
-<li data-source-line="71" data-source-end-line="71">Each repeated study selects new names; it doesn’t generate new turnout values.</li>
+<li data-source-line="68" data-source-end-line="68"><span class="math inline">m_1=2729</span> Black registered voters (group 1); <span class="math inline">m_0=6959</span> White registered voters (group 0).</li>
+<li data-source-line="69" data-source-end-line="69"><span class="math inline">y_j=1</span> if person <span class="math inline">j</span> voted, <span class="math inline">0</span> otherwise.</li>
+<li data-source-line="70" data-source-end-line="70"><span class="math inline">\mu(1)=1745/2729\approx.639</span> and <span class="math inline">\mu(0)=4988/6959\approx.717</span>.</li>
+<li data-source-line="71" data-source-end-line="71">The population difference is <span class="math inline">\Delta=\mu(1)-\mu(0)\approx-.077</span>.</li>
+<li data-source-line="72" data-source-end-line="72">Each repeated study selects new names; it doesn’t generate new turnout values.</li>
 </ul>
 </section>
 <section id="the-familiar-estimator" class="slide level2">
-<h2 data-source-line="73" data-source-end-line="73">The familiar estimator</h2>
+<h2 data-source-line="74" data-source-end-line="74">The familiar estimator</h2>
 
-<p data-source-line="75" data-source-end-line="78"><span class="math display">\[
+<p data-source-line="76" data-source-end-line="79"><span class="math display">
 \hat\Delta=\hat\mu(1)-\hat\mu(0),\qquad
 \hat\mu(x)=\frac{1}{n_x}\sum_{i=1}^{n_x}Y_{xi}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="80" data-source-end-line="80"><span class="math inline">\(Y_{xi}\)</span> is the turnout of the <span class="math inline">\(i\)</span>th person selected within group <span class="math inline">\(x\)</span>.</li>
-<li data-source-line="81" data-source-end-line="81">Both <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_0\)</span> are chosen before sampling.</li>
-<li data-source-line="82" data-source-end-line="82">Tuesday’s elective Candy groups had this same sampling structure.</li>
+<li data-source-line="81" data-source-end-line="81"><span class="math inline">Y_{xi}</span> is the turnout of the <span class="math inline">i</span>th person selected within group <span class="math inline">x</span>.</li>
+<li data-source-line="82" data-source-end-line="82">Both <span class="math inline">n_1</span> and <span class="math inline">n_0</span> are chosen before sampling.</li>
+<li data-source-line="83" data-source-end-line="83">Tuesday’s elective Candy groups had this same sampling structure.</li>
 </ul>
 </section>
 <section id="first-repeat-the-study" class="slide level2">
-<h2 data-source-line="84" data-source-end-line="84">First, repeat the study</h2>
+<h2 data-source-line="85" data-source-end-line="85">First, repeat the study</h2>
 
 
 
-<img data-src="georgia-oct29_files/figure-revealjs/ga-differences-distribution-1.svg" class="r-stretch" data-source-line="86" data-source-end-line="99"><ul>
-<li data-source-line="108" data-source-end-line="108">Each dot is one study’s difference, not one person’s outcome.</li>
-<li data-source-line="109" data-source-end-line="109">Does the distribution sit around the population difference?</li>
-<li data-source-line="110" data-source-end-line="110">How much does an estimate move when only the selected names change?</li>
+<img data-src="georgia-oct29_files/figure-revealjs/ga-differences-distribution-1.svg" class="r-stretch" data-source-line="87" data-source-end-line="100"><ul>
+<li data-source-line="109" data-source-end-line="109">Each dot is one study’s difference, not one person’s outcome.</li>
+<li data-source-line="110" data-source-end-line="110">Does the distribution sit around the population difference?</li>
+<li data-source-line="111" data-source-end-line="111">How much does an estimate move when only the selected names change?</li>
 </ul>
 </section>
 <section id="where-is-its-center" class="slide level2">
-<h2 data-source-line="112" data-source-end-line="112">Where is its center?</h2>
+<h2 data-source-line="113" data-source-end-line="113">Where is its center?</h2>
 <ul>
-<li data-source-line="114" data-source-end-line="114">Each group’s sample mean is unbiased for that group’s population mean.</li>
-<li data-source-line="115" data-source-end-line="115">What happens when we subtract?</li>
+<li data-source-line="115" data-source-end-line="115">Each group’s sample mean is unbiased for that group’s population mean.</li>
+<li data-source-line="116" data-source-end-line="116">What happens when we subtract?</li>
 </ul>
 <div class="fragment">
 
-<p data-source-line="118" data-source-end-line="122"><span class="math display">\[
+<p data-source-line="119" data-source-end-line="123"><span class="math display">
 \mathbb{E}(\hat\Delta)
 =\mathbb{E}\{\hat\mu(1)\}-\mathbb{E}\{\hat\mu(0)\}
 =\mu(1)-\mu(0)=\Delta.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="124" data-source-end-line="124">Linearity gives the result. It doesn’t require independence.</li>
+<li data-source-line="125" data-source-end-line="125">Linearity gives the result. It doesn’t require independence.</li>
 </ul>
 </div>
 </section>
 <section id="how-much-does-one-mean-vary" class="slide level2">
-<h2 data-source-line="127" data-source-end-line="127">How much does one mean vary?</h2>
+<h2 data-source-line="128" data-source-end-line="128">How much does one mean vary?</h2>
 <ul>
-<li data-source-line="129" data-source-end-line="129">Use the population-denominator convention from the sampling calculation.</li>
+<li data-source-line="130" data-source-end-line="130">Use the population-denominator convention from the sampling calculation.</li>
 </ul>
 
-<p data-source-line="131" data-source-end-line="137"><span class="math display">\[
+<p data-source-line="132" data-source-end-line="138"><span class="math display">
 \sigma^2(x)=\frac{1}{m_x}\sum_{j:x_j=x}\{y_j-\mu(x)\}^2.
-\]</span> <span class="math display">\[
+</span> <span class="math display">
 V_x=\operatorname{Var}\{\hat\mu(x)\}
 =\frac{\sigma^2(x)}{n_x}\frac{m_x-n_x}{m_x-1}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="139" data-source-end-line="139">For a binary outcome, <span class="math inline">\(\sigma^2(x)=\mu(x)\{1-\mu(x)\}\)</span>.</li>
-<li data-source-line="140" data-source-end-line="140">With replacement, omit the last factor.</li>
-<li data-source-line="141" data-source-end-line="141">Sampling everybody makes the without-replacement variance zero.</li>
+<li data-source-line="140" data-source-end-line="140">For a binary outcome, <span class="math inline">\sigma^2(x)=\mu(x)\{1-\mu(x)\}</span>.</li>
+<li data-source-line="141" data-source-end-line="141">With replacement, omit the last factor.</li>
+<li data-source-line="142" data-source-end-line="142">Sampling everybody makes the without-replacement variance zero.</li>
 </ul>
 </section>
 <section id="subtraction-still-adds-the-variances" class="slide level2">
-<h2 data-source-line="143" data-source-end-line="143">Subtraction still adds the variances</h2>
+<h2 data-source-line="144" data-source-end-line="144">Subtraction still adds the variances</h2>
 
-<p data-source-line="145" data-source-end-line="148"><span class="math display">\[
+<p data-source-line="146" data-source-end-line="149"><span class="math display">
 \operatorname{Var}(\hat\Delta)=V_1+V_0
 -2\operatorname{Cov}\{\hat\mu(1),\hat\mu(0)\}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="150" data-source-end-line="150">We shuffled the two fixed lists independently. What is the covariance?</li>
+<li data-source-line="151" data-source-end-line="151">We shuffled the two fixed lists independently. What is the covariance?</li>
 </ul>
 <div class="fragment">
 
-<p data-source-line="153" data-source-end-line="157"><span class="math display">\[
+<p data-source-line="154" data-source-end-line="158"><span class="math display">
 \operatorname{Var}(\hat\Delta)
 =\frac{\sigma^2(1)}{n_1}\frac{m_1-n_1}{m_1-1}
 +\frac{\sigma^2(0)}{n_0}\frac{m_0-n_0}{m_0-1}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="159" data-source-end-line="159">The covariance is zero because the two sampling processes are independent.</li>
-<li data-source-line="160" data-source-end-line="160">The two errors can reinforce each other when we subtract.</li>
+<li data-source-line="160" data-source-end-line="160">The covariance is zero because the two sampling processes are independent.</li>
+<li data-source-line="161" data-source-end-line="161">The two errors can reinforce each other when we subtract.</li>
 </ul>
 </div>
 </section>
 <section id="the-calculation-for-300-per-group" class="slide level2">
-<h2 data-source-line="163" data-source-end-line="163">The calculation for 300 per group</h2>
+<h2 data-source-line="164" data-source-end-line="164">The calculation for 300 per group</h2>
 
-<p data-source-line="165" data-source-end-line="174"><span class="math display">\[
+<p data-source-line="166" data-source-end-line="175"><span class="math display">
 \operatorname{Var}(\hat\Delta)
 =\frac{.639(.361)}{300}\frac{2429}{2728}
 +\frac{.717(.283)}{300}\frac{6659}{6958}
 \approx .00133192.
-\]</span> <span class="math display">\[
+</span> <span class="math display">
 \operatorname{sd}(\hat\Delta)\approx .03650,\qquad
 1.96\operatorname{sd}(\hat\Delta)\approx .07153.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="176" data-source-end-line="176">Under a suitable normal approximation, about 95% of estimates are within seven percentage points of the target.</li>
-<li data-source-line="177" data-source-end-line="177">An eight-point population gap can still produce an estimate of zero or the wrong sign. Unbiased doesn’t mean exact.</li>
+<li data-source-line="177" data-source-end-line="177">Under a suitable normal approximation, about 95% of estimates are within seven percentage points of the target.</li>
+<li data-source-line="178" data-source-end-line="178">An eight-point population gap can still produce an estimate of zero or the wrong sign. Unbiased doesn’t mean exact.</li>
 </ul>
 </section>
 <section id="how-much-faith-in-the-normal-approximation" class="slide level2">
-<h2 data-source-line="179" data-source-end-line="179">How much faith in the normal approximation?</h2>
+<h2 data-source-line="180" data-source-end-line="180">How much faith in the normal approximation?</h2>
 <ul>
-<li data-source-line="181" data-source-end-line="181">Here the counts of voters in our samples have hypergeometric distributions.</li>
-<li data-source-line="182" data-source-end-line="182">Both blocks have many voters and nonvoters; we aren’t nearly exhausting either block.</li>
-<li data-source-line="183" data-source-end-line="183">Compare the simulated error distribution with the normal approximation before using its quantiles.</li>
-<li data-source-line="184" data-source-end-line="184">The 1.96 calculation is approximate, not a finite-sample coverage guarantee.</li>
-<li data-source-line="185" data-source-end-line="185">Exact hypergeometric calculation gives 95.05% coverage for the known-variance margin in this example.</li>
-<li data-source-line="186" data-source-end-line="186">A tiny block or an almost constant outcome needs a separate check.</li>
+<li data-source-line="182" data-source-end-line="182">Here the counts of voters in our samples have hypergeometric distributions.</li>
+<li data-source-line="183" data-source-end-line="183">Both blocks have many voters and nonvoters; we aren’t nearly exhausting either block.</li>
+<li data-source-line="184" data-source-end-line="184">Compare the simulated error distribution with the normal approximation before using its quantiles.</li>
+<li data-source-line="185" data-source-end-line="185">The 1.96 calculation is approximate, not a finite-sample coverage guarantee.</li>
+<li data-source-line="186" data-source-end-line="186">Exact hypergeometric calculation gives 95.05% coverage for the known-variance margin in this example.</li>
+<li data-source-line="187" data-source-end-line="187">A tiny block or an almost constant outcome needs a separate check.</li>
 </ul>
 </section>
 <section id="what-if-we-dont-know-the-population-proportions" class="slide level2">
-<h2 data-source-line="188" data-source-end-line="188">What if we don’t know the population proportions?</h2>
+<h2 data-source-line="189" data-source-end-line="189">What if we don’t know the population proportions?</h2>
 <ul>
-<li data-source-line="190" data-source-end-line="190">In a real study, those are what we’re estimating.</li>
-<li data-source-line="191" data-source-end-line="191">For <span class="math inline">\(n_x&gt;1\)</span>, the usual sample variance is <span class="math inline">\(s_x^2\)</span> (denominator <span class="math inline">\(n_x-1\)</span>).</li>
+<li data-source-line="191" data-source-end-line="191">In a real study, those are what we’re estimating.</li>
+<li data-source-line="192" data-source-end-line="192">For <span class="math inline">n_x&gt;1</span>, the usual sample variance is <span class="math inline">s_x^2</span> (denominator <span class="math inline">n_x-1</span>).</li>
 </ul>
 
-<p data-source-line="193" data-source-end-line="196"><span class="math display">\[
+<p data-source-line="194" data-source-end-line="197"><span class="math display">
 \widehat V=(1-n_1/m_1)\frac{s_1^2}{n_1}
           +(1-n_0/m_0)\frac{s_0^2}{n_0}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="198" data-source-end-line="198"><span class="math inline">\(\hat\Delta\pm1.96\sqrt{\widehat V}\)</span> is a normal-approximation interval.</li>
-<li data-source-line="199" data-source-end-line="199">An unbiased variance estimate alone doesn’t guarantee its coverage.</li>
+<li data-source-line="199" data-source-end-line="199"><span class="math inline">\hat\Delta\pm1.96\sqrt{\widehat V}</span> is a normal-approximation interval.</li>
+<li data-source-line="200" data-source-end-line="200">An unbiased variance estimate alone doesn’t guarantee its coverage.</li>
 </ul>
 </section>
 <section id="planning-for-three-percentage-points" class="slide level2">
-<h2 data-source-line="201" data-source-end-line="201">Planning for three percentage points</h2>
+<h2 data-source-line="202" data-source-end-line="202">Planning for three percentage points</h2>
 <ul>
-<li data-source-line="203" data-source-end-line="203">Keep equal sample sizes <span class="math inline">\(n\)</span> in each block.</li>
-<li data-source-line="204" data-source-end-line="204">Use this frame’s proportions as planning values, then check how sensitive the answer is to them.</li>
-<li data-source-line="205" data-source-end-line="205">Let <span class="math inline">\(S_x^2=m_x\sigma^2(x)/(m_x-1)\)</span>, the same variance with denominator <span class="math inline">\(m_x-1\)</span>.</li>
+<li data-source-line="204" data-source-end-line="204">Keep equal sample sizes <span class="math inline">n</span> in each block.</li>
+<li data-source-line="205" data-source-end-line="205">Use this frame’s proportions as planning values, then check how sensitive the answer is to them.</li>
+<li data-source-line="206" data-source-end-line="206">Let <span class="math inline">S_x^2=m_x\sigma^2(x)/(m_x-1)</span>, the same variance with denominator <span class="math inline">m_x-1</span>.</li>
 </ul>
 
-<p data-source-line="207" data-source-end-line="210"><span class="math display">\[
+<p data-source-line="208" data-source-end-line="211"><span class="math display">
 \operatorname{Var}(\hat\Delta)
 =\frac{S_1^2+S_0^2}{n}-\frac{S_1^2}{m_1}-\frac{S_0^2}{m_0}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="212" data-source-end-line="212">How large must <span class="math inline">\(n\)</span> be so that <span class="math inline">\(1.96\operatorname{sd}(\hat\Delta)\le .03\)</span>?</li>
+<li data-source-line="213" data-source-end-line="213">How large must <span class="math inline">n</span> be so that <span class="math inline">1.96\operatorname{sd}(\hat\Delta)\le .03</span>?</li>
 </ul>
 </section>
 <section class="slide level2">
 
 
-<p data-source-line="216" data-source-end-line="219"><span class="math display">\[
+<p data-source-line="217" data-source-end-line="220"><span class="math display">
 n\ge\frac{S_1^2+S_0^2}
 {(.03/1.96)^2+S_1^2/m_1+S_0^2/m_0}.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="221" data-source-end-line="221">Round up: <strong>1247 per group</strong>, 2494 altogether.</li>
-<li data-source-line="222" data-source-end-line="222">At 1246 per group the planned half-width is .030006; at 1247 it is .029988.</li>
-<li data-source-line="223" data-source-end-line="223">McIntosh has only 2729 Black registered voters, so that is nearly half of group 1.</li>
-<li data-source-line="224" data-source-end-line="224">This uses known planning variances. Realized estimated interval widths can differ.</li>
-<li data-source-line="225" data-source-end-line="225">A census gives zero sampling error; neither nonresponse nor measurement error disappears with this calculation.</li>
+<li data-source-line="222" data-source-end-line="222">Round up: <strong>1247 per group</strong>, 2494 altogether.</li>
+<li data-source-line="223" data-source-end-line="223">At 1246 per group the planned half-width is .030006; at 1247 it is .029988.</li>
+<li data-source-line="224" data-source-end-line="224">McIntosh has only 2729 Black registered voters, so that is nearly half of group 1.</li>
+<li data-source-line="225" data-source-end-line="225">This uses known planning variances. Realized estimated interval widths can differ.</li>
+<li data-source-line="226" data-source-end-line="226">A census gives zero sampling error; neither nonresponse nor measurement error disappears with this calculation.</li>
 </ul>
 </section>
 <section id="from-turnout-to-vote-share" class="slide level2">
-<h2 data-source-line="227" data-source-end-line="227">From turnout to vote share</h2>
+<h2 data-source-line="228" data-source-end-line="228">From turnout to vote share</h2>
 <ul>
-<li data-source-line="229" data-source-end-line="229">In the same frame, the groups’ shares of its registered voters are <span class="math inline">\(a=2729/9688\approx.282\)</span> and <span class="math inline">\(b=6959/9688\approx.718\)</span>.</li>
-<li data-source-line="230" data-source-end-line="230">Suppose the candidate’s shares <strong>among voters</strong> are <span class="math inline">\(q_1=.90\)</span> and <span class="math inline">\(q_0=.35\)</span>.</li>
-<li data-source-line="231" data-source-end-line="231">Hold these quantities fixed for this calculation. <span class="math inline">\(q_1\)</span> and <span class="math inline">\(q_0\)</span> are hypothetical, not measured Georgia facts.</li>
+<li data-source-line="230" data-source-end-line="230">In the same frame, the groups’ shares of its registered voters are <span class="math inline">a=2729/9688\approx.282</span> and <span class="math inline">b=6959/9688\approx.718</span>.</li>
+<li data-source-line="231" data-source-end-line="231">Suppose the candidate’s shares <strong>among voters</strong> are <span class="math inline">q_1=.90</span> and <span class="math inline">q_0=.35</span>.</li>
+<li data-source-line="232" data-source-end-line="232">Hold these quantities fixed for this calculation. <span class="math inline">q_1</span> and <span class="math inline">q_0</span> are hypothetical, not measured Georgia facts.</li>
 </ul>
 
-<p data-source-line="233" data-source-end-line="236"><span class="math display">\[
+<p data-source-line="234" data-source-end-line="237"><span class="math display">
 V=\frac{a q_1\mu(1)+b q_0\mu(0)}{a\mu(1)+b\mu(0)}
 \approx\frac{.3423}{.6950}\approx .49254.
-\]</span></p>
+</span></p>
 <ul>
-<li data-source-line="238" data-source-end-line="238">Numerator: candidate votes per registered voter in this frame.</li>
-<li data-source-line="239" data-source-end-line="239">Denominator: all votes per registered voter in this frame.</li>
+<li data-source-line="239" data-source-end-line="239">Numerator: candidate votes per registered voter in this frame.</li>
+<li data-source-line="240" data-source-end-line="240">Denominator: all votes per registered voter in this frame.</li>
 </ul>
 </section>
 <section id="why-the-gap-alone-isnt-a-forecast" class="slide level2">
-<h2 data-source-line="241" data-source-end-line="241">Why the gap alone isn’t a forecast</h2>
+<h2 data-source-line="242" data-source-end-line="242">Why the gap alone isn’t a forecast</h2>
 <ul>
-<li data-source-line="243" data-source-end-line="243">If both groups turned out at the same rate, the share would be <span class="math inline">\(.282(.90)+.718(.35)\approx.505\)</span>.</li>
-<li data-source-line="244" data-source-end-line="244">With .639 versus .717 turnout, the share is about .493.</li>
-<li data-source-line="245" data-source-end-line="245">An eight-point turnout gap moves this candidate’s share by about one point under these assumptions.</li>
-<li data-source-line="246" data-source-end-line="246">Change the group shares or candidate preferences and that implication changes.</li>
-<li data-source-line="247" data-source-end-line="247">HW6: approximate uncertainty in this ratio. Its numerator and denominator share data.</li>
+<li data-source-line="244" data-source-end-line="244">If both groups turned out at the same rate, the share would be <span class="math inline">.282(.90)+.718(.35)\approx.505</span>.</li>
+<li data-source-line="245" data-source-end-line="245">With .639 versus .717 turnout, the share is about .493.</li>
+<li data-source-line="246" data-source-end-line="246">An eight-point turnout gap moves this candidate’s share by about one point under these assumptions.</li>
+<li data-source-line="247" data-source-end-line="247">Change the group shares or candidate preferences and that implication changes.</li>
+<li data-source-line="248" data-source-end-line="248">HW6: approximate uncertainty in this ratio. Its numerator and denominator share data.</li>
 </ul>
 </section>
 <section id="what-carries-over-and-what-doesnt" class="slide level2">
-<h2 data-source-line="249" data-source-end-line="249">What carries over — and what doesn’t?</h2>
+<h2 data-source-line="250" data-source-end-line="250">What carries over — and what doesn’t?</h2>
 <ul>
-<li data-source-line="251" data-source-end-line="251">Independent sampling within fixed groups: add the two variances.</li>
-<li data-source-line="252" data-source-end-line="252">Descriptive turnout differences do not identify an intervention’s effect.</li>
-<li data-source-line="253" data-source-end-line="253">Randomly assigned treatment and control groups are complementary; their means need a different covariance calculation.</li>
-<li data-source-line="254" data-source-end-line="254">Next Tuesday: NSW, missing potential outcomes, and identification.</li>
+<li data-source-line="252" data-source-end-line="252">Independent sampling within fixed groups: add the two variances.</li>
+<li data-source-line="253" data-source-end-line="253">Descriptive turnout differences do not identify an intervention’s effect.</li>
+<li data-source-line="254" data-source-end-line="254">Randomly assigned treatment and control groups are complementary; their means need a different covariance calculation.</li>
+<li data-source-line="255" data-source-end-line="255">Next Tuesday: NSW, missing potential outcomes, and identification.</li>
 </ul>
 
 <script type="webr-data">
@@ -1348,7 +1364,6 @@ W10=
   <script src="georgia-oct29_files/libs/revealjs/plugin/notes/notes.js"></script>
   <script src="georgia-oct29_files/libs/revealjs/plugin/search/search.js"></script>
   <script src="georgia-oct29_files/libs/revealjs/plugin/zoom/zoom.js"></script>
-  <script src="georgia-oct29_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
   <script>
@@ -1516,27 +1531,9 @@ W10=
         // Factor of the display size that should remain empty around the content
         margin: 2.0e-2,
 
-        math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
-
         // reveal.js plugins
         plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
 
-          RevealMath,
           RevealNotes,
           RevealSearch,
           RevealZoom
