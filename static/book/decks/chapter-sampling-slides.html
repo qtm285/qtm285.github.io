@@ -1,5 +1,358 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en"><head><!--tlda-publication-head-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads.
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        if (target.tagName === 'IMG') scheduleImageCheck();
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : 'unknown',
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
+    };
+    var names = ['math', 'webr', 'reveal', 'images'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: KaTeX renders on a deferred pass and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+}
+</script>
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  try {
+    Object.keys(sessionStorage).forEach(function(k) {
+      if (k.indexOf('reveal') !== -1 || k.indexOf('Reveal') !== -1) {
+        sessionStorage.removeItem(k);
+      }
+    });
+  } catch(e) {}
+})();
+}
+</script><!--/tlda-publication-head-->
 <script>/*!
  * clipboard.js v2.0.11
  * https://clipboardjs.com/
@@ -29382,4 +29735,1689 @@ window.QuartoSupport = function () {
       </script>
     
 
-</body></html>
+<!--tlda-publication-body-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var indexh = parseInt(params.get('_tldaH') || '0', 10);
+  var indexv = parseInt(params.get('_tldaV') || '0', 10);
+  var deckMode = params.get('_tldaDeck') === '1';
+  var captureHold = deckMode && params.get('_tldaCapture') === '1';
+  // Legacy per-slide iframes lock to their slide; a standalone deck page
+  // (no parent) navigates natively instead. The lock exists for book-viewer
+  // iframes that each show one slide -- without it, keys inside one frame
+  // would walk the whole deck. Standalone has no parent to drive it, so
+  // locking there strands every deck on slide 1 with dead keys.
+  var legacySlideLock = legacySlideLockApplies(deckMode, window.parent !== window);
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+  var slideBackground = null;
+
+  // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
+  // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
+  // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
+  // "E[X]=x...", and an inline t reads "ttt"). A formula is read once, as its TeX source: $...$
+  // inline, $$...$$ when it is display math. Everything else is its text, as before.
+  function tldaReadableBlockText(el) {
+    var out = '';
+    var kids = el.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 3) { out += kid.textContent; continue; }
+      if (kid.nodeType !== 1) continue;
+      if (kid.classList && kid.classList.contains('katex') && kid.querySelector) {
+        var annotation = kid.querySelector('annotation[encoding="application/x-tex"]');
+        var tex = annotation ? (annotation.textContent || '').trim() : '';
+        if (tex) {
+          var isDisplay = !!(kid.closest && kid.closest('.katex-display, .math.display'));
+          out += isDisplay ? '$$' + tex + '$$' : '$' + tex + '$';
+          continue;
+        }
+      }
+      out += tldaReadableBlockText(kid);
+    }
+    return out;
+  }
+
+  // Read once from the page by the capture driver, which checks the headings measured here against
+  // the page's own headings by text: both sides must read a heading with the same reader, or a heading
+  // that holds a formula ("Why Must X Be Nonnegative?") makes the two lists differ and the view refuse.
+  window.__tldaReadableBlockText = tldaReadableBlockText;
+
+  // The title of the callout that holds a closed (collapsed) block, without the screen-reader
+  // word Quarto puts in front of it ("Note", "Warning"). Empty when the callout has no title.
+  function tldaCalloutTitle(host) {
+    var callout = host.closest ? host.closest('.callout') : null;
+    var titleEl = callout && callout.querySelector ? callout.querySelector('.callout-title-container') : null;
+    if (!titleEl) return '';
+    var title = '';
+    var kids = titleEl.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 1 && kid.classList && kid.classList.contains('screen-reader-only')) continue;
+      title += kid.nodeType === 1 ? tldaReadableBlockText({ childNodes: [kid] }) : (kid.nodeType === 3 ? kid.textContent : '');
+    }
+    return title.replace(/\s+/g, ' ').trim();
+  }
+
+  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks) {
+    // In a Reveal deck after a scroll-view goto, section.present stays on the
+    // title slide while the address moves; getCurrentSlide() reads the
+    // addressed slide. Measure that first (the hidden!==root guard below keeps
+    // its slide-level aria-hidden text measurable); present, then main/body,
+    // preserve every non-deck path exactly.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var slide = Reveal.getCurrentSlide();
+        if (slide && slide.tagName === 'SECTION') addressed = slide;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var root = addressed ||
+      document.querySelector('.reveal .slides section.present') ||
+      document.querySelector('main') || document.body;
+    var blocks = [];
+    // The default candidate set is the prose skeleton, and it is what every
+    // deck walk gets: the walk passes no selector, so deck output is the same
+    // blocks in the same order as before this parameter existed. A caller may
+    // widen the set per request -- the chapter view asks for captions, tables
+    // and display math alongside prose -- and every match comes back in the
+    // one block shape below. The parameter is request-local; no caller reads
+    // or writes any state outside its own call.
+    var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
+    var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+    var pictureLayoutRequest = includePictureLayout === true;
+    function isVisibleLayoutElement(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var currentStyle = getComputedStyle(current);
+        var opacity = parseFloat(currentStyle.opacity);
+        if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+    function visibleTextLayoutRects() {
+      var rects = [];
+      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var textNode;
+      while ((textNode = walker.nextNode())) {
+        var text = textNode.textContent || '';
+        var owner = textNode.parentElement;
+        // SVG is measured as a picture; its internal labels belong to that
+        // image. Text siblings in an SVG-containing block still count.
+        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        var range = document.createRange();
+        range.setStart(textNode, 0);
+        range.setEnd(textNode, text.length);
+        var visibleRects = Array.from(range.getClientRects()).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        visibleRects.forEach(function(rect) {
+          rects.push({ top: rect.top, bottom: rect.bottom });
+        });
+        if (visibleRects.length) {
+          for (var current = owner; current; current = current.parentElement) {
+            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current === root) break;
+          }
+        }
+      }
+      // MathJax's SVG output can have no text node with a rendered range.
+      // Its visible container box is the text bound in that case. Prefer one
+      // outer math box and skip math SVGs when pictures are measured below.
+      var mathNodes = root.querySelectorAll(mathSelector);
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (outerMath && outerMath !== root) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
+          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+        }
+      }
+      return rects;
+    }
+    for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
+      var block = candidates[blockIndex];
+      if (block.closest('svg') || block.querySelector('svg')) continue;
+      // Display math written inside a paragraph or list item is part of that block's text now;
+      // measuring it again as its own block would read the same equation twice.
+      if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
+      var style = getComputedStyle(block);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var words = [];
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
+        if (hidden && hidden !== root) continue;
+        // Chapter views use readable block text, not wrapped word lines. One
+        // Range per text node establishes the same visibility without paying
+        // one layout query per word. Deck/export callers keep wrapped lines.
+        var pattern = includeLineBreaks === false ? /\S[\s\S]*/g : /\S+/g;
+        var match;
+        while ((match = pattern.exec(node.textContent || ''))) {
+          var range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          var rects = Array.from(range.getClientRects()).filter(function(rect) {
+            return rect.width > 1 && rect.height > 1;
+          });
+          if (!rects.length) continue;
+          words.push({
+            word: match[0],
+            center: rects[0].top + rects[0].height / 2,
+            height: rects[0].height,
+          });
+        }
+      }
+      var lines = [];
+      words.forEach(function(word) {
+        var line = lines.find(function(candidate) {
+          return Math.abs(candidate.center - word.center) < word.height * 0.5;
+        });
+        if (!line) {
+          line = { center: word.center, words: [] };
+          lines.push(line);
+        }
+        line.words.push(word.word);
+      });
+      // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
+      // and used to be dropped, though a reader can open the callout. A widened request keeps it,
+      // marked with the callout it is closed in.
+      var closedCallout = null;
+      if (widenedRequest && !lines.length && block.closest) {
+        var closedHost = block.closest('.callout-collapse');
+        if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
+      }
+      if (lines.length || closedCallout) {
+        // A widened request (the chapter view passes a candidate selector;
+        // the deck walk never does) gets two additions on the block shape:
+        //   - tables join cells with " | " and rows with " / ", because a
+        //     table's textContent concatenates cells with no separator and
+        //     "AB12" is not a readable row (tables are never matched under
+        //     the default set, so this can only fire for a widened request);
+        //   - sourceLine (from the build's data-source-line stamp; null when
+        //     unstamped, absence stated rather than guessed) and rect
+        //     (viewport coordinates at measurement time, for region math on
+        //     an unscrolled page).
+        // A default request takes the exact object it always took: no new
+        // keys, so deck measurement output is byte-identical field for
+        // field, not merely compatible.
+        var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
+          var rows = [];
+          var trs = block.querySelectorAll('tr');
+          for (var rowIndex = 0; rowIndex < trs.length; rowIndex++) {
+            var cells = [];
+            var tds = trs[rowIndex].querySelectorAll('th, td');
+            for (var cellIndex = 0; cellIndex < tds.length; cellIndex++) {
+              cells.push(tldaReadableBlockText(tds[cellIndex]).replace(/\s+/g, ' ').trim());
+            }
+            rows.push(cells.join(' | '));
+          }
+          if (rows.length) blockText = rows.join(' / ');
+        }
+        var entry = {
+          tag: block.tagName.toLowerCase(),
+          id: block.id || null,
+          text: blockText,
+          lines: lines.map(function(line) { return line.words.join(' '); }),
+        };
+        if (viewRequest) {
+          var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
+          var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
+          var sourceLineNum = sourceLineAttr == null ? null : Number(sourceLineAttr);
+          entry.sourceLine = Number.isInteger(sourceLineNum) ? sourceLineNum : null;
+          entry.sourceFile = block.getAttribute ? block.getAttribute('data-source-file') : null;
+          var endLineAttr = block.getAttribute ? block.getAttribute('data-source-end-line') : null;
+          entry.sourceEndLine = endLineAttr == null ? entry.sourceLine : Number(endLineAttr);
+          entry.domIndex = blockIndex;
+          entry.rect = blockRect && !closedCallout ? { x: blockRect.left, y: blockRect.top, w: blockRect.width, h: blockRect.height } : null;
+          if (closedCallout) {
+            entry.closedCallout = { id: closedCallout.id || null, title: tldaCalloutTitle(closedCallout) };
+          }
+        }
+        blocks.push(entry);
+      }
+    }
+    var measurement = { url: window.location.href, title: document.title, blocks: blocks };
+    if (pictureLayoutRequest) {
+      measurement.visibleTextRects = visibleTextLayoutRects();
+      var pictures = [];
+      var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
+        var picture = pictureNodes[pictureIndex];
+        var tag = (picture.tagName || '').toLowerCase();
+        // An embedded SVG (including KaTeX/MathJax glyphs) is part of its
+        // enclosing picture or equation, not a separate picture box.
+        if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
+        if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
+        if (!isVisibleLayoutElement(picture)) continue;
+        var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
+        if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
+        pictures.push({
+          tag: tag,
+          id: picture.id || null,
+          alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
+          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+        });
+      }
+      measurement.pictures = pictures;
+    }
+    return measurement;
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-measure-rendered-lines') return;
+    var requestId = event.data.requestId || null;
+    Promise.resolve(document.fonts?.ready).then(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var target = event.source || window.parent;
+          target.postMessage({
+            type: 'tlda-rendered-lines',
+            shapeId: shapeId,
+            requestId: requestId,
+            measurement: tldaMeasureRenderedLines(
+              typeof event.data.candidates === 'string' && event.data.candidates
+                ? event.data.candidates
+                : null,
+              event.data.includePictureLayout === true,
+              event.data.includeLineBreaks !== false,
+            ),
+          }, '*');
+        });
+      });
+    });
+  });
+
+  // Figure serialization for the client-side linearizer. The app and the
+  // deck often live on different origins (cross-origin asset server is the
+  // shipped topology), so the parent cannot read pixels itself: the frame
+  // serializes its own current-slide figures — static SVGs through canvas
+  // to PNG, live canvases via toDataURL — and posts the data back. One
+  // figure's failure is a note on that figure, never a failed roundtrip.
+  function tldaRasterSvg(svg, width, height) {
+    return new Promise(function(resolve, reject) {
+      try {
+        var clone = svg.cloneNode(true);
+        clone.setAttribute('width', String(width));
+        clone.setAttribute('height', String(height));
+        var source = new XMLSerializer().serializeToString(clone);
+        var url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
+        var image = new Image();
+        image.onload = function() {
+          try {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            if (!ctx) { URL.revokeObjectURL(url); reject(new Error('no 2d context')); return; }
+            ctx.drawImage(image, 0, 0, width, height);
+            var png = canvas.toDataURL('image/png');
+            URL.revokeObjectURL(url);
+            resolve(png);
+          } catch (e) { URL.revokeObjectURL(url); reject(e); }
+        };
+        image.onerror = function() { URL.revokeObjectURL(url); reject(new Error('SVG raster failed to load')); };
+        image.src = url;
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function tldaSerializeFigures() {
+    var doc = document;
+    // Same addressing as measurement: after a scroll-view goto,
+    // section.present stays on the title slide while the address moves;
+    // getCurrentSlide() reads the addressed slide.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var current = Reveal.getCurrentSlide();
+        if (current && current.tagName === 'SECTION') addressed = current;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var slide = addressed
+      || doc.querySelector('.reveal .slides section.present')
+      || doc.querySelector('.reveal .slides section');
+    var found = slide ? slide.querySelectorAll('svg, canvas') : [];
+    var nodes = Array.prototype.slice.call(found);
+    var figures = [];
+    var chain = Promise.resolve();
+    nodes.forEach(function(node) {
+      chain = chain.then(function() {
+        var tag = (node.tagName || '').toLowerCase();
+        if (tag === 'svg') {
+          var rect = node.getBoundingClientRect();
+          var width = Math.max(1, Math.round(rect.width));
+          var height = Math.max(1, Math.round(rect.height));
+          if (rect.width < 2 || rect.height < 2) return null;
+          return tldaRasterSvg(node, width, height).then(function(png) {
+            figures.push({ kind: 'svg', png: png, width: width, height: height, note: null });
+          }, function(e) {
+            figures.push({ kind: 'svg', png: null, width: width, height: height,
+              note: 'SVG did not raster: ' + (e && e.message ? e.message : String(e)) });
+          });
+        }
+        if (tag === 'canvas') {
+          if (node.width < 2 || node.height < 2) return null;
+          try {
+            figures.push({ kind: 'canvas', png: node.toDataURL('image/png'),
+              width: node.width, height: node.height, note: null });
+          } catch (e) {
+            figures.push({ kind: 'canvas', png: null, width: node.width, height: node.height,
+              note: 'canvas unreadable (tainted or empty): ' + (e && e.message ? e.message : String(e)) });
+          }
+          return null;
+        }
+        return null;
+      });
+    });
+    return chain.then(function() { return figures; });
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-serialize-figures') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaSerializeFigures().then(function(figures) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: figures,
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: [],
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
+
+  function isVisibleColor(color) {
+    return color && color !== 'transparent' && !/^rgba\([^)]*,\s*0\s*\)$/.test(color);
+  }
+
+  // The lock matrix, one definition for both lock sites so they cannot
+  // drift: legacy mode pins its slide only when embedded. Deck mode never
+  // locks (the parent drives it); standalone never locks (nothing would
+  // drive it back, so the snap-back would eat all navigation, keys and
+  // fragments included).
+  function legacySlideLockApplies(deckModeFlag, isEmbedded) {
+    return !deckModeFlag && isEmbedded;
+  }
+
+  function readSlideBackground() {
+    // Effective color only: the theme var (--r-background-color) names what the
+    // deck would paint opaque, not what shows once the containers go
+    // transparent, and reporting it re-colors the solo canvas away from the
+    // book canvas. Nothing visible means the canvas shows.
+    var candidates = [
+      document.querySelector('.reveal'),
+      document.querySelector('.reveal .slides'),
+      document.body,
+      document.documentElement,
+    ].filter(Boolean);
+    for (var i = 0; i < candidates.length; i++) {
+      var style = getComputedStyle(candidates[i]);
+      if (isVisibleColor(style.backgroundColor)) return style.backgroundColor;
+    }
+    return 'transparent';
+  }
+
+  // ---- deck mode: the external coordinate frame ----------------------------
+  //
+  // In reveal, h/v are navigation structure. Only the current slide has a box,
+  // so nothing is spatially anywhere:
+  //
+  //   reveal  gives  existence + address   (h, v, f)
+  //   tlda    gives  position
+  //
+  // Reveal's scroll view supplies the first half: it wraps every slide in a
+  // generated .scroll-page and gives each a real box. Measured on a 31-slide
+  // deck, stacked vs view=scroll: sections with a real box went 4 -> 31.
+  // It must be requested at INITIALIZE (the URL carries view=scroll); calling
+  // configure({view:'scroll'}) or toggleScrollView() after load sets the config
+  // and does NOT activate it.
+  //
+  // We take only the boxes, never reveal's placement. Every !important rule in
+  // reveal's scroll CSS is on section -- those give the slide its box and its
+  // scale, so we leave them alone. .scroll-page carries none, which is why
+  // positioning the WRAPPERS does not fight anything.
+  //
+  // The rectangles are computed by the parent (src/loaders/deckLayout.ts) and
+  // posted here. This side only applies numbers: one implementation of the
+  // layout rule rather than one on each side of the iframe, and changing the
+  // layout never touches this injected script.
+  var pendingDeckLayout = null;
+  var deckLayoutRetry = null;
+  var deckLayoutStyle = null;
+  // The page the parent last addressed: { section, index }. The only legitimate
+  // moves in the strip are the parent's gotos, so this is where reveal belongs.
+  var deckHeld = null;
+
+  // The pages reveal actually built, in the order it built them.
+  //
+  // Enumerating .slides section instead is off by the hidden macro-definition
+  // sections Quarto emits: measured on one deck, that gives 33 where reveal
+  // builds 31 .scroll-page wrappers, so every rect after the first hidden
+  // section lands on the wrong slide. The wrappers are what we position, so
+  // they are also what we count -- one list, no correspondence to maintain.
+  function deckPageElements() {
+    return Array.prototype.slice.call(document.querySelectorAll('.scroll-page'));
+  }
+
+  function deckSectionOf(page) {
+    return page.querySelector('section');
+  }
+
+  // The page that holds a given slide element, by element: the scroll view's
+  // own address is a page index that reveal reports as h, so it cannot say
+  // which slide is current.
+  function deckPageOfSection(section) {
+    if (!section) return null;
+    var pages = document.querySelectorAll('.scroll-page');
+    for (var i = 0; i < pages.length; i++) {
+      if (deckSectionOf(pages[i]) === section) return { section: section, index: i };
+    }
+    return null;
+  }
+
+  // The page whose slide carries a given reveal address.
+  function deckPageAtAddress(h, v) {
+    var pages = document.querySelectorAll('.scroll-page');
+    for (var i = 0; i < pages.length; i++) {
+      var section = deckSectionOf(pages[i]);
+      if (!section) continue;
+      var at = Reveal.getIndices(section);
+      if (at && at.h === h && (at.v || 0) === (v || 0)) return { section: section, index: i };
+    }
+    return null;
+  }
+
+  // Point reveal at the slide a fragment command names, so the step lands on
+  // the slide the reader is looking at.
+  //
+  // Reveal's scroll view takes its active page from
+  // scrollTop / (scrollHeight - offsetHeight). The deck strip never scrolls, so
+  // that ratio is structurally 0 and always resolves to page 0 -- and it is
+  // recomputed from layout(), not only from onScroll, so any layout pass puts
+  // the active slide back to the first one however the address was set.
+  // Addressing the slide when the command arrives wins that race by not
+  // entering it; making the address stick does not. The same sync drives lazy
+  // loading, which is why it is left alone rather than suppressed.
+  //
+  // Only when the slide is not already current: setCurrentScrollPage's third
+  // argument is the fragment index, so re-asserting a slide that is already
+  // current rewinds its fragments to 0 -- measured, it pinned the deck on the
+  // second fragment forever.
+  function addressFragmentTarget(data) {
+    if (!data || data.indexh === undefined || data.indexh === null) return;
+    if (!Reveal.isScrollView || !Reveal.isScrollView() || !Reveal.setCurrentScrollPage) return;
+    var found = deckPageAtAddress(data.indexh, data.indexv || 0);
+    // Hold what the parent last addressed even when reveal is already there.
+    if (found) deckHeld = { section: found.section, index: found.index };
+    if (!found || Reveal.getCurrentSlide() === found.section) return;
+    Reveal.setCurrentScrollPage(found.section, found.index, 0);
+    // Moving the page ran reveal's stretch sizing against the pinned section
+    // height; put the authored figure sizes back.
+    restoreStretchFigures();
+  }
+
+  // Put reveal back on the page the parent addressed after a layout pass moved
+  // it. In the strip nothing scrolls, so reveal's scroll-view address resolves
+  // to the first page on every layout or resize pass (see addressFragmentTarget),
+  // and it does so after layout() returns, so a re-assert made inside the pass
+  // sees nothing to correct. A change onto the first page that the parent did
+  // not ask for is that reset; any other move is left alone. It holds from the
+  // first address, before the strip layout exists: the pass that resets the
+  // address can come first.
+  function holdDeckAddress(current) {
+    if (!deckHeld || !Reveal.setCurrentScrollPage || !Reveal.isScrollView || !Reveal.isScrollView()) return false;
+    if (current === deckHeld.section || deckHeld.index === 0) return false;
+    var pages = document.querySelectorAll('.scroll-page');
+    if (!pages.length || current !== deckSectionOf(pages[0])) return false;
+    Reveal.setCurrentScrollPage(deckHeld.section, deckHeld.index, 0);
+    // Moving the page ran reveal's stretch sizing against the pinned section
+    // height, which leaves every stretch figure on the page at 0x0.
+    restoreStretchFigures();
+    return true;
+  }
+
+  // The extent is enumerated per slide. Reveal's own getHorizontalSlides() and
+  // getVerticalSlides() disagree with the slides themselves -- measured on one
+  // deck in one call, they answered 2 and 0 against 4 real columns and verticals
+  // to v=20, while getTotalSlides() answered 33 against 31 slides. So they are
+  // not a source of extent here or anywhere.
+  // Last per-slide content heights posted to the parent. The settle observer
+  // below re-posts only when a height actually moves, so late arrivals
+  // (figures, fonts) correct the layout once each instead of chattering.
+  var lastPostedHeights = null;
+
+  function deckContentHeights(pages) {
+    // Measure the SLIDE SECTION, never the page: the page carries layout
+    // scaffold (sticky clone, snap points) sized to whatever box was last
+    // posted, so its scrollHeight grows with the box and ratchets upward
+    // without bound -- measured live: box 8000 with scroll 16000 while the
+    // section inside sat at box 1000 with scroll 1398. The section's box is
+    // reveal-sized and independent of our layout, so its scrollHeight is the
+    // content height and re-measures identically after every relayout.
+    return pages.map(function(page) {
+      var sections = page.querySelectorAll('section');
+      var tallest = 0;
+      for (var i = 0; i < sections.length; i++) {
+        tallest = Math.max(tallest, sections[i].scrollHeight || 0);
+      }
+      return Math.round(tallest);
+    });
+  }
+
+  function heightsMoved(heights) {
+    if (!lastPostedHeights || lastPostedHeights.length !== heights.length) return true;
+    for (var i = 0; i < heights.length; i++) {
+      if (Math.abs(heights[i] - lastPostedHeights[i]) > 5) return true;
+    }
+    return false;
+  }
+
+  function reportDeckExtent() {
+    if (window.parent === window) return;
+    var pages = deckPageElements();
+    // Nothing to report until reveal has built its pages; the retry below is
+    // what brings us back, the same wait the layout needs.
+    if (!pages.length) return false;
+    var heights = deckContentHeights(pages);
+    var slides = pages.map(function(page, i) {
+      var el = deckSectionOf(page) || page;
+      var at = Reveal.getIndices(el) || {};
+      return { index: i, indexh: at.h || 0, indexv: at.v || 0, id: el.id || '', contentHeight: heights[i] };
+    });
+    // The authored slide size travels with the extent so the parent can compute
+    // placement from this one message. Threading it through document state
+    // instead would give the layout a second input that can disagree.
+    var config = Reveal.getConfig ? Reveal.getConfig() : {};
+    window.parent.postMessage({
+      type: 'tlda-deck-extent',
+      shapeId: shapeId,
+      slides: slides,
+      width: config.width || 960,
+      height: config.height || 700,
+      scale: Reveal.getScale ? Reveal.getScale() : 1,
+    }, '*');
+    lastPostedHeights = heights;
+    observeDeckHeights();
+  }
+
+  // Re-post the extent when slide content settles at a new height. Figures
+  // and fonts arrive after reveal builds its pages, so the first post often
+  // measures short; the parent grows that slide's box to fit -- a tall slide
+  // stays tall. Deliberately NOT a ResizeObserver: our boxes are fixed by
+  // design and content growth is overflow, which no box resize reports. The
+  // three signals below are the actual late arrivals: initial images, fonts,
+  // and lazily loaded figures (reveal loads them as slides become current).
+  // Widths never change here, so a taller box cannot reflow text and move
+  // heights again: posts stop when the content stops, by the check below.
+  var deckHeightsSettled = false;
+  var deckHeightTimer = null;
+  function maybeRepostDeckExtent() {
+    if (deckHeightTimer) clearTimeout(deckHeightTimer);
+    deckHeightTimer = setTimeout(function() {
+      deckHeightTimer = null;
+      var pages = deckPageElements();
+      if (!pages.length) return;
+      if (heightsMoved(deckContentHeights(pages))) reportDeckExtent();
+    }, 250);
+  }
+  function observeDeckHeights() {
+    if (deckHeightsSettled) return;
+    deckHeightsSettled = true;
+    window.addEventListener('load', maybeRepostDeckExtent);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(maybeRepostDeckExtent);
+    }
+    var slidesEl = document.querySelector('.slides');
+    if (slidesEl) slidesEl.addEventListener('load', maybeRepostDeckExtent, true);
+  }
+
+  function applyDeckLayout(layout) {
+    if (!layout || !layout.rects || !layout.rects.length) return;
+    pendingDeckLayout = layout;
+
+    // The parent's reply usually arrives BEFORE reveal has finished switching
+    // into scroll view, and the wrappers we position do not exist until it has.
+    // Measured on pic-dev: the extent went out, the layout came back, and every
+    // slide stayed at (0,0) because this returned early and nothing ever ran
+    // again. Storing it and waiting for a caller that never comes is the whole
+    // bug, so the retry is the fix rather than an optimisation.
+    if (!Reveal.isScrollView || !Reveal.isScrollView() || !document.querySelector('.scroll-page')) {
+      if (deckLayoutRetry) clearTimeout(deckLayoutRetry);
+      deckLayoutRetry = setTimeout(function() { applyDeckLayout(pendingDeckLayout); }, 100);
+      return;
+    }
+    if (deckLayoutRetry) { clearTimeout(deckLayoutRetry); deckLayoutRetry = null; }
+
+    var pages = document.querySelectorAll('.scroll-page');
+    if (!pages.length) return;
+
+    if (!deckLayoutStyle) {
+      deckLayoutStyle = document.createElement('style');
+      document.head.appendChild(deckLayoutStyle);
+    }
+    // The strip is laid out in the deck's own coordinate space and the CANVAS
+    // pans across it, so nothing here may scroll: reveal's viewport would
+    // otherwise clip the strip it just laid out.
+    deckLayoutStyle.textContent = [
+      '.reveal-viewport.reveal-scroll{overflow:visible!important}',
+      '.reveal-viewport.reveal-scroll .slides{display:block!important;position:relative!important;width:max-content!important;height:max-content!important}',
+      '.reveal-viewport.reveal-scroll .scroll-page{position:absolute!important;margin:0!important}',
+      // Reveal sizes these from the VIEWPORT, and our viewport is the whole
+      // strip -- measured, each page's inner box came out 31000px tall with the
+      // slide centred 14500px down it, which is why the canvas looked empty.
+      // They belong to the slide's own rect instead.
+      '.reveal-viewport.reveal-scroll .scroll-page-sticky{position:relative!important;height:100%!important;top:auto!important}',
+      // Height pins the box to the slide; overflow must NOT clip it.
+      //
+      // Reveal gives .scroll-page-content overflow:hidden because in its own
+      // scroll view a page is a viewport-sized window. Here the page IS the
+      // slide and the canvas is infinite, so a slide whose content runs long
+      // should spill downward onto empty canvas rather than be cut off.
+      //
+      // Measured: content ending at 1535px inside a 1000px box was clipped at
+      // 1000; with overflow visible it renders in full. Everything else in the
+      // chain -- sticky, section, page -- was already visible, so this one rule
+      // was the whole of it.
+      '.reveal-viewport.reveal-scroll .scroll-page-content{height:100%!important;overflow:visible!important}',
+      // The slide section is reveal-centred (top:50% plus translate(-50%,-50%))
+      // inside its page, so in a grown page the content starts (H-1000)/2 below
+      // the top and ends that far past the box: measured, every grown slide on
+      // one deck overshot by exactly its offset (worst 234px), and the
+      // strip-sized iframe viewport cut it there -- the severed equation at the
+      // frame with empty canvas below. Pin grown sections to the page top:
+      // tops parallel, bottoms free.
+      //
+      // Fitting pages keep paged reveal's vertical placement instead. Paged
+      // reveal offsets each non-stack slide top=(H-contentH)/2 when centring
+      // is on (its layout(), measured in the served bundle); pinning those
+      // too dragged every title/section slide to the top-left corner
+      // (measured: "Review" at y~25 in the app against y~455 static). So the
+      // section top is a per-page value, not a constant: grown and
+      // uncentred pages sit at 0 (the pin), fitting centred pages sit at
+      // reveal's own offset. A stylesheet !important carrying a per-page
+      // custom property holds against reveal's later inline tops, which
+      // would otherwise re-assert its scroll-view numbers over ours.
+      // Nothing about the section's display changes: this reuses reveal's
+      // positioning path rather than restyling slide contents. Direct child
+      // only: anything nested keeps reveal's behaviour relative to its
+      // outer.
+      '.reveal-viewport.reveal-scroll .scroll-page-content>section{top:var(--tlda-section-top,0px)!important;left:0!important;transform:none!important}',
+      // Reveal's scroll-snap markers. They are siblings of the slide inside
+      // .scroll-page, they inherit the strip's height the same way the boxes
+      // above did -- measured at 1290 x 31000, 39 of them -- and being later in
+      // DOM order they paint over the slide and take every pointer. That is
+      // Skip's "browse tool doesn't interact with shit": a real click landed on
+      // .scroll-snap-point and never reached the code cell underneath.
+      //
+      // We drive navigation from the canvas, so reveal's snapping has nothing
+      // to do here. Size them to their page and take them out of hit-testing.
+      '.reveal-viewport.reveal-scroll .scroll-snap-point{height:100%!important;pointer-events:none!important}',
+      // The canvas is the slide background. Authored per-slide backgrounds
+      // still paint inside the page; otherwise only the hairline below defines
+      // the slide boundary.
+      '.reveal-viewport.reveal-scroll .scroll-page{background:transparent!important}',
+    ].join('\n');
+
+    // The parent grows a rect exactly when the measured content height
+    // exceeds the authored height (deckLayout), so a rect taller than
+    // authored IS grown by the same numbers -- not a second opinion, and
+    // the same getConfig() call the extent reported, so it cannot disagree.
+    var deckConfig = Reveal.getConfig ? Reveal.getConfig() : {};
+    var authoredHeight = deckConfig.height || 700;
+    var byIndex = {};
+    for (var i = 0; i < layout.rects.length; i++) byIndex[layout.rects[i].index] = layout.rects[i];
+    for (var p = 0; p < pages.length; p++) {
+      var rect = byIndex[p];
+      if (!rect) continue;
+      pages[p].style.setProperty('left', rect.x + 'px', 'important');
+      pages[p].style.setProperty('top', rect.y + 'px', 'important');
+      pages[p].style.setProperty('width', rect.width + 'px', 'important');
+      pages[p].style.setProperty('height', rect.height + 'px', 'important');
+      // Reveal's own --slide-scale is fitted to the viewport too (measured at 2
+      // against a strip-sized one). The rect IS the authored slide box, so the
+      // slide draws at 1:1 inside it and the CANVAS does the scaling.
+      pages[p].style.setProperty('--slide-width', rect.width + 'px');
+      pages[p].style.setProperty('--slide-height', rect.height + 'px');
+      pages[p].style.setProperty('--slide-scale', '1');
+    }
+
+    // Reveal sizes its scroll-view page boxes from the viewport at layout
+    // time, so the strip above is only placement until Reveal lays out
+    // against the actual sized viewport. Lay out now that placement is
+    // real. A layout pass resets the scroll-view address to the first
+    // slide (see addressFragmentTarget), so re-assert the slide that was
+    // current before laying out.
+    if (Reveal.layout && Reveal.isScrollView && Reveal.isScrollView()) {
+      var backTo = deckHeld || deckPageOfSection(Reveal.getCurrentSlide && Reveal.getCurrentSlide());
+      Reveal.layout();
+      if (backTo && Reveal.setCurrentScrollPage && Reveal.getCurrentSlide() !== backTo.section) {
+        Reveal.setCurrentScrollPage(backTo.section, backTo.index, 0);
+      }
+      // The pass above also re-ran reveal's stretch sizing against the
+      // pinned section height (see restoreStretchFigures); put the authored
+      // sizes back before anything paints.
+      restoreStretchFigures();
+    }
+
+    // Section tops, after reveal and stretch have settled: measuring before
+    // the layout pass above would read pre-stretch figure sizes. Grown
+    // pages pin at 0 (the severed-equation repair); fitting pages take
+    // reveal's own offset when its centring condition holds --
+    // config.center, or the slide's own .center class -- and stacks and
+    // uncentred pages pin like grown ones. The scroll view forces section
+    // height to the slide box, so content height needs the temporary
+    // height:auto: the same measure dance restoreStretchFigures does, with
+    // the previous inline value put back exactly.
+    var centerDefault = deckConfig.center !== false;
+    for (var q = 0; q < pages.length; q++) {
+      var rectQ = byIndex[q];
+      if (!rectQ) continue;
+      var sec = deckSectionOf(pages[q]);
+      var secTop = 0;
+      if (
+        sec &&
+        rectQ.height <= authoredHeight &&
+        !sec.classList.contains('stack') &&
+        (centerDefault || sec.classList.contains('center'))
+      ) {
+        var prevH = sec.style.getPropertyValue('height');
+        var prevPri = sec.style.getPropertyPriority('height');
+        sec.style.setProperty('height', 'auto', 'important');
+        var contentH = sec.scrollHeight || 0;
+        if (prevH) sec.style.setProperty('height', prevH, prevPri);
+        else sec.style.removeProperty('height');
+        secTop = Math.max((rectQ.height - contentH) / 2, 0);
+      }
+      pages[q].style.setProperty('--tlda-section-top', Math.round(secTop) + 'px');
+    }
+  }
+
+  // ---- authored r-stretch restoration (deck mode only) --------------------
+  //
+  // Reveal sizes section > .stretch/.r-stretch by measuring the parent
+  // section with a temporary inline height:auto and aspect-fitting the
+  // element into config height minus that measurement. In scroll view the
+  // section carries height:var(--slide-height)!important from reveal's own
+  // CSS, which the temporary inline rule loses to, so the measurement
+  // reads the full slide height, the remainder is 0, and every loaded
+  // stretch figure lands at 0x0 — sticky, re-asserted by every later
+  // layout pass.
+  //
+  // This mirrors reveal's pass exactly — same selector rooted at the
+  // slides element, same measure dance, same aspect-fit arithmetic, same
+  // inputs (getConfig returns reveal's live config object, the same one
+  // its sizing reads, so these are its inputs by reference — not the
+  // computed slide size, which is a different object), same inline-px
+  // output — except the section is made measurable with a temporary
+  // height:auto !important whose previous inline value is put back
+  // exactly before return. Unloaded elements are skipped untouched, which
+  // matches reveal's ignored-NaNpx net effect. Nothing else is sized, and
+  // the pass calls neither layout nor configure, so it cannot recurse.
+  function restoreStretchFigures(section) {
+    if (!deckMode) return;
+    if (typeof Reveal === 'undefined' || !Reveal.getSlidesElement || !Reveal.getConfig) return;
+    var slidesEl = Reveal.getSlidesElement();
+    if (!slidesEl) return;
+    var config = Reveal.getConfig() || {};
+    var slideW = config.width;
+    var slideH = config.height;
+    if (typeof slideW !== 'number' || typeof slideH !== 'number' || !(slideW > 0) || !(slideH > 0)) return;
+    // A media load changes only its containing slide. Measuring every slide
+    // for every arriving image repeatedly forces layout across the whole deck.
+    var els = section
+      ? section.querySelectorAll(':scope > .stretch, :scope > .r-stretch')
+      : slidesEl.querySelectorAll('section > .stretch, section > .r-stretch');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      var isMedia = /(img|video)/i.test(el.nodeName || '');
+      var natW = 0;
+      var natH = 0;
+      if (isMedia) {
+        natW = el.naturalWidth || el.videoWidth || 0;
+        natH = el.naturalHeight || el.videoHeight || 0;
+        if (!(natW > 0) || !(natH > 0)) continue;
+      }
+      var parent = el.parentNode;
+      if (!parent) continue;
+      var prevH = el.style.height;
+      var prevParentH = parent.style.getPropertyValue('height');
+      var prevParentPri = parent.style.getPropertyPriority('height');
+      el.style.height = '0px';
+      parent.style.setProperty('height', 'auto', 'important');
+      var remaining = slideH - parent.offsetHeight;
+      if (prevH) el.style.height = prevH; else el.style.removeProperty('height');
+      if (prevParentH) parent.style.setProperty('height', prevParentH, prevParentPri);
+      else parent.style.removeProperty('height');
+      if (isMedia) {
+        var n = Math.min(slideW / natW, remaining / natH);
+        el.style.width = (natW * n) + 'px';
+        el.style.height = (natH * n) + 'px';
+      } else {
+        el.style.width = slideW + 'px';
+        el.style.height = remaining + 'px';
+      }
+    }
+  }
+
+  // ---- tlda navigator handshake -------------------------------------------
+  //
+  // A deck-mode iframe hides Reveal's native controls only once tlda's own
+  // navigator is up to replace them. The default state of a deck is native
+  // controls visible; the parent posts {type:'tlda-nav-active'} on navigator
+  // mount/unmount and whenever the iframe reports ready (which covers rebuilds
+  // and late loads). A page where both are hidden is unnavigable, and that
+  // state is unreachable by construction: no navigator, no hiding.
+  //
+  // Legacy per-slide iframes (!deckMode) are always parent-driven, so they keep
+  // the unconditional hide they always had.
+  var tldaNavHideRules = [
+    '.reveal .controls { display: none !important; }',
+    '.reveal .progress { display: none !important; }',
+    '.reveal .slide-number { display: none !important; }',
+    '.reveal .slide-menu-button { display: none !important; }',
+    '.slide-menu-wrapper { display: none !important; }',
+    '.slide-menu { display: none !important; }',
+    '.slide-menu-overlay { display: none !important; }',
+    '.reveal .slide-chalkboard-buttons { display: none !important; }',
+    '.reveal .footer { display: none !important; }',
+    '.reveal .slide-logo { display: none !important; }',
+  ];
+  var tldaNavStyle = null;
+  var tldaNativeConfig = null;
+  var tldaNavWanted = false;
+
+  function setTldaNavActive(active) {
+    tldaNavWanted = !!active;
+    if (typeof Reveal === 'undefined' || !Reveal.isReady || !Reveal.isReady()) return;
+    if (!deckMode) return;
+    if (tldaNavWanted) {
+      if (!tldaNativeConfig && Reveal.getConfig) {
+        var c = Reveal.getConfig() || {};
+        tldaNativeConfig = {
+          keyboard: c.keyboard, controls: c.controls, touch: c.touch,
+          mouseWheel: c.mouseWheel, embedded: c.embedded, progress: c.progress,
+          slideNumber: c.slideNumber, hash: c.hash, history: c.history,
+          overview: c.overview,
+        };
+      }
+      Reveal.configure({
+        keyboard: false,
+        controls: false,
+        touch: false,
+        mouseWheel: false,
+        embedded: true,
+        progress: false,
+        slideNumber: false,
+        hash: false,
+        history: false,
+        overview: false,
+      });
+      if (!tldaNavStyle) {
+        tldaNavStyle = document.createElement('style');
+        tldaNavStyle.textContent = tldaNavHideRules.join('\n');
+        document.head.appendChild(tldaNavStyle);
+      }
+    } else {
+      if (tldaNavStyle) { tldaNavStyle.remove(); tldaNavStyle = null; }
+      if (tldaNativeConfig) Reveal.configure(tldaNativeConfig);
+    }
+    // Every configure() above ends in a layout pass, which re-ran reveal's
+    // stretch sizing against the pinned section height.
+    restoreStretchFigures();
+  }
+
+  // Registered outside init: a handshake arriving before Reveal is ready is
+  // stored, not lost, and init() applies it.
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'tlda-nav-active' && deckMode) setTldaNavActive(!!e.data.active);
+  });
+
+  // Mid-zoom sketch of a deck (the parent asks for it below a zoom level):
+  // text drawn as gray bars, headings darker, figures kept and stilled, every
+  // fragment in its final state. A slide the parent marks revealed shows in
+  // full. CSS only; the layout is the deck's own.
+  var GESTALT_SLIDE = 'html.tlda-gestalt .reveal .slides section:not(.tlda-gestalt-reveal)';
+  var GESTALT_TEXT = ':is(p, li, dt, dd, td, th, figcaption, blockquote)';
+  var GESTALT_HEAD = ':is(h1, h2, h3, h4, h5, h6)';
+  var GESTALT_ALL = ':is(p, li, dt, dd, td, th, figcaption, blockquote, pre, h1, h2, h3, h4, h5, h6)';
+  function gestaltBars(color) {
+    return 'repeating-linear-gradient(to bottom, transparent 0 0.3lh, ' + color + ' 0.3lh 0.75lh, transparent 0.75lh 1lh) !important';
+  }
+  function ensureGestaltStyle() {
+    if (document.getElementById('tlda-gestalt-style')) return;
+    var style = document.createElement('style');
+    style.id = 'tlda-gestalt-style';
+    style.textContent = [
+      GESTALT_SLIDE + ' ' + GESTALT_ALL + ', ' + GESTALT_SLIDE + ' ' + GESTALT_ALL + ' :not(svg):not(svg *) { color: transparent !important; text-shadow: none !important; }',
+      GESTALT_SLIDE + ' ' + GESTALT_TEXT + ' { background-image: ' + gestaltBars('#cfd4d9') + '; }',
+      GESTALT_SLIDE + ' ' + GESTALT_HEAD + ' { background-image: ' + gestaltBars('#8e959c') + '; }',
+      GESTALT_SLIDE + ' :is(pre, mjx-container[display="true"], .math.display, .katex-display) { background: #e2e6e9 !important; border-radius: 4px; }',
+      GESTALT_SLIDE + ' .fragment:not(.fade-out):not(.current-visible) { opacity: 1 !important; visibility: inherit !important; }',
+      GESTALT_SLIDE + ' .fragment.fade-out { visibility: hidden !important; }',
+      GESTALT_SLIDE + ' svg * { animation-play-state: paused !important; }',
+    ].join(' ');
+    (document.head || document.documentElement).appendChild(style);
+  }
+  function setGestalt(on) {
+    if (on) ensureGestaltStyle();
+    document.documentElement.classList.toggle('tlda-gestalt', !!on);
+    var svgs = document.querySelectorAll('svg');
+    for (var i = 0; i < svgs.length; i++) {
+      var svg = svgs[i];
+      if (on && svg.pauseAnimations) svg.pauseAnimations();
+      else if (!on && svg.unpauseAnimations) svg.unpauseAnimations();
+    }
+    if (!on) revealGestaltSlide(null);
+  }
+  function revealGestaltSlide(at) {
+    var shown = document.querySelectorAll('section.tlda-gestalt-reveal');
+    for (var i = 0; i < shown.length; i++) shown[i].classList.remove('tlda-gestalt-reveal');
+    if (!at || typeof Reveal === 'undefined' || !Reveal.getSlide) return;
+    var node = Reveal.getSlide(at.h, at.v);
+    // A vertical stack nests slides in an outer section; reveal both.
+    while (node && node.nodeName && node.nodeName.toLowerCase() === 'section') {
+      node.classList.add('tlda-gestalt-reveal');
+      node = node.parentElement;
+    }
+  }
+  window.addEventListener('message', function(e) {
+    if (!e.data || !deckMode) return;
+    if (e.data.type === 'tlda-gestalt') setGestalt(!!e.data.on);
+    else if (e.data.type === 'tlda-gestalt-reveal') revealGestaltSlide(e.data.slide);
+  });
+
+  // Registered outside init for the same reason: images whose bytes arrive
+  // before Reveal is ready are already complete at the first pass, and every
+  // later arrival fires this natively. Reveal swaps data-src to src in its
+  // own visibility sweep and in loadSlidesNear, but no layout pass follows
+  // either, so without this a lazily loaded stretch figure keeps whatever
+  // the last pass wrote for it — usually 0x0. Load does not bubble, hence
+  // capture. This is the native signal, not polling. Video elements never
+  // fire load for data readiness, so they get their own earliest sufficient
+  // native signal below; same pass, no separate sizing.
+  document.addEventListener('load', function(e) {
+    if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'img') return;
+    var section = e.target.closest('section');
+    if (section) restoreStretchFigures(section);
+  }, true);
+  document.addEventListener('loadedmetadata', function(e) {
+    if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'video') return;
+    var section = e.target.closest('section');
+    if (section) restoreStretchFigures(section);
+  }, true);
+
+  // Window resize is the one native trigger that re-runs reveal's sizing
+  // behind this bridge: its handler calls the internal layout directly, so
+  // wrapping the public Reveal.layout would never see it, and reveal's own
+  // resize event fires only when the scale changed. Deferred one microtask
+  // so it runs after reveal's handler — required, because every configure()
+  // unbinds and re-binds reveal's resize listener after this one.
+  window.addEventListener('resize', function() {
+    if (!deckMode) return;
+    Promise.resolve().then(restoreStretchFigures);
+  });
+
+  function init() {
+    if (typeof Reveal === 'undefined' || !Reveal.isReady || !Reveal.isReady()) {
+      setTimeout(init, 100);
+      return;
+    }
+
+    bindXrefHovers();
+    bindSplitXrefNavigation();
+
+    // Legacy per-slide iframes lock to one slide. Deck-mode iframes keep the
+    // whole Reveal instance alive and are driven by parent messages.
+    // Standalone skips the pin so native navigation (and deep links) work.
+    if (legacySlideLock) Reveal.slide(indexh, indexv, 0);
+
+    if (deckMode) {
+      // Reveal builds its .scroll-page wrappers asynchronously, so neither half
+      // can run at init: the extent has nothing to enumerate and the layout has
+      // nothing to position. One retry drives both.
+      (function announceDeck() {
+        if (reportDeckExtent() === false) {
+          setTimeout(announceDeck, 100);
+          return;
+        }
+        applyDeckLayout(pendingDeckLayout);
+      })();
+      // Size whatever reveal's own initialize-time passes left behind: images
+      // already loaded get authored sizes now, and later arrivals are covered
+      // by the load listener above. (Moving the scroll-view page does run
+      // reveal's stretch sizing: goto, and the bridge's own re-addressing, call
+      // restoreStretchFigures after the move.)
+      restoreStretchFigures();
+    }
+
+    // Signal parent that this slide is ready to show (triggers fade-in)
+    setTimeout(function() {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-slide-ready', shapeId: shapeId }, '*');
+      }
+    }, 150);
+
+    // Reveal's own navigation stays on until tlda's navigator claims the deck
+    // (see the handshake above). Legacy per-slide iframes are always
+    // parent-driven, so they take the unconditional hide they always had.
+    if (!deckMode) {
+      Reveal.configure({
+        keyboard: false,
+        controls: false,
+        touch: false,
+        mouseWheel: false,
+        embedded: true,
+        progress: false,
+        slideNumber: false,
+        hash: false,
+        history: false,
+        overview: false,
+      });
+    } else {
+      setTldaNavActive(tldaNavWanted);
+    }
+
+    // Prevent reveal from changing slides (lock to this slide). Embedded
+    // legacy iframes only: standalone lets every move stand.
+    Reveal.on('slidechanged', function(ev) {
+      if (legacySlideLock && (ev.indexh !== indexh || ev.indexv !== indexv)) {
+        Reveal.slide(indexh, indexv, 0);
+      }
+      // Reveal's scroll view moves its current page on its own (the first
+      // page at load, then whichever the strip's tracking picks), and each move
+      // runs its stretch sizing against the pinned section height, which leaves
+      // every lone figure in the strip at 0x0. The sizing lands after this event
+      // returns, so the authored sizes go back on the next task.
+      if (deckMode) setTimeout(restoreStretchFigures, 0);
+      if (deckMode && holdDeckAddress(ev.currentSlide)) return;
+      if (deckMode) {
+        reportFragmentState();
+        reportSlideHeight();
+      }
+    });
+
+    // Layout rules apply always; the navigation-hiding rules join them only for
+    // legacy per-slide iframes. Deck-mode hiding arrives via the handshake.
+    // Decks take the chapter background treatment: the reveal containers go
+    // transparent so the canvas shows through in book and solo alike (one path;
+    // his forced-white line and quarto's theme white underneath it both lose to
+    // the !important). Per-slide authored backgrounds on section are left
+    // alone. No frame rule here: the iframe viewport is exactly strip-sized,
+    // so a .scroll-page outline falls outside the viewport and clips on every
+    // outer edge (measured: vertical lines only). The parent draws each
+    // slide's frame as canvas overlay divs from the same layout this bridge
+    // applies, with breathing room the viewport cannot give.
+    var styleRules = [
+      'html, body { overflow: visible !important; margin: 0; background: transparent !important; }',
+      '.reveal, .reveal .slides, .reveal .slides section { overflow: visible !important; }',
+      '.reveal { background: transparent !important; }',
+    ];
+    // The capture clone uses Reveal's own scroll view. Keep its viewport as
+    // the scroller: the strip's overflow-visible rule otherwise scrolls the
+    // outer document while Reveal sees scrollTop=0 and reselects slide one.
+    if (captureHold) styleRules.push(
+      'html { height: 100%; overflow: hidden !important; }',
+      'body.reveal-viewport.reveal-scroll { height: 100%; overflow-y: auto !important; }',
+      '.reveal-scroll .scroll-page-content { overflow: visible !important; }'
+    );
+    if (!deckMode) styleRules = styleRules.concat(tldaNavHideRules);
+    var style = document.createElement('style');
+    style.textContent = styleRules.join('\n');
+    document.head.appendChild(style);
+
+    // Read AFTER the rules above apply: reading earlier sees quarto's own
+    // body background and caches it, and the +50ms report then posts that
+    // stale color forever (measured: solo canvas gray against book white).
+    slideBackground = slideBackground || readSlideBackground();
+
+    function reportSlideHeight() {
+      if (window.parent === window) return;
+      var slide = Reveal.getCurrentSlide();
+      if (!slide) return;
+      var scale = Reveal.getScale ? Reveal.getScale() : 1;
+      // Measure the slide, never the document. body.scrollHeight and
+      // documentElement.scrollHeight are a function of the height the PARENT
+      // last applied from this very report: reveal centres .slides in the
+      // viewport, so half the container falls below the content and counts into
+      // both. Measured on an 18-slide deck at container heights 1000..3000, they
+      // came back as H/2 + 1562 — so every report asked for more than it had just
+      // been given, and the parent's minH = current.props.h clamp meant the
+      // height could only climb. That is the continuous bounce: a ratchet whose
+      // gaps halve, which stalls against the parent's 5px gate and restarts from
+      // the bottom whenever anything perturbs the height.
+      //
+      // scrollHeight and offsetHeight are in the deck's authored coordinate
+      // space and do not move with the container — measured constant across the
+      // same 1000..3000 sweep, in both directions. Because .slides is centred,
+      // content that overflows its slide element by d needs d of room above it
+      // as well, so the box that shows all of it is 2*scrollHeight - offsetHeight
+      // (and just offsetHeight when nothing overflows). That value is what the
+      // old ratchet was blindly climbing towards: it settles at the same height,
+      // in two writes instead of an unbounded chase.
+      var deckH = Math.max(
+        2 * (slide.scrollHeight || 0) - (slide.offsetHeight || 0),
+        slide.offsetHeight || 0
+      );
+      var h = deckH * (scale || 1);
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: Math.ceil(h),
+      }, '*');
+    }
+
+    function reportSlideBackground() {
+      if (window.parent === window) return;
+      window.parent.postMessage({
+        type: 'tlda-slide-background',
+        shapeId: shapeId,
+        color: slideBackground || 'transparent',
+      }, '*');
+    }
+
+    // Report fragment state to parent (for SlidesNavigator)
+    function reportFragmentState(requestId) {
+      if (window.parent === window) return;
+      var slide = Reveal.getCurrentSlide();
+      if (!slide) return;
+      var fragments = slide.querySelectorAll('.fragment');
+      var total = 0;
+      var current = 0;
+      // Count unique fragment indices
+      var indices = new Set();
+      for (var i = 0; i < fragments.length; i++) {
+        var idx = fragments[i].getAttribute('data-fragment-index');
+        if (idx !== null) indices.add(idx);
+        else indices.add('auto-' + i);
+      }
+      total = indices.size;
+      // Count visible fragments
+      for (var i = 0; i < fragments.length; i++) {
+        if (fragments[i].classList.contains('visible')) {
+          var idx = fragments[i].getAttribute('data-fragment-index');
+          if (idx !== null) indices.delete(idx);
+          else indices.delete('auto-' + i);
+        }
+      }
+      current = total - indices.size;
+      // Address the SLIDE, not the strip position. In deck-strip scroll mode
+      // the goto path calls setCurrentScrollPage(section, pageIndex, 0), so the
+      // argumentless getIndices() answers with that page index as h and 0 as v.
+      // The parent keys fragment state by the address reportDeckExtent sent,
+      // which is Reveal.getIndices(element) -- the slide's real h/v. Reporting
+      // the position instead files every report under a key the navigator never
+      // looks up, so a deck whose slides have verticals loses fragment stepping
+      // entirely and Next walks past a slide's fragments. Measured on one deck:
+      // the two disagreed on 32 of 35 pages, agreeing only where page index
+      // happened to equal h with v = 0.
+      var at = Reveal.getIndices(slide) || {};
+      // Viewport-relative box of the addressed slide, for capture invokers
+      // that clip a native screenshot to it. Never throws: a report that
+      // throws would break the walk's settle, so failure reads as null and
+      // the invoker refuses to capture rather than guessing a region.
+      var slideBox = null;
+      try {
+        var rect = slide.getBoundingClientRect();
+        if (rect) {
+          // Reveal pins the section to the authored slide height even when
+          // its content is taller. The reader must capture that overflow too.
+          var captureHeight = captureHold && slide.offsetHeight > 0
+            ? Math.max(rect.height, slide.scrollHeight * rect.height / slide.offsetHeight)
+            : rect.height;
+          slideBox = { x: rect.left, y: rect.top, w: rect.width, h: captureHeight };
+        }
+      } catch (boxError) { slideBox = null; }
+      window.parent.postMessage({
+        type: 'tlda-fragment-state',
+        requestId: typeof requestId === 'string' ? requestId : null,
+        shapeId: shapeId,
+        indexh: at.h,
+        indexv: at.v || 0,
+        current: current,
+        total: total,
+        slideBox: slideBox,
+      }, '*');
+    }
+
+    function getVisibleFragmentCount() {
+      var slide = Reveal.getCurrentSlide();
+      if (!slide) return { current: 0, total: 0 };
+      var fragments = slide.querySelectorAll('.fragment');
+      var all = new Set();
+      var visible = new Set();
+      for (var i = 0; i < fragments.length; i++) {
+        var idx = fragments[i].getAttribute('data-fragment-index');
+        var key = idx !== null ? idx : 'auto-' + i;
+        all.add(key);
+        if (fragments[i].classList.contains('visible')) {
+          visible.add(key);
+        }
+      }
+      return { current: visible.size, total: all.size };
+    }
+
+    function goToVisibleFragmentCount(target) {
+      var state = getVisibleFragmentCount();
+      var clamped = Math.max(0, Math.min(target, state.total));
+      var guard = state.total + 2;
+      while (state.current < clamped && guard-- > 0) {
+        Reveal.nextFragment ? Reveal.nextFragment() : Reveal.next();
+        state = getVisibleFragmentCount();
+      }
+      while (state.current > clamped && guard-- > 0) {
+        Reveal.prevFragment ? Reveal.prevFragment() : Reveal.prev();
+        state = getVisibleFragmentCount();
+      }
+    }
+
+    // Bring in the images for the slides the reader can actually see.
+    //
+    // Quarto emits every figure as a lazy img with data-src, never an eager
+    // one with src -- measured on the built deck: 34 lazy, 0 eager. Reveal
+    // swaps data-src to src in its visibility sweep, and in scroll view that
+    // sweep decides what is near FROM SCROLL POSITION. The strip never scrolls
+    // (see the deck CSS above), so the sweep always answers with the same few
+    // slides and every other figure stays unloaded for the life of the deck.
+    // Skip: "the picture on the Friday's Lab slide is there. From then on, I
+    // don't see pictures."
+    //
+    // This is the third symptom of that one cause, after navigation and
+    // fragments. The next person will meet a fourth.
+    //
+    // The slidechanged event is NOT the missing half -- measured, it fires on
+    // every move, 14 for 14. The loader is simply never called, so call it.
+    //
+    // Neighbours, not just the target: the deck is one row and he presents
+    // zoomed out, so the camera shows more than the slide it is addressed to.
+    // The distance is reveal's own configured viewDistance rather than a
+    // literal -- and when reveal does not state one we load the target alone
+    // rather than inventing a number. Unloading is deliberately left to reveal.
+    // Run done once every img in the current slide has finished loading
+    // (or failed), promoting a still-lazy data-src first, within maxMs.
+    //
+    // The target argument is the section the goto addressed. In the scroll-view strip
+    // Reveal's own current slide can still be the one before it (setCurrentScrollPage
+    // sets the address, not Reveal's pointer), so asking Reveal answers for the
+    // wrong slide: a single-slide capture then waited on slide 1's pictures and
+    // screenshotted slide 3 before its figure had loaded. A range from slide 1
+    // hid it, because visiting slide 2 had already preloaded slide 3.
+    function whenCurrentSlideImagesLoaded(maxMs, done, target) {
+      var section = target || (Reveal.getCurrentSlide && Reveal.getCurrentSlide());
+      var imgs = section ? Array.prototype.slice.call(section.querySelectorAll('img')) : [];
+      var pending = 0;
+      var finished = false;
+      var timer = null;
+      function finish() {
+        if (finished) return;
+        finished = true;
+        if (timer) clearTimeout(timer);
+        done();
+      }
+      function one() { pending -= 1; if (pending <= 0) finish(); }
+      for (var i = 0; i < imgs.length; i++) {
+        var img = imgs[i];
+        if (!img.getAttribute('src') && img.getAttribute('data-src')) img.setAttribute('src', img.getAttribute('data-src'));
+        if (!img.getAttribute('src')) continue;
+        // complete is terminal either way: loaded (naturalWidth > 0) or already
+        // failed (naturalWidth 0). A failed image fired its error before any
+        // listener could be attached, so waiting on it would run to the bound.
+        if (img.complete) continue;
+        pending += 1;
+        img.addEventListener('load', one, { once: true });
+        img.addEventListener('error', one, { once: true });
+      }
+      if (pending <= 0) { finish(); return; }
+      timer = setTimeout(finish, maxMs);
+    }
+
+    function loadSlidesNear(pages, index) {
+      if (!Reveal.loadSlide || !pages || !pages.length) return;
+      var config = Reveal.getConfig ? Reveal.getConfig() : null;
+      var distance = config && typeof config.viewDistance === 'number' ? config.viewDistance : 0;
+      var first = Math.max(0, index - distance);
+      var last = Math.min(pages.length - 1, index + distance);
+      for (var li = first; li <= last; li++) {
+        var section = pages[li].querySelector('section');
+        if (section) Reveal.loadSlide(section);
+      }
+    }
+
+    // Report initial fragment state
+    setTimeout(reportSlideBackground, 50);
+    setTimeout(reportFragmentState, 200);
+    setTimeout(reportSlideHeight, 200);
+    setTimeout(reportSlideHeight, 800);
+    setTimeout(reportSlideHeight, 2000);
+    setTimeout(reportSlideHeight, 5000);
+    setTimeout(reportSlideHeight, 8000);
+
+    if (window.ResizeObserver) {
+      var resizeObserver = new ResizeObserver(function() {
+        reportSlideHeight();
+      });
+      resizeObserver.observe(document.documentElement);
+      if (document.body) resizeObserver.observe(document.body);
+      var currentSlideForResize = Reveal.getCurrentSlide();
+      if (currentSlideForResize) resizeObserver.observe(currentSlideForResize);
+    }
+    if (window.MutationObserver && document.body) {
+      var mutationTimer = null;
+      var mutationObserver = new MutationObserver(function() {
+        if (mutationTimer) clearTimeout(mutationTimer);
+        mutationTimer = setTimeout(reportSlideHeight, 100);
+      });
+      mutationObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+
+    // Report on every fragment change
+    Reveal.on('fragmentshown', reportFragmentState);
+    Reveal.on('fragmenthidden', reportFragmentState);
+    Reveal.on('fragmentshown', reportSlideHeight);
+    Reveal.on('fragmenthidden', reportSlideHeight);
+
+    // Listen for messages from parent (edge tap zones, dark mode)
+    window.addEventListener('message', function(e) {
+      if (!e.data || !e.data.type) return;
+      // Step the fragment directly rather than through next()/prev(). In the
+      // deck strip nothing scrolls, so reveal's scroll view treats next() as a
+      // navigation it cannot perform and the fragment never advances -- which
+      // left the deck stuck on a fragment slide once its address started
+      // moving. nextFragment()/prevFragment() act on the current slide's
+      // fragments without navigating, and availableFragments() above already
+      // guarantees there is one to step.
+      if (e.data.type === 'tlda-fragment-next') {
+        addressFragmentTarget(e.data);
+        var avail = Reveal.availableFragments();
+        if (avail && avail.next) {
+          if (Reveal.nextFragment) Reveal.nextFragment(); else Reveal.next();
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+        }
+      }
+      if (e.data.type === 'tlda-fragment-prev') {
+        addressFragmentTarget(e.data);
+        var avail = Reveal.availableFragments();
+        if (avail && avail.prev) {
+          if (Reveal.prevFragment) Reveal.prevFragment(); else Reveal.prev();
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+        }
+      }
+      if (e.data.type === 'tlda-fragment-goto') {
+        addressFragmentTarget(e.data);
+        goToVisibleFragmentCount(parseInt(e.data.current || '0', 10) || 0);
+        setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+        setTimeout(reportSlideHeight, 50);
+      }
+      if (e.data.type === 'tlda-slide-goto') {
+        var gotoH = e.data.indexh || 0;
+        var gotoV = e.data.indexv || 0;
+        // The deck strip does not scroll: the CSS above makes
+        // .reveal-viewport.reveal-scroll overflow:visible and absolutely
+        // positions every .scroll-page, because tlda flies a camera over the
+        // strip instead. Reveal's scroll view tracks its address from scroll
+        // position, so with nothing scrolling Reveal.slide() moves nothing and
+        // getCurrentSlide() stays on the first slide forever. That is what fed
+        // reportFragmentState a permanent 0/0 and made the navigator skip every
+        // fragment. setCurrentScrollPage sets the address without scrolling;
+        // once it is right, availableFragments() and next() drive fragments
+        // normally, so nothing else here has to change.
+        var movedByScrollPage = false;
+        var gotoTargetSection = null;
+        if (Reveal.isScrollView && Reveal.isScrollView() && Reveal.setCurrentScrollPage) {
+          var gotoPages = document.querySelectorAll('.scroll-page');
+          for (var gi = 0; gi < gotoPages.length; gi++) {
+            var gotoSection = gotoPages[gi].querySelector('section');
+            if (!gotoSection) continue;
+            var gotoIdx = Reveal.getIndices(gotoSection);
+            if (gotoIdx && gotoIdx.h === gotoH && (gotoIdx.v || 0) === gotoV) {
+              deckHeld = { section: gotoSection, index: gi };
+              Reveal.setCurrentScrollPage(gotoSection, gi, 0);
+              loadSlidesNear(gotoPages, gi);
+              // Same move as the bridge's other re-addressing: reveal's stretch
+              // sizing ran and left the page's figures at 0x0, and no image
+              // load follows when the page's images are already loaded.
+              restoreStretchFigures();
+              movedByScrollPage = true;
+              gotoTargetSection = gotoSection;
+              break;
+            }
+          }
+        }
+        if (!movedByScrollPage) Reveal.slide(gotoH, gotoV, 0);
+        // Capture hold only: the linearizer walk asks the CLONE to scroll
+        // the addressed slide into its own viewport so a native screenshot
+        // sees it whole. Walk-only flag — the live navigator never sends it
+        // — and refused whenever the strip layout is applied (a laid-out
+        // deck never scrolls, see above), so reader scroll is untouched
+        // either way. The +50ms report below carries the resulting box.
+        if (e.data.scrollIntoView === true && !deckLayoutStyle) {
+          try {
+            var scrolled = Reveal.getCurrentSlide && Reveal.getCurrentSlide();
+            if (scrolled && scrolled.scrollIntoView) scrolled.scrollIntoView({
+              behavior: 'instant',
+              block: 'center',
+              inline: 'center',
+            });
+          } catch (scrollError) { /* report still goes out; the box shows where we are */ }
+        }
+        // Capture hold only (the scrollIntoView flag is walk-only): answer
+        // when the addressed slide's images have loaded, not 50 ms after the
+        // address. The walk publishes the frame for a native screenshot as
+        // soon as this report arrives, and a lazily loaded figure that is
+        // still in flight screenshots as an empty body under its bullets.
+        // Measured 2026-10-21 on Skip's quality-assurance deck: the 1 MB
+        // coverage figure (sb-5-3, 9,608 points) came back empty in capture
+        // after capture while the 11 KB one beside it rendered; both are
+        // complete on disk and served. Bounded: a figure that never loads
+        // still gets its report, with whatever is there.
+        if (e.data.scrollIntoView === true) {
+          var gotoRequestId = e.data.requestId;
+          whenCurrentSlideImagesLoaded(10000, function() {
+            restoreStretchFigures();
+            reportFragmentState(gotoRequestId);
+            reportSlideHeight();
+          }, gotoTargetSection);
+        } else {
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+          setTimeout(reportSlideHeight, 50);
+        }
+      }
+      if (e.data.type === 'tlda-deck-layout') {
+        // Arrives whenever the parent recomputes placement, including before
+        // Reveal is ready — applyDeckLayout keeps it and the deck-mode branch in
+        // init() replays it, so neither order loses the layout.
+        applyDeckLayout(e.data.layout);
+      }
+      if (e.data.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+    });
+
+    // Pointer presses stay native; report them so parent chrome can dismiss.
+    document.addEventListener('pointerdown', function() {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-pointerdown', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    // Forward wheel events to parent (TLDraw handles scrolling)
+    function tldaSlideAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaSlideAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    // Mouse side buttons (3 and 4) toggle pan mode in the parent window; see the
+    // same forwarder in injectBridge. A page gets one bridge or the other, never both.
+    function tldaSlideIsSideButton(e) { return e.button === 3 || e.button === 4; }
+    document.addEventListener('mousedown', function(e) {
+      if (!tldaSlideIsSideButton(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-pan-toggle',
+          shapeId: shapeId,
+          clientX: e.clientX, clientY: e.clientY,
+        }, '*');
+      }
+    }, true);
+    ['mouseup', 'auxclick'].forEach(function(name) {
+      document.addEventListener(name, function(e) {
+        if (!tldaSlideIsSideButton(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    });
+    var tldaSlideLastTouch = null;
+    function tldaSlideTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    // Send the touches, not a scroll derived from them. A wheel carries
+    // translation and nothing else, so a pinch on a slide could only ever pan —
+    // which is why slides "refuse pinch gestures and comply with drag gestures
+    // but vibrate while you do them". The parent reads these with the same
+    // classifier the canvas uses. This is the slides copy of the same bridge;
+    // the other one is above and both had to change.
+    function tldaSlidePostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaSlideAllowsInternalScroll(e.target)) {
+        tldaSlideLastTouch = null;
+        return;
+      }
+      tldaSlideLastTouch = e.touches && e.touches.length >= 2 ? tldaSlideTouchCenter(e.touches) : null;
+      tldaSlidePostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchmove', function(e) {
+      if (tldaSlideAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaSlidePostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaSlideLastTouch = null;
+      tldaSlidePostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function() { tldaSlideLastTouch = null; }, { passive: true });
+  }
+
+  function bindXrefHovers() {
+    if (typeof window.tippy !== 'function') return;
+    var xrefs = document.querySelectorAll('a.quarto-xref');
+    for (var i = 0; i < xrefs.length; i++) {
+      var xref = xrefs[i];
+      if (!/^#\/?fig-/.test(xref.getAttribute('href') || '')) continue;
+      if (xref.getAttribute('data-tlda-xref-bound')) continue;
+      xref.setAttribute('data-tlda-xref-bound', '1');
+      window.tippy(xref, {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) { return el.closest('section.slide') || el.parentElement; },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+        content: (function(link) {
+          return function() {
+            var href = link.getAttribute('href') || '';
+            var id = href.replace(/^#\/?/, '');
+            var note = id && document.getElementById(id);
+            if (!note) return '';
+            return note.children && note.children.length ? note.innerHTML : note.outerHTML;
+          };
+        })(xref),
+      });
+    }
+  }
+
+  function bindSplitXrefNavigation() {
+    document.addEventListener('click', function(e) {
+      var link = e.target.closest && e.target.closest('a.quarto-xref');
+      if (!link) return;
+      var href = link.getAttribute('href') || '';
+      if (href.charAt(0) !== '#') return;
+      var targetFile = link.getAttribute('data-tlda-target-file');
+      if (!targetFile) return;
+      var anchor = href.slice(1);
+      while (anchor.charAt(0) === '/') anchor = anchor.slice(1);
+      if (!anchor) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: null,
+          targetTitle: ((link.textContent || '').trim()) || null,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 50); });
+  } else {
+    setTimeout(init, 50);
+  }
+})();
+}
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fdecks%2Fchapter-sampling-slides.html&amp;course=qtm285" style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-file-app-switch>
+(()=>{const a=document.currentScript.previousElementSibling;const params=new URLSearchParams(location.search);
+if(params.has('_tldaShape')){a.hidden=true;return;}
+const course=params.get('course');if(course){const url=new URL(a.href);url.searchParams.set('course',course);a.href=url.href;}})();
+</script><!--/tlda-file-app-switch--></body></html>

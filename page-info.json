@@ -1,0 +1,475 @@
+[
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/index.html",
+    "title": "Prediction, Inference, and Causality I (Fall 2026)"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/index.html",
+    "title": "The Social Pressure Experiment",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "index.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-social-pressure-experiment.html",
+    "title": "The Social Pressure Experiment",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-social-pressure-experiment.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-setup.html",
+    "title": "Homework: Setting Up",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-setup.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-descriptive.html",
+    "title": "Homework: Basic Descriptive Statistics",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-descriptive.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/part1-one-sample.html",
+    "title": "The Social Pressure Experiment",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "part1-one-sample.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-sampling.html",
+    "title": "Sampling",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-sampling.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-point-and-interval-estimates.html",
+    "title": "Point and Interval Estimates",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-point-and-interval-estimates.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-calibration.html",
+    "title": "Homework: The Idea of Calibration",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-calibration.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-calibration-binary.html",
+    "title": "Calibrating Interval Estimates with Binary Observations",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-calibration-binary.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-sampling-with-replacement.html",
+    "title": "Sampling with Replacement and the Binomial Distribution",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-sampling-with-replacement.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-calibration-binary.html",
+    "title": "Homework: Calibration with Binary Outcomes",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-calibration-binary.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-sampling-without-replacement.html",
+    "title": "Sampling without Replacement and the Hypergeometric Distribution",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-sampling-without-replacement.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-calibration-with-the-binomial.html",
+    "title": "Calibration using the Binomial Distribution",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-calibration-with-the-binomial.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-bootstrap.html",
+    "title": "Calibrating Interval Estimates using the Bootstrap",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-bootstrap.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-bootstrap.html",
+    "title": "Homework: Bootstrap",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-bootstrap.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-random-variables-and-moments.html",
+    "title": "Random Variables and Moments",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-random-variables-and-moments.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-random-variables-and-moments.html",
+    "title": "Homework — Random Variables, Moments, and the Standard Deviation",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-random-variables-and-moments.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-random-variables-and-moments-solutions.html",
+    "title": "Homework — Random Variables, Moments, and the Standard Deviation",
+    "variant": "solutions",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-random-variables-and-moments.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-standard-deviation.html",
+    "title": "The Standard Deviation is Standard",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-standard-deviation.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-normal-approximation.html",
+    "title": "Normal Approximation",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-normal-approximation.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-markov-chebyshev.html",
+    "title": "Homework: RVs, Markov’s Inequality, Chebyshev’s Inequality, Biased Estimators",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-markov-chebyshev.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-probability-review.html",
+    "title": "Probability Review",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-probability-review.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-variance-and-sample-size.html",
+    "title": "Variance, Standard Deviation, and Sample Size",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "chapters/chapter-variance-and-sample-size.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-comparing-estimators.html",
+    "title": "Homework: Comparing Estimators",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "homework/homework-comparing-estimators.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/exams/practice-midterm-1.html",
+    "title": "Practice Midterm 1",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "exams/practice-midterm-1.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/references.html",
+    "title": "The Social Pressure Experiment",
+    "source": {
+      "type": "project-source",
+      "format": "qmd",
+      "file": "references.qmd"
+    }
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-getting-away-from-bespoke-sampling-distributions.html",
+    "title": "11  Getting Away from Bespoke Sampling Distributions** – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/chapters/chapter-understanding-sampling-designs-beyond-independence.html",
+    "title": "12  Understanding Sampling Designs Beyond Independence** – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/candy-oct27.html",
+    "title": "Differences in Means: Surveys and Experiments",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-bias-and-coverage-slides.html",
+    "title": "Power, Bias, and Coverage",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-bootstrap-slides.html",
+    "title": "Calibrating Interval Estimates using the Bootstrap",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-calibration-binary-slides.html",
+    "title": "Calibrating Interval Estimates with Binary Observations",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-normal-approximation-proof-slides.html",
+    "title": "Normal Approximation: the Proof",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-normal-approximation-slides.html",
+    "title": "Normal Approximation and Sample Size Calculation",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-point-and-interval-estimates-slides.html",
+    "title": "Point and Interval Estimates",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-quality-assurance-slides.html",
+    "title": "Quality Assurance and Poisson Approximation",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-sampling-slides.html",
+    "title": "Sampling",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-social-pressure-experiment-slides.html",
+    "title": "Introduction",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/chapter-standard-deviation-slides.html",
+    "title": "The Standard Deviation is Standard",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/georgia-oct29.html",
+    "title": "Georgia Turnout: How Precise Is a Difference? — working draft",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/exams/practice-midterm-1-solutions.html",
+    "title": "Practice Midterm 1"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-bootstrap-solutions.html",
+    "title": "Homework: Bootstrap"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-calibration-binary-solutions.html",
+    "title": "9  Homework: Calibration with Binary Outcomes – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-calibration-solutions.html",
+    "title": "6  Homework: The Idea of Calibration – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-comparing-estimators-solutions.html",
+    "title": "19  Homework: Comparing Estimators – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/homework/homework-descriptive-solutions.html",
+    "title": "3  Homework: Basic Descriptive Statistics – Prediction, Inference, and Causality"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/supplemental/final-project-topics.html",
+    "title": "QTM 285 — Final Project Topics"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-bootstrap-slides.html",
+    "title": "Calibrating Interval Estimates using the Bootstrap",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-calibration-binary-slides.html",
+    "title": "Calibrating Interval Estimates with Binary Observations",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-normal-approximation-slides.html",
+    "title": "Normal Approximation and Sample Size Calculation",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-point-and-interval-estimates-slides.html",
+    "title": "Point and Interval Estimates",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-sampling-slides.html",
+    "title": "Sampling",
+    "variant": "slides"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/decks/chapter-social-pressure-experiment-slides.html",
+    "title": "Introduction",
+    "variant": "slides"
+  }
+]

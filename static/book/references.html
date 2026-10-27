@@ -1,5 +1,345 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><!--tlda-publication-head-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads.
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        if (target.tagName === 'IMG') scheduleImageCheck();
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : 'unknown',
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
+    };
+    var names = ['math', 'webr', 'reveal', 'images'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: KaTeX renders on a deferred pass and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+}
+</script><!--/tlda-publication-head-->
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
@@ -846,4 +1186,1498 @@ window._ojs.runtime.interpretFromScriptTags();
 
 
 
-</body></html>
+<!--tlda-publication-body-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
+  // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
+  // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
+  // "E[X]=x...", and an inline t reads "ttt"). A formula is read once, as its TeX source: $...$
+  // inline, $$...$$ when it is display math. Everything else is its text, as before.
+  function tldaReadableBlockText(el) {
+    var out = '';
+    var kids = el.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 3) { out += kid.textContent; continue; }
+      if (kid.nodeType !== 1) continue;
+      if (kid.classList && kid.classList.contains('katex') && kid.querySelector) {
+        var annotation = kid.querySelector('annotation[encoding="application/x-tex"]');
+        var tex = annotation ? (annotation.textContent || '').trim() : '';
+        if (tex) {
+          var isDisplay = !!(kid.closest && kid.closest('.katex-display, .math.display'));
+          out += isDisplay ? '$$' + tex + '$$' : '$' + tex + '$';
+          continue;
+        }
+      }
+      out += tldaReadableBlockText(kid);
+    }
+    return out;
+  }
+
+  // Read once from the page by the capture driver, which checks the headings measured here against
+  // the page's own headings by text: both sides must read a heading with the same reader, or a heading
+  // that holds a formula ("Why Must X Be Nonnegative?") makes the two lists differ and the view refuse.
+  window.__tldaReadableBlockText = tldaReadableBlockText;
+
+  // The title of the callout that holds a closed (collapsed) block, without the screen-reader
+  // word Quarto puts in front of it ("Note", "Warning"). Empty when the callout has no title.
+  function tldaCalloutTitle(host) {
+    var callout = host.closest ? host.closest('.callout') : null;
+    var titleEl = callout && callout.querySelector ? callout.querySelector('.callout-title-container') : null;
+    if (!titleEl) return '';
+    var title = '';
+    var kids = titleEl.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 1 && kid.classList && kid.classList.contains('screen-reader-only')) continue;
+      title += kid.nodeType === 1 ? tldaReadableBlockText({ childNodes: [kid] }) : (kid.nodeType === 3 ? kid.textContent : '');
+    }
+    return title.replace(/\s+/g, ' ').trim();
+  }
+
+  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks) {
+    // In a Reveal deck after a scroll-view goto, section.present stays on the
+    // title slide while the address moves; getCurrentSlide() reads the
+    // addressed slide. Measure that first (the hidden!==root guard below keeps
+    // its slide-level aria-hidden text measurable); present, then main/body,
+    // preserve every non-deck path exactly.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var slide = Reveal.getCurrentSlide();
+        if (slide && slide.tagName === 'SECTION') addressed = slide;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var root = addressed ||
+      document.querySelector('.reveal .slides section.present') ||
+      document.querySelector('main') || document.body;
+    var blocks = [];
+    // The default candidate set is the prose skeleton, and it is what every
+    // deck walk gets: the walk passes no selector, so deck output is the same
+    // blocks in the same order as before this parameter existed. A caller may
+    // widen the set per request -- the chapter view asks for captions, tables
+    // and display math alongside prose -- and every match comes back in the
+    // one block shape below. The parameter is request-local; no caller reads
+    // or writes any state outside its own call.
+    var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
+    var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+    var pictureLayoutRequest = includePictureLayout === true;
+    function isVisibleLayoutElement(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var currentStyle = getComputedStyle(current);
+        var opacity = parseFloat(currentStyle.opacity);
+        if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+    function visibleTextLayoutRects() {
+      var rects = [];
+      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var textNode;
+      while ((textNode = walker.nextNode())) {
+        var text = textNode.textContent || '';
+        var owner = textNode.parentElement;
+        // SVG is measured as a picture; its internal labels belong to that
+        // image. Text siblings in an SVG-containing block still count.
+        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        var range = document.createRange();
+        range.setStart(textNode, 0);
+        range.setEnd(textNode, text.length);
+        var visibleRects = Array.from(range.getClientRects()).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        visibleRects.forEach(function(rect) {
+          rects.push({ top: rect.top, bottom: rect.bottom });
+        });
+        if (visibleRects.length) {
+          for (var current = owner; current; current = current.parentElement) {
+            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current === root) break;
+          }
+        }
+      }
+      // MathJax's SVG output can have no text node with a rendered range.
+      // Its visible container box is the text bound in that case. Prefer one
+      // outer math box and skip math SVGs when pictures are measured below.
+      var mathNodes = root.querySelectorAll(mathSelector);
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (outerMath && outerMath !== root) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
+          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+        }
+      }
+      return rects;
+    }
+    for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
+      var block = candidates[blockIndex];
+      if (block.closest('svg') || block.querySelector('svg')) continue;
+      // Display math written inside a paragraph or list item is part of that block's text now;
+      // measuring it again as its own block would read the same equation twice.
+      if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
+      var style = getComputedStyle(block);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var words = [];
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
+        if (hidden && hidden !== root) continue;
+        // Chapter views use readable block text, not wrapped word lines. One
+        // Range per text node establishes the same visibility without paying
+        // one layout query per word. Deck/export callers keep wrapped lines.
+        var pattern = includeLineBreaks === false ? /\S[\s\S]*/g : /\S+/g;
+        var match;
+        while ((match = pattern.exec(node.textContent || ''))) {
+          var range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          var rects = Array.from(range.getClientRects()).filter(function(rect) {
+            return rect.width > 1 && rect.height > 1;
+          });
+          if (!rects.length) continue;
+          words.push({
+            word: match[0],
+            center: rects[0].top + rects[0].height / 2,
+            height: rects[0].height,
+          });
+        }
+      }
+      var lines = [];
+      words.forEach(function(word) {
+        var line = lines.find(function(candidate) {
+          return Math.abs(candidate.center - word.center) < word.height * 0.5;
+        });
+        if (!line) {
+          line = { center: word.center, words: [] };
+          lines.push(line);
+        }
+        line.words.push(word.word);
+      });
+      // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
+      // and used to be dropped, though a reader can open the callout. A widened request keeps it,
+      // marked with the callout it is closed in.
+      var closedCallout = null;
+      if (widenedRequest && !lines.length && block.closest) {
+        var closedHost = block.closest('.callout-collapse');
+        if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
+      }
+      if (lines.length || closedCallout) {
+        // A widened request (the chapter view passes a candidate selector;
+        // the deck walk never does) gets two additions on the block shape:
+        //   - tables join cells with " | " and rows with " / ", because a
+        //     table's textContent concatenates cells with no separator and
+        //     "AB12" is not a readable row (tables are never matched under
+        //     the default set, so this can only fire for a widened request);
+        //   - sourceLine (from the build's data-source-line stamp; null when
+        //     unstamped, absence stated rather than guessed) and rect
+        //     (viewport coordinates at measurement time, for region math on
+        //     an unscrolled page).
+        // A default request takes the exact object it always took: no new
+        // keys, so deck measurement output is byte-identical field for
+        // field, not merely compatible.
+        var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
+          var rows = [];
+          var trs = block.querySelectorAll('tr');
+          for (var rowIndex = 0; rowIndex < trs.length; rowIndex++) {
+            var cells = [];
+            var tds = trs[rowIndex].querySelectorAll('th, td');
+            for (var cellIndex = 0; cellIndex < tds.length; cellIndex++) {
+              cells.push(tldaReadableBlockText(tds[cellIndex]).replace(/\s+/g, ' ').trim());
+            }
+            rows.push(cells.join(' | '));
+          }
+          if (rows.length) blockText = rows.join(' / ');
+        }
+        var entry = {
+          tag: block.tagName.toLowerCase(),
+          id: block.id || null,
+          text: blockText,
+          lines: lines.map(function(line) { return line.words.join(' '); }),
+        };
+        if (viewRequest) {
+          var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
+          var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
+          var sourceLineNum = sourceLineAttr == null ? null : Number(sourceLineAttr);
+          entry.sourceLine = Number.isInteger(sourceLineNum) ? sourceLineNum : null;
+          entry.sourceFile = block.getAttribute ? block.getAttribute('data-source-file') : null;
+          var endLineAttr = block.getAttribute ? block.getAttribute('data-source-end-line') : null;
+          entry.sourceEndLine = endLineAttr == null ? entry.sourceLine : Number(endLineAttr);
+          entry.domIndex = blockIndex;
+          entry.rect = blockRect && !closedCallout ? { x: blockRect.left, y: blockRect.top, w: blockRect.width, h: blockRect.height } : null;
+          if (closedCallout) {
+            entry.closedCallout = { id: closedCallout.id || null, title: tldaCalloutTitle(closedCallout) };
+          }
+        }
+        blocks.push(entry);
+      }
+    }
+    var measurement = { url: window.location.href, title: document.title, blocks: blocks };
+    if (pictureLayoutRequest) {
+      measurement.visibleTextRects = visibleTextLayoutRects();
+      var pictures = [];
+      var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
+        var picture = pictureNodes[pictureIndex];
+        var tag = (picture.tagName || '').toLowerCase();
+        // An embedded SVG (including KaTeX/MathJax glyphs) is part of its
+        // enclosing picture or equation, not a separate picture box.
+        if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
+        if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
+        if (!isVisibleLayoutElement(picture)) continue;
+        var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
+        if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
+        pictures.push({
+          tag: tag,
+          id: picture.id || null,
+          alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
+          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+        });
+      }
+      measurement.pictures = pictures;
+    }
+    return measurement;
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-measure-rendered-lines') return;
+    var requestId = event.data.requestId || null;
+    Promise.resolve(document.fonts?.ready).then(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var target = event.source || window.parent;
+          target.postMessage({
+            type: 'tlda-rendered-lines',
+            shapeId: shapeId,
+            requestId: requestId,
+            measurement: tldaMeasureRenderedLines(
+              typeof event.data.candidates === 'string' && event.data.candidates
+                ? event.data.candidates
+                : null,
+              event.data.includePictureLayout === true,
+              event.data.includeLineBreaks !== false,
+            ),
+          }, '*');
+        });
+      });
+    });
+  });
+
+  // Figure serialization for the client-side linearizer. The app and the
+  // deck often live on different origins (cross-origin asset server is the
+  // shipped topology), so the parent cannot read pixels itself: the frame
+  // serializes its own current-slide figures — static SVGs through canvas
+  // to PNG, live canvases via toDataURL — and posts the data back. One
+  // figure's failure is a note on that figure, never a failed roundtrip.
+  function tldaRasterSvg(svg, width, height) {
+    return new Promise(function(resolve, reject) {
+      try {
+        var clone = svg.cloneNode(true);
+        clone.setAttribute('width', String(width));
+        clone.setAttribute('height', String(height));
+        var source = new XMLSerializer().serializeToString(clone);
+        var url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
+        var image = new Image();
+        image.onload = function() {
+          try {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            if (!ctx) { URL.revokeObjectURL(url); reject(new Error('no 2d context')); return; }
+            ctx.drawImage(image, 0, 0, width, height);
+            var png = canvas.toDataURL('image/png');
+            URL.revokeObjectURL(url);
+            resolve(png);
+          } catch (e) { URL.revokeObjectURL(url); reject(e); }
+        };
+        image.onerror = function() { URL.revokeObjectURL(url); reject(new Error('SVG raster failed to load')); };
+        image.src = url;
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function tldaSerializeFigures() {
+    var doc = document;
+    // Same addressing as measurement: after a scroll-view goto,
+    // section.present stays on the title slide while the address moves;
+    // getCurrentSlide() reads the addressed slide.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var current = Reveal.getCurrentSlide();
+        if (current && current.tagName === 'SECTION') addressed = current;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var slide = addressed
+      || doc.querySelector('.reveal .slides section.present')
+      || doc.querySelector('.reveal .slides section');
+    var found = slide ? slide.querySelectorAll('svg, canvas') : [];
+    var nodes = Array.prototype.slice.call(found);
+    var figures = [];
+    var chain = Promise.resolve();
+    nodes.forEach(function(node) {
+      chain = chain.then(function() {
+        var tag = (node.tagName || '').toLowerCase();
+        if (tag === 'svg') {
+          var rect = node.getBoundingClientRect();
+          var width = Math.max(1, Math.round(rect.width));
+          var height = Math.max(1, Math.round(rect.height));
+          if (rect.width < 2 || rect.height < 2) return null;
+          return tldaRasterSvg(node, width, height).then(function(png) {
+            figures.push({ kind: 'svg', png: png, width: width, height: height, note: null });
+          }, function(e) {
+            figures.push({ kind: 'svg', png: null, width: width, height: height,
+              note: 'SVG did not raster: ' + (e && e.message ? e.message : String(e)) });
+          });
+        }
+        if (tag === 'canvas') {
+          if (node.width < 2 || node.height < 2) return null;
+          try {
+            figures.push({ kind: 'canvas', png: node.toDataURL('image/png'),
+              width: node.width, height: node.height, note: null });
+          } catch (e) {
+            figures.push({ kind: 'canvas', png: null, width: node.width, height: node.height,
+              note: 'canvas unreadable (tainted or empty): ' + (e && e.message ? e.message : String(e)) });
+          }
+          return null;
+        }
+        return null;
+      });
+    });
+    return chain.then(function() { return figures; });
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-serialize-figures') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaSerializeFigures().then(function(figures) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: figures,
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: [],
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
+
+  // Keep the static content layout, including its named grid tracks. The app
+  // supplies navigation around the embedded chapter, so Quarto's duplicate
+  // book/sidebar TOCs and their mobile toggle stay hidden inside the frame.
+  // Hide with CSS rather than removing nodes Quarto's own scripts reference.
+  function hideEmbeddedTocs() {
+    if (window.parent === window) return;
+    var style = document.createElement('style');
+    style.textContent = "#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }";
+    document.head.appendChild(style);
+  }
+  // Let the canvas show through: the document's own background goes
+  // transparent so the page paints the fog canvas instead of Quarto white.
+  // The deck bridge already does the same for slides; this is the chapter
+  // half the parity commit dropped, and the pages went white without it.
+  function letCanvasShowThrough() {
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+  }
+  function installCanvasListeners() {
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+            docWidth: document.documentElement.clientWidth,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    // The mouse side buttons (3 and 4) toggle pan mode in the parent window. A press
+    // over a page that takes pointer events lands HERE, in this document, where the
+    // parent's listener cannot see it, so it is forwarded like the wheel above. The
+    // matching mouseup and auxclick are claimed so the browser does not navigate
+    // history on them.
+    function tldaIsSideButton(e) { return e.button === 3 || e.button === 4; }
+    document.addEventListener('mousedown', function(e) {
+      if (!tldaIsSideButton(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-pan-toggle',
+          shapeId: shapeId,
+          clientX: e.clientX, clientY: e.clientY,
+        }, '*');
+      }
+    }, true);
+    ['mouseup', 'auxclick'].forEach(function(name) {
+      document.addEventListener(name, function(e) {
+        if (!tldaIsSideButton(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-pointerdown', shapeId: shapeId }, '*');
+      }
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Tab-pane state sync across same-document iframe instances.
+    //
+    // The docview renders its OWN iframe of the target document (measured: two
+    // iframes serve chapter-social-pressure-experiment.html with the same
+    // _tldaShape after a peek). A pane opened by a link click exists only in
+    // the clicked instance, so the docview's copy keeps default tabs and shows
+    // the wrong figure in the right slot (measured: Figure 3.1 in the Figure
+    // 3.4 slot). Instances sync open panes over a BroadcastChannel keyed by
+    // document path: the click path broadcasts to live instances, and the
+    // parent posts tlda-activate-pane to the target's iframes as load
+    // signals arrive so late joiners converge too.
+    var tabSyncChannel = null;
+    try {
+      tabSyncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('tlda-tab-panes') : null;
+    } catch (bcErr) { tabSyncChannel = null; }
+    function tabSyncDocKey() {
+      try { return window.location.pathname; } catch (e) { return ''; }
+    }
+    function broadcastOpenPane(paneId) {
+      if (!tabSyncChannel || !paneId) return;
+      // Best-effort cross-instance sync: if the broadcast fails the clicked
+      // instance still navigates correctly and only the mirror stays stale.
+      try { tabSyncChannel.postMessage({ t: 'tlda-tab-open', doc: tabSyncDocKey(), pane: paneId }); } catch (e) { /* sync is advisory */ }
+    }
+    // Open the tab pane holding an anchor, through its tab, so a link to a
+    // figure in a closed pane lands on the figure and not on whichever pane
+    // happens to be open (measured: the book keeps one letter-figure per pane
+    // with only the first open; clicks landed on the slot showing Figure 3.1
+    // whatever the link named). Manipulates Bootstrap tab classes directly
+    // rather than clicking the tab, so no second navigation is posted.
+    function openTabPaneById(paneId, broadcast) {
+      if (!paneId || !document.getElementById) return false;
+      var pane = document.getElementById(paneId);
+      if (!pane || !pane.classList || !pane.classList.contains('tab-pane')) return false;
+      if (pane.classList.contains('active')) return false;
+      var tab = null;
+      if (pane.id) {
+        tab = document.querySelector('[role="tab"][aria-controls="' + pane.id + '"]');
+        if (!tab) {
+          tab = document.querySelector(
+            'a[data-bs-toggle="tab"][href="#' + pane.id + '"],' +
+            'button[data-bs-toggle="tab"][data-bs-target="#' + pane.id + '"]'
+          );
+        }
+      }
+      // Scope to the whole tabset: the tablist is a sibling of .tab-content,
+      // so scoping to .tab-content clears the panes but leaves the old tab
+      // button marked selected alongside the new one (measured: Civic Duty
+      // and Neighbors both aria-selected after a Figure 3.4 click).
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          p.classList.remove('active');
+          p.classList.remove('show');
+        });
+        tabset.querySelectorAll('[role="tab"][aria-selected="true"]').forEach(function(t) {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('active');
+        });
+      }
+      pane.classList.add('active');
+      pane.classList.add('show');
+      if (tab) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      }
+      // A remote apply must not rebroadcast: the sender already has it open,
+      // and an echo would ping-pong between instances.
+      if (broadcast) broadcastOpenPane(pane.id);
+      return true;
+    }
+    function activateTabPaneForAnchor(anchorId) {
+      if (!anchorId || !document.getElementById) return false;
+      var el = document.getElementById(anchorId);
+      // Quarto xref tooltips clone the target (id included) into the link's
+      // vicinity on click, ahead of the original in document order — so
+      // getElementById returns the clone (measured: an IMG in the link's LI
+      // while the real figure sits in its tab pane) and the pane lookup
+      // below finds nothing. Walk every copy to the one outside tooltips.
+      if (el && el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) {
+        var copies = document.querySelectorAll('[id]');
+        el = null;
+        for (var i = 0; i < copies.length; i++) {
+          if (copies[i].id === anchorId
+            && !(copies[i].closest && copies[i].closest('[data-tippy-root], .tippy-box, .tippy-content'))) {
+            el = copies[i];
+            break;
+          }
+        }
+      }
+      var pane = el && el.closest ? el.closest('.tab-pane:not(.active)') : null;
+      if (!pane || !pane.id) return false;
+      return openTabPaneById(pane.id, true);
+    }
+    // Folds (callouts, code folds, <details>) and tabs are mirrored the same
+    // way, so every frame showing this document shows it the same: the
+    // canvas and a doc-view panel are two cameras on one page, not two pages
+    // that drift apart. A change made here is sent; a change applied from
+    // another frame is not sent again (remoteExpect), so nothing echoes.
+    var remoteExpect = {};
+    function foldKeyOf(el) {
+      if (!el) return null;
+      if (el.tagName === 'DETAILS') {
+        if (el.id) return '#' + el.id;
+        return 'details:' + Array.prototype.indexOf.call(document.querySelectorAll('details'), el);
+      }
+      return el.id ? '#' + el.id : null;
+    }
+    function foldElement(key) {
+      if (!key) return null;
+      if (key.indexOf('details:') === 0) return document.querySelectorAll('details')[Number(key.slice(8))] || null;
+      return document.getElementById(key.slice(1));
+    }
+    function foldIsOpen(el) {
+      return el.tagName === 'DETAILS' ? !!el.open : el.classList.contains('show');
+    }
+    function sendFold(el, open) {
+      var key = foldKeyOf(el);
+      if (!key || !tabSyncChannel) return;
+      if (remoteExpect[key] === open) { delete remoteExpect[key]; return; }
+      foldStateSettled = true;
+      try { tabSyncChannel.postMessage({ t: 'tlda-fold', doc: tabSyncDocKey(), key: key, open: !!open }); } catch (e) { /* mirroring is advisory */ }
+    }
+    function applyFold(key, open) {
+      var el = foldElement(key);
+      if (!el || foldIsOpen(el) === open) return;
+      remoteExpect[key] = open;
+      if (el.tagName === 'DETAILS') { el.open = open; return; }
+      var B = window.bootstrap;
+      if (B && B.Collapse) {
+        var c = B.Collapse.getOrCreateInstance(el, { toggle: false });
+        if (open) c.show(); else c.hide();
+      } else {
+        el.classList.toggle('show', open);
+        delete remoteExpect[key];
+      }
+      var sel = '[data-bs-target="#' + el.id + '"], [href="#' + el.id + '"], [data-bs-target=".' + el.id + '-contents"]';
+      document.querySelectorAll(sel).forEach(function(h) {
+        h.setAttribute('aria-expanded', open ? 'true' : 'false');
+        h.classList.toggle('collapsed', !open);
+      });
+    }
+    // Bootstrap fires show/hide as the change starts, before its animation.
+    document.addEventListener('show.bs.collapse', function(e) { sendFold(e.target, true); });
+    document.addEventListener('hide.bs.collapse', function(e) { sendFold(e.target, false); });
+    document.addEventListener('toggle', function(e) {
+      if (e.target && e.target.tagName === 'DETAILS') sendFold(e.target, e.target.open);
+    }, true);
+    // A tab the reader clicks, not only one a link opened.
+    document.addEventListener('shown.bs.tab', function(e) {
+      var target = e.target && (e.target.getAttribute('data-bs-target') || e.target.getAttribute('href') || '');
+      if (target && target.charAt(0) === '#') broadcastOpenPane(target.slice(1));
+    });
+    function foldState() {
+      var folds = {};
+      document.querySelectorAll('.collapse[id], details').forEach(function(el) {
+        var key = foldKeyOf(el);
+        if (key) folds[key] = foldIsOpen(el);
+      });
+      var panes = [];
+      document.querySelectorAll('.tab-pane.active[id]').forEach(function(p) { panes.push(p.id); });
+      return { folds: folds, panes: panes };
+    }
+    if (tabSyncChannel) {
+      tabSyncChannel.onmessage = function(ev) {
+        var msg = ev && ev.data;
+        if (!msg || msg.doc !== tabSyncDocKey()) return;
+        if (msg.t === 'tlda-tab-open') {
+          openTabPaneById(msg.pane, false);
+        } else if (msg.t === 'tlda-fold') {
+          applyFold(msg.key, !!msg.open);
+        } else if (msg.t === 'tlda-fold-query') {
+          // Only a frame whose state is settled answers. A frame that has just
+          // loaded holds every fold shut, and the first answer wins, so its
+          // answer could tell a sibling loading beside it that nothing was open.
+          if (!foldStateSettled) return;
+          try { tabSyncChannel.postMessage({ t: 'tlda-fold-state', doc: tabSyncDocKey(), to: msg.from, state: foldState() }); } catch (e) { /* advisory */ }
+        } else if (msg.t === 'tlda-fold-state' && msg.to === foldSyncId && !foldStateApplied) {
+          // The first answer wins; every settled frame holds the same state.
+          foldStateApplied = true;
+          foldStateSettled = true;
+          var folds = (msg.state && msg.state.folds) || {};
+          Object.keys(folds).forEach(function(key) { applyFold(key, !!folds[key]); });
+          ((msg.state && msg.state.panes) || []).forEach(function(pane) { openTabPaneById(pane, false); });
+        }
+      };
+      // A frame that loads after the others (a panel opened later, a page
+      // reloaded by a rebuild) takes the state the others are showing.
+      var foldSyncId = Math.random().toString(36).slice(2);
+      var foldStateApplied = false;
+      var foldStateSettled = false;
+      var askFoldState = function() {
+        try { tabSyncChannel.postMessage({ t: 'tlda-fold-query', doc: tabSyncDocKey(), from: foldSyncId }); } catch (e) { /* advisory */ }
+        // No settled frame answered: this one is the first showing the page,
+        // and what it shows is the state.
+        setTimeout(function() { foldStateSettled = true; }, 600);
+      };
+      // Ask once the document is parsed, not on load: the folds exist then,
+      // and load waits for every subresource, which can be a long time or never.
+      if (document.readyState !== 'loading') askFoldState();
+      else document.addEventListener('DOMContentLoaded', askFoldState);
+    }
+    // Late joiners (a docview iframe mounting after the click missed the
+    // broadcast) converge through the parent instead: on a peek the parent
+    // posts tlda-activate-pane to every iframe serving the target document,
+    // immediately and again as load signals arrive. A peer query was tried
+    // first and removed: late mounts never observed asking, while the
+    // addressed post reaches exactly the instances showing the target.
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-activate-pane' || !msg.anchor) return;
+      if (msg.doc && msg.doc !== tabSyncDocKey()) return;
+      activateTabPaneForAnchor(msg.anchor);
+    });
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-request-figures') return;
+      // On-demand authoritative report: the parent asks for this after room
+      // hydration when a keyed report already arrived pre-hydration (its
+      // retire saw a partial store). Answers with the same keyed
+      // tlda-figures post as the scheduled reports — not the keyless
+      // serialize path, which serves deck export.
+      // A loaded frame also receives this request when it gains layout
+      // ownership; refresh the heading outline and anchor positions then.
+      reportHeadings();
+      reportFigures();
+    });
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      if (a.hasAttribute('data-tlda-app-shell')) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      // Tab controls are not document navigation: the element switches its own
+      // pane through data-bs-target. Quarto's nav fixup rewrites a tab's empty
+      // href attribute to this page's own URL, which the anchor path below
+      // would reduce to an all-null navigate — the page-top jump on a tab click.
+      if (a.getAttribute('role') === 'tab' || a.getAttribute('data-bs-toggle') === 'tab') return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Same document (matching path): keep just the hash portion.
+        // Cross-chapter path: keep the full path so the parent chapter
+        // matcher can find the target shape; keep any hash as the anchor.
+        // (A bare cross-chapter URL with no hash used to be reduced to the
+        // empty string here, shipping targetFile/targetPath/anchor all null
+        // — so no target shape ever resolved and the parent fell back to
+        // centering the current page top.)
+        var hashIdx = href.indexOf('#');
+        try {
+          var linkUrl = new URL(href, window.location.href);
+          var selfUrl = new URL(window.location.href);
+          if (linkUrl.pathname === selfUrl.pathname) {
+            parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+          } else {
+            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+          }
+        } catch (parseErr) {
+          parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+        }
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      // Same-document anchors only: a cross-chapter anchor lives in an iframe
+      // this document cannot reach. Re-measure after opening so the parent
+      // navigates with the pane open; same-channel ordering delivers the fresh
+      // positions before the navigation.
+      if (anchor && !targetFile && activateTabPaneForAnchor(anchor)) {
+        reportHeadings();
+        reportHeight();
+      }
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Keep authored content styling. Duplicate embedded TOCs are hidden
+    // separately above; these rules are dark-mode states the parent toggles.
+    var style = document.createElement('style');
+    style.textContent = [
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height,
+  // and because body/documentElement scrollHeight include the height the parent
+  // sets on the embed — they stay put while the page reflows.
+  function contentHeight() {
+    var main = document.querySelector('main');
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      return Math.ceil(rect.bottom + window.scrollY);
+    }
+    return Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight
+    );
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    var h = contentHeight();
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  // An element inside an inactive tab pane reports offsetTop 0 (the pane is
+  // display:none, which collapses the whole offset chain), so the position
+  // would register as the top of the document instead of the real location.
+  // Measure those elements with their pane chain temporarily activated and
+  // restored in the same synchronous pass, so no paint happens in between.
+  // Note: toggling the Bootstrap active class (not inline display) is what
+  // makes the pane visible — the hiding rule targets panes without the
+  // active class, which outranks any inline display value.
+  // The reveal must be isolated, not stacked: activating the hidden pane
+  // alongside the currently-active sibling lays both out, and the revealed
+  // content measures below the sibling's (measured: y=7456 stacked against
+  // a true y=6833). Park the active siblings while measuring, restoring each
+  // pane's exact classes afterwards.
+  function measureWithHiddenPanesShown(el, measure) {
+    var reveal = [];
+    var node = el;
+    while (node && node !== document.body && node !== document.documentElement) {
+      if (node.classList && node.classList.contains('tab-pane') &&
+          !node.classList.contains('active')) {
+        reveal.push(node);
+      }
+      node = node.parentElement;
+    }
+    if (reveal.length === 0) return measure();
+    // Collect every pane touched — the reveal chain plus the active sibling
+    // in each of its tabsets — snapshot each once, then swap: deactivating
+    // and snapshotting interleaved would catch an already-revealed pane in a
+    // nested tabset and measure it hidden again.
+    var parked = [];
+    var seen = [];
+    reveal.forEach(function(pane) {
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          if (seen.indexOf(p) === -1) { seen.push(p); parked.push(p); }
+        });
+      }
+      if (seen.indexOf(pane) === -1) { seen.push(pane); parked.push(pane); }
+    });
+    var saved = parked.map(function(p) {
+      return {
+        pane: p,
+        active: p.classList.contains('active'),
+        show: p.classList.contains('show'),
+      };
+    });
+    parked.forEach(function(p) {
+      p.classList.remove('active');
+      p.classList.remove('show');
+    });
+    reveal.forEach(function(pane) {
+      pane.classList.add('active');
+      pane.classList.add('show');
+    });
+    var value;
+    try {
+      value = measure();
+    } finally {
+      saved.forEach(function(entry) {
+        if (entry.active) entry.pane.classList.add('active');
+        else entry.pane.classList.remove('active');
+        if (entry.show) entry.pane.classList.add('show');
+        else entry.pane.classList.remove('show');
+      });
+    }
+    return value;
+  }
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      // Tooltip clones carry the target's id (see activateTabPaneForAnchor);
+      // duplicates overwrite by document order, so measuring one replaces
+      // the real position with the tooltip's. Skip tooltip subtrees.
+      if (el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) return;
+      positions[id] = measureWithHiddenPanesShown(el, function() {
+        var y = 0;
+        var node = el;
+        while (node) {
+          y += node.offsetTop || 0;
+          node = node.offsetParent;
+        }
+        return y;
+      });
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      var outline = Array.prototype.slice.call(document.querySelectorAll('h1,h2,h3,h4')).map(function(heading) {
+        var owner = heading.id ? heading : heading.closest('[id]');
+        var titleNode = heading.cloneNode(true);
+        titleNode.querySelectorAll('a.anchorjs-link, a[aria-label="Anchor"]').forEach(function(anchor) { anchor.remove(); });
+        return {
+          id: owner ? owner.id : '',
+          title: (titleNode.textContent || '').trim(),
+          level: parseInt(heading.tagName.slice(1), 10),
+        };
+      }).filter(function(entry) { return entry.id && entry.title; });
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+        outline: outline,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  // Figures stay in the page. They used to be lifted onto the canvas: an
+  // image figure was hidden here and redrawn over the page on a plate, and an
+  // inline SVG got a transparent pane over it that turned the wheel into a
+  // zoom of that figure. The plates trailed the text after every reflow and the
+  // panes took the wheel away from the canvas (Skip: "some images take scroll",
+  // "misplaced white plate scrolling svgs"; "ZOOM WORKS ON THE FULL CANVAS").
+  //
+  // What remains: inline SVGs are made to scale with their container, and the
+  // page still says it has no figures to lift. That empty report, under a key,
+  // is what retires the figure records earlier loads left in the room.
+  function reportFigures() {
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+    });
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figuresKey: 'in-page', figures: [] }, '*');
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Install parent listeners on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      installCanvasListeners();
+      hideEmbeddedTocs();
+      letCanvasShowThrough();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for render accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    installCanvasListeners();
+    hideEmbeddedTocs();
+    letCanvasShowThrough();
+    // processWebRCells(); // Disabled — live-html includes WebR runtime
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, KaTeX rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function(mutations) {
+    // A tab pane becoming active changes which figures are on screen, and the
+    // load-time reports only ever covered the pane that was active at load —
+    // nothing else publishes figures afterwards, so a pane opened later would
+    // keep whatever record an earlier report left at its figures' indices.
+    // Re-report here instead. Only a class change on a pane that is active now
+    // counts, so figure style writes (which never touch a pane's class) cannot
+    // re-enter this.
+    for (var mi = 0; mi < mutations.length; mi++) {
+      var mt = mutations[mi];
+      if (mt.type === 'attributes' && mt.attributeName === 'class' &&
+          mt.target && mt.target.classList &&
+          mt.target.classList.contains('tab-pane') &&
+          mt.target.classList.contains('active')) {
+        reportFigures();
+        break;
+      }
+    }
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = contentHeight();
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        // A height change means the page reflowed — a callout or code fold, an
+        // image settling — and the figures moved with their text, so re-report
+        // them; otherwise the canvas plates keep covering the spot the text
+        // has flowed into.
+        reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Follow <main>'s size as it changes, one report per frame, so the page on
+  // the canvas grows and shrinks with a callout's own animation instead of
+  // 300 ms after it. <main>, not body: body includes the height the parent
+  // gives the frame, so observing it would feed back (measured on a chapter
+  // and an exam: <main> is the same height in an 800 px and a 20000 px frame).
+  var mainSizeFrame = 0;
+  var mainSizeFollowed = false;
+  function followMainSize() {
+    var main = document.querySelector('main');
+    if (mainSizeFollowed || !main || typeof ResizeObserver !== 'function') return;
+    mainSizeFollowed = true;
+    new ResizeObserver(function() {
+      if (mainSizeFrame) return;
+      mainSizeFrame = requestAnimationFrame(function() {
+        mainSizeFrame = 0;
+        var h = contentHeight();
+        if (Math.abs(h - lastHeight) <= 10) return;
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        reportMermaidDiagrams();
+      });
+    }).observe(main);
+  }
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    // <main> may not be parsed yet when body first exists.
+    followMainSize();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', followMainSize);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+}
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../app.html?location=static%2Fbook%2Freferences.html&amp;course=qtm285" style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-file-app-switch>
+(()=>{const a=document.currentScript.previousElementSibling;const params=new URLSearchParams(location.search);
+if(params.has('_tldaShape')){a.hidden=true;return;}
+const course=params.get('course');if(course){const url=new URL(a.href);url.searchParams.set('course',course);a.href=url.href;}})();
+</script><!--/tlda-file-app-switch--></body></html>

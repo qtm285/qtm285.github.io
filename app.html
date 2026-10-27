@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/tlda-mark.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f7f7f4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>tlda</title>
+    <style>
+      html[data-theme="dark"], html[data-theme="dark"] body { background: #0f0f1a; color: #c0c0d4; }
+      html[data-theme="light"], html[data-theme="light"] body { background: #d2dfe3; color: #222; }
+    </style>
+    <script>
+      (() => {
+        let saved = null
+        try { saved = localStorage.getItem('tlda-color-scheme') } catch {}
+        const dark = saved === 'dark' || (saved !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light'
+        document.documentElement.style.background = dark ? '#0f0f1a' : '#d2dfe3'
+      })()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+<script>window.__TLDA_CONFIG__={"name":"class-site","database":{"http":"https://pic.cormorant-matrix.ts.net","ws":"wss://pic.cormorant-matrix.ts.net"},"store":{"http":"https://pic.cormorant-matrix.ts.net","ws":"wss://pic.cormorant-matrix.ts.net"},"licenseKey":"tldraw-2027-01-19/WyJhUGMwcWRBayIsWyIqLnF0bTI4NS5naXRodWIuaW8iXSw5LCIyMDI3LTAxLTE5Il0.Hq9z1V8oTLsZKgpB0pI3o/RXCoLOsh5Go7Co53YGqHNmtEO9Lv/iuyBPzwQwlxQoREjwkkFbpflOOPmQMwvQSQ","pages":"files","basePath":"/","publicationUrl":"https://qtm285.github.io/"}</script>
+    <script type="module" crossorigin src="/assets/index-DZ9lEWqF.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-eWAeUihp.css">
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+{
+  "documents": {
+    "qtm285-book": {
+      "name": "qtm285-book",
+      "title": "Prediction, Inference, and Causality I",
+      "mainFile": "index.qmd",
+      "format": "qmd",
+      "documentRoots": [
+        {
+          "path": "index.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-joint-distributions-and-independence.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-mean-and-variance-of-an-average.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-getting-away-from-bespoke-sampling-distributions.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-understanding-sampling-designs-beyond-independence.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-concentration.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "homework/homework-comparing-estimators.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "exams/practice-midterm-1.qmd",
+          "format": "qmd"
+        },
+        {
+          "path": "chapters/chapter-programming-reference.qmd",
+          "format": "qmd"
+        }
+      ],
+      "pages": 54,
+      "pageFiles": [
+        "static/index.html",
+        "static/book/index.html",
+        "static/book/chapters/chapter-social-pressure-experiment.html",
+        "static/book/homework/homework-setup.html",
+        "static/book/homework/homework-descriptive.html",
+        "static/book/part1-one-sample.html",
+        "static/book/chapters/chapter-sampling.html",
+        "static/book/chapters/chapter-point-and-interval-estimates.html",
+        "static/book/homework/homework-calibration.html",
+        "static/book/chapters/chapter-calibration-binary.html",
+        "static/book/chapters/chapter-sampling-with-replacement.html",
+        "static/book/homework/homework-calibration-binary.html",
+        "static/book/chapters/chapter-sampling-without-replacement.html",
+        "static/book/chapters/chapter-calibration-with-the-binomial.html",
+        "static/book/chapters/chapter-bootstrap.html",
+        "static/book/homework/homework-bootstrap.html",
+        "static/book/chapters/chapter-random-variables-and-moments.html",
+        "static/book/homework/homework-random-variables-and-moments.html",
+        "static/book/homework/homework-random-variables-and-moments-solutions.html",
+        "static/book/chapters/chapter-standard-deviation.html",
+        "static/book/chapters/chapter-normal-approximation.html",
+        "static/book/homework/homework-markov-chebyshev.html",
+        "static/book/chapters/chapter-probability-review.html",
+        "static/book/chapters/chapter-variance-and-sample-size.html",
+        "static/book/homework/homework-comparing-estimators.html",
+        "static/book/exams/practice-midterm-1.html",
+        "static/book/references.html",
+        "static/book/chapters/chapter-getting-away-from-bespoke-sampling-distributions.html",
+        "static/book/chapters/chapter-understanding-sampling-designs-beyond-independence.html",
+        "static/book/decks/candy-oct27.html",
+        "static/book/decks/chapter-bias-and-coverage-slides.html",
+        "static/book/decks/chapter-bootstrap-slides.html",
+        "static/book/decks/chapter-calibration-binary-slides.html",
+        "static/book/decks/chapter-normal-approximation-proof-slides.html",
+        "static/book/decks/chapter-normal-approximation-slides.html",
+        "static/book/decks/chapter-point-and-interval-estimates-slides.html",
+        "static/book/decks/chapter-quality-assurance-slides.html",
+        "static/book/decks/chapter-sampling-slides.html",
+        "static/book/decks/chapter-social-pressure-experiment-slides.html",
+        "static/book/decks/chapter-standard-deviation-slides.html",
+        "static/book/decks/georgia-oct29.html",
+        "static/book/exams/practice-midterm-1-solutions.html",
+        "static/book/homework/homework-bootstrap-solutions.html",
+        "static/book/homework/homework-calibration-binary-solutions.html",
+        "static/book/homework/homework-calibration-solutions.html",
+        "static/book/homework/homework-comparing-estimators-solutions.html",
+        "static/book/homework/homework-descriptive-solutions.html",
+        "static/book/supplemental/final-project-topics.html",
+        "static/decks/chapter-bootstrap-slides.html",
+        "static/decks/chapter-calibration-binary-slides.html",
+        "static/decks/chapter-normal-approximation-slides.html",
+        "static/decks/chapter-point-and-interval-estimates-slides.html",
+        "static/decks/chapter-sampling-slides.html",
+        "static/decks/chapter-social-pressure-experiment-slides.html"
+      ],
+      "classSiteUrl": "https://qtm285.github.io/static",
+      "previewUrl": "https://imac.cormorant-matrix.ts.net:10000/static",
+      "buildStatus": "success",
+      "lastBuild": "2026-10-25T19:30:57.187Z",
+      "lastBuildSuccess": "2026-10-25T19:30:57.187Z",
+      "linkedAt": "2026-10-25T19:30:57.187Z",
+      "classroomCourseId": "qtm285"
+    }
+  }
+}
