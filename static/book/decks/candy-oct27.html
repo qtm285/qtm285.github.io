@@ -988,12 +988,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 
 
 <style>
-.reveal .slides section { font-size: 28px; }
-.reveal .slides h2 { font-size: 1.4em; }
-.reveal .slides li { margin-bottom: .2em; }
-.reveal .slides li > p { margin: 0; }
-.reveal .slides table { font-size: .72em; }
-.reveal .slides .math { font-size: .93em; }
+/* Layout support only. Type, spacing, tables and maths follow class.scss. */
 .reveal .slides .r-stack { width: 100%; }
 .reveal .slides .r-stack > div { width: 100%; }
 </style>
@@ -1067,17 +1062,17 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </tbody>
 </table>
 <ul>
-<li data-source-line="242" data-source-end-line="242">We will taste a <span class="groupb">salty</span> and <span class="groupa">fruity</span> bar and report a preference.
+<li data-source-line="237" data-source-end-line="237">We will taste a <span class="groupb">salty</span> and <span class="groupa">fruity</span> bar and report a preference.
 <ul>
-<li data-source-line="243" data-source-end-line="243"><span class="math inline">\textcolor{#00BFC4}{y_j=1}</span> for salty, <span class="math inline">\textcolor{#F8766D}{y_j=0}</span> for fruity.</li>
+<li data-source-line="238" data-source-end-line="238"><span class="math inline">\textcolor{#00BFC4}{y_j=1}</span> for salty, <span class="math inline">\textcolor{#F8766D}{y_j=0}</span> for fruity.</li>
 </ul></li>
-<li data-source-line="244" data-source-end-line="244">But before we do that, some of us — those who choose — will eat a piece of bitter dark chocolate.</li>
-<li data-source-line="245" data-source-end-line="245">We call the groups that do or don’t do this <em>subpopulations</em>.
+<li data-source-line="239" data-source-end-line="239">But before we do that, some of us — those who choose — will eat a piece of bitter dark chocolate.</li>
+<li data-source-line="240" data-source-end-line="240">We call the groups that do or don’t do this <em>subpopulations</em>.
 <ul>
-<li data-source-line="246" data-source-end-line="246">We say <span class="math inline">\textcolor{#00BFC4}{w_j=1}</span> if person <span class="math inline">j</span> ate the dark chocolate.</li>
-<li data-source-line="247" data-source-end-line="247">We say <span class="math inline">\textcolor{#F8766D}{w_j=0}</span> if they did not.</li>
+<li data-source-line="241" data-source-end-line="241">We say <span class="math inline">\textcolor{#00BFC4}{w_j=1}</span> if person <span class="math inline">j</span> ate the dark chocolate.</li>
+<li data-source-line="242" data-source-end-line="242">We say <span class="math inline">\textcolor{#F8766D}{w_j=0}</span> if they did not.</li>
 </ul></li>
-<li data-source-line="248" data-source-end-line="248">Our estimand is a difference in means of these subpopulations.</li>
+<li data-source-line="243" data-source-end-line="243">Our estimand is a difference in means of these subpopulations.</li>
 </ul>
 <div style="text-align:center">
 <p><span class="target"><span class="math inline">\Delta</span></span> <span class="math inline">\;=\; \textcolor{#00BFC4}{\mu(1)}-\textcolor{#F8766D}{\mu(0)}
@@ -1089,9 +1084,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </section>
 <section id="our-survey-design-and-estimator" class="slide level2 nostretch">
-<h2 data-source-line="251" data-source-end-line="256">Our survey design and estimator</h2>
+<h2 data-source-line="246" data-source-end-line="251">Our survey design and estimator</h2>
 
-<div class="cell" data-source-line="261" data-source-end-line="269">
+<div class="cell" data-source-line="256" data-source-end-line="264">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1101,27 +1096,27 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><p data-source-line="271" data-source-end-line="271">We will use <em>stratified sampling</em>:</p>
+<li><p data-source-line="266" data-source-end-line="266">We will use <em>stratified sampling</em>:</p>
 <ul>
-<li data-source-line="272" data-source-end-line="272">we fix how many to sample from each subpopulation,</li>
-<li data-source-line="273" data-source-end-line="273">then sample within each one separately, without replacement.</li>
+<li data-source-line="267" data-source-end-line="267">we fix how many to sample from each subpopulation,</li>
+<li data-source-line="268" data-source-end-line="268">then sample within each one separately, without replacement.</li>
 </ul></li>
-<li><p data-source-line="274" data-source-end-line="274">We take numbered cards within our own subpopulation,</p>
+<li><p data-source-line="269" data-source-end-line="269">We take numbered cards within our own subpopulation,</p>
 <ul>
-<li data-source-line="275" data-source-end-line="275">shuffle a deck for each, and take the top three.</li>
+<li data-source-line="270" data-source-end-line="270">shuffle a deck for each, and take the top three.</li>
 </ul></li>
-<li><p data-source-line="276" data-source-end-line="276">The difference in sample means is our estimator:</p>
+<li><p data-source-line="271" data-source-end-line="271">The difference in sample means is our estimator:</p>
 <p><span class="math display">
 \hat\Delta=\textcolor{#00BFC4}{\hat\mu(1)}-\textcolor{#F8766D}{\hat\mu(0)}.
 </span></p></li>
 </ul>
 </section>
 <section id="interval-estimation" class="slide level2 nostretch">
-<h2 data-source-line="282" data-source-end-line="282">Interval estimation</h2>
+<h2 data-source-line="277" data-source-end-line="277">Interval estimation</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="288" data-source-end-line="296">
+<div class="cell" data-source-line="283" data-source-end-line="291">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1133,7 +1128,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <div class="fragment current-visible" data-fragment-index="0">
 
-<div class="cell" data-source-line="302" data-source-end-line="309">
+<div class="cell" data-source-line="297" data-source-end-line="304">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1145,7 +1140,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <div class="fragment current-visible" data-fragment-index="1">
 
-<div class="cell" data-source-line="315" data-source-end-line="322">
+<div class="cell" data-source-line="310" data-source-end-line="317">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1157,7 +1152,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <div class="fragment current-visible" data-fragment-index="2">
 
-<div class="cell" data-source-line="328" data-source-end-line="335">
+<div class="cell" data-source-line="323" data-source-end-line="330">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1169,7 +1164,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <div class="fragment current-visible" data-fragment-index="3">
 
-<div class="cell" data-source-line="341" data-source-end-line="348">
+<div class="cell" data-source-line="336" data-source-end-line="343">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1181,7 +1176,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <div class="fragment" data-fragment-index="4">
 
-<div class="cell" data-source-line="354" data-source-end-line="361">
+<div class="cell" data-source-line="349" data-source-end-line="356">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1195,31 +1190,31 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 <ul>
-<li data-source-line="371" data-source-end-line="371">That gives a point estimate. How do we get an interval estimate?</li>
+<li data-source-line="366" data-source-end-line="366">That gives a point estimate. How do we get an interval estimate?</li>
 </ul>
 </div>
 <div class="fragment current-visible" data-fragment-index="0">
 <ul>
-<li data-source-line="377" data-source-end-line="377">An interval estimate depends on the sampling distribution of <span class="math inline">\hat\Delta</span>.</li>
-<li data-source-line="378" data-source-end-line="378">We will have to collect responses from everybody else.</li>
-<li data-source-line="379" data-source-end-line="379">With the whole population written down, we can rerun the survey from it:
+<li data-source-line="372" data-source-end-line="372">An interval estimate depends on the sampling distribution of <span class="math inline">\hat\Delta</span>.</li>
+<li data-source-line="373" data-source-end-line="373">We will have to collect responses from everybody else.</li>
+<li data-source-line="374" data-source-end-line="374">With the whole population written down, we can rerun the survey from it:
 <ul>
-<li data-source-line="380" data-source-end-line="380">shuffle the two decks again, take three more from each subpopulation,</li>
-<li data-source-line="381" data-source-end-line="381">and get another estimate.</li>
+<li data-source-line="375" data-source-end-line="375">shuffle the two decks again, take three more from each subpopulation,</li>
+<li data-source-line="376" data-source-end-line="376">and get another estimate.</li>
 </ul></li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="4">
 <ul>
-<li data-source-line="387" data-source-end-line="387">What do we see?</li>
+<li data-source-line="382" data-source-end-line="382">What do we see?</li>
 </ul>
 </div>
 </div>
 </section>
 <section id="unbiasedness" class="slide level2 nostretch">
-<h2 data-source-line="393" data-source-end-line="393">Unbiasedness</h2>
+<h2 data-source-line="388" data-source-end-line="388">Unbiasedness</h2>
 
-<div class="cell" data-source-line="395" data-source-end-line="402">
+<div class="cell" data-source-line="390" data-source-end-line="397">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1229,14 +1224,14 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li data-source-line="404" data-source-end-line="404">The sampling distribution is centered on <span class="math inline">\Delta</span>. How did we know?</li>
+<li data-source-line="399" data-source-end-line="399">The sampling distribution is centered on <span class="math inline">\Delta</span>. How did we know?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li data-source-line="408" data-source-end-line="408">From the two subpopulations separately:
+<li data-source-line="403" data-source-end-line="403">From the two subpopulations separately:
 <ul>
-<li data-source-line="409" data-source-end-line="409">each sample mean is unbiased for its own subpopulation’s mean,</li>
-<li data-source-line="410" data-source-end-line="410">and an expectation of a difference is the difference of expectations.</li>
+<li data-source-line="404" data-source-end-line="404">each sample mean is unbiased for its own subpopulation’s mean,</li>
+<li data-source-line="405" data-source-end-line="405">and an expectation of a difference is the difference of expectations.</li>
 </ul>
 <span class="math display">
 \begin{aligned}
@@ -1248,9 +1243,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </section>
 <section id="could-we-calculate-the-width" class="slide level2 nostretch">
-<h2 data-source-line="421" data-source-end-line="421">Could we calculate the width?</h2>
+<h2 data-source-line="416" data-source-end-line="416">Could we calculate the width?</h2>
 
-<div class="cell" data-source-line="423" data-source-end-line="430">
+<div class="cell" data-source-line="418" data-source-end-line="425">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1260,36 +1255,36 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li data-source-line="432" data-source-end-line="432">What is the variance of our estimate?</li>
+<li data-source-line="427" data-source-end-line="427">What is the variance of our estimate?</li>
 </ul>
 <div class="fragment" data-fragment-index="0">
 <ul>
-<li><p data-source-line="436" data-source-end-line="436">The two samples are drawn independently, so</p>
+<li><p data-source-line="431" data-source-end-line="431">The two samples are drawn independently, so</p>
 <p><span class="math display">
 \operatorname{Var}(\hat\Delta)=\operatorname{Var}\{\textcolor{#00BFC4}{\hat\mu(1)}\}+\operatorname{Var}\{\textcolor{#F8766D}{\hat\mu(0)}\},
 \qquad
 \operatorname{Var}\{\hat\mu(w)\}=\frac{\sigma^2(w)}{n_w}\frac{m_w-n_w}{m_w-1}.
 </span></p></li>
-<li><p data-source-line="444" data-source-end-line="444">What does this tell us about choosing our sample sizes?</p></li>
+<li><p data-source-line="439" data-source-end-line="439">What does this tell us about choosing our sample sizes?</p></li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="1">
 <ul>
-<li data-source-line="450" data-source-end-line="450">Enlarging one sample leaves the other subpopulation’s term alone.
+<li data-source-line="445" data-source-end-line="445">Enlarging one sample leaves the other subpopulation’s term alone.
 <ul>
-<li data-source-line="451" data-source-end-line="451">However many we sample from one, a small sample in the other still limits our precision.</li>
+<li data-source-line="446" data-source-end-line="446">However many we sample from one, a small sample in the other still limits our precision.</li>
 </ul></li>
-<li data-source-line="452" data-source-end-line="452">The gray curve is the normal approximation with that variance.
+<li data-source-line="447" data-source-end-line="447">The gray curve is the normal approximation with that variance.
 <ul>
-<li data-source-line="453" data-source-end-line="453">At three per subpopulation it is poor.</li>
+<li data-source-line="448" data-source-end-line="448">At three per subpopulation it is poor.</li>
 </ul></li>
 </ul>
 </div>
 </section>
 <section id="how-can-we-estimate-this-distribution-more-precisely" class="slide level2 nostretch">
-<h2 data-source-line="457" data-source-end-line="457">How can we estimate this distribution more precisely?</h2>
+<h2 data-source-line="452" data-source-end-line="452">How can we estimate this distribution more precisely?</h2>
 
-<div class="cell" data-source-line="459" data-source-end-line="466">
+<div class="cell" data-source-line="454" data-source-end-line="461">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1354,11 +1349,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </tbody>
 </table>
 <ul>
-<li><p data-source-line="479" data-source-end-line="479">We sample the subpopulations separately,</p>
+<li><p data-source-line="474" data-source-end-line="474">We sample the subpopulations separately,</p>
 <ul>
-<li data-source-line="480" data-source-end-line="480">so each row’s probability <span class="math inline">p</span> is the product of its two sample-mean probabilities.</li>
+<li data-source-line="475" data-source-end-line="475">so each row’s probability <span class="math inline">p</span> is the product of its two sample-mean probabilities.</li>
 </ul></li>
-<li><p data-source-line="481" data-source-end-line="481">Adding the rows that share a difference gives the distribution exactly:</p>
+<li><p data-source-line="476" data-source-end-line="476">Adding the rows that share a difference gives the distribution exactly:</p>
 <p><span class="math display">
 P(\hat\Delta=d)=\sum_{\textcolor{#00BFC4}{\hat\mu(1)}-\textcolor{#F8766D}{\hat\mu(0)} \,=\, d} p.
 </span></p></li>
@@ -1366,7 +1361,7 @@ P(\hat\Delta=d)=\sum_{\textcolor{#00BFC4}{\hat\mu(1)}-\textcolor{#F8766D}{\hat\m
 </div>
 </section>
 <section id="the-sampling-distribution-for-any-population" class="slide level2 nostretch">
-<h2 data-source-line="489" data-source-end-line="489">The sampling distribution for any population</h2>
+<h2 data-source-line="484" data-source-end-line="484">The sampling distribution for any population</h2>
 
 
 <div class="cell" data-source-line="1" data-source-end-line="32" data-source-file="_extensions/r-wasm/live/_knitr.qmd">
@@ -1457,7 +1452,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOnRydWUsImVjaG8iOmZhbHNlLCJlZGl0IjpmYWxzZSwiZXZhbCI6dHJ1
 </div>
 </div>
 
-<div class="cell" data-edit="true" data-autorun="false" data-source-line="493" data-source-end-line="506">
+<div class="cell" data-edit="true" data-autorun="false" data-source-line="488" data-source-end-line="501">
 <div>
 <div id="webr-9" class="exercise-cell">
 
@@ -1468,13 +1463,13 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div>
 <ul>
-<li data-source-line="508" data-source-end-line="508">Change the responses in either subpopulation, or either sample size, and run it again.</li>
+<li data-source-line="503" data-source-end-line="503">Change the responses in either subpopulation, or either sample size, and run it again.</li>
 </ul>
 </section>
 <section id="can-we-always-use-this-survey-design" class="slide level2 nostretch">
-<h2 data-source-line="510" data-source-end-line="510">Can we always use this survey design?</h2>
+<h2 data-source-line="505" data-source-end-line="505">Can we always use this survey design?</h2>
 
-<div class="cell" data-source-line="512" data-source-end-line="519">
+<div class="cell" data-source-line="507" data-source-end-line="514">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1484,27 +1479,27 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div>
 <ul>
-<li data-source-line="521" data-source-end-line="521">Why or why not?</li>
+<li data-source-line="516" data-source-end-line="516">Why or why not?</li>
 </ul>
 <div class="fragment">
 <ul>
-<li data-source-line="525" data-source-end-line="525">To use stratified sampling, we need to know which subpopulation every person is in, that is <span class="math inline">w_j</span>, in advance.</li>
-<li data-source-line="526" data-source-end-line="526">Sometimes we do. Sometimes we need to call the person up to find their subpopulation.</li>
-<li data-source-line="527" data-source-end-line="527">In the latter case, we’ll need some new math. We’ll do it later.</li>
+<li data-source-line="520" data-source-end-line="520">To use stratified sampling, we need to know which subpopulation every person is in, that is <span class="math inline">w_j</span>, in advance.</li>
+<li data-source-line="521" data-source-end-line="521">Sometimes we do. Sometimes we need to call the person up to find their subpopulation.</li>
+<li data-source-line="522" data-source-end-line="522">In the latter case, we’ll need some new math. We’ll do it later.</li>
 </ul>
 </div>
 </section></section>
 <section>
 <section id="experiment" class="title-slide slide level1 center">
-<h1 data-source-line="531" data-source-end-line="531">Experiment</h1>
+<h1 data-source-line="526" data-source-end-line="526">Experiment</h1>
 
 </section>
 <section id="our-experiment" class="slide level2 nostretch">
-<h2 data-source-line="533" data-source-end-line="533">Our experiment</h2>
+<h2 data-source-line="528" data-source-end-line="528">Our experiment</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="539" data-source-end-line="546">
+<div class="cell" data-source-line="534" data-source-end-line="541">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1516,7 +1511,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment" data-fragment-index="0">
 
-<div class="cell" data-source-line="552" data-source-end-line="559">
+<div class="cell" data-source-line="547" data-source-end-line="554">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1530,31 +1525,31 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 <ul>
-<li data-source-line="569" data-source-end-line="569">We will taste the same two candies.
+<li data-source-line="564" data-source-end-line="564">We will taste the same two candies.
 <ul>
-<li data-source-line="570" data-source-end-line="570">The prime is different: coconut milk chocolate.</li>
+<li data-source-line="565" data-source-end-line="565">The prime is different: coconut milk chocolate.</li>
 </ul></li>
-<li data-source-line="571" data-source-end-line="571">One shuffle of the whole class’s cards picks six people to eat it.</li>
-<li data-source-line="572" data-source-end-line="572">The groups are randomly assigned. That is what an experiment is.</li>
+<li data-source-line="566" data-source-end-line="566">One shuffle of the whole class’s cards picks six people to eat it.</li>
+<li data-source-line="567" data-source-end-line="567">The groups are randomly assigned. That is what an experiment is.</li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="0">
 <ul>
-<li><p data-source-line="578" data-source-end-line="578">Again our estimate is the difference in the two sample means.</p>
+<li><p data-source-line="573" data-source-end-line="573">Again our estimate is the difference in the two sample means.</p>
 <p><span class="math display">
 \hat\Delta=\textcolor{#00BFC4}{\hat\mu(1)}-\textcolor{#F8766D}{\hat\mu(0)}.
 </span></p></li>
-<li><p data-source-line="584" data-source-end-line="584">How do you calibrate a confidence interval? We simulate our study.</p></li>
+<li><p data-source-line="579" data-source-end-line="579">How do you calibrate a confidence interval? We simulate our study.</p></li>
 </ul>
 </div>
 </div>
 </section>
 <section id="repeating-the-experiment" class="slide level2 nostretch">
-<h2 data-source-line="590" data-source-end-line="590">Repeating the experiment</h2>
+<h2 data-source-line="585" data-source-end-line="585">Repeating the experiment</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="596" data-source-end-line="603">
+<div class="cell" data-source-line="591" data-source-end-line="598">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1566,7 +1561,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment" data-fragment-index="0">
 
-<div class="cell" data-source-line="609" data-source-end-line="616">
+<div class="cell" data-source-line="604" data-source-end-line="611">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1636,7 +1631,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </tbody>
 </table>
 <div style="text-align:center">
-<p data-source-line="628" data-source-end-line="628">As always, we collect the population’s responses and simulate our study.</p>
+<p data-source-line="623" data-source-end-line="623">As always, we collect the population’s responses and simulate our study.</p>
 </div>
 <div class="fragment" data-fragment-index="0">
 <table class="caption-top">
@@ -1687,11 +1682,11 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </section>
 <section id="potential-outcomes-and-treatment-effects" class="slide level2 nostretch">
-<h2 data-source-line="639" data-source-end-line="639">Potential outcomes and treatment effects</h2>
+<h2 data-source-line="634" data-source-end-line="634">Potential outcomes and treatment effects</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="645" data-source-end-line="652">
+<div class="cell" data-source-line="640" data-source-end-line="647">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1703,7 +1698,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="0">
 
-<div class="cell" data-source-line="658" data-source-end-line="665">
+<div class="cell" data-source-line="653" data-source-end-line="660">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1715,7 +1710,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="1">
 
-<div class="cell" data-source-line="671" data-source-end-line="678">
+<div class="cell" data-source-line="666" data-source-end-line="673">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1727,7 +1722,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment" data-fragment-index="2">
 
-<div class="cell" data-source-line="684" data-source-end-line="691">
+<div class="cell" data-source-line="679" data-source-end-line="686">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1863,9 +1858,9 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="1">
 <ul>
-<li><p data-source-line="723" data-source-end-line="723">We say that <span class="math inline">\textcolor{#F8766D}{y_j(0)}</span> and <span class="math inline">\textcolor{#00BFC4}{y_j(1)}</span> are person <span class="math inline">j</span>’s preferences without and with the prime.</p></li>
-<li><p data-source-line="724" data-source-end-line="724">We observed <span class="math inline">y_j(w_j)</span>, one of the two. A new assignment asks for the other.</p></li>
-<li><p data-source-line="725" data-source-end-line="725">We define the average treatment effect as the mean individual difference:</p>
+<li><p data-source-line="718" data-source-end-line="718">We say that <span class="math inline">\textcolor{#F8766D}{y_j(0)}</span> and <span class="math inline">\textcolor{#00BFC4}{y_j(1)}</span> are person <span class="math inline">j</span>’s preferences without and with the prime.</p></li>
+<li><p data-source-line="719" data-source-end-line="719">We observed <span class="math inline">y_j(w_j)</span>, one of the two. A new assignment asks for the other.</p></li>
+<li><p data-source-line="720" data-source-end-line="720">We define the average treatment effect as the mean individual difference:</p>
 <p><span class="math display">
 \Delta=\frac{1}{m}\sum_{j=1}^m \{\textcolor{#00BFC4}{y_j(1)}-\textcolor{#F8766D}{y_j(0)}\}.
 </span></p></li>
@@ -1873,45 +1868,45 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="1">
 <ul>
-<li data-source-line="735" data-source-end-line="735">How do we complete it? How do we simulate?</li>
+<li data-source-line="730" data-source-end-line="730">How do we complete it? How do we simulate?</li>
 </ul>
 </div>
 <div class="fragment current-visible" data-fragment-index="2">
 <ul>
-<li data-source-line="741" data-source-end-line="741">In this particular context, we can just ask. And then we can run our replication.</li>
+<li data-source-line="736" data-source-end-line="736">In this particular context, we can just ask. And then we can run our replication.</li>
 </ul>
 </div>
 <div class="fragment current-visible" data-fragment-index="3">
 <ul>
-<li data-source-line="747" data-source-end-line="747">But do you completely buy this?
+<li data-source-line="742" data-source-end-line="742">But do you completely buy this?
 <ul>
-<li data-source-line="748" data-source-end-line="748">How do you really know how eating the chocolate or not ahead of time would have impacted your experience?</li>
+<li data-source-line="743" data-source-end-line="743">How do you really know how eating the chocolate or not ahead of time would have impacted your experience?</li>
 </ul></li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="4">
 <ul>
-<li data-source-line="754" data-source-end-line="754">But do you completely buy this?
+<li data-source-line="749" data-source-end-line="749">But do you completely buy this?
 <ul>
-<li data-source-line="755" data-source-end-line="755">How do you really know how eating the chocolate or not ahead of time would have impacted your experience?</li>
+<li data-source-line="750" data-source-end-line="750">How do you really know how eating the chocolate or not ahead of time would have impacted your experience?</li>
 </ul></li>
-<li data-source-line="757" data-source-end-line="757">Imagine this was a vaccine.</li>
-<li data-source-line="758" data-source-end-line="758">If you don’t give someone a vaccine in an experiment and then they get sick,
+<li data-source-line="752" data-source-end-line="752">Imagine this was a vaccine.</li>
+<li data-source-line="753" data-source-end-line="753">If you don’t give someone a vaccine in an experiment and then they get sick,
 <ul>
-<li data-source-line="759" data-source-end-line="759">you can’t run it again</li>
-<li data-source-line="760" data-source-end-line="760">and see if the vaccine would have prevented them from getting sick.</li>
-<li data-source-line="761" data-source-end-line="761">Because they’ve already developed some immunity.</li>
+<li data-source-line="754" data-source-end-line="754">you can’t run it again</li>
+<li data-source-line="755" data-source-end-line="755">and see if the vaccine would have prevented them from getting sick.</li>
+<li data-source-line="756" data-source-end-line="756">Because they’ve already developed some immunity.</li>
 </ul></li>
 </ul>
 </div>
 </div>
 </section>
 <section id="simulating-the-experiment" class="slide level2 nostretch">
-<h2 data-source-line="767" data-source-end-line="767">Simulating the experiment</h2>
+<h2 data-source-line="762" data-source-end-line="762">Simulating the experiment</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="773" data-source-end-line="780">
+<div class="cell" data-source-line="768" data-source-end-line="775">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1923,7 +1918,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="0">
 
-<div class="cell" data-source-line="786" data-source-end-line="793">
+<div class="cell" data-source-line="781" data-source-end-line="788">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1937,7 +1932,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 <div class="columns">
 <div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="803" data-source-end-line="810">
+<div class="cell" data-source-line="798" data-source-end-line="805">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1948,7 +1943,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div><div class="column" style="width:50%;">
 
-<div class="cell" data-source-line="816" data-source-end-line="823">
+<div class="cell" data-source-line="811" data-source-end-line="818">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -1961,22 +1956,22 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div>
 <ul>
-<li data-source-line="833" data-source-end-line="833">If you’re going to simulate these things, you need the potential outcome population.</li>
-<li data-source-line="834" data-source-end-line="834">We can do this a couple times,
+<li data-source-line="828" data-source-end-line="828">If you’re going to simulate these things, you need the potential outcome population.</li>
+<li data-source-line="829" data-source-end-line="829">We can do this a couple times,
 <ul>
-<li data-source-line="835" data-source-end-line="835">with a couple different ways of filling things in,</li>
-<li data-source-line="836" data-source-end-line="836">and plot the randomization distributions.</li>
+<li data-source-line="830" data-source-end-line="830">with a couple different ways of filling things in,</li>
+<li data-source-line="831" data-source-end-line="831">and plot the randomization distributions.</li>
 </ul></li>
-<li data-source-line="837" data-source-end-line="837">This is a thing you can do if and only if you know all the potential outcomes,
+<li data-source-line="832" data-source-end-line="832">This is a thing you can do if and only if you know all the potential outcomes,
 <ul>
-<li data-source-line="838" data-source-end-line="838">which you don’t.</li>
+<li data-source-line="833" data-source-end-line="833">which you don’t.</li>
 </ul></li>
 </ul>
 </section>
 <section id="the-randomization-distribution-for-any-population" class="slide level2 nostretch">
-<h2 data-source-line="840" data-source-end-line="840">The randomization distribution for any population</h2>
+<h2 data-source-line="835" data-source-end-line="835">The randomization distribution for any population</h2>
 
-<div class="cell" data-edit="true" data-autorun="false" data-source-line="842" data-source-end-line="854">
+<div class="cell" data-edit="true" data-autorun="false" data-source-line="837" data-source-end-line="849">
 <div>
 <div id="webr-10" class="exercise-cell">
 
@@ -1987,15 +1982,49 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div>
 <ul>
-<li data-source-line="856" data-source-end-line="856">Change either response for anybody, or the number treated, and run it again.</li>
+<li data-source-line="851" data-source-end-line="851">Change either response for anybody, or the number treated, and run it again.</li>
+</ul>
+</section>
+<section id="can-we-still-get-an-interval-estimate" class="slide level2 nostretch">
+<h2 data-source-line="853" data-source-end-line="853">Can we still get an interval estimate?</h2>
+
+<div class="cell" data-source-line="855" data-source-end-line="862">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="candy-oct27_files/figure-revealjs/candy-interval-estimate-1.svg" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li><p data-source-line="864" data-source-end-line="864">That’s not saying we can’t get an interval estimate.</p>
+<ul>
+<li data-source-line="865" data-source-end-line="865">That’s just saying we can’t do it by simulating the population we observed in the experiment.</li>
+</ul></li>
+<li><p data-source-line="866" data-source-end-line="866">So: can we do this using our observations? Yes and no.</p></li>
+<li><p data-source-line="867" data-source-end-line="867">Our estimate is going to stay unbiased.</p>
+<ul>
+<li data-source-line="868" data-source-end-line="868">Chance decides who is treated, so each group’s mean is unbiased for the corresponding average of potential outcomes:</li>
+</ul>
+<p><span class="math display">
+\begin{aligned}
+\mathbb E(\hat\Delta)&amp;=\mathbb E\{\textcolor{#00BFC4}{\hat\mu(1)}\}-\mathbb E\{\textcolor{#F8766D}{\hat\mu(0)}\}\\
+&amp;=\frac{1}{m}\sum_{j=1}^m \textcolor{#00BFC4}{y_j(1)}-\frac{1}{m}\sum_{j=1}^m \textcolor{#F8766D}{y_j(0)}=\Delta.
+\end{aligned}
+</span></p></li>
+<li><p data-source-line="877" data-source-end-line="877">So the question boils down to whether we can do spread.</p>
+<ul>
+<li data-source-line="878" data-source-end-line="878">The spread does not split into the two groups’ terms as it did in the survey. It depends on both of each person’s potential responses, of which we only ever see one.</li>
+</ul></li>
 </ul>
 </section>
 <section id="a-pitfall" class="slide level2 nostretch">
-<h2 data-source-line="858" data-source-end-line="858">A pitfall</h2>
+<h2 data-source-line="880" data-source-end-line="880">A pitfall</h2>
 <div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="0">
 
-<div class="cell" data-source-line="864" data-source-end-line="871">
+<div class="cell" data-source-line="886" data-source-end-line="893">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2007,7 +2036,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="0">
 
-<div class="cell" data-source-line="877" data-source-end-line="884">
+<div class="cell" data-source-line="899" data-source-end-line="906">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2019,7 +2048,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="1">
 
-<div class="cell" data-source-line="890" data-source-end-line="897">
+<div class="cell" data-source-line="912" data-source-end-line="919">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2031,7 +2060,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="2">
 
-<div class="cell" data-source-line="903" data-source-end-line="910">
+<div class="cell" data-source-line="925" data-source-end-line="932">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2043,7 +2072,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="3">
 
-<div class="cell" data-source-line="916" data-source-end-line="923">
+<div class="cell" data-source-line="938" data-source-end-line="945">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2055,7 +2084,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="4">
 
-<div class="cell" data-source-line="929" data-source-end-line="936">
+<div class="cell" data-source-line="951" data-source-end-line="958">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2067,7 +2096,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="5">
 
-<div class="cell" data-source-line="942" data-source-end-line="949">
+<div class="cell" data-source-line="964" data-source-end-line="971">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2079,7 +2108,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="6">
 
-<div class="cell" data-source-line="955" data-source-end-line="962">
+<div class="cell" data-source-line="977" data-source-end-line="984">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2091,7 +2120,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment current-visible" data-fragment-index="7">
 
-<div class="cell" data-source-line="968" data-source-end-line="975">
+<div class="cell" data-source-line="990" data-source-end-line="997">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2103,7 +2132,7 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 <div class="fragment" data-fragment-index="8">
 
-<div class="cell" data-source-line="981" data-source-end-line="988">
+<div class="cell" data-source-line="1003" data-source-end-line="1010">
 <div class="cell-output-display">
 <div>
 <figure>
@@ -2115,35 +2144,78 @@ eyJhdHRyIjp7ImF1dG9ydW4iOmZhbHNlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJmaWctaGVpZ2h0
 </div>
 </div>
 <div class="r-stack">
+<div class="fragment fade-out" data-fragment-index="0">
+<ul>
+<li data-source-line="1020" data-source-end-line="1020">Population A</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="0">
+<ul>
+<li data-source-line="1026" data-source-end-line="1026">Population B</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="1">
+<ul>
+<li data-source-line="1032" data-source-end-line="1032">Population A</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="2">
+<ul>
+<li data-source-line="1038" data-source-end-line="1038">Population B</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="3">
+<ul>
+<li data-source-line="1044" data-source-end-line="1044">Population A</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="4">
+<ul>
+<li data-source-line="1050" data-source-end-line="1050">Population B</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="5">
+<ul>
+<li data-source-line="1056" data-source-end-line="1056">Population A</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="6">
+<ul>
+<li data-source-line="1062" data-source-end-line="1062">Population B</li>
+</ul>
+</div>
+<div class="fragment current-visible" data-fragment-index="7">
+<ul>
+<li data-source-line="1068" data-source-end-line="1068">Population A</li>
+</ul>
+</div>
+<div class="fragment" data-fragment-index="8">
+<ul>
+<li data-source-line="1074" data-source-end-line="1074">Population B</li>
+</ul>
+</div>
+</div>
+<div class="r-stack">
 <div class="fragment fade-out" data-fragment-index="9">
 <ul>
-<li data-source-line="998" data-source-end-line="998">Ten people, five assigned the prime.
+<li data-source-line="1084" data-source-end-line="1084">Ten people, five assigned the prime.
 <ul>
-<li data-source-line="999" data-source-end-line="999">Each has one response with the prime and one without.</li>
-<li data-source-line="1000" data-source-end-line="1000">Under each condition, both populations hold five salty and five fruity.</li>
-<li data-source-line="1001" data-source-end-line="1001">Both have average treatment effect zero.</li>
+<li data-source-line="1085" data-source-end-line="1085">Each has one response with the prime and one without.</li>
+<li data-source-line="1086" data-source-end-line="1086">Under each condition, both populations hold five salty and five fruity.</li>
+<li data-source-line="1087" data-source-end-line="1087">Both have average treatment effect zero.</li>
 </ul></li>
-<li data-source-line="1002" data-source-end-line="1002">The distribution of observed outcomes, as pairs, is the same.
+<li data-source-line="1088" data-source-end-line="1088">The distribution of observed outcomes, as pairs, is the same.
 <ul>
-<li data-source-line="1003" data-source-end-line="1003">But the spread of the estimate is different.</li>
-<li data-source-line="1004" data-source-end-line="1004">In A the estimate runs from <span class="math inline">-1</span> to <span class="math inline">1</span>; in B it is zero under every assignment.</li>
+<li data-source-line="1089" data-source-end-line="1089">But the spread of the estimate is different.</li>
+<li data-source-line="1090" data-source-end-line="1090">In A the estimate runs from <span class="math inline">-1</span> to <span class="math inline">1</span>; in B it is zero under every assignment.</li>
 </ul></li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="9">
 <ul>
-<li data-source-line="1010" data-source-end-line="1010">That’s not saying we can’t get an interval estimate.
+<li data-source-line="1096" data-source-end-line="1096">We can estimate an upper bound on spread and overcover,
 <ul>
-<li data-source-line="1011" data-source-end-line="1011">That’s just saying we can’t do it by simulating the population we observed in the experiment.</li>
-</ul></li>
-<li data-source-line="1012" data-source-end-line="1012">So: can we do this using our observations? Yes and no.
-<ul>
-<li data-source-line="1013" data-source-end-line="1013">Our estimate is going to stay unbiased.</li>
-<li data-source-line="1014" data-source-end-line="1014">So the question boils down to whether we can do spread.</li>
-</ul></li>
-<li data-source-line="1015" data-source-end-line="1015">We can estimate an upper bound on spread and overcover,
-<ul>
-<li data-source-line="1016" data-source-end-line="1016">but we can’t calibrate for exact coverage.</li>
+<li data-source-line="1097" data-source-end-line="1097">but we can’t calibrate for exact coverage.</li>
 </ul></li>
 </ul>
 </div>
