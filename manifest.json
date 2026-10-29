@@ -43,7 +43,7 @@
           "format": "qmd"
         }
       ],
-      "pages": 54,
+      "pages": 53,
       "pageFiles": [
         "static/index.html",
         "static/book/index.html",
@@ -85,7 +85,6 @@
         "static/book/decks/chapter-sampling-slides.html",
         "static/book/decks/chapter-social-pressure-experiment-slides.html",
         "static/book/decks/chapter-standard-deviation-slides.html",
-        "static/book/decks/georgia-oct29.html",
         "static/book/exams/practice-midterm-1-solutions.html",
         "static/book/homework/homework-bootstrap-solutions.html",
         "static/book/homework/homework-calibration-binary-solutions.html",
