@@ -3423,7 +3423,7 @@ W10=
   var shapeId = params.get('_tldaShape') || '';
   var indexh = parseInt(params.get('_tldaH') || '0', 10);
   var indexv = parseInt(params.get('_tldaV') || '0', 10);
-  var deckMode = params.get('_tldaDeck') === '1';
+  var deckMode = params.get('_tldaDeck') === '1' || window.parent === window;
   var captureHold = deckMode && params.get('_tldaCapture') === '1';
   // Legacy per-slide iframes lock to their slide; a standalone deck page
   // (no parent) navigates natively instead. The lock exists for book-viewer
