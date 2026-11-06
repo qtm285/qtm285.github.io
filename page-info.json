@@ -420,12 +420,6 @@
   {
     "width": 1041,
     "height": 1000,
-    "file": "static/book/supplemental/final-project-topics.html",
-    "title": "QTM 285 — Final Project Topics"
-  },
-  {
-    "width": 1041,
-    "height": 1000,
     "file": "static/decks/chapter-bootstrap-slides.html",
     "title": "Calibrating Interval Estimates using the Bootstrap",
     "variant": "slides"
