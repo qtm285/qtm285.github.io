@@ -464,5 +464,12 @@
     "height": 1000,
     "file": "static/book/homework/homework-06.html",
     "title": "HW6: Variance of Comparisons"
+  },
+  {
+    "width": 1041,
+    "height": 1000,
+    "file": "static/book/decks/georgia-oct29.html",
+    "title": "Comparing Two Groups: Precision, Power and Allocation",
+    "variant": "slides"
   }
 ]

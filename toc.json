@@ -5381,5 +5381,100 @@
     "level": "subsection",
     "page": 53,
     "anchor": "footnotes"
+  },
+  {
+    "title": "Comparing Two Groups: Precision, Power and Allocation",
+    "level": "chapter",
+    "page": 54
+  },
+  {
+    "title": "Turnout in Georgia Before and After SB 202",
+    "level": "section",
+    "page": 54,
+    "anchor": "turnout-in-georgia-before-and-after-sb-202"
+  },
+  {
+    "title": "Sampling",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "sampling"
+  },
+  {
+    "title": "Our Estimator",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "our-estimator"
+  },
+  {
+    "title": "Survey design",
+    "level": "section",
+    "page": 54,
+    "anchor": "survey-design"
+  },
+  {
+    "title": "Power to detect success",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "designing-the-survey"
+  },
+  {
+    "title": "Power Calculation",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "power-calculation"
+  },
+  {
+    "title": "Exercise: How many calls?",
+    "level": "section",
+    "page": 54,
+    "anchor": "how-many-calls"
+  },
+  {
+    "title": "Exercise",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "exercise-1-how-many-calls"
+  },
+  {
+    "title": "How many calls?",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "solution-1-how-many-calls"
+  },
+  {
+    "title": "Exercise: Optimal Allocation",
+    "level": "section",
+    "page": 54,
+    "anchor": "exercise-optimal-allocation"
+  },
+  {
+    "title": "Exercise",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "exercise-2-choosing-the-allocation"
+  },
+  {
+    "title": "Solution Part 1",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "allocation-optimum"
+  },
+  {
+    "title": "Solution Part 2",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "allocation-price"
+  },
+  {
+    "title": "Why does splitting evenly cost so little?",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "allocation-even-precision"
+  },
+  {
+    "title": "When shouldn’t we use even allocation?",
+    "level": "subsection",
+    "page": 54,
+    "anchor": "when-shouldnt-we-use-even-allocation"
   }
 ]
