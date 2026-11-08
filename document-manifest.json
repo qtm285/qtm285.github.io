@@ -468,6 +468,12 @@
       "file": "static/decks/chapter-social-pressure-experiment-slides.html",
       "title": "Introduction",
       "variant": "slides"
+    },
+    {
+      "width": 1041,
+      "height": 1000,
+      "file": "static/book/homework/homework-06.html",
+      "title": "HW6: Variance of Comparisons"
     }
   ],
   "assets": [],

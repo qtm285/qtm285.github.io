@@ -96,7 +96,8 @@
         "static/decks/chapter-normal-approximation-slides.html",
         "static/decks/chapter-point-and-interval-estimates-slides.html",
         "static/decks/chapter-sampling-slides.html",
-        "static/decks/chapter-social-pressure-experiment-slides.html"
+        "static/decks/chapter-social-pressure-experiment-slides.html",
+        "static/book/homework/homework-06.html"
       ],
       "classSiteUrl": "https://qtm285.github.io/static",
       "previewUrl": "https://imac.cormorant-matrix.ts.net:10000/static",

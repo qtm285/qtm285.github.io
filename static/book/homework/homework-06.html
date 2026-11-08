@@ -1,0 +1,2924 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head><!--tlda-publication-head-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function () {
+  var MAX_FIELD = 2000;
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+
+  function clip(value) {
+    if (value === undefined || value === null) return undefined;
+    var s = typeof value === 'string' ? value : String(value);
+    if (!s) return undefined;
+    return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  function send(ns, msg, data) {
+    var payload = {
+      ts: new Date().toISOString(),
+      level: 'error',
+      ns: ns,
+      msg: msg,
+      data: Object.assign({
+        url: location.href,
+        shapeId: shapeId,
+        userAgent: navigator.userAgent,
+        online: navigator.onLine,
+        embedded: window.parent !== window,
+      }, data),
+    };
+    try {
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
+      fetch('/api/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body,
+        keepalive: true,
+      }).catch(function () {
+        // Nowhere left to report a failed report, and rethrowing would be
+        // caught by the rejection handler below and posted, which loops.
+      });
+    } catch (e) {
+      // Circular payload, or no Blob. Called FROM the error handlers, so a
+      // throw here re-enters them and buries the original fault.
+    }
+  }
+
+  function tell(report) {
+    try {
+      window.parent.postMessage({ type: 'tlda-doc-health', shapeId: shapeId, report: report }, '*');
+    } catch (e) {
+      // Served standalone, so no parent is listening. Supported, not a fault:
+      // the report has already gone to /api/log.
+    }
+  }
+
+  // KaTeX render errors, caught at render time inside the wrapper. This runs in
+  // <head> before the page's own math block, so it installs first and Quarto's
+  // hardcoded non-throwing loop renders through it. Setting throwOnError here
+  // turns a silent literal-text render into a throw the catch reports — the
+  // throw is the signal. It never looks at the page.
+  var katexReported = {};
+  function reportKatexError(tex, err) {
+    try {
+      var detail = clip(err && err.message);
+      if (!detail) return;
+      // One report per distinct error per page load: a single broken macro
+      // used fifty times is one defect, not fifty cards.
+      if (katexReported[detail]) return;
+      katexReported[detail] = true;
+      send('katex-error', 'KaTeX render error', {
+        error: detail,
+        tex: clip(tex),
+      });
+    } catch (e) {
+      // Called FROM the render path, so a throw here re-enters the wrapper
+      // and buries the original fault.
+    }
+  }
+
+  function installKatexHook() {
+    try {
+      if (!window.katex || !window.katex.render || window.__tldaKatexHooked) return false;
+      var inner = window.katex.render.bind(window.katex);
+      window.katex.render = function (tex, el, opts) {
+        opts = opts || {};
+        // Quarto hardcodes the non-throwing options in its own template and
+        // the schema accepts only method+url, so this cannot be configuration.
+        // Callers that set it explicitly keep their own value.
+        if (opts.throwOnError === undefined || opts.throwOnError === false) opts.throwOnError = true;
+        try {
+          return inner(tex, el, opts);
+        } catch (err) {
+          reportKatexError(tex, err);
+          // Paint what KaTeX would have painted had it not thrown: callers
+          // and page layout see the same shape as a non-throwing render.
+          try {
+            var fallbackOpts = {};
+            for (var k in opts) fallbackOpts[k] = opts[k];
+            fallbackOpts.throwOnError = false;
+            return inner(tex, el, fallbackOpts);
+          } catch (e2) {
+            return el;
+          }
+        }
+      };
+      window.__tldaKatexHooked = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // katex.min.js is deferred, so it may not exist yet when this head script
+  // runs. Poll briefly; give up quietly if KaTeX never loads.
+  (function waitForKatex(tries) {
+    if (installKatexHook()) return;
+    if (tries > 0) setTimeout(function () { waitForKatex(tries - 1); }, 250);
+  })(40);
+  window.__tldaKatexHookInstall = installKatexHook;
+
+  window.addEventListener('error', function (event) {
+    try {
+      // 'error' also fires for failed subresources, where target is the element
+      // rather than window. Unlike crashBeacon.ts these are kept — a macros.js
+      // that 404s is the fault we are looking for — but under their own kind.
+      var target = event.target;
+      if (target && target !== window) {
+        var src = target.src || target.href;
+        if (!src) return;
+        send('doc-fault', 'subresource failed to load', {
+          kind: 'subresource',
+          source: clip(src),
+          tag: target.tagName,
+        });
+        if (target.tagName === 'IMG') scheduleImageCheck();
+        return;
+      }
+      send('doc-fault', event.message || 'error', {
+        kind: 'error',
+        message: clip(event.message),
+        stack: clip(event.error && event.error.stack),
+        source: clip(event.filename),
+        line: event.lineno,
+        column: event.colno,
+      });
+    } catch (e) {
+      // This IS the error handler: a throw here fires 'error' again and
+      // recurses. Reading event.target cross-origin can throw.
+    }
+  }, true);
+
+  window.addEventListener('unhandledrejection', function (event) {
+    try {
+      var reason = event.reason;
+      send('doc-fault', 'unhandled rejection', {
+        kind: 'unhandledrejection',
+        message: clip((reason && reason.message) || reason),
+        stack: clip(reason && reason.stack),
+      });
+    } catch (e) {
+      // A rejection can carry a getter that throws when read, and throwing
+      // here rejects again and re-enters this handler.
+    }
+  });
+
+  function probeMath() {
+    var rendered = document.querySelectorAll('.katex, mjx-container').length;
+    var errored = document.querySelectorAll('.katex-error, mjx-merror').length;
+    // Source delimiters still in the text mean the renderer never ran over
+    // them. The backslash is a charcode, not an escape: this script rides
+    // inside a template literal, so every backslash here is read twice and a
+    // written escape ships wrong while looking right.
+    var BS = String.fromCharCode(92);
+    var body = document.body ? (document.body.innerText || '') : '';
+    var residue = (body.split(BS + '(').length - 1) + (body.split(BS + '[').length - 1);
+
+    if (errored > 0) {
+      var sample = document.querySelector('.katex-error, mjx-merror');
+      return {
+        state: 'broken',
+        why: 'math rendered with errors',
+        errored: errored,
+        rendered: rendered,
+        // KaTeX's title names the undefined control sequence; the count alone
+        // does not tell a reader what to fix.
+        detail: clip(sample && (sample.getAttribute('title') || sample.textContent)),
+      };
+    }
+    if (rendered === 0 && residue > 0) {
+      return { state: 'broken', why: 'math present but nothing rendered it', residue: residue, rendered: 0 };
+    }
+    if (rendered === 0) return { state: 'absent', why: 'no math on this page' };
+    return {
+      state: 'ok',
+      rendered: rendered,
+      engine: window.katex ? 'katex' : 'unknown',
+      macros: window.__tldaKatexMacros ? Object.keys(window.__tldaKatexMacros).length : 0,
+    };
+  }
+
+  function probeWebR() {
+    // The markers are a div with id webr-N and class exercise-cell, beside a
+    // script of type webr-N-contents. Match those and nothing broader:
+    // .cell-code .sourceCode is every static code listing on every Quarto page.
+    //
+    // No backticks in this comment — it lives inside a template literal, and one
+    // backtick closes it and takes the module down.
+    var cells = document.querySelectorAll('div.exercise-cell[id^="webr-"]');
+    if (cells.length === 0) return { state: 'absent', why: 'no webR cells on this page' };
+    // The div ships EMPTY and the runtime mounts into it, so liveness is
+    // readable from the DOM alone: no children means a student cannot run it.
+    var live = 0;
+    for (var i = 0; i < cells.length; i++) if (cells[i].childElementCount > 0) live++;
+    if (live === 0) return { state: 'broken', why: 'webR never mounted any cell', cells: cells.length, live: 0 };
+    if (live < cells.length) {
+      return { state: 'broken', why: 'some webR cells never mounted', cells: cells.length, live: live };
+    }
+    return { state: 'ok', cells: cells.length, live: live };
+  }
+
+  function probeReveal() {
+    if (!document.querySelector('.reveal')) return { state: 'absent', why: 'not a deck' };
+    if (!window.Reveal || typeof window.Reveal.isReady !== 'function' || !window.Reveal.isReady()) {
+      return { state: 'broken', why: 'reveal never initialised' };
+    }
+    return { state: 'ok', slides: document.querySelectorAll('.reveal .slides section').length };
+  }
+
+  function requestedImages() {
+    return Array.from(document.querySelectorAll('img')).filter(function (img) {
+      // Reveal keeps future pictures in data-src. They have not failed: the
+      // browser has not been asked to load them yet.
+      return !!(img.currentSrc || img.getAttribute('src'));
+    });
+  }
+
+  function failedImage(img) { return img.complete && img.naturalWidth === 0; }
+
+  function probeImages() {
+    var images = requestedImages();
+    var failed = images.filter(failedImage).length;
+    var pending = images.filter(function (img) { return !img.complete; }).length;
+    return {
+      state: failed ? 'broken' : pending ? 'pending' : images.length ? 'ok' : 'absent',
+      why: failed ? failed + ' images failed to load' : pending ? 'images are still loading' : undefined,
+      failed: failed,
+      pending: pending,
+      loaded: images.length - failed - pending,
+    };
+  }
+
+  var imageCheckTimer = null;
+  function scheduleImageCheck() {
+    // Initial failures are included in the existing after-load health check.
+    // Do not diagnose Reveal or math before their startup has finished.
+    if (document.readyState !== 'complete') return;
+    if (imageCheckTimer !== null) return;
+    imageCheckTimer = setTimeout(function () {
+      imageCheckTimer = null;
+      check();
+    }, 150);
+  }
+
+  function retryFailedImages() {
+    requestedImages().filter(failedImage).forEach(function (img) {
+      // Keep the current document, its Reveal state and the canvas overlay.
+      // A fresh request for this failed resource must not reload the iframe.
+      var url = new URL(img.currentSrc || img.src, location.href);
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+      url.searchParams.set('_tldaImageRetry', String(Date.now()));
+      // currentSrc may have come from srcset. Keep its chosen resource on this
+      // retry so the unchanged srcset cannot select the failed request again.
+      var picture = img.closest('picture');
+      if (picture) picture.querySelectorAll('source[srcset]').forEach(function (source) {
+        source.removeAttribute('srcset');
+      });
+      img.removeAttribute('srcset');
+      img.addEventListener('load', scheduleImageCheck, { once: true });
+      img.addEventListener('error', scheduleImageCheck, { once: true });
+      img.src = url.href;
+    });
+    check();
+  }
+
+  window.addEventListener('message', function (event) {
+    if (window.parent === window || event.source !== window.parent) return;
+    if (event.data && event.data.type === 'tlda-retry-images') retryFailedImages();
+    if (event.data && event.data.type === 'tlda-request-doc-health') check();
+  });
+
+  // Without this a throwing probe takes check() down: no report, no badge, and
+  // a page that reads as healthy. 'unknown' never folds into 'ok'.
+  function attempt(name, probe) {
+    try {
+      return probe();
+    } catch (e) {
+      return { state: 'unknown', why: 'the ' + name + ' check could not run', error: clip(e && e.message) };
+    }
+  }
+
+  function check() {
+    var report = {
+      math: attempt('math', probeMath),
+      webr: attempt('webR', probeWebR),
+      reveal: attempt('reveal', probeReveal),
+      images: attempt('images', probeImages),
+    };
+    var names = ['math', 'webr', 'reveal', 'images'];
+    var broken = names.filter(function (k) { return report[k].state === 'broken'; });
+    var unknown = names.filter(function (k) { return report[k].state === 'unknown'; });
+    report.broken = broken;
+    report.unknown = unknown;
+    // Reported either way: a check that only speaks when unhappy is
+    // indistinguishable from one that never ran.
+    tell(report);
+    if (broken.length || unknown.length) {
+      send('doc-capability',
+        'document capability check: ' +
+          (broken.length ? 'failed ' + broken.join(', ') : '') +
+          (broken.length && unknown.length ? '; ' : '') +
+          (unknown.length ? 'could not measure ' + unknown.join(', ') : ''),
+        report);
+    }
+    return report;
+  }
+
+  // After load plus a settle window: KaTeX renders on a deferred pass and webR
+  // mounts after its wasm load, so probing earlier reports every page broken.
+  function schedule() { setTimeout(check, 1500); }
+  if (document.readyState === 'complete') schedule();
+  else window.addEventListener('load', schedule);
+
+  // Reads the result out. Deliberately not a fault injector: a detector proved
+  // against a failure it staged for itself was measured on a fixture.
+  window.__tldaDocHealthCheck = check;
+})();
+}
+</script><!--/tlda-publication-head-->
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>HW6: Variance of Comparisons</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="homework-06_files/libs/clipboard/clipboard.min.js"></script>
+<script src="homework-06_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="homework-06_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="homework-06_files/libs/quarto-html/popper.min.js"></script>
+<script src="homework-06_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="homework-06_files/libs/quarto-html/anchor.min.js"></script>
+<link href="homework-06_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="homework-06_files/libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="homework-06_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="homework-06_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="homework-06_files/libs/bootstrap/bootstrap-dccbf6d1331a2f33e19699e7e393519e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="homework-06_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.js"></script>
+<link href="homework-06_files/libs/quarto-contrib/image-toggle-1.0.0/image-toggle.css" rel="stylesheet">
+<script src="homework-06_files/libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="homework-06_files/libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script type="text/x-tex" id="qtm285-macros">
+% The course's TeX macros. This file is the only place they are defined.
+% Every format loads it with include-in-header (Skip, chat#9215600: "macros in
+% a tex file or whatever included in the like, config yaml file as
+% include-in-header"). Edit the definitions here; the script below hands them
+% to KaTeX.
+\providecommand{\invlogit}{\operatorname{logit}^{-1}}
+\providecommand{\E}{\operatorname{E}}
+\providecommand{\V}{\operatorname{V}}
+\providecommand{\Var}{\operatorname{V}}
+\providecommand{\sd}{\operatorname{sd}}
+\providecommand{\hVar}{\widehat{\operatorname{V}}}
+\providecommand{\bias}{\operatorname{bias}}
+\providecommand{\Cov}{\operatorname{Cov}}
+\providecommand{\argmin}{\operatorname*{argmin}}
+\providecommand{\qqtext}[1]{\quad\text{#1}\quad}
+\providecommand{\sb}[1]{[#1]}
+\providecommand{\p}[1]{(#1)}
+\providecommand{\cb}[1]{\{#1\}}
+\newcommand{\se}[1]{\mathrm{se}_{#1}}
+\newcommand{\ind}[1]{1_{\{#1\}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\all}{\text{all}}
+\newcommand{\lcb}[1]{\color{gray}\left\{ \color{black} #1 \color{gray} \right\} \color{black}}
+% KaTeX reads # inside a macro body as an argument marker, so colour hexes spell # as \hashmark.
+\newcommand{\hashmark}{#}
+\newcommand{\pcb}[1]{\color{\hashmark EF476F}\left\{ \color{black} #1 \color{\hashmark EF476F} \right\} \color{black}}
+\newcommand{\tcb}[1]{\color{\hashmark118AB2}\left\{ \color{black} #1 \color{\hashmark118AB2} \right\} \color{black}}
+
+\newcommand{\mapbg}{\color{\hashmark06D6A0}}
+\newcommand{\polla}{\color{\hashmark073B4C}}
+\newcommand{\pollb}{\color{\hashmark EF476F}}
+\newcommand{\pollc}{\color{\hashmark118AB2}}
+\newcommand{\polld}{\color{\hashmark06D6A0}}
+\newcommand{\polle}{\color{\hashmark FFD166}}
+\newcommand{\groupa}{\color{\hashmark F8766D}}
+\newcommand{\groupb}{\color{\hashmark00BFC4}}
+\newcommand{\faded}{\color{\hashmark404040}}
+
+\newcommand{\inmapbg}[1]{\textcolor{\hashmark06D6A0}{#1}}
+\newcommand{\inpolla}[1]{\textcolor{\hashmark073B4C}{#1}}
+\newcommand{\inpollb}[1]{\textcolor{\hashmark EF476F}{#1}}
+\newcommand{\inpollc}[1]{\textcolor{\hashmark118AB2}{#1}}
+\newcommand{\inpolld}[1]{\textcolor{\hashmark06D6A0}{#1}}
+\newcommand{\inpolle}[1]{\textcolor{\hashmark FFD166}{#1}}
+\newcommand{\ingroupa}[1]{\textcolor{\hashmark F8766D}{#1}}
+\newcommand{\ingroupb}[1]{\textcolor{\hashmark00BFC4}{#1}}
+
+\newcommand{\inred}[1]{\ingroupa{#1}}
+\newcommand{\ingreen}[1]{\ingroupb{#1}}
+\newcommand{\inblue}[1]{\textcolor{\hashmark0000FF}{#1}}
+\newcommand{\inmidnight}[1]{\inpolla{#1}}
+\newcommand{\inpink}[1]{\inpollb{#1}}
+\newcommand{\inteal}[1]{\inpollc{#1}}
+\newcommand{\inpurple}[1]{\textcolor{\hashmark A020F0}{#1}}
+\newcommand{\ingray}[1]{\textcolor{\hashmark969696}{#1}}
+
+\newcommand{\alert}[1]{\textcolor{\hashmark808080}{#1}}
+\newcommand{\faint}[1]{\textcolor{\hashmark808080}{#1}}
+\newcommand{\veryfaint}[1]{\textcolor{\hashmark C0C0C0}{#1}}
+
+\newcommand{\with}{\ingroupb{\text{degree}}}
+\newcommand{\without}{\ingroupa{\text{no degree}}}
+
+\newcommand{\explain}[2]{\overset{\texttip{\small{\text{?}}}{#2}}{#1}}
+\newcommand{\mathexplain}[2]{\overset{\mathtip{\small{\text{?}}}{#2}}{#1}}
+
+\newcommand{\wone}{\overset{\veryfaint{w}}{1}}
+\newcommand{\wzero}{\overset{\veryfaint{w}}{0}}
+\newcommand{\xone}{\overset{\veryfaint{x}}{1}}
+\newcommand{\xzero}{\overset{\veryfaint{x}}{0}}
+
+\newcommand{\Deltaall}{\Delta_{\text{all}}}
+\newcommand{\mua}[1]{\ingroupa{\mu(0, #1)}}
+\newcommand{\mub}[1]{\ingroupb{\mu(1, #1)}}
+\newcommand{\pa}[1]{\ingroupa{p_{#1 \mid 0}}}
+\newcommand{\pb}[1]{\ingroupb{p_{#1 \mid 1}}}
+\newcommand{\pall}[1]{\inpurple{p_{#1}}}
+\newcommand{\hmua}[1]{\ingroupa{\hat\mu(0, #1)}}
+\newcommand{\hmub}[1]{\ingroupb{\hat\mu(1, #1)}}
+\newcommand{\tmua}[1]{\ingroupa{\tilde\mu(0, #1)}}
+\newcommand{\tmub}[1]{\ingroupb{\tilde\mu(1, #1)}}
+\newcommand{\effect}[1]{\mub{x}-\mua{x}}
+\newcommand{\heffect}[1]{\hmub{x}-\hmua{x}}
+</script>
+<script>
+// Hand the definitions above to KaTeX.
+//
+// Pandoc's KaTeX loop and Quarto's typesetMath both call katex.render with an
+// empty macros object of their own, so no configuration reaches them; the seam
+// is katex.render itself. This wraps it once, before those loops run (a window
+// capture listener fires ahead of every document listener), and defines the
+// macros into whatever macros object each call carries. A page that also loads
+// the tlda base set wraps katex.render after this, so its shared object arrives
+// here and gets the course definitions on first use. \providecommand leaves an
+// existing definition alone; \newcommand replaces it.
+(function () {
+  var tex = document.getElementById('qtm285-macros').textContent
+  var defs = []
+  var re = /\\(newcommand|providecommand|renewcommand)\s*\{\s*(\\[A-Za-z]+)\s*\}\s*(?:\[(\d)\])?\s*\{/g
+  var m
+  while ((m = re.exec(tex))) {
+    var depth = 1, i = re.lastIndex
+    while (i < tex.length && depth > 0) {
+      var c = tex[i]
+      if (c === '\\') { i += 2; continue }
+      if (c === '{') depth++
+      else if (c === '}') depth--
+      i++
+    }
+    defs.push({ provide: m[1] === 'providecommand', name: m[2], body: tex.slice(re.lastIndex, i - 1) })
+    re.lastIndex = i
+  }
+  var seeded = typeof WeakSet === 'function' ? new WeakSet() : null
+  function seed(macros) {
+    if (seeded && seeded.has(macros)) return
+    for (var k = 0; k < defs.length; k++) {
+      var d = defs[k]
+      if (d.provide && Object.prototype.hasOwnProperty.call(macros, d.name)) continue
+      macros[d.name] = d.body
+    }
+    if (seeded) seeded.add(macros)
+  }
+  function install() {
+    if (!window.katex || !window.katex.render || window.katex.render.__qtm285) return
+    var inner = window.katex.render
+    var wrapped = function (input, el, opts) {
+      opts = opts || {}
+      if (!opts.macros) opts.macros = {}
+      seed(opts.macros)
+      return inner.call(window.katex, input, el, opts)
+    }
+    wrapped.__qtm285 = true
+    window.katex.render = wrapped
+  }
+  window.addEventListener('DOMContentLoaded', install, true)
+})()
+</script>
+<script type="module" src="homework-06_files/libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="homework-06_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">HW6: Variance of Comparisons</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>These exercises are new this year. If any part reads unclearly, ask and I’ll clarify.</p>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>The question is whether a turnout survey can help us predict who wins. Taking each group’s candidate preference as given lets us isolate the uncertainty about who shows up. That makes the ratio an election forecast, the confidence interval a statement about whether we can call a majority, and the power calculation a way to plan a survey capable of doing that.</p>
+<p>In class, we discussed the Georgia Republican Party’s effort to suppress Black turnout. Could that effort cost the Democrats their majority? For this exercise, we’ll take Democratic support to be 90% among Black voters and 35% among non-Black voters. These are hypothetical inputs. Suppose that effort reduces Black turnout from 60% to 58%, with the same registration counts and non-Black turnout. This lowers the implied Democratic vote share from about 50.05% to 49.68%. The candidate moves from just above one-half to just below it. We want to know whether a turnout survey can give convincing evidence of that loss of a majority.</p>
+<div id="fig-comparisons" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-comparisons-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-06_files/figure-html/unnamed-chunk-2-1.svg" class="img-fluid figure-img" width="480"></p>
+<figcaption>The difference’s sampling distribution</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-06_files/figure-html/unnamed-chunk-2-2.svg" class="img-fluid figure-img" width="480"></p>
+<figcaption>The vote share estimate’s sampling distribution</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-comparisons-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The sampling distributions of the difference in turnout rates and of the estimated vote share, simulated from a population with Georgia’s 2020 roll and turnout rates of 0.580 among Black voters and 0.682 among non-Black voters. In each panel, the blue line and dot mark one sample’s estimate, and the interval is centered there with the width of the middle 95% of the sampling distribution.
+</figcaption>
+</figure>
+</div>
+<p>In our lecture <a href="../decks/georgia-oct29.html">Comparing Two Groups: Precision, Power and Allocation</a>, we used the variance of a difference in subsample means to work out how many calls our survey needs. A candidate’s vote share depends on turnout in each group, because a group that turns out more makes up more of the people who vote. Here you’ll use a linear approximation to work out the variance of that forecast and put a confidence interval around it. We’ll review the lecture’s power calculation, then you’ll adapt it to the vote share and work out how many calls we need, and how to divide them between the groups, to have a good chance of showing that the Democratic vote share is below one-half under the reduced-turnout alternative.</p>
+</section>
+<section id="calculus-review-linear-approximation" class="level1">
+<h1>Calculus Review: Linear Approximation</h1>
+<p>We’re going to be using <em>linear approximation</em> to simplify some of our calculations. Given a function <span class="math inline">h(x)</span>, we can approximate it near any point <span class="math inline">x_0</span> like this. We call <span class="math inline">x_0</span> the <em>base point</em>: it is where we evaluate the function and its derivative. <span class="math display">
+h(x) \approx h(x_0) + h'(x_0)(x-x_0)
+</span></p>
+<p>Hopefully you remember that from calculus. If you like, you can call this <em>first-order Taylor approximation</em>. And there are a few formulas for the error of this approximation, which is called the <em>remainder in Taylor’s Theorem</em>, in most calculus textbooks.</p>
+<p>When we’re thinking about functions of multiple variables, we use the multivariate version, which involves <em>partial derivatives</em>. Here the base point is <span class="math inline">(x_0,y_0)</span>, where we evaluate the function and its partial derivatives. <span class="math display">
+\begin{aligned}
+h(x,y)
+&amp;\approx h(x_0,y_0) \\
+&amp;\quad + \left\{\frac{\partial h}{\partial x}(x_0,y_0)\right\} (x-x_0) \\
+&amp;\quad + \left\{\frac{\partial h}{\partial y}(x_0,y_0)\right\} (y-y_0).
+\end{aligned}
+</span></p>
+</section>
+<section id="variance-calculation-for-comparisons" class="level1">
+<h1>Variance Calculation for Comparisons</h1>
+<section id="differences-in-means" class="level2">
+<h2 class="anchored" data-anchor-id="differences-in-means">Differences in Means</h2>
+<p>In our lecture <a href="../decks/georgia-oct29.html">Comparing Two Groups: Precision, Power and Allocation</a>, we talked about how to use subsample means to compare two groups. In particular, we talked about the case that we’ve drawn a stratified sample of Georgia’s registered voters: we chose two sample sizes in advance, <span class="math inline">n_1</span> <span class="groupb">Black registered voters</span> (<span class="math inline">w=1</span>) and <span class="math inline">n_0</span> <span class="groupa">non-Black registered voters</span> (<span class="math inline">w=0</span>), and drew a sample independently from each group, without replacement. And we talked about using the difference <span class="math inline">\ingroupb{\hat\mu(1)}-\ingroupa{\hat\mu(0)}</span> in the turnout rates among the <span class="math inline">n_1</span> and <span class="math inline">n_0</span> sampled voters to estimate the corresponding difference <span class="math inline">\ingroupb{\mu(1)}-\ingroupa{\mu(0)}</span> in turnout among the <span class="math inline">m_1</span> and <span class="math inline">m_0</span> registered voters. The rest of this homework uses two facts about this estimator from that lecture. First, it’s unbiased: expectation is linear, and each subsample mean is an unbiased estimator of its group’s turnout rate when we sample from that group with or without replacement (<a href="homework-random-variables-and-moments.html#sampling-without-replacement">Homework 4</a>).</p>
+<p><span class="math display">
+\E\left\{\ingroupb{\hat\mu(1)}-\ingroupa{\hat\mu(0)}\right\}
+=\E\left\{\ingroupb{\hat\mu(1)}\right\}-\E\left\{\ingroupa{\hat\mu(0)}\right\}
+=\ingroupb{\mu(1)}-\ingroupa{\mu(0)}.
+</span></p>
+<p>Second, because we draw the two samples independently, their variances add (<a href="homework-random-variables-and-moments.html#variances">Homework 4, Variances</a>), and each one has the correction factor for sampling without replacement that you derived in <a href="homework-random-variables-and-moments.html#exr-without-replacement-variance">Homework 4</a>.</p>
+<p><span class="math display">
+\begin{aligned}
+\Var\left\{\ingroupb{\hat\mu(1)}-\ingroupa{\hat\mu(0)}\right\}
+&amp;=\Var\left\{\ingroupb{\hat\mu(1)}\right\}+\Var\left\{\ingroupa{\hat\mu(0)}\right\}\\
+&amp;=\ingroupb{\frac{\sigma^2(1)}{n_1}}\textcolor{#ef476f}{\frac{m_1-n_1}{m_1-1}}
++\ingroupa{\frac{\sigma^2(0)}{n_0}}\textcolor{#ef476f}{\frac{m_0-n_0}{m_0-1}}.
+\end{aligned}
+</span></p>
+<p>Because turnout is binary, <span class="math inline">\sigma^2(w)=\mu(w)\{1-\mu(w)\}</span>. Statewide the <span class="pollb">correction factors</span> are close to one and we can get away with dropping them. That’s what we did in class. And you can confirm that dropping them was OK by plugging in <span class="math inline">m_1</span>, <span class="math inline">m_0</span>, <span class="math inline">n_1</span> and <span class="math inline">n_0</span>. In McIntosh County, later in this homework, they aren’t.</p>
+</section>
+<section id="ratios-of-means" class="level2">
+<h2 class="anchored" data-anchor-id="ratios-of-means">Ratios of Means</h2>
+<p>Write <span class="math inline">\theta_1</span> and <span class="math inline">\theta_0</span> for the Democratic candidate’s share of the votes cast by <span class="groupb">Black</span> and by <span class="groupa">non-Black</span> registered voters. We’ll take <span class="math inline">\theta_1 = 0.90</span> and <span class="math inline">\theta_0 = 0.35</span> as given, so the only thing we’re estimating is turnout. These are round figures chosen for this exercise. Of the <span class="math inline">m_1 = 2{,}290{,}365</span> Black registered voters on Georgia’s 2020 roll, <span class="math inline">m_1\mu(1)</span> vote, and <span class="math inline">m_1\mu(1)\theta_1</span> of them vote for the candidate; likewise for the <span class="math inline">m_0 = 5{,}350{,}986</span> non-Black registered voters on that roll. So the candidate’s share of the votes cast is <span class="math display">
+\theta=\frac{m_1\mu(1)\theta_1+m_0\mu(0)\theta_0}{m_1\mu(1)+m_0\mu(0)}.
+</span></p>
+<div id="why-black-and-non-black" class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why Black and non-Black?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“Non-Black” is everyone else on the roll: a complement, defined by what its members are not. So it is worth asking why splitting the state two ways is a reasonable thing to do at all.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/nyt-margin-shift-by-group.png" class="img-fluid figure-img" alt="Margin of support for several demographic groups at three elections, the 2020 and 2024 presidential votes and the 2026 House vote, on an axis running from D+100 on the left through EVEN to R+20 on the right. The rows shown are all voters, White, Hispanic, Asian and Black. The Black row sits around D+80 at all three elections, far to the left of the others, which sit between about R+16 and D+40."></p>
+<figcaption>Every Major Demographic Group Swung Left Amid Trump Backlash. <em>The New York Times</em>, November 4, 2026.</figcaption>
+</figure>
+</div>
+<p>The figure follows a few of the larger groups the Times reports on, at three elections. What matters here is how far apart they are. Black voters sit around D+80, far from everyone else shown; the other groups all sit much nearer even.</p>
+<p>That distance is what makes the two-way split worth anything. D+80 is roughly a 90–10 split, which is where our <span class="math inline">\theta_1 = 0.90</span> comes from. We choose <span class="math inline">\theta_0 = 0.35</span> as a hypothetical support level for the exercise. With our turnout assumptions, it lets the two-point drop in Black turnout move the statewide Democratic vote share from just above one-half to just below it. The 35% is not estimated from the Times figure, which is national rather than Georgian. We take both group support rates as given so that we can study the uncertainty about turnout.</p>
+</div>
+</div>
+<p>If <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span> are good estimators of <span class="math inline">\mu(1)</span> and <span class="math inline">\mu(0)</span>, then shouldn’t this be a good estimator of <span class="math inline">\theta</span>? <span class="math display">
+\hat\theta = \frac{m_1\hat\mu(1)\theta_1+m_0\hat\mu(0)\theta_0}{m_1\hat\mu(1)+m_0\hat\mu(0)}
+</span> Let’s look into it. To do this, we’ll think of the vote share as a function of the two turnout rates. <span class="math display">
+\hat\theta-\theta = h(\hat\mu(1),\hat\mu(0))-h(\mu(1),\mu(0)) \qqtext{for} h(x,y)=\frac{m_1\theta_1x+m_0\theta_0y}{m_1x+m_0y}.
+</span></p>
+<p>And we’ll use <em>a linear approximation to this function</em> to think about this difference.</p>
+<p>We choose the base point for convenience. For theoretical calculations of bias and variance, we’ll use the population turnout rates <span class="math inline">(\mu(1),\mu(0))</span>, so the coefficients stay constant as the sample changes. When we estimate the variance from a sample, we’ll plug in the sample turnout rates, because those are the ones we have. Either way, there is an approximation error to bound.</p>
+<p>Using the population turnout rates as our base point, we get this.</p>
+<p><span class="math display">
+\begin{aligned}
+h(\hat\mu(1), \hat\mu(0))
+&amp;\approx h(\mu(1), \mu(0)) \\
+&amp;\quad + \left[\dfrac{\partial h}{\partial x}(\mu(1), \mu(0))\right]\left\{\hat\mu(1) - \mu(1)\right\} \\
+&amp;\quad + \left[\dfrac{\partial h}{\partial y}(\mu(1), \mu(0))\right]\left\{\hat\mu(0) - \mu(0)\right\}
+\end{aligned}
+</span></p>
+<p>This approximation should be good if <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span> are close to <span class="math inline">\mu(1)</span> and <span class="math inline">\mu(0)</span>.</p>
+<div id="exr-justify-taylor-approx" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1</strong></span> When our sample includes a reasonably large number of observations in both groups, it’s reasonable to expect that they should be close. With a sentence or two, or a rough sketch if you prefer, explain why.</p>
+</div>
+<div id="ans-exr-justify-taylor-approx" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p>Now that we’ve justified the approximation, let’s use it to analyze our vote share estimator.</p>
+<div id="exr-ratio-bias" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2</strong></span> Using the population turnout rates <span class="math inline">(\mu(1),\mu(0))</span> as the base point, write out a formula for the linear approximation to our estimator <span class="math inline">\hat\theta=h(\hat\mu(1),\hat\mu(0))</span> in terms of <span class="math inline">m_1</span>, <span class="math inline">m_0</span>, <span class="math inline">\theta_1</span>, <span class="math inline">\theta_0</span>, <span class="math inline">\mu(1)</span>, <span class="math inline">\mu(0)</span>, <span class="math inline">\hat\mu(1)-\mu(1)</span>, and <span class="math inline">\hat\mu(0)-\mu(0)</span>. Then approximate its bias by comparing the expected value of this linear approximation to the estimation target <span class="math inline">\theta</span>.</p>
+</div>
+<div id="ans-exr-ratio-bias" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<div id="exr-ratio-variance" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3</strong></span> Using the population turnout rates as the base point, calculate the variance of the linear approximation to <span class="math inline">\hat\theta</span> from <a href="#exr-ratio-bias" class="quarto-xref">Exercise&nbsp;2</a> to find a formula approximating the variance of this estimator. For the interval calculation, use the sample turnout rates as the base point of the linear approximation. Estimate each group’s turnout variance from the sample, too. Use the resulting variance estimate to calculate a 95% confidence interval based on normal approximation for the vote share <span class="math inline">\theta</span>, using the sample described below. Draw it on top of the plot of that estimator’s sampling distribution in <a href="#fig-comparisons" class="quarto-xref">Figure&nbsp;1</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> With all these approximations, are you still getting an interval similar to the one I already drew there, which is calibrated using the estimator’s actual sampling distribution?</p>
+<p>The sample sizes are fixed by the survey design:</p>
+<p><span class="math display">
+\begin{alignedat}{2}
+n_1 &amp;= 5{,}259 &amp;\quad&amp; \text{Black voters called} \\
+n_0 &amp;= 12{,}270 &amp;\quad&amp; \text{non-Black voters called.}
+\end{alignedat}
+</span></p>
+<p>You can use the turnout rates observed in the first sample simulated for <a href="#fig-comparisons" class="quarto-xref">Figure&nbsp;1</a>:</p>
+<p><span class="math display">
+\begin{alignedat}{2}
+\hat\mu(1) &amp;= 0.5840 &amp;\quad&amp; \text{turnout rate among Black voters called} \\
+\hat\mu(0) &amp;= 0.6822 &amp;\quad&amp; \text{turnout rate among non-Black voters called.}
+\end{alignedat}
+</span></p>
+</div>
+<div id="ans-exr-ratio-variance" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+<p>All of that ignores the error of our linear approximation as a potential problem. We should, if we like, be able to reason about this error using tools from calculus.</p>
+<div id="exr-bias-bound" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4</strong></span> <em>Extra Credit</em>. Using some version of Taylor’s Theorem to characterize the error of the linear approximation you’ve been working with, refine your answer to <a href="#exr-ratio-bias" class="quarto-xref">Exercise&nbsp;2</a>: find an <em>upper bound</em> on the absolute value of the estimator’s bias. This should be a formula involving <span class="math inline">m_1</span>, <span class="math inline">m_0</span>, <span class="math inline">\theta_1</span>, <span class="math inline">\theta_0</span>, <span class="math inline">\mu(1)</span>, <span class="math inline">\mu(0)</span>, and the subsample sizes <span class="math inline">n_1</span> and <span class="math inline">n_0</span>. Compare it to your approximation of the estimator’s standard deviation from <a href="#exr-ratio-variance" class="quarto-xref">Exercise&nbsp;3</a>. Are you worried that confidence intervals like the one you calculated in <a href="#exr-ratio-variance" class="quarto-xref">Exercise&nbsp;3</a> might have coverage well below the nominal level of 95%?</p>
+</div>
+</section>
+</section>
+<section id="sample-size-and-allocation" class="level1">
+<h1>Sample Size and Allocation</h1>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-hw6-turnout-gap-review" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A normal distribution of estimated turnout gaps is centered at minus 10.2%, marked in green. The old gap, minus 8.2%, is marked in orange. About 80% of estimates lie in the purple area to the left of a dashed orange cutoff between those values. Faint dots have rightward confidence-bound arms. Pink and teal segments run from the alternative to the cutoff and from the cutoff to the old gap.">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hw6-turnout-gap-review-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="homework-06_files/figure-html/fig-hw6-turnout-gap-review-1.svg" class="img-fluid figure-img" style="width:100.0%" alt="A normal distribution of estimated turnout gaps is centered at minus 10.2%, marked in green. The old gap, minus 8.2%, is marked in orange. About 80% of estimates lie in the purple area to the left of a dashed orange cutoff between those values. Faint dots have rightward confidence-bound arms. Pink and teal segments run from the alternative to the cutoff and from the cutoff to the old gap.">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hw6-turnout-gap-review-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Review of the lecture’s turnout-gap power calculation. The horizontal axis is the estimated turnout gap, Black minus non-Black. Green marks the alternative two points below the old gap in orange. Estimates left of the dashed cutoff have one-sided 95% upper bounds below the old gap; the purple area is about 80%. Pink and teal show the two distances used in the calculation below.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="review-power-for-the-turnout-gap" class="level3">
+<h3 class="anchored" data-anchor-id="review-power-for-the-turnout-gap">Review: power for the turnout gap</h3>
+<p>The picture reviews the lecture’s <a href="../decks/georgia-oct29.html#power-calculation">Power Calculation</a>. We estimated the turnout gap <span class="math inline">\delta=\mu(1)-\mu(0)</span> using <span class="math inline">\hat\delta=\hat\mu(1)-\hat\mu(0)</span>. Using the lecture’s rounded rates, the old gap was <span class="math inline">\delta_0=0.600-0.682=-0.082</span>. Our alternative was a two-point decrease, to <span class="math inline">\delta=0.580-0.682=-0.102</span>. In lecture, we called a guess like that about the value of the estimand our <em>alternative value</em>, and designed our survey to meet our standard if that guess is right.</p>
+<p>To be evidence of a decrease, an estimate’s right arm has to end to the left of the <span class="null">old gap</span>. That arm is <span class="pollc">1.65 standard errors</span> long. The estimate therefore has to lie below the dashed cutoff.</p>
+<p><span class="math display">
+\hat\delta+1.65\,\mathrm{se}&lt;\delta_0
+\qqtext{if and only if}
+\hat\delta&lt;\delta_0-1.65\,\mathrm{se}.
+</span></p>
+<p>For 80% of estimates to meet this standard, the 80th percentile of the sampling distribution must be at or below the cutoff. That percentile is <span class="pollb">0.84 standard errors</span> above the alternative. The <span class="purple">purple area</span> is the proportion of estimates that meet the standard, and the two colored distances add to the separation between the alternative and the old gap.</p>
+<p><span class="math display">
+\begin{aligned}
+\delta+0.84\,\mathrm{se}&amp;\le\delta_0-1.65\,\mathrm{se} \\
+\delta_0-\delta=0.02&amp;\ge(1.65+0.84)\,\mathrm{se} \\
+\mathrm{se}&amp;\le\frac{0.02}{2.49}\approx0.008.
+\end{aligned}
+</span></p>
+<p>In the lecture’s <a href="../decks/georgia-oct29.html#exercise-1-how-many-calls">“How many calls?” exercise</a>, proportional allocation needed 5,259 calls to <span class="groupb">Black voters</span> and 12,270 to <span class="groupa">non-Black voters</span> for this standard-error target. We’ll use that design as a benchmark for the cost of answering our new question.</p>
+<p>This is the worked review. In <a href="#exr-vote-share-calls" class="quarto-xref">Exercise&nbsp;5</a>, you’ll relabel this argument for the estimated Democratic vote share, find its new standard-error target, and use your variance formula to choose the call counts.</p>
+</section>
+<section id="the-alternative-world" class="level3">
+<h3 class="anchored" data-anchor-id="the-alternative-world">The alternative world</h3>
+<p>We’ll keep the lecture’s hypothetical success of the Georgia Republican Party’s effort to suppress Black turnout and ask whether it costs the Democrats their majority. Using the lecture’s rounded rates, the original world has 60% Black turnout and 68.2% non-Black turnout; the alternative lowers Black turnout to 58%. With the hypothetical candidate preferences below, the implied statewide share moves from about 50.05% to 49.68%. These are the alternative population values we’ll use to design the survey.</p>
+<p><span class="math display">
+\begin{alignedat}{2}
+\ingroupb{\mu(1)} &amp;= 0.580 &amp;\quad&amp; \text{turnout among Black voters, two points below 2020} \\
+\ingroupa{\mu(0)} &amp;= 0.682 &amp;\quad&amp; \text{turnout among non-Black voters, as in 2020} \\
+\ingroupb{m_1} &amp;= 2{,}290{,}365 &amp;\quad&amp; \text{Black registered voters on Georgia's 2020 roll} \\
+\ingroupa{m_0} &amp;= 5{,}350{,}986 &amp;\quad&amp; \text{non-Black registered voters on that roll} \\
+\theta_1 &amp;= 0.90 &amp;\quad&amp; \text{Democratic vote share among Black voters} \\
+\theta_0 &amp;= 0.35 &amp;\quad&amp; \text{Democratic vote share among non-Black voters.}
+\end{alignedat}
+</span></p>
+<p>For the election forecast, evidence of a lost majority means that a one-sided 95% confidence interval for the Democratic vote share lies entirely below one-half. We want that to happen in 80% of our samples if the reduced-turnout alternative is right. The <a href="../decks/georgia-oct29.html#power-calculation">Power Calculation in our lecture</a> shows how to turn that requirement into a standard-error target. The direction is the same as in class: an upper confidence bound must fall below a reference value. Here the reference is one-half rather than the old turnout gap.</p>
+<p>We will compare two ways to divide the calls. We call an allocation <em>proportional</em> if the groups receive the same shares of calls as their shares of registered voters. We call it <em>equal</em> if we call the same number of people in each group. Proportional allocation resembles the population; equal allocation gives the two turnout estimates the same number of observations. Our vote-share formula already uses the registration counts to account for the groups’ sizes, so the sample does not have to reproduce their proportions. The useful comparison is how much uncertainty each allocation leaves in the forecast, and how many calls it needs to meet the same power requirement.</p>
+<p>Once we know how small the standard error must be, we can choose the numbers of calls <span class="math inline">n_1</span> and <span class="math inline">n_0</span> using the variance calculation from <a href="#exr-ratio-variance" class="quarto-xref">Exercise&nbsp;3</a>. The population turnout rates and candidate preferences stay fixed while we change those sample sizes. Statewide, each sample is a tiny fraction of its group’s roll, so <span class="math inline">(m_w-n_w)/(m_w-1)</span> is close to one. For these design calculations we’ll replace those factors by one, as we did for the turnout gap in lecture, and check the resulting sample fractions. We’ll return to the full formula in McIntosh County.</p>
+<div id="exr-vote-share-calls" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5</strong></span> &nbsp;</p>
+<ol type="1">
+<li>Relabel the review for the vote-share question: identify the estimator and reference value that replace <span class="math inline">\hat\delta</span> and <span class="math inline">\delta_0</span>. Use the vote-share formula to calculate the Democratic share <span class="math inline">\theta</span> in the reduced-turnout alternative. Keep enough digits to find its distance below one-half accurately.</li>
+<li>How small must the standard error of <span class="math inline">\hat\theta</span> be so that 80% of its one-sided 95% confidence intervals lie entirely below one-half in this world? Relabel the upper-bound event and the 80th-percentile argument in the review to work it out.</li>
+<li>Using your variance formula from <a href="#exr-ratio-variance" class="quarto-xref">Exercise&nbsp;3</a>, find the total number of calls and the number in each group needed to meet your requirement under proportional allocation. Then do the same for equal allocation. Use the population values above to evaluate the coefficients of <span class="math inline">\hat\mu(1)-\mu(1)</span> and <span class="math inline">\hat\mu(0)-\mu(0)</span> in your linear approximation, and use <span class="math inline">\sigma^2(w)=\mu(w)\{1-\mu(w)\}</span>. Round group sample sizes upward. Check that each is a small fraction of its group’s roll, and compare the totals with the lecture’s turnout-gap design.</li>
+</ol>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For the allocation calculations, express both group sample sizes in terms of the total number of calls.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-vote-share-calls" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><em>(your answer here)</em></li>
+<li><em>(your answer here)</em></li>
+<li><em>(your answer here)</em></li>
+</ol>
+</div>
+</div>
+<div id="exr-vote-share-allocation" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6</strong></span> Suppose the total number of calls is fixed at <span class="math inline">n</span>, so <span class="math inline">n_1+n_0=n</span>. How should we split those calls between the two groups to minimize the variance of our estimated vote share? Use your variance calculation from <a href="#exr-ratio-variance" class="quarto-xref">Exercise&nbsp;3</a> and the same population values as in <a href="#exr-vote-share-calls" class="quarto-xref">Exercise&nbsp;5</a>. Then find the total and group sample sizes needed to meet the power requirement you found there. Check that your integer sample sizes meet that requirement.</p>
+<p>The lecture’s <a href="../decks/georgia-oct29.html#exercise-2-choosing-the-allocation">Optimal Allocation exercise</a> works through the corresponding question for the turnout gap.</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Tip
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>With the total fixed, choosing <span class="math inline">n_1</span> also chooses <span class="math inline">n_0</span>. Differentiate the variance with respect to the number of Black voters called, and check that the stationary point is a minimum.</p>
+</div>
+</div>
+</div>
+<div id="ans-exr-vote-share-allocation" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><em>(your answer here)</em></p>
+</div>
+</div>
+</section>
+</section>
+<section id="mcintosh-county" class="level1">
+<h1>McIntosh County</h1>
+<p>Statewide, the correction factors are close to one, so we dropped them. McIntosh County is much smaller: in 2024, its roll had <span class="math inline">m_1 = 2{,}729</span> <span class="groupb">Black</span> and <span class="math inline">m_0 = 7{,}777</span> <span class="groupa">non-Black</span> registered voters, <span class="math inline">m = 10{,}506</span> in all. We will choose the allocation and total number of calls again, using this smaller roll and retaining the without-replacement factors.</p>
+<p>Each dot below represents one registered voter. The positions illustrate the counts, not actual residential locations.</p>
+<div class="cell quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-06_files/figure-html/ga-small-county-maps-1.svg" class="img-fluid figure-img" style="width:100.0%" alt="Two maps of the same McIntosh County boundary. The left map contains 2,729 teal dots for Black registered voters, and the right contains 7,777 red dots for non-Black registered voters. Each dot represents one registered voter; positions are illustrative, not actual residential locations."></p>
+<figcaption>2,729 Black registered voters</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="homework-06_files/figure-html/ga-small-county-maps-2.svg" class="img-fluid figure-img" style="width:100.0%" alt="Two maps of the same McIntosh County boundary. The left map contains 2,729 teal dots for Black registered voters, and the right contains 7,777 red dots for non-Black registered voters. Each dot represents one registered voter; positions are illustrative, not actual residential locations."></p>
+<figcaption>7,777 non-Black registered voters</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>The maps show why calling a substantial fraction of this roll is quite different from calling a tiny fraction of the state. Sampling without replacement reduces uncertainty as we cover more of each group, and it leaves none when we have called everyone. The factors you derived in <a href="homework-random-variables-and-moments.html#exr-without-replacement-variance">Homework 4</a> describe that change.</p>
+<p>The new algebra comes from those correction factors. I’ll expand one group’s contribution so that you can reuse the optimization in <a href="#exr-vote-share-allocation" class="quarto-xref">Exercise&nbsp;6</a>. Distributing the numerator separates the part that depends on the number called from a fixed population term.</p>
+<p><span class="math display">
+\begin{aligned}
+\frac{\sigma^2(w)}{n_w}\frac{m_w-n_w}{m_w-1}
+&amp;=\frac{\sigma^2(w)m_w}{n_w(m_w-1)}
+-\frac{\sigma^2(w)n_w}{n_w(m_w-1)} \\
+&amp;=\frac{m_w}{m_w-1}\frac{\sigma^2(w)}{n_w}
+-\frac{\sigma^2(w)}{m_w-1}.
+\end{aligned}
+</span></p>
+<p>For the turnout gap, we add these contributions from the two groups. For the vote-share approximation, we first multiply each group’s contribution by its squared coefficient, <span class="math inline">c_w^2</span>. We write <span class="math inline">V(n_1,n_0)</span> for the resulting variance expression. Collecting the fixed population quantities into constants <span class="math inline">A_1</span>, <span class="math inline">A_0</span> and <span class="math inline">C</span> gives the form</p>
+<p><span class="math display">
+V(n_1,n_0)=\frac{A_1}{n_1}+\frac{A_0}{n_0}-C.
+</span></p>
+<p>The constants differ between the two questions. They stay fixed while we choose the call counts. This expansion is the supplied step; you’ll identify the constants, minimize the variance at a fixed total, and find the total needed for the relevant power target. The normal-approximation power argument stays the same. Its standard error must now come from the full without-replacement variance. Finally, a design without replacement must have <span class="math inline">n_1\le m_1</span> and <span class="math inline">n_0\le m_0</span>: we cannot call more distinct people than a group contains.</p>
+<div id="exr-mcintosh-county" class="callout-exercise theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7</strong></span> Use McIntosh County’s registration counts to continue the optimal survey design from <a href="#exr-vote-share-allocation" class="quarto-xref">Exercise&nbsp;6</a>. Keep the same turnout rates, <span class="math inline">\mu(1)=0.580</span> and <span class="math inline">\mu(0)=0.682</span>, and candidate preferences, <span class="math inline">\theta_1=0.90</span> and <span class="math inline">\theta_0=0.35</span>.</p>
+<ol type="1">
+<li>For the turnout gap, keep the lecture’s requirement of 80% power to detect a two-point decrease, which gave a standard-error target of <span class="math inline">0.008</span>. First replace the without-replacement factors by one, as we did statewide. Choose the variance-minimizing allocation, and find sufficient group and total call counts. Compare them with the county’s registration counts.</li>
+<li>Now retain the without-replacement factors. Identify <span class="math inline">A_1</span>, <span class="math inline">A_0</span> and <span class="math inline">C</span> for the turnout gap. Use the same optimization as in <a href="#exr-vote-share-allocation" class="quarto-xref">Exercise&nbsp;6</a> to choose the allocation at a fixed total <span class="math inline">n</span>. Substitute that allocation into the variance and solve the precision inequality for <span class="math inline">n</span>. Choose integer group counts, check their standard error and their feasibility, and find the fraction of each group called.</li>
+<li>Calculate the candidate’s vote share in this county. Use its distance below one-half to find the standard-error target for 80% of our one-sided 95% intervals to lie entirely below one-half. Repeat the optimal allocation and sample-size calculation for this question, first omitting the correction and then retaining it. For the latter design, check the rounded counts, capacities and sampling fractions.</li>
+<li>Why does the vote-share question need fewer calls here than statewide, and fewer than detecting the county’s two-point turnout-gap change? Explain the roles of the distance from the reference value and the estimator’s variance. Why does the without-replacement correction matter much more for one county question than the other?</li>
+</ol>
+</div>
+<div id="ans-exr-mcintosh-county" class="callout callout-style-default callout-answer callout-titled" title="Template">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Answer</span>Template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><em>(your answer here)</em></li>
+<li><em>(your answer here)</em></li>
+<li><em>(your answer here)</em></li>
+<li><em>(your answer here)</em></li>
+</ol>
+</div>
+</div>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can find the figure in the Summary at the top of this page. Draw in your interval however you like. You can print this, draw it on paper, and photograph it for submission. You can right click on the plot, save it as an image, and draw on that using your favorite image editor. You can sketch what you see in <a href="#fig-comparisons" class="quarto-xref">Figure&nbsp;1</a> on paper, add your interval, and photograph that. Maybe the easiest thing to do is use the <a href="https://chromewebstore.google.com/detail/tldrawe/mhkmpnjdjhckmcejgmajnjhbmclmkdnd">Tldrawe Chrome Extension</a> to draw right on top of this webpage and take a screenshot. Don’t work too hard. A rough sketch is fine.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main>
+<!-- /main column -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<!--tlda-publication-body-->
+<script>
+if (new URLSearchParams(window.location.search).has("_tldaShape")) {
+(function() {
+  // Read shape ID from query string
+  var params = new URLSearchParams(window.location.search);
+  var shapeId = params.get('_tldaShape') || '';
+  var tldaWheelOwner = 'page';
+  var tldaWheelViewportId = '';
+
+  // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
+  // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
+  // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
+  // "E[X]=x...", and an inline t reads "ttt"). A formula is read once, as its TeX source: $...$
+  // inline, $$...$$ when it is display math. Everything else is its text, as before.
+  function tldaReadableBlockText(el) {
+    var out = '';
+    var kids = el.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 3) { out += kid.textContent; continue; }
+      if (kid.nodeType !== 1) continue;
+      if (kid.classList && kid.classList.contains('katex') && kid.querySelector) {
+        var annotation = kid.querySelector('annotation[encoding="application/x-tex"]');
+        var tex = annotation ? (annotation.textContent || '').trim() : '';
+        if (tex) {
+          var isDisplay = !!(kid.closest && kid.closest('.katex-display, .math.display'));
+          out += isDisplay ? '$$' + tex + '$$' : '$' + tex + '$';
+          continue;
+        }
+      }
+      out += tldaReadableBlockText(kid);
+    }
+    return out;
+  }
+
+  // Read once from the page by the capture driver, which checks the headings measured here against
+  // the page's own headings by text: both sides must read a heading with the same reader, or a heading
+  // that holds a formula ("Why Must X Be Nonnegative?") makes the two lists differ and the view refuse.
+  window.__tldaReadableBlockText = tldaReadableBlockText;
+
+  // The title of the callout that holds a closed (collapsed) block, without the screen-reader
+  // word Quarto puts in front of it ("Note", "Warning"). Empty when the callout has no title.
+  function tldaCalloutTitle(host) {
+    var callout = host.closest ? host.closest('.callout') : null;
+    var titleEl = callout && callout.querySelector ? callout.querySelector('.callout-title-container') : null;
+    if (!titleEl) return '';
+    var title = '';
+    var kids = titleEl.childNodes || [];
+    for (var kidIndex = 0; kidIndex < kids.length; kidIndex++) {
+      var kid = kids[kidIndex];
+      if (kid.nodeType === 1 && kid.classList && kid.classList.contains('screen-reader-only')) continue;
+      title += kid.nodeType === 1 ? tldaReadableBlockText({ childNodes: [kid] }) : (kid.nodeType === 3 ? kid.textContent : '');
+    }
+    return title.replace(/\s+/g, ' ').trim();
+  }
+
+  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks) {
+    // In a Reveal deck after a scroll-view goto, section.present stays on the
+    // title slide while the address moves; getCurrentSlide() reads the
+    // addressed slide. Measure that first (the hidden!==root guard below keeps
+    // its slide-level aria-hidden text measurable); present, then main/body,
+    // preserve every non-deck path exactly.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var slide = Reveal.getCurrentSlide();
+        if (slide && slide.tagName === 'SECTION') addressed = slide;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var root = addressed ||
+      document.querySelector('.reveal .slides section.present') ||
+      document.querySelector('main') || document.body;
+    var blocks = [];
+    // The default candidate set is the prose skeleton, and it is what every
+    // deck walk gets: the walk passes no selector, so deck output is the same
+    // blocks in the same order as before this parameter existed. A caller may
+    // widen the set per request -- the chapter view asks for captions, tables
+    // and display math alongside prose -- and every match comes back in the
+    // one block shape below. The parameter is request-local; no caller reads
+    // or writes any state outside its own call.
+    var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
+    var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+    var pictureLayoutRequest = includePictureLayout === true;
+    function isVisibleLayoutElement(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var currentStyle = getComputedStyle(current);
+        var opacity = parseFloat(currentStyle.opacity);
+        if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+    function visibleTextLayoutRects() {
+      var rects = [];
+      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var textNode;
+      while ((textNode = walker.nextNode())) {
+        var text = textNode.textContent || '';
+        var owner = textNode.parentElement;
+        // SVG is measured as a picture; its internal labels belong to that
+        // image. Text siblings in an SVG-containing block still count.
+        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        var range = document.createRange();
+        range.setStart(textNode, 0);
+        range.setEnd(textNode, text.length);
+        var visibleRects = Array.from(range.getClientRects()).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        visibleRects.forEach(function(rect) {
+          rects.push({ top: rect.top, bottom: rect.bottom });
+        });
+        if (visibleRects.length) {
+          for (var current = owner; current; current = current.parentElement) {
+            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current === root) break;
+          }
+        }
+      }
+      // MathJax's SVG output can have no text node with a rendered range.
+      // Its visible container box is the text bound in that case. Prefer one
+      // outer math box and skip math SVGs when pictures are measured below.
+      var mathNodes = root.querySelectorAll(mathSelector);
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (outerMath && outerMath !== root) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
+          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+        }
+      }
+      return rects;
+    }
+    for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
+      var block = candidates[blockIndex];
+      if (block.closest('svg') || block.querySelector('svg')) continue;
+      // Display math written inside a paragraph or list item is part of that block's text now;
+      // measuring it again as its own block would read the same equation twice.
+      if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
+      var style = getComputedStyle(block);
+      if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var words = [];
+      var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
+        if (hidden && hidden !== root) continue;
+        // Chapter views use readable block text, not wrapped word lines. One
+        // Range per text node establishes the same visibility without paying
+        // one layout query per word. Deck/export callers keep wrapped lines.
+        var pattern = includeLineBreaks === false ? /\S[\s\S]*/g : /\S+/g;
+        var match;
+        while ((match = pattern.exec(node.textContent || ''))) {
+          var range = document.createRange();
+          range.setStart(node, match.index);
+          range.setEnd(node, match.index + match[0].length);
+          var rects = Array.from(range.getClientRects()).filter(function(rect) {
+            return rect.width > 1 && rect.height > 1;
+          });
+          if (!rects.length) continue;
+          words.push({
+            word: match[0],
+            center: rects[0].top + rects[0].height / 2,
+            height: rects[0].height,
+          });
+        }
+      }
+      var lines = [];
+      words.forEach(function(word) {
+        var line = lines.find(function(candidate) {
+          return Math.abs(candidate.center - word.center) < word.height * 0.5;
+        });
+        if (!line) {
+          line = { center: word.center, words: [] };
+          lines.push(line);
+        }
+        line.words.push(word.word);
+      });
+      // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
+      // and used to be dropped, though a reader can open the callout. A widened request keeps it,
+      // marked with the callout it is closed in.
+      var closedCallout = null;
+      if (widenedRequest && !lines.length && block.closest) {
+        var closedHost = block.closest('.callout-collapse');
+        if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
+      }
+      if (lines.length || closedCallout) {
+        // A widened request (the chapter view passes a candidate selector;
+        // the deck walk never does) gets two additions on the block shape:
+        //   - tables join cells with " | " and rows with " / ", because a
+        //     table's textContent concatenates cells with no separator and
+        //     "AB12" is not a readable row (tables are never matched under
+        //     the default set, so this can only fire for a widened request);
+        //   - sourceLine (from the build's data-source-line stamp; null when
+        //     unstamped, absence stated rather than guessed) and rect
+        //     (viewport coordinates at measurement time, for region math on
+        //     an unscrolled page).
+        // A default request takes the exact object it always took: no new
+        // keys, so deck measurement output is byte-identical field for
+        // field, not merely compatible.
+        var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
+        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
+          var rows = [];
+          var trs = block.querySelectorAll('tr');
+          for (var rowIndex = 0; rowIndex < trs.length; rowIndex++) {
+            var cells = [];
+            var tds = trs[rowIndex].querySelectorAll('th, td');
+            for (var cellIndex = 0; cellIndex < tds.length; cellIndex++) {
+              cells.push(tldaReadableBlockText(tds[cellIndex]).replace(/\s+/g, ' ').trim());
+            }
+            rows.push(cells.join(' | '));
+          }
+          if (rows.length) blockText = rows.join(' / ');
+        }
+        var entry = {
+          tag: block.tagName.toLowerCase(),
+          id: block.id || null,
+          text: blockText,
+          lines: lines.map(function(line) { return line.words.join(' '); }),
+        };
+        if (viewRequest) {
+          var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
+          var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
+          var sourceLineNum = sourceLineAttr == null ? null : Number(sourceLineAttr);
+          entry.sourceLine = Number.isInteger(sourceLineNum) ? sourceLineNum : null;
+          entry.sourceFile = block.getAttribute ? block.getAttribute('data-source-file') : null;
+          var endLineAttr = block.getAttribute ? block.getAttribute('data-source-end-line') : null;
+          entry.sourceEndLine = endLineAttr == null ? entry.sourceLine : Number(endLineAttr);
+          entry.domIndex = blockIndex;
+          entry.rect = blockRect && !closedCallout ? { x: blockRect.left, y: blockRect.top, w: blockRect.width, h: blockRect.height } : null;
+          if (closedCallout) {
+            entry.closedCallout = { id: closedCallout.id || null, title: tldaCalloutTitle(closedCallout) };
+          }
+        }
+        blocks.push(entry);
+      }
+    }
+    var measurement = { url: window.location.href, title: document.title, blocks: blocks };
+    if (pictureLayoutRequest) {
+      measurement.visibleTextRects = visibleTextLayoutRects();
+      var pictures = [];
+      var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
+        var picture = pictureNodes[pictureIndex];
+        var tag = (picture.tagName || '').toLowerCase();
+        // An embedded SVG (including KaTeX/MathJax glyphs) is part of its
+        // enclosing picture or equation, not a separate picture box.
+        if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
+        if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
+        if (!isVisibleLayoutElement(picture)) continue;
+        var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
+        if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
+        pictures.push({
+          tag: tag,
+          id: picture.id || null,
+          alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
+          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+        });
+      }
+      measurement.pictures = pictures;
+    }
+    return measurement;
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-measure-rendered-lines') return;
+    var requestId = event.data.requestId || null;
+    Promise.resolve(document.fonts?.ready).then(function() {
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          var target = event.source || window.parent;
+          target.postMessage({
+            type: 'tlda-rendered-lines',
+            shapeId: shapeId,
+            requestId: requestId,
+            measurement: tldaMeasureRenderedLines(
+              typeof event.data.candidates === 'string' && event.data.candidates
+                ? event.data.candidates
+                : null,
+              event.data.includePictureLayout === true,
+              event.data.includeLineBreaks !== false,
+            ),
+          }, '*');
+        });
+      });
+    });
+  });
+
+  // Figure serialization for the client-side linearizer. The app and the
+  // deck often live on different origins (cross-origin asset server is the
+  // shipped topology), so the parent cannot read pixels itself: the frame
+  // serializes its own current-slide figures — static SVGs through canvas
+  // to PNG, live canvases via toDataURL — and posts the data back. One
+  // figure's failure is a note on that figure, never a failed roundtrip.
+  function tldaRasterSvg(svg, width, height) {
+    return new Promise(function(resolve, reject) {
+      try {
+        var clone = svg.cloneNode(true);
+        clone.setAttribute('width', String(width));
+        clone.setAttribute('height', String(height));
+        var source = new XMLSerializer().serializeToString(clone);
+        var url = URL.createObjectURL(new Blob([source], { type: 'image/svg+xml;charset=utf-8' }));
+        var image = new Image();
+        image.onload = function() {
+          try {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext('2d');
+            if (!ctx) { URL.revokeObjectURL(url); reject(new Error('no 2d context')); return; }
+            ctx.drawImage(image, 0, 0, width, height);
+            var png = canvas.toDataURL('image/png');
+            URL.revokeObjectURL(url);
+            resolve(png);
+          } catch (e) { URL.revokeObjectURL(url); reject(e); }
+        };
+        image.onerror = function() { URL.revokeObjectURL(url); reject(new Error('SVG raster failed to load')); };
+        image.src = url;
+      } catch (e) { reject(e); }
+    });
+  }
+
+  function tldaSerializeFigures() {
+    var doc = document;
+    // Same addressing as measurement: after a scroll-view goto,
+    // section.present stays on the title slide while the address moves;
+    // getCurrentSlide() reads the addressed slide.
+    var addressed = null;
+    try {
+      if (typeof Reveal !== 'undefined' && Reveal.getCurrentSlide) {
+        var current = Reveal.getCurrentSlide();
+        if (current && current.tagName === 'SECTION') addressed = current;
+      }
+    } catch (e) { /* pre-init Reveal: fall through to present */ }
+    var slide = addressed
+      || doc.querySelector('.reveal .slides section.present')
+      || doc.querySelector('.reveal .slides section');
+    var found = slide ? slide.querySelectorAll('svg, canvas') : [];
+    var nodes = Array.prototype.slice.call(found);
+    var figures = [];
+    var chain = Promise.resolve();
+    nodes.forEach(function(node) {
+      chain = chain.then(function() {
+        var tag = (node.tagName || '').toLowerCase();
+        if (tag === 'svg') {
+          var rect = node.getBoundingClientRect();
+          var width = Math.max(1, Math.round(rect.width));
+          var height = Math.max(1, Math.round(rect.height));
+          if (rect.width < 2 || rect.height < 2) return null;
+          return tldaRasterSvg(node, width, height).then(function(png) {
+            figures.push({ kind: 'svg', png: png, width: width, height: height, note: null });
+          }, function(e) {
+            figures.push({ kind: 'svg', png: null, width: width, height: height,
+              note: 'SVG did not raster: ' + (e && e.message ? e.message : String(e)) });
+          });
+        }
+        if (tag === 'canvas') {
+          if (node.width < 2 || node.height < 2) return null;
+          try {
+            figures.push({ kind: 'canvas', png: node.toDataURL('image/png'),
+              width: node.width, height: node.height, note: null });
+          } catch (e) {
+            figures.push({ kind: 'canvas', png: null, width: node.width, height: node.height,
+              note: 'canvas unreadable (tainted or empty): ' + (e && e.message ? e.message : String(e)) });
+          }
+          return null;
+        }
+        return null;
+      });
+    });
+    return chain.then(function() { return figures; });
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-serialize-figures') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaSerializeFigures().then(function(figures) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: figures,
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-figures',
+        shapeId: shapeId,
+        requestId: requestId,
+        figures: [],
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
+
+  // Keep the static content layout, including its named grid tracks. The app
+  // supplies navigation around the embedded chapter, so Quarto's duplicate
+  // book/sidebar TOCs and their mobile toggle stay hidden inside the frame.
+  // Hide with CSS rather than removing nodes Quarto's own scripts reference.
+  function hideEmbeddedTocs() {
+    if (window.parent === window) return;
+    var style = document.createElement('style');
+    style.textContent = "#quarto-sidebar, #quarto-sidebar-glass, #quarto-sidebar-toc-left, #TOC, #quarto-header .quarto-secondary-nav { display: none !important; }";
+    document.head.appendChild(style);
+  }
+  // Let the canvas show through: the document's own background goes
+  // transparent so the page paints the fog canvas instead of Quarto white.
+  // The deck bridge already does the same for slides; this is the chapter
+  // half the parity commit dropped, and the pages went white without it.
+  function letCanvasShowThrough() {
+    document.body.style.background = 'transparent';
+    document.documentElement.style.background = 'transparent';
+  }
+  function installCanvasListeners() {
+    // Dark mode: toggle via postMessage from parent, only change backgrounds
+    // and default text color — leave semantic colors (plots, colored text) alone
+    window.addEventListener('message', function(e) {
+      if (e.data?.type === 'tlda-dark-mode') {
+        document.documentElement.classList.toggle('tlda-dark', !!e.data.dark);
+      }
+      if (e.data?.type === 'tlda-wheel-owner') {
+        tldaWheelOwner = e.data.owner === 'clip' ? 'clip' : 'page';
+        tldaWheelViewportId = tldaWheelOwner === 'clip' ? (e.data.viewportId || '') : '';
+      }
+      if (e.data?.type === 'tlda-scroll-to-id') {
+        var el = document.getElementById(e.data.id);
+        if (el) {
+          // Report element position back to parent for camera scrolling
+          var rect = el.getBoundingClientRect();
+          var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+          window.parent.postMessage({
+            type: 'tlda-element-position',
+            shapeId: shapeId,
+            id: e.data.id,
+            offsetTop: rect.top + scrollY,
+            offsetLeft: rect.left,
+            height: rect.height,
+            docWidth: document.documentElement.clientWidth,
+          }, '*');
+          // Flash the element briefly
+          el.style.outline = '2px solid rgba(255, 100, 100, 0.6)';
+          el.style.outlineOffset = '4px';
+          setTimeout(function() { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
+        }
+      }
+    });
+    // Prevent iframe from capturing wheel/touch scroll events (Safari ignores
+    // pointer-events:none on iframes for scroll gestures).
+    // Forward to parent so TLDraw still scrolls when text-select tool is active.
+    function tldaAllowsInternalScroll(target) {
+      return !!(target && target.closest && target.closest('.tlda-scroll'));
+    }
+    document.addEventListener('wheel', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      e.preventDefault();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: tldaWheelOwner === 'clip' ? 'tlda-clip-wheel' : 'tlda-wheel',
+          shapeId: shapeId,
+          viewportId: tldaWheelViewportId,
+          deltaX: e.deltaX, deltaY: e.deltaY, deltaMode: e.deltaMode,
+          clientX: e.clientX, clientY: e.clientY,
+          ctrlKey: e.ctrlKey, metaKey: e.metaKey,
+        }, '*');
+      }
+    }, { passive: false });
+    // The mouse side buttons (3 and 4) toggle pan mode in the parent window. A press
+    // over a page that takes pointer events lands HERE, in this document, where the
+    // parent's listener cannot see it, so it is forwarded like the wheel above. The
+    // matching mouseup and auxclick are claimed so the browser does not navigate
+    // history on them.
+    function tldaIsSideButton(e) { return e.button === 3 || e.button === 4; }
+    document.addEventListener('mousedown', function(e) {
+      if (!tldaIsSideButton(e)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-pan-toggle',
+          shapeId: shapeId,
+          clientX: e.clientX, clientY: e.clientY,
+        }, '*');
+      }
+    }, true);
+    ['mouseup', 'auxclick'].forEach(function(name) {
+      document.addEventListener(name, function(e) {
+        if (!tldaIsSideButton(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+    });
+    var tldaLastTouch = null;
+    function tldaTouchCenter(touches) {
+      var x = 0, y = 0;
+      for (var i = 0; i < touches.length; i++) {
+        x += touches[i].clientX;
+        y += touches[i].clientY;
+      }
+      return { x: x / touches.length, y: y / touches.length };
+    }
+    document.addEventListener('touchstart', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) {
+        tldaLastTouch = null;
+        return;
+      }
+      if (!e.touches || e.touches.length < 2) {
+        tldaLastTouch = null;
+        return;
+      }
+      tldaLastTouch = tldaTouchCenter(e.touches);
+      tldaPostTouches(e);
+    }, { passive: true });
+    // Send the touches themselves, not a scroll derived from them.
+    //
+    // This used to post the centroid delta as a WHEEL event, and that was the
+    // judder: a wheel carries translation and nothing else, so a pinch inside a
+    // page could only ever pan. Skip: "the slide seemed to refuse pinch
+    // gestures, and they comply with drag gestures but they vibrate while you
+    // do them." Pan arrived by one mechanism with its own timing while the
+    // scale it implied was thrown away.
+    //
+    // The parent already converts this frame's CSS pixels to screen pixels for
+    // the wheel path, and it owns the same pan/zoom classifier the canvas uses.
+    // So hand it the raw points and let one classifier read them, wherever the
+    // fingers happen to be.
+    function tldaPostTouches(e) {
+      if (window.parent === window) return;
+      var pts = [];
+      for (var i = 0; i < e.touches.length; i++) {
+        pts.push({ id: e.touches[i].identifier, x: e.touches[i].clientX, y: e.touches[i].clientY });
+      }
+      window.parent.postMessage({
+        type: 'tlda-touches',
+        shapeId: shapeId,
+        viewportId: tldaWheelViewportId,
+        points: pts,
+      }, '*');
+    }
+    document.addEventListener('touchmove', function(e) {
+      if (tldaAllowsInternalScroll(e.target)) return;
+      if (!e.touches || e.touches.length < 2) return;
+      e.preventDefault();
+      tldaPostTouches(e);
+    }, { passive: false });
+    document.addEventListener('touchend', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+    document.addEventListener('touchcancel', function(e) {
+      tldaLastTouch = null;
+      tldaPostTouches(e);
+    }, { passive: true });
+
+    function tldaElementFromNode(node) {
+      if (!node) return null;
+      return node.nodeType === 1 ? node : node.parentElement;
+    }
+    function tldaSelectionLine(range) {
+      var node = tldaElementFromNode(range.commonAncestorContainer) || tldaElementFromNode(range.startContainer);
+      while (node && node !== document.body && node !== document.documentElement) {
+        if (node.id) {
+          var m = String(node.id).match(/^line-(\d+)$/);
+          if (m) return parseInt(m[1], 10);
+        }
+        node = node.parentElement;
+      }
+      return null;
+    }
+    function tldaPostTextSelection() {
+      if (window.parent === window) return;
+      var sel = window.getSelection && window.getSelection();
+      var text = sel ? String(sel.toString() || '').trim() : '';
+      if (!sel || sel.rangeCount === 0 || !text) return;
+      var range = sel.getRangeAt(0);
+      var rect = range.getBoundingClientRect();
+      if (!rect || (rect.width <= 0 && rect.height <= 0)) return;
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      window.parent.postMessage({
+        type: 'tlda-text-selection',
+        shapeId: shapeId,
+        text: text,
+        line: tldaSelectionLine(range),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      }, '*');
+    }
+    document.addEventListener('selectionchange', function() {
+      setTimeout(tldaPostTextSelection, 0);
+    });
+    document.addEventListener('pointerup', tldaPostTextSelection, true);
+
+    function docLinkPayload(el) {
+      var rect = el.getBoundingClientRect();
+      var scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      var scrollX = window.scrollX || document.documentElement.scrollLeft || 0;
+      return {
+        type: '',
+        shapeId: shapeId,
+        refType: el.dataset.refType || '',
+        refValue: el.dataset.refValue || '',
+        refLabel: el.dataset.refLabel || '',
+        refFile: el.dataset.refFile || '',
+        refLine: el.dataset.refLine || '',
+        text: (el.textContent || '').trim(),
+        rect: {
+          left: rect.left,
+          top: rect.top,
+          right: rect.right,
+          bottom: rect.bottom,
+          width: rect.width,
+          height: rect.height,
+          offsetLeft: rect.left + scrollX,
+          offsetTop: rect.top + scrollY,
+        },
+        docSize: {
+          width: document.documentElement.clientWidth || document.body.clientWidth || 800,
+          height: Math.max(document.body.scrollHeight || 0, document.documentElement.scrollHeight || 0),
+        },
+      };
+    }
+
+    document.addEventListener('mouseover', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link || link.classList.contains('doc-link-unresolved')) return;
+      var payload = docLinkPayload(link);
+      payload.type = 'tlda-doc-link-hover';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+    }, true);
+
+    document.addEventListener('mouseout', function(e) {
+      var link = e.target.closest && e.target.closest('.doc-link');
+      if (!link) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+      }
+    }, true);
+
+    function postDocLinkClick(e, docLink) {
+      if (!docLink || docLink.classList.contains('doc-link-unresolved')) return false;
+      e.preventDefault();
+      var payload = docLinkPayload(docLink);
+      payload.type = 'tlda-doc-link-click';
+      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      return true;
+    }
+
+    document.addEventListener('pointerdown', function(e) {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'tlda-pointerdown', shapeId: shapeId }, '*');
+      }
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      postDocLinkClick(e, docLink);
+    }, true);
+
+    // Tab-pane state sync across same-document iframe instances.
+    //
+    // The docview renders its OWN iframe of the target document (measured: two
+    // iframes serve chapter-social-pressure-experiment.html with the same
+    // _tldaShape after a peek). A pane opened by a link click exists only in
+    // the clicked instance, so the docview's copy keeps default tabs and shows
+    // the wrong figure in the right slot (measured: Figure 3.1 in the Figure
+    // 3.4 slot). Instances sync open panes over a BroadcastChannel keyed by
+    // document path: the click path broadcasts to live instances, and the
+    // parent posts tlda-activate-pane to the target's iframes as load
+    // signals arrive so late joiners converge too.
+    var tabSyncChannel = null;
+    try {
+      tabSyncChannel = ('BroadcastChannel' in window) ? new BroadcastChannel('tlda-tab-panes') : null;
+    } catch (bcErr) { tabSyncChannel = null; }
+    function tabSyncDocKey() {
+      try { return window.location.pathname; } catch (e) { return ''; }
+    }
+    function broadcastOpenPane(paneId) {
+      if (!tabSyncChannel || !paneId) return;
+      // Best-effort cross-instance sync: if the broadcast fails the clicked
+      // instance still navigates correctly and only the mirror stays stale.
+      try { tabSyncChannel.postMessage({ t: 'tlda-tab-open', doc: tabSyncDocKey(), pane: paneId }); } catch (e) { /* sync is advisory */ }
+    }
+    // Open the tab pane holding an anchor, through its tab, so a link to a
+    // figure in a closed pane lands on the figure and not on whichever pane
+    // happens to be open (measured: the book keeps one letter-figure per pane
+    // with only the first open; clicks landed on the slot showing Figure 3.1
+    // whatever the link named). Manipulates Bootstrap tab classes directly
+    // rather than clicking the tab, so no second navigation is posted.
+    function openTabPaneById(paneId, broadcast) {
+      if (!paneId || !document.getElementById) return false;
+      var pane = document.getElementById(paneId);
+      if (!pane || !pane.classList || !pane.classList.contains('tab-pane')) return false;
+      if (pane.classList.contains('active')) return false;
+      var tab = null;
+      if (pane.id) {
+        tab = document.querySelector('[role="tab"][aria-controls="' + pane.id + '"]');
+        if (!tab) {
+          tab = document.querySelector(
+            'a[data-bs-toggle="tab"][href="#' + pane.id + '"],' +
+            'button[data-bs-toggle="tab"][data-bs-target="#' + pane.id + '"]'
+          );
+        }
+      }
+      // Scope to the whole tabset: the tablist is a sibling of .tab-content,
+      // so scoping to .tab-content clears the panes but leaves the old tab
+      // button marked selected alongside the new one (measured: Civic Duty
+      // and Neighbors both aria-selected after a Figure 3.4 click).
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          p.classList.remove('active');
+          p.classList.remove('show');
+        });
+        tabset.querySelectorAll('[role="tab"][aria-selected="true"]').forEach(function(t) {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('active');
+        });
+      }
+      pane.classList.add('active');
+      pane.classList.add('show');
+      if (tab) {
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+      }
+      // A remote apply must not rebroadcast: the sender already has it open,
+      // and an echo would ping-pong between instances.
+      if (broadcast) broadcastOpenPane(pane.id);
+      return true;
+    }
+    function activateTabPaneForAnchor(anchorId) {
+      if (!anchorId || !document.getElementById) return false;
+      var el = document.getElementById(anchorId);
+      // Quarto xref tooltips clone the target (id included) into the link's
+      // vicinity on click, ahead of the original in document order — so
+      // getElementById returns the clone (measured: an IMG in the link's LI
+      // while the real figure sits in its tab pane) and the pane lookup
+      // below finds nothing. Walk every copy to the one outside tooltips.
+      if (el && el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) {
+        var copies = document.querySelectorAll('[id]');
+        el = null;
+        for (var i = 0; i < copies.length; i++) {
+          if (copies[i].id === anchorId
+            && !(copies[i].closest && copies[i].closest('[data-tippy-root], .tippy-box, .tippy-content'))) {
+            el = copies[i];
+            break;
+          }
+        }
+      }
+      var pane = el && el.closest ? el.closest('.tab-pane:not(.active)') : null;
+      if (!pane || !pane.id) return false;
+      return openTabPaneById(pane.id, true);
+    }
+    // Folds (callouts, code folds, <details>) and tabs are mirrored the same
+    // way, so every frame showing this document shows it the same: the
+    // canvas and a doc-view panel are two cameras on one page, not two pages
+    // that drift apart. A change made here is sent; a change applied from
+    // another frame is not sent again (remoteExpect), so nothing echoes.
+    var remoteExpect = {};
+    function foldKeyOf(el) {
+      if (!el) return null;
+      if (el.tagName === 'DETAILS') {
+        if (el.id) return '#' + el.id;
+        return 'details:' + Array.prototype.indexOf.call(document.querySelectorAll('details'), el);
+      }
+      return el.id ? '#' + el.id : null;
+    }
+    function foldElement(key) {
+      if (!key) return null;
+      if (key.indexOf('details:') === 0) return document.querySelectorAll('details')[Number(key.slice(8))] || null;
+      return document.getElementById(key.slice(1));
+    }
+    function foldIsOpen(el) {
+      return el.tagName === 'DETAILS' ? !!el.open : el.classList.contains('show');
+    }
+    function sendFold(el, open) {
+      var key = foldKeyOf(el);
+      if (!key || !tabSyncChannel) return;
+      if (remoteExpect[key] === open) { delete remoteExpect[key]; return; }
+      foldStateSettled = true;
+      try { tabSyncChannel.postMessage({ t: 'tlda-fold', doc: tabSyncDocKey(), key: key, open: !!open }); } catch (e) { /* mirroring is advisory */ }
+    }
+    function applyFold(key, open) {
+      var el = foldElement(key);
+      if (!el || foldIsOpen(el) === open) return;
+      remoteExpect[key] = open;
+      if (el.tagName === 'DETAILS') { el.open = open; return; }
+      var B = window.bootstrap;
+      if (B && B.Collapse) {
+        var c = B.Collapse.getOrCreateInstance(el, { toggle: false });
+        if (open) c.show(); else c.hide();
+      } else {
+        el.classList.toggle('show', open);
+        delete remoteExpect[key];
+      }
+      var sel = '[data-bs-target="#' + el.id + '"], [href="#' + el.id + '"], [data-bs-target=".' + el.id + '-contents"]';
+      document.querySelectorAll(sel).forEach(function(h) {
+        h.setAttribute('aria-expanded', open ? 'true' : 'false');
+        h.classList.toggle('collapsed', !open);
+      });
+    }
+    // Bootstrap fires show/hide as the change starts, before its animation.
+    document.addEventListener('show.bs.collapse', function(e) { sendFold(e.target, true); });
+    document.addEventListener('hide.bs.collapse', function(e) { sendFold(e.target, false); });
+    document.addEventListener('toggle', function(e) {
+      if (e.target && e.target.tagName === 'DETAILS') sendFold(e.target, e.target.open);
+    }, true);
+    // A tab the reader clicks, not only one a link opened.
+    document.addEventListener('shown.bs.tab', function(e) {
+      var target = e.target && (e.target.getAttribute('data-bs-target') || e.target.getAttribute('href') || '');
+      if (target && target.charAt(0) === '#') broadcastOpenPane(target.slice(1));
+    });
+    function foldState() {
+      var folds = {};
+      document.querySelectorAll('.collapse[id], details').forEach(function(el) {
+        var key = foldKeyOf(el);
+        if (key) folds[key] = foldIsOpen(el);
+      });
+      var panes = [];
+      document.querySelectorAll('.tab-pane.active[id]').forEach(function(p) { panes.push(p.id); });
+      return { folds: folds, panes: panes };
+    }
+    if (tabSyncChannel) {
+      tabSyncChannel.onmessage = function(ev) {
+        var msg = ev && ev.data;
+        if (!msg || msg.doc !== tabSyncDocKey()) return;
+        if (msg.t === 'tlda-tab-open') {
+          openTabPaneById(msg.pane, false);
+        } else if (msg.t === 'tlda-fold') {
+          applyFold(msg.key, !!msg.open);
+        } else if (msg.t === 'tlda-fold-query') {
+          // Only a frame whose state is settled answers. A frame that has just
+          // loaded holds every fold shut, and the first answer wins, so its
+          // answer could tell a sibling loading beside it that nothing was open.
+          if (!foldStateSettled) return;
+          try { tabSyncChannel.postMessage({ t: 'tlda-fold-state', doc: tabSyncDocKey(), to: msg.from, state: foldState() }); } catch (e) { /* advisory */ }
+        } else if (msg.t === 'tlda-fold-state' && msg.to === foldSyncId && !foldStateApplied) {
+          // The first answer wins; every settled frame holds the same state.
+          foldStateApplied = true;
+          foldStateSettled = true;
+          var folds = (msg.state && msg.state.folds) || {};
+          Object.keys(folds).forEach(function(key) { applyFold(key, !!folds[key]); });
+          ((msg.state && msg.state.panes) || []).forEach(function(pane) { openTabPaneById(pane, false); });
+        }
+      };
+      // A frame that loads after the others (a panel opened later, a page
+      // reloaded by a rebuild) takes the state the others are showing.
+      var foldSyncId = Math.random().toString(36).slice(2);
+      var foldStateApplied = false;
+      var foldStateSettled = false;
+      var askFoldState = function() {
+        try { tabSyncChannel.postMessage({ t: 'tlda-fold-query', doc: tabSyncDocKey(), from: foldSyncId }); } catch (e) { /* advisory */ }
+        // No settled frame answered: this one is the first showing the page,
+        // and what it shows is the state.
+        setTimeout(function() { foldStateSettled = true; }, 600);
+      };
+      // Ask once the document is parsed, not on load: the folds exist then,
+      // and load waits for every subresource, which can be a long time or never.
+      if (document.readyState !== 'loading') askFoldState();
+      else document.addEventListener('DOMContentLoaded', askFoldState);
+    }
+    // Late joiners (a docview iframe mounting after the click missed the
+    // broadcast) converge through the parent instead: on a peek the parent
+    // posts tlda-activate-pane to every iframe serving the target document,
+    // immediately and again as load signals arrive. A peer query was tried
+    // first and removed: late mounts never observed asking, while the
+    // addressed post reaches exactly the instances showing the target.
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-activate-pane' || !msg.anchor) return;
+      if (msg.doc && msg.doc !== tabSyncDocKey()) return;
+      activateTabPaneForAnchor(msg.anchor);
+    });
+    window.addEventListener('message', function(ev) {
+      var msg = ev && ev.data;
+      if (!msg || msg.type !== 'tlda-request-figures') return;
+      // On-demand authoritative report: the parent asks for this after room
+      // hydration when a keyed report already arrived pre-hydration (its
+      // retire saw a partial store). Answers with the same keyed
+      // tlda-figures post as the scheduled reports — not the keyless
+      // serialize path, which serves deck export.
+      // A loaded frame also receives this request when it gains layout
+      // ownership; refresh the heading outline and anchor positions then.
+      reportHeadings();
+      reportFigures();
+    });
+    // Intercept link clicks — route navigation through parent canvas
+    document.addEventListener('click', function(e) {
+      var docLink = e.target.closest && e.target.closest('.doc-link');
+      if (postDocLinkClick(e, docLink)) return;
+      var a = e.target.closest('a[href]');
+      if (!a) return;
+      if (a.hasAttribute('data-tlda-app-shell')) return;
+      // Download links must retain the browser's native file-download behavior.
+      if (a.hasAttribute('download')) return;
+      // Tab controls are not document navigation: the element switches its own
+      // pane through data-bs-target. Quarto's nav fixup rewrites a tab's empty
+      // href attribute to this page's own URL, which the anchor path below
+      // would reduce to an all-null navigate — the page-top jump on a tab click.
+      if (a.getAttribute('role') === 'tab' || a.getAttribute('data-bs-toggle') === 'tab') return;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
+      // External links: open in new tab
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) {
+        e.preventDefault();
+        window.open(href, '_blank');
+        return;
+      }
+      e.preventDefault();
+      // Parse href: same-host full URLs, relative paths, or bare anchors
+      // Same-host full URLs (Quarto cross-refs like "http://host/docs/name/...#fig-id")
+      // → treat as in-page anchor if they point to this same iframe URL
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        // Same document (matching path): keep just the hash portion.
+        // Cross-chapter path: keep the full path so the parent chapter
+        // matcher can find the target shape; keep any hash as the anchor.
+        // (A bare cross-chapter URL with no hash used to be reduced to the
+        // empty string here, shipping targetFile/targetPath/anchor all null
+        // — so no target shape ever resolved and the parent fell back to
+        // centering the current page top.)
+        var hashIdx = href.indexOf('#');
+        try {
+          var linkUrl = new URL(href, window.location.href);
+          var selfUrl = new URL(window.location.href);
+          if (linkUrl.pathname === selfUrl.pathname) {
+            parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+          } else {
+            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+          }
+        } catch (parseErr) {
+          parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+        }
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      // Strip query params from targetFile (e.g. "file.html?_tldaShape=..." -> "file.html")
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = parts[1] || null;
+      // targetFile is a basename and stays one — every existing consumer matches
+      // on it. targetPath keeps the whole path, which is what you need to OPEN a
+      // document of this project that has no shape on the canvas yet, and
+      // targetTitle is what the link called it.
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      // Same-document anchors only: a cross-chapter anchor lives in an iframe
+      // this document cannot reach. Re-measure after opening so the parent
+      // navigates with the pane open; same-channel ordering delivers the fresh
+      // positions before the navigation.
+      if (anchor && !targetFile && activateTabPaneForAnchor(anchor)) {
+        reportHeadings();
+        reportHeight();
+      }
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-navigate',
+          shapeId: shapeId,
+          targetFile: targetFile,
+          targetPath: targetPath,
+          targetTitle: targetTitle,
+          anchor: anchor,
+        }, '*');
+      }
+    }, true);
+    // Keep authored content styling. Duplicate embedded TOCs are hidden
+    // separately above; these rules are dark-mode states the parent toggles.
+    var style = document.createElement('style');
+    style.textContent = [
+      // Dark mode: CSS invert on html element, counter-rotate semantic color classes.
+      // invert(0.92) lands body text at soft off-white; semantic color counter-filter
+      // uses invert(0.92) which isn't a perfect identity but keeps colors recognizable.
+      'html.tlda-dark { filter: invert(0.92) hue-rotate(180deg); background: #fff; }',
+      // Counter-filter for semantic color classes (text labeled "the red curve" must stay red)
+      // Applying the same filter undoes the parent: invert(invert(x)) = x
+      'html.tlda-dark .twocolor-red, html.tlda-dark .twocolor-green, html.tlda-dark .groupa, html.tlda-dark .groupb, html.tlda-dark .midnight, html.tlda-dark .polla, html.tlda-dark .pink, html.tlda-dark .pollb, html.tlda-dark .teal, html.tlda-dark .pollc, html.tlda-dark .polld, html.tlda-dark .magenta, html.tlda-dark .counterfactual, html.tlda-dark .green, html.tlda-dark .cyan, html.tlda-dark .population, html.tlda-dark .blue, html.tlda-dark .sample, html.tlda-dark .red, html.tlda-dark .purple, html.tlda-dark .target, html.tlda-dark .shadedred, html.tlda-dark .todofix { filter: invert(0.92) hue-rotate(180deg); }',
+      // Counter-filter for semantic colors in inline SVG plots (tagged by inline-svg.lua)
+      'html.tlda-dark .darkmode-invariant { filter: invert(0.92) hue-rotate(180deg); }',
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  // Hide WebR cells when WebR runtime is not available.
+  // With live-html format, WebR is embedded — don't call this.
+  function processWebRCells() {
+    var pres = document.querySelectorAll('pre[class="{webr}"]');
+    pres.forEach(function(pre) {
+      var cell = pre.closest('.cell');
+      if (cell) cell.style.display = 'none';
+      else pre.style.display = 'none';
+    });
+  }
+
+  // Prefer <main> bottom to avoid hidden Quarto sidebar/nav inflating height,
+  // and because body/documentElement scrollHeight include the height the parent
+  // sets on the embed — they stay put while the page reflows.
+  function contentHeight() {
+    var main = document.querySelector('main');
+    if (main) {
+      var rect = main.getBoundingClientRect();
+      return Math.ceil(rect.bottom + window.scrollY);
+    }
+    return Math.max(
+      document.body.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.scrollHeight
+    );
+  }
+
+  // Report height to parent
+  function reportHeight() {
+    var h = contentHeight();
+    if (h > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-resize',
+        shapeId: shapeId,
+        height: h,
+      }, '*');
+    }
+  }
+
+  // Report anchor Y positions for navigation (headings, figures, tables, sections)
+  // An element inside an inactive tab pane reports offsetTop 0 (the pane is
+  // display:none, which collapses the whole offset chain), so the position
+  // would register as the top of the document instead of the real location.
+  // Measure those elements with their pane chain temporarily activated and
+  // restored in the same synchronous pass, so no paint happens in between.
+  // Note: toggling the Bootstrap active class (not inline display) is what
+  // makes the pane visible — the hiding rule targets panes without the
+  // active class, which outranks any inline display value.
+  // The reveal must be isolated, not stacked: activating the hidden pane
+  // alongside the currently-active sibling lays both out, and the revealed
+  // content measures below the sibling's (measured: y=7456 stacked against
+  // a true y=6833). Park the active siblings while measuring, restoring each
+  // pane's exact classes afterwards.
+  function measureWithHiddenPanesShown(el, measure) {
+    var reveal = [];
+    var node = el;
+    while (node && node !== document.body && node !== document.documentElement) {
+      if (node.classList && node.classList.contains('tab-pane') &&
+          !node.classList.contains('active')) {
+        reveal.push(node);
+      }
+      node = node.parentElement;
+    }
+    if (reveal.length === 0) return measure();
+    // Collect every pane touched — the reveal chain plus the active sibling
+    // in each of its tabsets — snapshot each once, then swap: deactivating
+    // and snapshotting interleaved would catch an already-revealed pane in a
+    // nested tabset and measure it hidden again.
+    var parked = [];
+    var seen = [];
+    reveal.forEach(function(pane) {
+      var tabset = pane.closest('.panel-tabset') || pane.parentElement;
+      if (tabset) {
+        tabset.querySelectorAll('.tab-pane.active').forEach(function(p) {
+          if (seen.indexOf(p) === -1) { seen.push(p); parked.push(p); }
+        });
+      }
+      if (seen.indexOf(pane) === -1) { seen.push(pane); parked.push(pane); }
+    });
+    var saved = parked.map(function(p) {
+      return {
+        pane: p,
+        active: p.classList.contains('active'),
+        show: p.classList.contains('show'),
+      };
+    });
+    parked.forEach(function(p) {
+      p.classList.remove('active');
+      p.classList.remove('show');
+    });
+    reveal.forEach(function(pane) {
+      pane.classList.add('active');
+      pane.classList.add('show');
+    });
+    var value;
+    try {
+      value = measure();
+    } finally {
+      saved.forEach(function(entry) {
+        if (entry.active) entry.pane.classList.add('active');
+        else entry.pane.classList.remove('active');
+        if (entry.show) entry.pane.classList.add('show');
+        else entry.pane.classList.remove('show');
+      });
+    }
+    return value;
+  }
+  function reportHeadings() {
+    var elements = document.querySelectorAll('[id]');
+    var positions = {};
+    elements.forEach(function(el) {
+      var id = el.id;
+      if (!id) return;
+      // Tooltip clones carry the target's id (see activateTabPaneForAnchor);
+      // duplicates overwrite by document order, so measuring one replaces
+      // the real position with the tooltip's. Skip tooltip subtrees.
+      if (el.closest && el.closest('[data-tippy-root], .tippy-box, .tippy-content')) return;
+      positions[id] = measureWithHiddenPanesShown(el, function() {
+        var y = 0;
+        var node = el;
+        while (node) {
+          y += node.offsetTop || 0;
+          node = node.offsetParent;
+        }
+        return y;
+      });
+    });
+    if (Object.keys(positions).length > 0 && window.parent !== window) {
+      var outline = Array.prototype.slice.call(document.querySelectorAll('h1,h2,h3,h4')).map(function(heading) {
+        var owner = heading.id ? heading : heading.closest('[id]');
+        var titleNode = heading.cloneNode(true);
+        titleNode.querySelectorAll('a.anchorjs-link, a[aria-label="Anchor"]').forEach(function(anchor) { anchor.remove(); });
+        return {
+          id: owner ? owner.id : '',
+          title: (titleNode.textContent || '').trim(),
+          level: parseInt(heading.tagName.slice(1), 10),
+        };
+      }).filter(function(entry) { return entry.id && entry.title; });
+      window.parent.postMessage({
+        type: 'tlda-headings',
+        shapeId: shapeId,
+        positions: positions,
+        outline: outline,
+      }, '*');
+    }
+  }
+
+  // Report figure positions and hide originals (replaced by TLDraw shapes on canvas)
+  function getOffsetY(el) {
+    var y = 0;
+    while (el) {
+      y += el.offsetTop || 0;
+      el = el.offsetParent;
+    }
+    return y;
+  }
+  function getOffsetX(el) {
+    var x = 0;
+    while (el) {
+      x += el.offsetLeft || 0;
+      el = el.offsetParent;
+    }
+    return x;
+  }
+
+  // Figures stay in the page. They used to be lifted onto the canvas: an
+  // image figure was hidden here and redrawn over the page on a plate, and an
+  // inline SVG got a transparent pane over it that turned the wheel into a
+  // zoom of that figure. The plates trailed the text after every reflow and the
+  // panes took the wheel away from the canvas (Skip: "some images take scroll",
+  // "misplaced white plate scrolling svgs"; "ZOOM WORKS ON THE FULL CANVAS").
+  //
+  // What remains: inline SVGs are made to scale with their container, and the
+  // page still says it has no figures to lift. That empty report, under a key,
+  // is what retires the figure records earlier loads left in the room.
+  function reportFigures() {
+    var inlineSvgs = document.querySelectorAll('div.inlined-svg > svg');
+    inlineSvgs.forEach(function(svg) {
+      // Fix case-sensitive viewBox attribute (svglite outputs lowercase "viewbox")
+      // and make SVG scale responsively within its container
+      if (!svg.getAttribute('viewBox') && svg.getAttribute('viewbox')) {
+        svg.setAttribute('viewBox', svg.getAttribute('viewbox'));
+      }
+      if (!svg.getAttribute('viewBox')) {
+        var w = svg.getAttribute('width'), h = svg.getAttribute('height');
+        if (w && h) svg.setAttribute('viewBox', '0 0 ' + parseFloat(w) + ' ' + parseFloat(h));
+      }
+      svg.style.width = '100%';
+      svg.style.height = 'auto';
+      svg.removeAttribute('width');
+      svg.removeAttribute('height');
+    });
+    if (window.parent !== window) {
+      window.parent.postMessage({ type: 'tlda-figures', shapeId: shapeId, figuresKey: 'in-page', figures: [] }, '*');
+    }
+  }
+
+  function reportMermaidDiagrams() {
+    var placeholders = document.querySelectorAll('.tlda-mermaid-placeholder[data-tlda-mermaid-id]');
+    if (placeholders.length === 0 || window.parent === window) return;
+    var diagrams = [];
+    placeholders.forEach(function(el) {
+      var rect = el.getBoundingClientRect();
+      if (rect.height < 10) return;
+      var sourceEl = el.querySelector('template[data-tlda-mermaid-source]');
+      var source = sourceEl ? ((sourceEl.content && sourceEl.content.textContent) || sourceEl.textContent || '') : '';
+      if (!source.trim()) return;
+      diagrams.push({
+        id: el.getAttribute('data-tlda-mermaid-id'),
+        source: source,
+        offsetX: getOffsetX(el),
+        offsetY: getOffsetY(el),
+        w: rect.width,
+        h: rect.height,
+        docWidth: Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, 800),
+      });
+    });
+    if (diagrams.length > 0) {
+      window.parent.postMessage({ type: 'tlda-mermaid-diagrams', shapeId: shapeId, diagrams: diagrams }, '*');
+    }
+  }
+
+  // Report scrollytelling region metadata to parent for overlay rendering.
+  // The overlay shows the figure in a floating panel; step text stays inline.
+  // Note: image-toggle.js (Quarto extension) restructures the DOM before this
+  // runs — sidebar toggles get wrapped in .image-toggle-sidebar with step text
+  // moved into .image-toggle-steps. Cells get .image-toggle-cell class.
+  function reportScrollyRegions() {
+    var containers = document.querySelectorAll('.image-toggle');
+    if (containers.length === 0) return;
+
+    function getOffsetY(el) {
+      var y = 0;
+      while (el) { y += el.offsetTop || 0; el = el.offsetParent; }
+      return y;
+    }
+
+    var regions = [];
+    containers.forEach(function(container, idx) {
+      var containerY = getOffsetY(container);
+      var labels = (container.getAttribute('data-labels') || '').split(',').map(function(s) { return s.trim(); });
+      var stepSel = container.getAttribute('data-steps');
+
+      // Find images: image-toggle.js wraps cells in .image-toggle-stack > .image-toggle-cell
+      // With inline SVGs (from the Lua filter), there are no <img> tags — serialize SVGs to blob URLs.
+      var cells = container.querySelectorAll('.image-toggle-cell');
+      var imgUrls = Array.from(cells).map(function(cell) {
+        var img = cell.querySelector('img');
+        if (img) return img.src;
+        var inlineSvg = cell.querySelector('div.inlined-svg > svg');
+        if (inlineSvg) {
+          var serialized = new XMLSerializer().serializeToString(inlineSvg);
+          return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(serialized)));
+        }
+        return '';
+      });
+
+      // Find step text elements — location depends on layout:
+      // Sidebar: moved into .image-toggle-sidebar > .image-toggle-steps
+      // Non-sidebar: still siblings of the container
+      var stepTextEls = [];
+      var sidebar = container.closest('.image-toggle-sidebar');
+      if (sidebar) {
+        var stepsCol = sidebar.querySelector('.image-toggle-steps');
+        if (stepsCol && stepSel) {
+          stepTextEls = Array.from(stepsCol.querySelectorAll(stepSel));
+        }
+      } else if (stepSel) {
+        var sibling = container.nextElementSibling;
+        while (sibling) {
+          if (sibling.matches && sibling.matches(stepSel)) {
+            stepTextEls.push(sibling);
+          } else if (stepTextEls.length > 0) {
+            break;
+          }
+          sibling = sibling.nextElementSibling;
+        }
+      }
+
+      // Build steps array
+      var numSteps = Math.max(imgUrls.length, stepTextEls.length, labels.length);
+      if (numSteps === 0) return;
+
+      var steps = [];
+      for (var s = 0; s < numSteps; s++) {
+        var stepEl = stepTextEls[s];
+        var stepY = stepEl ? getOffsetY(stepEl) : containerY;
+        // Extract bold lead-in as label, remainder as text
+        var stepLabel = labels[s] || ('Step ' + (s + 1));
+        var stepText = '';
+        if (stepEl) {
+          var strong = stepEl.querySelector('strong, b');
+          if (strong) {
+            stepLabel = strong.textContent.replace(/[.s]+$/, '');
+            // Get text after the bold element
+            var clone = stepEl.cloneNode(true);
+            var boldClone = clone.querySelector('strong, b');
+            if (boldClone) boldClone.remove();
+            stepText = clone.textContent.trim();
+          } else {
+            stepText = stepEl.textContent.trim();
+          }
+        }
+        steps.push({
+          y: stepY,
+          label: stepLabel,
+          imageUrl: imgUrls[s] || imgUrls[0] || '',
+          text: stepText,
+        });
+      }
+
+      // Click step text → switch figure + highlight active step
+      var cellArr = Array.from(cells);
+      var stepArr = Array.from(stepTextEls);
+      // Mark first step as active initially
+      if (stepArr.length > 0) {
+        var activeIdx = cellArr.findIndex(function(c) { return c.classList.contains('active'); });
+        if (activeIdx >= 0 && activeIdx < stepArr.length) {
+          stepArr[activeIdx].classList.add('scrolly-active');
+        }
+      }
+      for (var s2 = 0; s2 < stepArr.length; s2++) {
+        (function(stepIdx) {
+          stepArr[stepIdx].addEventListener('click', function() {
+            for (var c = 0; c < cellArr.length; c++) {
+              cellArr[c].classList.toggle('active', c === stepIdx);
+            }
+            for (var t = 0; t < stepArr.length; t++) {
+              stepArr[t].classList.toggle('scrolly-active', t === stepIdx);
+            }
+          });
+        })(s2);
+      }
+
+      // Region bounds: top of container to bottom of last step element
+      var startY = containerY;
+      var endY = containerY + (container.offsetHeight || 200);
+      // For sidebar, use the sidebar wrapper bounds
+      if (sidebar) {
+        startY = getOffsetY(sidebar);
+        endY = startY + sidebar.offsetHeight;
+      }
+      if (stepTextEls.length > 0) {
+        var lastEl = stepTextEls[stepTextEls.length - 1];
+        var lastY = getOffsetY(lastEl) + lastEl.offsetHeight;
+        if (lastY > endY) endY = lastY;
+      }
+
+      regions.push({
+        id: container.id || ('scrolly-' + idx),
+        startY: startY,
+        endY: endY,
+        steps: steps,
+      });
+    });
+
+    if (regions.length > 0 && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'tlda-scrolly-regions',
+        shapeId: shapeId,
+        regions: regions,
+      }, '*');
+    }
+  }
+
+  // Install parent listeners on DOMContentLoaded, then measure
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      installCanvasListeners();
+      hideEmbeddedTocs();
+      letCanvasShowThrough();
+      // processWebRCells(); // Disabled — live-html includes WebR runtime
+      // Early reports for fast anchor resolution, later reports for render accuracy
+      setTimeout(reportHeight, 200);
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 2000);
+      setTimeout(reportHeight, 5000);
+      setTimeout(reportHeadings, 200);
+      setTimeout(reportHeadings, 1000);
+      setTimeout(reportHeadings, 3000);
+      setTimeout(reportHeadings, 6000);
+      setTimeout(reportScrollyRegions, 200);
+      setTimeout(reportScrollyRegions, 1000);
+      setTimeout(reportScrollyRegions, 3000);
+      setTimeout(reportFigures, 500);
+      setTimeout(reportFigures, 2000);
+      setTimeout(reportFigures, 5000);
+      setTimeout(reportMermaidDiagrams, 500);
+      setTimeout(reportMermaidDiagrams, 2000);
+      setTimeout(reportMermaidDiagrams, 5000);
+    });
+  } else {
+    installCanvasListeners();
+    hideEmbeddedTocs();
+    letCanvasShowThrough();
+    // processWebRCells(); // Disabled — live-html includes WebR runtime
+    setTimeout(reportHeight, 100);
+    setTimeout(reportHeight, 2000);
+    setTimeout(reportHeadings, 500);
+    setTimeout(reportHeadings, 2500);
+    setTimeout(reportScrollyRegions, 500);
+    setTimeout(reportScrollyRegions, 2500);
+    setTimeout(reportFigures, 500);
+    setTimeout(reportFigures, 2000);
+    setTimeout(reportMermaidDiagrams, 500);
+    setTimeout(reportMermaidDiagrams, 2000);
+  }
+
+  // Observe DOM mutations (webR output, KaTeX rendering, etc.)
+  var lastHeight = 0;
+  var debounceTimer = null;
+  var observer = new MutationObserver(function(mutations) {
+    // A tab pane becoming active changes which figures are on screen, and the
+    // load-time reports only ever covered the pane that was active at load —
+    // nothing else publishes figures afterwards, so a pane opened later would
+    // keep whatever record an earlier report left at its figures' indices.
+    // Re-report here instead. Only a class change on a pane that is active now
+    // counts, so figure style writes (which never touch a pane's class) cannot
+    // re-enter this.
+    for (var mi = 0; mi < mutations.length; mi++) {
+      var mt = mutations[mi];
+      if (mt.type === 'attributes' && mt.attributeName === 'class' &&
+          mt.target && mt.target.classList &&
+          mt.target.classList.contains('tab-pane') &&
+          mt.target.classList.contains('active')) {
+        reportFigures();
+        break;
+      }
+    }
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      var h = contentHeight();
+      if (Math.abs(h - lastHeight) > 10) {
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        // A height change means the page reflowed — a callout or code fold, an
+        // image settling — and the figures moved with their text, so re-report
+        // them; otherwise the canvas plates keep covering the spot the text
+        // has flowed into.
+        reportFigures();
+        reportMermaidDiagrams();
+      }
+    }, 300);
+  });
+
+  // Follow <main>'s size as it changes, one report per frame, so the page on
+  // the canvas grows and shrinks with a callout's own animation instead of
+  // 300 ms after it. <main>, not body: body includes the height the parent
+  // gives the frame, so observing it would feed back (measured on a chapter
+  // and an exam: <main> is the same height in an 800 px and a 20000 px frame).
+  var mainSizeFrame = 0;
+  var mainSizeFollowed = false;
+  function followMainSize() {
+    var main = document.querySelector('main');
+    if (mainSizeFollowed || !main || typeof ResizeObserver !== 'function') return;
+    mainSizeFollowed = true;
+    new ResizeObserver(function() {
+      if (mainSizeFrame) return;
+      mainSizeFrame = requestAnimationFrame(function() {
+        mainSizeFrame = 0;
+        var h = contentHeight();
+        if (Math.abs(h - lastHeight) <= 10) return;
+        lastHeight = h;
+        reportHeight();
+        reportHeadings();
+        reportScrollyRegions();
+        reportMermaidDiagrams();
+      });
+    }).observe(main);
+  }
+
+  // Start observing once DOM is ready
+  function startObserver() {
+    // <main> may not be parsed yet when body first exists.
+    followMainSize();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', followMainSize);
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: false,
+    });
+  }
+
+  if (document.body) {
+    startObserver();
+  } else {
+    document.addEventListener('DOMContentLoaded', startObserver);
+  }
+})();
+}
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fhomework%2Fhomework-06.html&amp;course=qtm285" style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-file-app-switch>
+(()=>{const a=document.currentScript.previousElementSibling;const params=new URLSearchParams(location.search);
+if(params.has('_tldaShape')){a.hidden=true;return;}
+const course=params.get('course');if(course){const url=new URL(a.href);url.searchParams.set('course',course);a.href=url.href;}})();
+</script><!--/tlda-file-app-switch--></body></html>
