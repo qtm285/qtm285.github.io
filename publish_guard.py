@@ -13,6 +13,7 @@ runner checks out this repository and nothing else.
 """
 
 from pathlib import Path
+import re
 
 # Homework and exams are the pages that carry worked solutions. Skip's rule,
 # 2026-09-18 05:31: "you guys know you're not to render solutions for students
@@ -21,8 +22,10 @@ from pathlib import Path
 # like, handout version]".
 SOLUTION_SECTIONS = ('homework', 'exams')
 
-# The marker Quarto's solution callout leaves in rendered HTML.
-SOLUTION_MARKER = 'callout-solution'
+# The marker Quarto's solution callout leaves in rendered HTML: the class on
+# the callout element itself. A script that only names the selector (the
+# reader bridge does) is not a solution block.
+SOLUTION_MARKER = re.compile(r'''class=["'][^"']*\bcallout-solution\b''')
 
 
 def pages_with_solutions(site_dir, book_subdir='book'):
@@ -40,7 +43,7 @@ def pages_with_solutions(site_dir, book_subdir='book'):
     for page in sorted(section_dir.glob('*.html')):
       if page.stem.endswith('-solutions'):
         continue
-      blocks = page.read_text(errors='ignore').count(SOLUTION_MARKER)
+      blocks = len(SOLUTION_MARKER.findall(page.read_text(errors='ignore')))
       if blocks:
         found.append({'page': str(page.relative_to(site_dir)), 'blocks': blocks})
   return sorted(found, key=lambda row: -row['blocks'])
