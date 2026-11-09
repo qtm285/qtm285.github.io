@@ -3877,8 +3877,127 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   }
 })();
 }
-</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fchapters%2Fchapter-standard-deviation.html&amp;course=qtm285" style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-file-app-switch>
-(()=>{const a=document.currentScript.previousElementSibling;const params=new URLSearchParams(location.search);
-if(params.has('_tldaShape')){a.hidden=true;return;}
-const course=params.get('course');if(course){const url=new URL(a.href);url.searchParams.set('course',course);a.href=url.href;}})();
-</script><!--/tlda-file-app-switch--></body></html>
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fchapters%2Fchapter-standard-deviation.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>
