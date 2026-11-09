@@ -340,9 +340,30 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 })();
 }
 </script>
+<style id="tlda-standalone-deck-layout">
+html, body { overflow-y: auto !important; }
+.reveal { overflow: visible !important; }
+.reveal .slides section:not(.stack) { height: auto !important; min-height: 100% !important; overflow: visible !important; }
+</style>
+
 <script>
 if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 (function() {
+  // This page has a bridge, so it is the viewer's, and the standalone layout
+  // rules above must not reach reveal. Dropped here rather than overridden:
+  // removing the element is the whole of it, where an override would have to
+  // restore reveal's own section geometry rule by rule.
+  var standaloneLayout = document.getElementById('tlda-standalone-deck-layout');
+  if (standaloneLayout) standaloneLayout.remove();
+  // Reveal's layout notification bubbles from its wrapper. It is not a native
+  // window resize: feeding it back into Reveal's window listener re-enters
+  // layout. Install before Reveal binds, while retaining wrapper subscribers.
+  if (new URLSearchParams(window.location.search).get('_tldaDeck') === '1') {
+    window.addEventListener('resize', function(event) {
+      if (typeof Reveal !== 'undefined' && Reveal.getRevealElement &&
+          event.target === Reveal.getRevealElement()) event.stopImmediatePropagation();
+    });
+  }
   try {
     Object.keys(sessionStorage).forEach(function(k) {
       if (k.indexOf('reveal') !== -1 || k.indexOf('Reveal') !== -1) {
@@ -29755,6 +29776,21 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   var tldaWheelViewportId = '';
   var slideBackground = null;
 
+  // Identity survives repeated state measurements in this document. A new DOM
+  // element receives a different key, so layout position never invents a
+  // replacement relationship.
+  var tldaVisualIdentityMap = new WeakMap();
+  var tldaVisualIdentityNext = 1;
+  function tldaVisualIdentity(element) {
+    if (!element) return null;
+    var identity = tldaVisualIdentityMap.get(element);
+    if (!identity) {
+      identity = tldaVisualIdentityNext++;
+      tldaVisualIdentityMap.set(element, identity);
+    }
+    return identity;
+  }
+
   // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
   // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
   // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
@@ -29815,9 +29851,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (slide && slide.tagName === 'SECTION') addressed = slide;
       }
     } catch (e) { /* pre-init Reveal: fall through to present */ }
-    var root = addressed ||
-      document.querySelector('.reveal .slides section.present') ||
+    var presentSlide = document.querySelector('.reveal .slides section.present');
+    var revealSlide = addressed || presentSlide;
+    var root = revealSlide ||
       document.querySelector('main') || document.body;
+    var isRevealSlide = root === addressed || (root === presentSlide && root.classList && (
+      root.classList.contains('slide') || root.classList.contains('quarto-title-block') || root.classList.contains('footnotes')
+    ));
     var blocks = [];
     // The default candidate set is the prose skeleton, and it is what every
     // deck walk gets: the walk passes no selector, so deck output is the same
@@ -29829,27 +29869,129 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
     var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
     var pictureLayoutRequest = includePictureLayout === true;
+    var intrinsicGraphicText = 'svg,canvas,.modebar,.plotly-notifier';
+    var intrinsicMathText = 'math,.katex,.MathJax,.MathJax_Display,mjx-container';
+    var renderedMathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+    var displayMathSelector = '.katex-display, .math.display, .MathJax_Display, mjx-container[display="true"], math[display="block"]';
+    var assistiveMathSelector = 'mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml';
+    /**
+     * Whether a BR still breaks the line it sits on. A display of none removes an
+     * element and its break from layout entirely; a hidden visibility and a
+     * zero opacity only stop it being painted, and the break it causes is
+     * still there. So this walks for a removed ancestor and deliberately does
+     * not reuse the visibility test, which would discard real breaks.
+     */
+    function breaksLayoutLine(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var style = getComputedStyle(current);
+        if (!style) break;
+        if (style.display === 'none' || style.contentVisibility === 'hidden') return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+
     function isVisibleLayoutElement(element) {
       for (var current = element; current; current = current.parentElement) {
         var currentStyle = getComputedStyle(current);
         var opacity = parseFloat(currentStyle.opacity);
+        // MathJax and KaTeX insert visually clipped MathML for screen readers
+        // beside their visible rendering. It remains in the accessibility
+        // tree, but its text ranges are not visible slide content.
+        if (current.matches && current.matches(assistiveMathSelector)) return false;
         if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
         if (current === document.documentElement) break;
       }
       return true;
     }
+    function isIntrinsicGraphicText(owner) {
+      var graphic = owner.closest && owner.closest(intrinsicGraphicText);
+      if (!graphic) return false;
+      var math = owner.closest && owner.closest(intrinsicMathText);
+      if (math && math.contains(graphic)) {
+        // MathJax can render a separate equation as SVG. Its visible glyph
+        // text is still slide text unless the equation is inside another
+        // graphic, where it is an intrinsic label of that graphic.
+        var outerGraphic = math.parentElement && math.parentElement.closest(intrinsicGraphicText);
+        if (!outerGraphic) return false;
+      }
+      return true;
+    }
+    function visibleDomText(element, fragmentBoundary) {
+      var values = [];
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var owner = node.parentElement;
+        var value = String(node.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!value || !owner || isIntrinsicGraphicText(owner) || !isVisibleLayoutElement(owner)) continue;
+        if (fragmentBoundary && owner.closest && owner.closest('.fragment.visible') !== fragmentBoundary) continue;
+        var range = document.createRange();
+        range.selectNodeContents(node);
+        if (!Array.from(range.getClientRects()).some(function(rect) { return rect.width > 1 && rect.height > 1; })) continue;
+        values.push(value);
+        for (var current = owner; current; current = current.parentElement) {
+          if (current.matches && current.matches(renderedMathSelector)) mathWithVisibleText.add(current);
+          if (current === element) break;
+        }
+      }
+      var mathNodes = (element.matches && element.matches(renderedMathSelector) ? [element] : [])
+        .concat(Array.from(element.querySelectorAll(renderedMathSelector)));
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        if (fragmentBoundary && math.closest && math.closest('.fragment.visible') !== fragmentBoundary) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(renderedMathSelector) : null;
+        if (outerMath) continue;
+        var outerGraphic = math.parentElement && math.parentElement.closest ? math.parentElement.closest(intrinsicGraphicText) : null;
+        if (outerGraphic) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (!mathRect || !(mathRect.width > 1 && mathRect.height > 1)
+            || !Number.isFinite(mathRect.top) || !Number.isFinite(mathRect.bottom)) continue;
+        values.push('[visible standalone math; rendered glyph text unavailable]');
+      }
+      return values.join(' ').replace(/\s+/g, ' ').trim();
+    }
     function visibleTextLayoutRects() {
       var rects = [];
-      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
       var mathWithVisibleText = new Set();
+      var slideTitle = null;
+      if (isRevealSlide) {
+        // Quarto marks a slide's heading level on the Reveal section. Only a
+        // direct heading at that level is the slide title; a titleless slide's
+        // first body heading remains part of the picture-order measurement.
+        var titleLevel = root.classList && root.classList.contains('quarto-title-block') ? '1' : null;
+        for (var level = 1; !titleLevel && level <= 6; level++) {
+          if (root.classList && root.classList.contains('level' + level)) titleLevel = String(level);
+        }
+        if (titleLevel) {
+          var titleTag = 'H' + titleLevel;
+          var directChildren = Array.from(root.children || []);
+          for (var childIndex = 0; childIndex < directChildren.length; childIndex++) {
+            if (String(directChildren[childIndex].tagName || '').toUpperCase() === titleTag) {
+              slideTitle = directChildren[childIndex];
+              break;
+            }
+          }
+        }
+      }
+      function isSlideTitleText(owner) {
+        for (var current = owner; current && current !== root; current = current.parentElement) {
+          if (current === slideTitle) return true;
+        }
+        return false;
+      }
       var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       var textNode;
       while ((textNode = walker.nextNode())) {
         var text = textNode.textContent || '';
         var owner = textNode.parentElement;
         // SVG is measured as a picture; its internal labels belong to that
-        // image. Text siblings in an SVG-containing block still count.
-        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        // image. Text siblings in an SVG-containing block still count. The
+        // slide title is also excluded; body headings and captions still count.
+        if (!/\S/.test(text) || !owner || isSlideTitleText(owner)
+            || (owner.closest && owner.closest('svg,canvas')) || !isVisibleLayoutElement(owner)) continue;
         var range = document.createRange();
         range.setStart(textNode, 0);
         range.setEnd(textNode, text.length);
@@ -29857,11 +29999,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
         });
         visibleRects.forEach(function(rect) {
-          rects.push({ top: rect.top, bottom: rect.bottom });
+          rects.push({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom });
         });
         if (visibleRects.length) {
           for (var current = owner; current; current = current.parentElement) {
-            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current.matches && current.matches(renderedMathSelector)) mathWithVisibleText.add(current);
             if (current === root) break;
           }
         }
@@ -29869,18 +30011,28 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // MathJax's SVG output can have no text node with a rendered range.
       // Its visible container box is the text bound in that case. Prefer one
       // outer math box and skip math SVGs when pictures are measured below.
-      var mathNodes = root.querySelectorAll(mathSelector);
+      var mathNodes = root.querySelectorAll(renderedMathSelector);
       for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
         var math = mathNodes[mathIndex];
-        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
-        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (isSlideTitleText(math) || !isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(renderedMathSelector) : null;
         if (outerMath && outerMath !== root) continue;
         var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
         if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
-          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+          rects.push({ left: mathRect.left, right: mathRect.right, top: mathRect.top, bottom: mathRect.bottom });
         }
       }
       return rects;
+    }
+    function outerInlineMathContainer(element, block) {
+      if (element.closest && element.closest(displayMathSelector)) return null;
+      if (block.matches && block.matches(displayMathSelector)) return null;
+      var container = null;
+      for (var current = element; current && current !== block; current = current.parentElement) {
+        if (current.matches && current.matches(displayMathSelector)) return null;
+        if (current.matches && current.matches(renderedMathSelector)) container = current;
+      }
+      return container;
     }
     for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
       var block = candidates[blockIndex];
@@ -29890,12 +30042,114 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
       var style = getComputedStyle(block);
       if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var listItemHasOwnParagraph = false;
+      if (pictureLayoutRequest && block.tagName === 'LI' && block.querySelectorAll) {
+        listItemHasOwnParagraph = Array.from(block.querySelectorAll('p')).some(function(paragraph) {
+          return paragraph.closest && paragraph.closest('li') === block;
+        });
+      }
       var words = [];
+      // Inline fractions expose numerator and denominator text on separate baselines.
+      // Use their outer inline box once per fragment, while leaving display math out.
+      var inlineMathContainers = [];
+      var inlineMathContainerSet = new Set();
+      if (pictureLayoutRequest && block.querySelectorAll) {
+        var mathCandidates = block.matches && block.matches(renderedMathSelector) ? [block] : [];
+        mathCandidates = mathCandidates.concat(Array.from(block.querySelectorAll(renderedMathSelector)));
+        for (var mathCandidateIndex = 0; mathCandidateIndex < mathCandidates.length; mathCandidateIndex++) {
+          var mathContainer = outerInlineMathContainer(mathCandidates[mathCandidateIndex], block);
+          if (!mathContainer || inlineMathContainerSet.has(mathContainer) || !isVisibleLayoutElement(mathContainer)) continue;
+          if (block.tagName === 'LI') {
+            var mathListItem = mathContainer.closest ? mathContainer.closest('li') : null;
+            if (mathListItem && mathListItem !== block) continue;
+            if (listItemHasOwnParagraph && mathContainer.closest && mathContainer.closest('p')) continue;
+          }
+          inlineMathContainerSet.add(mathContainer);
+          inlineMathContainers.push(mathContainer);
+        }
+      }
+      var measuredInlineMathContainers = new Set();
+      function appendInlineMathWords(container) {
+        if (!container || measuredInlineMathContainers.has(container)) return;
+        measuredInlineMathContainers.add(container);
+        var rects = Array.from(container.getClientRects ? container.getClientRects() : []).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        if (!rects.length && container.getBoundingClientRect) {
+          var box = container.getBoundingClientRect();
+          if (box && box.width > 1 && box.height > 1 && Number.isFinite(box.top) && Number.isFinite(box.bottom)) rects.push(box);
+        }
+        if (!rects.length) return;
+        var mathText = visibleDomText(container) || '[inline math]';
+        var mathSegment = typeof segmentOf === 'function' ? segmentOf(container) : 0;
+        rects.forEach(function(rect) {
+          words.push({ word: mathText, center: rect.top + rect.height / 2, height: rect.height, left: rect.left, segment: mathSegment });
+        });
+      }
+      // Which authored segment each node sits in. A line partition alone cannot
+      // tell an author's own line break from reflow: both put text on a second
+      // baseline, and BR carries no text, so the walk below never sees it.
+      // Number the segments between BR elements here, in document order, and
+      // every word can say which one it came from. Document order is used
+      // rather than a BR's own box, which is zero-width and not reliably
+      // measurable.
+      //
+      // Only the deck measurement asks for this. The chapter view requests its
+      // own candidate set with includeLineBreaks false, takes one range per
+      // text node rather than per word, and has no use for the distinction, so
+      // it pays for no second walk and its block shape is left exactly as it
+      // was.
+      var segmentByNode = new Map();
+      var authoredSegments = 0;
+      if (pictureLayoutRequest) {
+        var segmentWalker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+        var segmentNode;
+        while ((segmentNode = segmentWalker.nextNode())) {
+          // Only elements carry tagName, so this needs no nodeType check.
+          if (String(segmentNode.tagName || '').toUpperCase() === 'BR') {
+            // A BR removed from layout breaks nothing. Counting it would open
+            // a new segment across text that in fact reflowed, and the
+            // boundary comparison would then exempt a real wrap. Paint-only
+            // invisibility is different: a BR that is merely transparent or
+            // visibility:hidden still occupies layout and still breaks the
+            // line, so it counts. The test is participation in layout, not
+            // visibility.
+            if (breaksLayoutLine(segmentNode)) authoredSegments++;
+            continue;
+          }
+          segmentByNode.set(segmentNode, authoredSegments);
+        }
+      }
+      function segmentOf(target) {
+        var found = segmentByNode.get(target);
+        return Number.isInteger(found) ? found : 0;
+      }
       var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
       var node;
       while ((node = walker.nextNode())) {
         var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
         if (hidden && hidden !== root) continue;
+        if (pictureLayoutRequest && node.parentElement) {
+          var owner = node.parentElement;
+          if (!isVisibleLayoutElement(owner)) continue;
+          // Deck wrapping describes prose, not child bullets or the stacked
+          // glyph rows used to typeset a display equation. Paragraphs measure
+          // their own wraps; list items retain their bullet record without
+          // duplicating the paragraph's line count.
+          if (owner.closest && owner.closest(displayMathSelector)) continue;
+          if (block.tagName === 'LI') {
+            var ownerListItem = owner.closest ? owner.closest('li') : null;
+            if (ownerListItem && ownerListItem !== block) continue;
+            if (listItemHasOwnParagraph && owner.closest && owner.closest('p')) continue;
+          }
+          var ownerMath = owner.closest ? owner.closest(renderedMathSelector) : null;
+          if (ownerMath) {
+            var inlineMathContainer = outerInlineMathContainer(ownerMath, block);
+            if (inlineMathContainer && inlineMathContainerSet.has(inlineMathContainer)) appendInlineMathWords(inlineMathContainer);
+            continue;
+          }
+          if (owner.closest && owner.closest(displayMathSelector)) continue;
+        }
         // Chapter views use readable block text, not wrapped word lines. One
         // Range per text node establishes the same visibility without paying
         // one layout query per word. Deck/export callers keep wrapped lines.
@@ -29913,9 +30167,23 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             word: match[0],
             center: rects[0].top + rects[0].height / 2,
             height: rects[0].height,
+            left: rects[0].left,
+            segment: segmentOf(node),
           });
         }
       }
+      // Inline math reaches the word list out of reading order. KaTeX marks its
+      // visible rendering aria-hidden and keeps its MathML for screen readers,
+      // so every text node inside an equation is skipped by the walk above and
+      // the container is collected by this trailing sweep instead -- after the
+      // prose that surrounds it. Grouping alone would therefore report
+      // "Does treated men give us enough power? n = 185" for a line that reads
+      // "Does n = 185 treated men give us enough power?", and a producer told
+      // to shorten that line could not find it on the slide. Each word carries
+      // its own horizontal position, so ordering a line by that position
+      // restores what the line actually reads, whenever its words were
+      // appended.
+      inlineMathContainers.forEach(appendInlineMathWords);
       var lines = [];
       words.forEach(function(word) {
         var line = lines.find(function(candidate) {
@@ -29925,8 +30193,49 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           line = { center: word.center, words: [] };
           lines.push(line);
         }
-        line.words.push(word.word);
+        line.words.push(word);
       });
+      lines.forEach(function(line) {
+        line.words.sort(function(a, b) {
+          var left = Number.isFinite(a.left) ? a.left : 0;
+          var right = Number.isFinite(b.left) ? b.left : 0;
+          return left - right;
+        });
+      });
+      // Lines are created in word-arrival order, which is not reading order:
+      // every inline-math container arrives in the trailing sweep after all
+      // prose, so a line made only of an equation is created after the line
+      // below it. Order the lines by their own baseline before anything reads
+      // them, so line 1 is the top line on the slide. Without this, an
+      // equation alone above an authored break is emitted below the prose
+      // that follows it, and the boundary test then calls the author's break
+      // a wrap.
+      //
+      // Deck requests only, like the segment walk and reflowLines above. The
+      // non-deck path keeps the order it has always emitted: its existing key
+      // test fixes the shape of one example, not the ordering of every
+      // request, so leaving the sort ungated would change a contract nothing
+      // here measures.
+      if (pictureLayoutRequest) lines.sort(function(a, b) { return a.center - b.center; });
+      // Which line boundaries are reflow. A boundary is the author's own break
+      // when the next line starts in a later authored segment than the one the
+      // previous line ended in; otherwise the text ran past the edge and came
+      // back on its own. A segment that both breaks and wraps reports the wrap,
+      // because each boundary is judged separately.
+      var reflowBoundaries = [];
+      for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+        var previousEnd = -1;
+        var currentStart = Infinity;
+        lines[lineIndex - 1].words.forEach(function(entry) {
+          var segment = Number.isInteger(entry.segment) ? entry.segment : 0;
+          if (segment > previousEnd) previousEnd = segment;
+        });
+        lines[lineIndex].words.forEach(function(entry) {
+          var segment = Number.isInteger(entry.segment) ? entry.segment : 0;
+          if (segment < currentStart) currentStart = segment;
+        });
+        if (currentStart <= previousEnd) reflowBoundaries.push(lineIndex);
+      }
       // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
       // and used to be dropped, though a reader can open the callout. A widened request keeps it,
       // marked with the callout it is closed in.
@@ -29935,7 +30244,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         var closedHost = block.closest('.callout-collapse');
         if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
       }
-      if (lines.length || closedCallout) {
+      var visibleListItem = pictureLayoutRequest && block.tagName === 'LI'
+        && !!String(block.textContent || '').trim() && isVisibleLayoutElement(block);
+      if (lines.length || closedCallout || visibleListItem) {
         // A widened request (the chapter view passes a candidate selector;
         // the deck walk never does) gets two additions on the block shape:
         //   - tables join cells with " | " and rows with " / ", because a
@@ -29950,7 +30261,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         // keys, so deck measurement output is byte-identical field for
         // field, not merely compatible.
         var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
-        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        var blockText = (pictureLayoutRequest
+          ? visibleDomText(block)
+          : (viewRequest ? tldaReadableBlockText(block) : (block.textContent || ''))).replace(/\s+/g, ' ').trim();
         if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
           var rows = [];
           var trs = block.querySelectorAll('tr');
@@ -29968,8 +30281,16 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           tag: block.tagName.toLowerCase(),
           id: block.id || null,
           text: blockText,
-          lines: lines.map(function(line) { return line.words.join(' '); }),
+          lines: lines.map(function(line) {
+            return line.words.map(function(entry) { return entry.word; }).join(' ');
+          }),
+
         };
+        // The index of each line that continues the previous one by reflow
+        // rather than by an authored break. An empty array on a multi-line
+        // block means every break was the author's. Deck requests only: the
+        // chapter view's object keeps the keys it always had.
+        if (pictureLayoutRequest) entry.reflowLines = reflowBoundaries;
         if (viewRequest) {
           var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
           var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
@@ -29990,8 +30311,53 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var measurement = { url: window.location.href, title: document.title, blocks: blocks };
     if (pictureLayoutRequest) {
       measurement.visibleTextRects = visibleTextLayoutRects();
+      // Delivery checks use rendered evidence only: source strings can sit in
+      // comments, hidden chunks, or an unused helper. These are the actual
+      // text fragments visible in this addressed state, after Reveal settled.
+      var visibleTextFragments = [];
+      var fragmentNodes = root.querySelectorAll('.fragment.visible');
+      var slideRect = root.getBoundingClientRect();
+      for (var fragmentIndex = 0; fragmentIndex < fragmentNodes.length; fragmentIndex++) {
+        var fragment = fragmentNodes[fragmentIndex];
+        // Measure each fragment's own text separately from visible nested
+        // fragments, while keeping grouped Reveal steps together by index.
+        if (!isVisibleLayoutElement(fragment)) continue;
+        var fragmentText = visibleDomText(fragment, fragment);
+        if (!fragmentText) continue;
+        var fragmentAttr = fragment.getAttribute('data-fragment-index');
+        visibleTextFragments.push({
+          index: fragmentAttr == null ? 'auto:' + fragmentIndex : 'index:' + fragmentAttr,
+          tag: (fragment.tagName || '').toLowerCase(),
+          text: fragmentText,
+        });
+      }
+      measurement.visibleTextFragments = visibleTextFragments;
+
+      // Native heading weight is layout, not inline emphasis. Capture other
+      // rendered bold text, including strong/b tags and explicit CSS weight.
+      var boldText = [];
+      var boldWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var boldNode;
+      while ((boldNode = boldWalker.nextNode())) {
+        var boldOwner = boldNode.parentElement;
+        var boldValue = String(boldNode.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!boldValue || !boldOwner || (boldOwner.closest && boldOwner.closest('h1,h2,h3,h4,h5,h6,svg,.katex,.MathJax,mjx-container'))) continue;
+        if (!isVisibleLayoutElement(boldOwner)) continue;
+        var boldWeight = parseFloat(getComputedStyle(boldOwner).fontWeight);
+        if (!Number.isFinite(boldWeight) || boldWeight < 600) continue;
+        var boldRange = document.createRange();
+        boldRange.selectNodeContents(boldNode);
+        if (!Array.from(boldRange.getClientRects()).some(function(rect) { return rect.width > 1 && rect.height > 1; })) continue;
+        boldText.push({ tag: (boldOwner.tagName || '').toLowerCase(), text: boldValue, weight: boldWeight });
+      }
+      measurement.boldText = boldText;
+
       var pictures = [];
       var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      var figureSelector = 'figure, .quarto-figure, .cell-output-display';
+      var figureBoxes = (root.matches && root.matches(figureSelector) ? [root] : [])
+        .concat(Array.from(root.querySelectorAll(figureSelector)));
+      var figureBoxIndices = new Map(figureBoxes.map(function(box, index) { return [box, index + 1]; }));
       for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
         var picture = pictureNodes[pictureIndex];
         var tag = (picture.tagName || '').toLowerCase();
@@ -30000,16 +30366,83 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
         if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
         if (!isVisibleLayoutElement(picture)) continue;
+        var figureBox = picture.closest && picture.closest('figure, .quarto-figure, .cell-output-display');
         var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
         if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
         pictures.push({
           tag: tag,
           id: picture.id || null,
           alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
-          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+          kind: figureBox ? 'figure' : 'picture',
+          figureIndex: figureBox ? figureBoxIndices.get(figureBox) : null,
+          pictureIndex: pictureIndex + 1,
+          elementIdentity: tldaVisualIdentity(figureBox || picture),
+          layoutRect: {
+            x: pictureRect.left - slideRect.left,
+            y: pictureRect.top - slideRect.top,
+            left: pictureRect.left,
+            right: pictureRect.right,
+            top: pictureRect.top,
+            bottom: pictureRect.bottom,
+            width: pictureRect.width,
+            height: pictureRect.height,
+          },
         });
       }
       measurement.pictures = pictures;
+
+      // Scroll extents include hidden Reveal fragments. Measure the visible
+      // text ranges and graphics in this settled state against the slide box.
+      var visibleContentRects = measurement.visibleTextRects.concat(pictures.map(function(picture) {
+        var rect = picture.layoutRect;
+        return {
+          left: slideRect.left + rect.x,
+          right: slideRect.left + rect.x + rect.width,
+          top: slideRect.top + rect.y,
+          bottom: slideRect.top + rect.y + rect.height,
+        };
+      }));
+      if (slideRect.width > 0 && slideRect.height > 0
+          && [slideRect.left, slideRect.right, slideRect.top, slideRect.bottom].every(Number.isFinite)) {
+        var overflowX = 0;
+        var overflowY = 0;
+        visibleContentRects.forEach(function(rect) {
+          overflowX = Math.max(overflowX, slideRect.left - rect.left, rect.right - slideRect.right);
+          overflowY = Math.max(overflowY, slideRect.top - rect.top, rect.bottom - slideRect.bottom);
+        });
+        measurement.overflowXPx = Math.max(0, overflowX);
+        measurement.overflowPx = Math.max(0, overflowY);
+      } else {
+        measurement.overflowXPx = null;
+        measurement.overflowPx = null;
+      }
+
+      // A plot's Reveal fragment may contain graphics only. Prose synchronized
+      // with it belongs in a separate parallel fragment sequence. SVG/canvas
+      // labels are intrinsic to the graphic and deliberately excluded here.
+      var figureFragmentText = [];
+      var visibleFragments = root.querySelectorAll('.fragment.visible');
+      for (var figureFragmentIndex = 0; figureFragmentIndex < visibleFragments.length; figureFragmentIndex++) {
+        var figureFragment = visibleFragments[figureFragmentIndex];
+        var graphicSelector = 'img, svg, canvas';
+        var graphics = (figureFragment.matches && figureFragment.matches(graphicSelector) ? [figureFragment] : [])
+          .concat(Array.from(figureFragment.querySelectorAll(graphicSelector)));
+        var hasVisibleGraphic = graphics.some(function(graphic) {
+          if ((graphic.tagName || '').toLowerCase() === 'svg' && graphic.closest && graphic.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) return false;
+          if (!isVisibleLayoutElement(graphic)) return false;
+          var rect = graphic.getBoundingClientRect ? graphic.getBoundingClientRect() : null;
+          return rect && rect.width > 1 && rect.height > 1;
+        });
+        if (!hasVisibleGraphic) continue;
+        var fragmentText = visibleDomText(figureFragment);
+        if (!fragmentText) continue;
+        var figureFragmentAttr = figureFragment.getAttribute('data-fragment-index');
+        figureFragmentText.push({
+          index: figureFragmentAttr == null ? 'auto:' + figureFragmentIndex : 'index:' + figureFragmentAttr,
+          text: fragmentText,
+        });
+      }
+      measurement.figureFragmentText = figureFragmentText;
     }
     return measurement;
   }
@@ -30145,6 +30578,136 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     });
   });
 
+  function tldaRasterizeCurrentSlide(opts) {
+    return new Promise(function(resolve, reject) {
+      try {
+        var slide = (window.Reveal && typeof window.Reveal.getCurrentSlide === 'function' && window.Reveal.getCurrentSlide())
+          || document.querySelector('.reveal .slides section.present')
+          || document.querySelector('.reveal .slides section');
+        if (!slide) return reject(new Error('No active slide section to rasterize'));
+        var rect = slide.getBoundingClientRect ? slide.getBoundingClientRect() : null;
+        var rawH = rect ? rect.height : 1000;
+        var calcH = (slide.offsetHeight > 0 && rect)
+          ? Math.max(rect.height, slide.scrollHeight * rect.height / slide.offsetHeight)
+          : rawH;
+        var w = Math.max(1, Math.ceil((rect && rect.width) || slide.offsetWidth || 1290));
+        var h = Math.max(1, Math.ceil(calcH || 1000));
+        var ground = (typeof slideBackground === 'string' && slideBackground && slideBackground !== 'transparent')
+          ? slideBackground
+          : '#ffffff';
+        var clone = slide.cloneNode(true);
+        var origEls = [slide].concat(Array.prototype.slice.call(slide.querySelectorAll('*')));
+        var cloneEls = [clone].concat(Array.prototype.slice.call(clone.querySelectorAll('*')));
+        for (var i = 0; i < origEls.length && i < cloneEls.length; i++) {
+          var orig = origEls[i];
+          var copy = cloneEls[i];
+          if (!orig || !copy || !copy.style) continue;
+          var cs = window.getComputedStyle(orig);
+          if (cs.cssText) {
+            copy.style.cssText = cs.cssText;
+          } else {
+            for (var j = 0; j < cs.length; j++) {
+              var prop = cs[j];
+              copy.style.setProperty(prop, cs.getPropertyValue(prop), cs.getPropertyPriority(prop));
+            }
+          }
+          if (orig.tagName === 'CANVAS') {
+            try {
+              var canvasImg = document.createElement('img');
+              canvasImg.src = orig.toDataURL('image/png');
+              canvasImg.style.cssText = copy.style.cssText;
+              if (copy.parentNode) copy.parentNode.replaceChild(canvasImg, copy);
+            } catch (_) { /* tainted cross-origin canvas falls back to original node */ }
+          } else if (orig.tagName === 'IMG' && orig.complete && orig.naturalWidth > 0) {
+            try {
+              var ic = document.createElement('canvas');
+              ic.width = orig.naturalWidth;
+              ic.height = orig.naturalHeight;
+              ic.getContext('2d').drawImage(orig, 0, 0);
+              copy.setAttribute('src', ic.toDataURL('image/png'));
+              copy.removeAttribute('srcset');
+            } catch (_) { /* tainted cross-origin image falls back to original src */ }
+          }
+        }
+        clone.style.position = 'relative';
+        clone.style.left = '0px';
+        clone.style.top = '0px';
+        clone.style.margin = '0px';
+        clone.style.transform = 'none';
+        clone.style.width = w + 'px';
+        clone.style.height = h + 'px';
+        clone.style.boxSizing = 'border-box';
+        clone.style.overflow = 'visible';
+        clone.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+        var serialized = new XMLSerializer().serializeToString(clone);
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
+          + '<rect width="100%" height="100%" fill="' + ground.replace(/"/g, '&quot;') + '"/>'
+          + '<foreignObject x="0" y="0" width="' + w + '" height="' + h + '">'
+          + serialized
+          + '</foreignObject></svg>';
+        var viewportW = Number(opts && opts.viewportW) || 1400;
+        var dsf = Number(opts && opts.dsf) || 1;
+        var scale = Math.min(1, viewportW / 1400) * dsf;
+        var outW = Math.max(1, Math.ceil(w * scale));
+        var outH = Math.max(1, Math.ceil(h * scale));
+        var img = new Image();
+        img.onload = function() {
+          try {
+            var outCanvas = document.createElement('canvas');
+            outCanvas.width = outW;
+            outCanvas.height = outH;
+            var ctx = outCanvas.getContext('2d');
+            ctx.fillStyle = ground;
+            ctx.fillRect(0, 0, outW, outH);
+            ctx.drawImage(img, 0, 0, outW, outH);
+            var dataUrl = outCanvas.toDataURL('image/png');
+            var comma = dataUrl.indexOf(',');
+            resolve({
+              pngBase64: comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl,
+              box: { x: 0, y: 0, w: w, h: h },
+              clip: { x: 0, y: 0, width: outW, height: outH },
+              ground: ground,
+            });
+          } catch (err) {
+            reject(err);
+          }
+        };
+        img.onerror = function() {
+          reject(new Error('Failed to load serialized slide SVG into Image'));
+        };
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-raster-slide') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaRasterizeCurrentSlide(event.data).then(function(res) {
+      target.postMessage({
+        type: 'tlda-slide-png',
+        shapeId: shapeId,
+        requestId: requestId,
+        ok: true,
+        pngBase64: res.pngBase64,
+        box: res.box,
+        clip: res.clip,
+        ground: res.ground,
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-slide-png',
+        shapeId: shapeId,
+        requestId: requestId,
+        ok: false,
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
 
   function isVisibleColor(color) {
     return color && color !== 'transparent' && !/^rgba\([^)]*,\s*0\s*\)$/.test(color);
@@ -30207,6 +30770,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   // The page the parent last addressed: { section, index }. The only legitimate
   // moves in the strip are the parent's gotos, so this is where reveal belongs.
   var deckHeld = null;
+  // Freshness counter for delayed capture fragment-gotos: a newer request
+  // supersedes a still-settling one, whose delayed half must not step or
+  // report for a slide the clone no longer addresses.
+  var captureGotoSeq = 0;
+  var walkthroughHeights = {};
 
   // The pages reveal actually built, in the order it built them.
   //
@@ -30221,18 +30789,6 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 
   function deckSectionOf(page) {
     return page.querySelector('section');
-  }
-
-  // The page that holds a given slide element, by element: the scroll view's
-  // own address is a page index that reveal reports as h, so it cannot say
-  // which slide is current.
-  function deckPageOfSection(section) {
-    if (!section) return null;
-    var pages = document.querySelectorAll('.scroll-page');
-    for (var i = 0; i < pages.length; i++) {
-      if (deckSectionOf(pages[i]) === section) return { section: section, index: i };
-    }
-    return null;
   }
 
   // The page whose slide carries a given reveal address.
@@ -30273,7 +30829,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     Reveal.setCurrentScrollPage(found.section, found.index, 0);
     // Moving the page ran reveal's stretch sizing against the pinned section
     // height; put the authored figure sizes back.
-    restoreStretchFigures();
+    restoreStretchFigures(found.section);
   }
 
   // Put reveal back on the page the parent addressed after a layout pass moved
@@ -30286,13 +30842,16 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   // address can come first.
   function holdDeckAddress(current) {
     if (!deckHeld || !Reveal.setCurrentScrollPage || !Reveal.isScrollView || !Reveal.isScrollView()) return false;
-    if (current === deckHeld.section || deckHeld.index === 0) return false;
-    var pages = document.querySelectorAll('.scroll-page');
-    if (!pages.length || current !== deckSectionOf(pages[0])) return false;
+    if (current === deckHeld.section) return false;
+    if (typeof captureHold === 'undefined' || !captureHold) {
+      if (deckHeld.index === 0) return false;
+      var pages = document.querySelectorAll('.scroll-page');
+      if (!pages.length || current !== deckSectionOf(pages[0])) return false;
+    }
     Reveal.setCurrentScrollPage(deckHeld.section, deckHeld.index, 0);
     // Moving the page ran reveal's stretch sizing against the pinned section
     // height, which leaves every stretch figure on the page at 0x0.
-    restoreStretchFigures();
+    restoreStretchFigures(deckHeld.section);
     return true;
   }
 
@@ -30342,7 +30901,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var slides = pages.map(function(page, i) {
       var el = deckSectionOf(page) || page;
       var at = Reveal.getIndices(el) || {};
-      return { index: i, indexh: at.h || 0, indexv: at.v || 0, id: el.id || '', contentHeight: heights[i] };
+      var entry = { index: i, indexh: at.h || 0, indexv: at.v || 0, id: el.id || '', contentHeight: heights[i] };
+      var heading = el.querySelector('h1[data-source-line],h2[data-source-line]');
+      if (heading && !heading.hasAttribute('data-source-file')) entry.sourceLine = Number(heading.getAttribute('data-source-line'));
+      if (params.get('_tldaWriting') === '1' && walkthroughHeights[i]) entry.walkthroughHeight = walkthroughHeights[i];
+      return entry;
     });
     // The authored slide size travels with the extent so the parent can compute
     // placement from this one message. Threading it through document state
@@ -30415,18 +30978,32 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       deckLayoutStyle = document.createElement('style');
       document.head.appendChild(deckLayoutStyle);
     }
-    // The strip is laid out in the deck's own coordinate space and the CANVAS
-    // pans across it, so nothing here may scroll: reveal's viewport would
-    // otherwise clip the strip it just laid out.
+    // =========================================================================
+    // DO NOT CHANGE — SLIDE UNCLIPPING INVARIANT (Skip, 2026-11-05):
+    //
+    //   "slide rects shouldn't clip / like if content overflows fking let it.
+    //    if there's a faint line through it who gives a fuck / just make shit
+    //    less brittle plz like designing around correct measurement or wahtever
+    //    like not cool"
+    //   "re unclipping: like this fucking like it was done and then it wasn't.
+    //    so a comment is warranted imo / saying like don't change"
+    //
+    // Every wrapper in the Reveal scroll-view strip (.reveal-viewport, .reveal,
+    // .slides, .scroll-page, .scroll-page-sticky, .scroll-page-content, and
+    // section / section.scrollable) MUST stay overflow:visible!important with
+    // max-height:none!important. Slide rects position the slide and draw the
+    // faint parent frame; they MUST NEVER clip overflowing content, even when
+    // contentHeight has not been measured yet or under-measures.
+    // =========================================================================
     deckLayoutStyle.textContent = [
       '.reveal-viewport.reveal-scroll{overflow:visible!important}',
-      '.reveal-viewport.reveal-scroll .slides{display:block!important;position:relative!important;width:max-content!important;height:max-content!important}',
-      '.reveal-viewport.reveal-scroll .scroll-page{position:absolute!important;margin:0!important}',
+      '.reveal-viewport.reveal-scroll .slides{display:block!important;position:relative!important;width:max-content!important;height:max-content!important;overflow:visible!important}',
+      '.reveal-viewport.reveal-scroll .scroll-page{position:absolute!important;margin:0!important;overflow:visible!important;max-height:none!important;contain:none!important}',
       // Reveal sizes these from the VIEWPORT, and our viewport is the whole
       // strip -- measured, each page's inner box came out 31000px tall with the
       // slide centred 14500px down it, which is why the canvas looked empty.
       // They belong to the slide's own rect instead.
-      '.reveal-viewport.reveal-scroll .scroll-page-sticky{position:relative!important;height:100%!important;top:auto!important}',
+      '.reveal-viewport.reveal-scroll .scroll-page-sticky{position:relative!important;height:100%!important;top:auto!important;overflow:visible!important;max-height:none!important}',
       // Height pins the box to the slide; overflow must NOT clip it.
       //
       // Reveal gives .scroll-page-content overflow:hidden because in its own
@@ -30438,7 +31015,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // 1000; with overflow visible it renders in full. Everything else in the
       // chain -- sticky, section, page -- was already visible, so this one rule
       // was the whole of it.
-      '.reveal-viewport.reveal-scroll .scroll-page-content{height:100%!important;overflow:visible!important}',
+      '.reveal-viewport.reveal-scroll .scroll-page-content{height:100%!important;overflow:visible!important;max-height:none!important;contain:none!important}',
+      '.reveal-viewport.reveal-scroll .slides section,.reveal-viewport.reveal-scroll .slides section.scrollable{overflow:visible!important;max-height:none!important}',
+      // Reveal's .r-stack > * sets margin:auto, which in CSS Grid vertically
+      // centres shorter fragments inside the tallest fragment's grid cell even
+      // when align-items:start is set on .r-stack -- making equations jump from
+      // the middle of the slide to the top on fragment advance. Pin to top.
+      '.reveal .r-stack>*{margin-top:0!important}',
       // The slide section is reveal-centred (top:50% plus translate(-50%,-50%))
       // inside its page, so in a grown page the content starts (H-1000)/2 below
       // the top and ends that far past the box: measured, every grown slide on
@@ -30472,6 +31055,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // We drive navigation from the canvas, so reveal's snapping has nothing
       // to do here. Size them to their page and take them out of hit-testing.
       '.reveal-viewport.reveal-scroll .scroll-snap-point{height:100%!important;pointer-events:none!important}',
+      // A slide's images are part of the flat page, not objects to pick up.
+      // Left draggable, a pen or finger pressed on a plot in Browse starts the
+      // browser's native image drag, which swallows the gesture.
+      '.reveal-viewport.reveal-scroll img{-webkit-user-drag:none!important;user-select:none!important;-webkit-touch-callout:none!important}',
       // The canvas is the slide background. Authored per-slide backgrounds
       // still paint inside the page; otherwise only the hairline below defines
       // the slide boundary.
@@ -30501,26 +31088,14 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       pages[p].style.setProperty('--slide-scale', '1');
     }
 
-    // Reveal sizes its scroll-view page boxes from the viewport at layout
-    // time, so the strip above is only placement until Reveal lays out
-    // against the actual sized viewport. Lay out now that placement is
-    // real. A layout pass resets the scroll-view address to the first
-    // slide (see addressFragmentTarget), so re-assert the slide that was
-    // current before laying out.
-    if (Reveal.layout && Reveal.isScrollView && Reveal.isScrollView()) {
-      var backTo = deckHeld || deckPageOfSection(Reveal.getCurrentSlide && Reveal.getCurrentSlide());
-      Reveal.layout();
-      if (backTo && Reveal.setCurrentScrollPage && Reveal.getCurrentSlide() !== backTo.section) {
-        Reveal.setCurrentScrollPage(backTo.section, backTo.index, 0);
-      }
-      // The pass above also re-ran reveal's stretch sizing against the
-      // pinned section height (see restoreStretchFigures); put the authored
-      // sizes back before anything paints.
-      restoreStretchFigures();
-    }
+    // The parent already supplied the page boxes. Native Reveal.layout()
+    // rebuilds viewport-sized scroll pages and progress markers here, forcing
+    // layout after the writes above and resetting the current slide/fragment.
+    // Keep authored figure sizing without rebuilding Reveal's scroll geometry.
+    restoreStretchFigures();
 
-    // Section tops, after reveal and stretch have settled: measuring before
-    // the layout pass above would read pre-stretch figure sizes. Grown
+    // Section tops, after authored stretch sizing: measuring before the
+    // restoration above would read pre-stretch figure sizes. Grown
     // pages pin at 0 (the severed-equation repair); fitting pages take
     // reveal's own offset when its centring condition holds --
     // config.center, or the slide's own .center class -- and stacks and
@@ -30689,6 +31264,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   // Registered outside init: a handshake arriving before Reveal is ready is
   // stored, not lost, and init() applies it.
   window.addEventListener('message', function(e) {
+    if (e.source === window.parent && e.data && e.data.type === 'tlda-walkthrough-heights' && params.get('_tldaWriting') === '1') {
+      var nextHeights = e.data.heights || {};
+      if (JSON.stringify(nextHeights) !== JSON.stringify(walkthroughHeights)) {
+        walkthroughHeights = nextHeights;
+        if (typeof Reveal !== 'undefined' && Reveal.isReady && Reveal.isReady()) reportDeckExtent();
+      }
+    }
     if (e.data && e.data.type === 'tlda-nav-active' && deckMode) setTldaNavActive(!!e.data.active);
   });
 
@@ -30759,11 +31341,19 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'img') return;
     var section = e.target.closest('section');
     if (section) restoreStretchFigures(section);
+    // Re-evaluate --tlda-section-top after a late or lazy image load: a slide
+    // whose figure was 0px at initial layout had a tall centering offset that
+    // would otherwise push the now-loaded content past the bottom of the rect.
+    if (pendingDeckLayout) applyDeckLayout(pendingDeckLayout);
   }, true);
   document.addEventListener('loadedmetadata', function(e) {
     if (!deckMode || !e.target || (e.target.nodeName || '').toLowerCase() !== 'video') return;
     var section = e.target.closest('section');
     if (section) restoreStretchFigures(section);
+    if (pendingDeckLayout) applyDeckLayout(pendingDeckLayout);
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    if (e.target && e.target.closest && e.target.closest('img, svg')) e.preventDefault();
   }, true);
 
   // Window resize is the one native trigger that re-runs reveal's sizing
@@ -30781,6 +31371,26 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     if (typeof Reveal === 'undefined' || !Reveal.isReady || !Reveal.isReady()) {
       setTimeout(init, 100);
       return;
+    }
+
+    // App deck views retain figure descriptions for assistive technology,
+    // without the visible hover payloads carried by existing builds.
+    if (deckMode) {
+      document.querySelectorAll('[data-tip], [title]').forEach(function(node) {
+        if (!node.closest('figure, .r-stack, .cell-output-display') &&
+            !node.matches('img, svg, canvas, video') &&
+            !node.querySelector('figure, .r-stack, img, svg, canvas, video')) return;
+        var title = node.getAttribute('title');
+        if (title && !node.hasAttribute('aria-label')) node.setAttribute('aria-label', title);
+        node.removeAttribute('data-tip');
+        node.removeAttribute('title');
+      });
+      document.querySelectorAll('figure svg > title, .cell-output-display svg > title').forEach(function(title) {
+        var description = document.createElementNS('http://www.w3.org/2000/svg', 'desc');
+        Array.from(title.attributes).forEach(function(attribute) { description.setAttribute(attribute.name, attribute.value); });
+        description.textContent = title.textContent;
+        title.replaceWith(description);
+      });
     }
 
     // MathJax can lay out the scroll-view deck after navigation has settled.
@@ -30860,7 +31470,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // runs its stretch sizing against the pinned section height, which leaves
       // every lone figure in the strip at 0x0. The sizing lands after this event
       // returns, so the authored sizes go back on the next task.
-      if (deckMode) setTimeout(restoreStretchFigures, 0);
+      if (deckMode) {
+        var changedSlide = ev && ev.currentSlide;
+        setTimeout(function() { restoreStretchFigures(changedSlide); }, 0);
+      }
       if (deckMode && holdDeckAddress(ev.currentSlide)) return;
       if (deckMode) {
         reportFragmentState();
@@ -30882,6 +31495,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var styleRules = [
       'html, body { overflow: visible !important; margin: 0; background: transparent !important; }',
       '.reveal, .reveal .slides, .reveal .slides section { overflow: visible !important; }',
+      '.reveal .r-stack > * { margin-top: 0 !important; }',
       '.reveal { background: transparent !important; }',
     ];
     // The capture clone uses Reveal's own scroll view. Keep its viewport as
@@ -30889,8 +31503,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     // outer document while Reveal sees scrollTop=0 and reselects slide one.
     if (captureHold) styleRules.push(
       'html { height: 100%; overflow: hidden !important; }',
-      'body.reveal-viewport.reveal-scroll { height: 100%; overflow-y: auto !important; }',
-      '.reveal-scroll .scroll-page-content { overflow: visible !important; }'
+      'body.reveal-viewport.reveal-scroll { height: 100%; overflow-y: auto !important; overflow-x: visible !important; }',
+      '.reveal-viewport.reveal-scroll .slides { overflow: visible !important; }',
+      '.reveal-scroll .scroll-page, .reveal-scroll .scroll-page-sticky, .reveal-scroll .scroll-page-content { overflow: visible !important; max-height: none !important; contain: none !important; }',
+      '.reveal .slides section, .reveal .slides section.scrollable { overflow: visible !important; max-height: none !important; contain: none !important; }'
     );
     if (!deckMode) styleRules = styleRules.concat(tldaNavHideRules);
     var style = document.createElement('style');
@@ -30947,6 +31563,70 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       }, '*');
     }
 
+    // Capture clone only: scroll the addressed section into the clone
+    // viewport. Callers do this BEFORE applying a fragment count, never
+    // at report time: Reveal's scroll view derives fragment progress from
+    // scroll position (onScroll -> syncScrollPosition activates the
+    // fragment trigger whose scroll band holds scrollTop), so a scroll
+    // after fragments are stepped re-derives and can revert their state.
+    // The walk grows the clone iframe when a slide's overflowed content
+    // outgrows it; that height change re-lays the scroll pages, so the
+    // scroll position a goto established points at a different page and
+    // the section's box becomes a document offset instead of a viewport
+    // position. Scrolling here re-establishes the position; the caller
+    // then waits for the scroll to settle and applies the fragment count,
+    // which steps fragments directly without scrolling. Live decks never
+    // carry the capture flag, and a laid-out strip still never scrolls.
+    // Never throws: a failed scroll leaves the box as measured and the
+    // capture invoker refuses honestly.
+    function scrollSlideForCapture(section) {
+      if (!captureHold || deckLayoutStyle || !section) return;
+      try {
+        if (section.scrollIntoView) section.scrollIntoView({
+          behavior: 'instant',
+          block: 'center',
+          inline: 'center',
+        });
+      } catch (scrollError) { /* the reported box shows where the slide lies */ }
+    }
+
+    // Capture-only second half of tlda-fragment-goto, run after the scroll
+    // settle: verify the clone still addresses the requested section
+    // before stepping fragments or reporting. A superseded request (a
+    // newer capture goto arrived during the settle) does nothing; the
+    // newer request owns the clone and its report. A stale current-slide
+    // pointer gets one bounded re-address and settle. A target that is
+    // still wrong after that retry is never stepped and never reported:
+    // the walk's navigation timeout is the honest outcome, not another
+    // slide measured under this request's name. The delayed report
+    // rechecks freshness and target again, because a superseding address
+    // can land between stepping and reporting.
+    function applyCaptureFragmentGoto(gotoData, gotoCount, gotoTarget, gotoSeq, retried) {
+      if (gotoSeq !== captureGotoSeq) return;
+      var current = Reveal.getCurrentSlide && Reveal.getCurrentSlide();
+      if (gotoTarget && current !== gotoTarget) {
+        if (!retried) {
+          addressFragmentTarget(gotoData);
+          setTimeout(function() { applyCaptureFragmentGoto(gotoData, gotoCount, gotoTarget, gotoSeq, true); }, 50);
+        }
+        return;
+      }
+      goToVisibleFragmentCount(gotoCount);
+      setTimeout(function() {
+        if (gotoSeq !== captureGotoSeq) return;
+        var now = Reveal.getCurrentSlide && Reveal.getCurrentSlide();
+        if (gotoTarget && now !== gotoTarget) {
+          if (!retried) {
+            addressFragmentTarget(gotoData);
+            setTimeout(function() { applyCaptureFragmentGoto(gotoData, gotoCount, gotoTarget, gotoSeq, true); }, 50);
+          }
+          return;
+        }
+        reportFragmentState(gotoData.requestId);
+        reportSlideHeight();
+      }, 50);
+    }
+
     // Report fragment state to parent (for SlidesNavigator)
     function reportFragmentState(requestId) {
       if (window.parent === window) return;
@@ -30996,7 +31676,35 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           var captureHeight = captureHold && slide.offsetHeight > 0
             ? Math.max(rect.height, slide.scrollHeight * rect.height / slide.offsetHeight)
             : rect.height;
+          if (captureHold && typeof slide.querySelectorAll === 'function') {
+            var contentNodes = slide.querySelectorAll('p, li, dd, dt, blockquote, figcaption, caption, h1, h2, h3, h4, h5, h6, pre, table, .math.display, mjx-container[display="true"], .katex-display, .callout, img, svg, canvas, video, figure, .cell-output-display');
+            for (var ci = 0; ci < contentNodes.length; ci++) {
+              var cn = contentNodes[ci];
+              if (!cn || typeof cn.getBoundingClientRect !== 'function') continue;
+              if (cn.closest && cn.closest('mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml, .fragment:not(.visible)')) continue;
+              var cnVisible = true;
+              if (typeof getComputedStyle === 'function') {
+                for (var cur = cn; cur && cur !== slide; cur = cur.parentElement) {
+                  var cs = getComputedStyle(cur);
+                  if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' || cs.contentVisibility === 'hidden' || parseFloat(cs.opacity) === 0)) {
+                    cnVisible = false;
+                    break;
+                  }
+                }
+              }
+              if (!cnVisible) continue;
+              var cr = cn.getBoundingClientRect();
+              if (cr && cr.width > 0 && cr.height > 0 && cr.bottom - rect.top > captureHeight) {
+                captureHeight = cr.bottom - rect.top;
+              }
+            }
+          }
           slideBox = { x: rect.left, y: rect.top, w: rect.width, h: captureHeight };
+          if (captureHold) {
+            slideBox.authoredHeight = rect.height;
+            slideBox.offsetHeight = slide.offsetHeight;
+            slideBox.scrollHeight = slide.scrollHeight;
+          }
         }
       } catch (boxError) { slideBox = null; }
       window.parent.postMessage({
@@ -31179,11 +31887,32 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       }
       if (e.data.type === 'tlda-fragment-goto') {
         addressFragmentTarget(e.data);
-        goToVisibleFragmentCount(parseInt(e.data.current || '0', 10) || 0);
-        setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
-        setTimeout(reportSlideHeight, 50);
+        if (captureHold && !deckLayoutStyle) {
+          // Capture clone: re-establish the scroll position BEFORE the
+          // fragment count is applied (see scrollSlideForCapture). The
+          // addressed section is the one addressFragmentTarget just held;
+          // Reveal's own current slide can still be the previous one. The
+          // settle lets the scroll view process the scroll (and re-derive
+          // whatever fragment state it maps to the new position) before
+          // applyCaptureFragmentGoto verifies the target and sets the
+          // requested count directly.
+          var gotoData = e.data;
+          var gotoCount = parseInt(e.data.current || '0', 10) || 0;
+          var gotoTarget = deckHeld && deckHeld.section;
+          var gotoSeq = ++captureGotoSeq;
+          scrollSlideForCapture(gotoTarget || (Reveal.getCurrentSlide && Reveal.getCurrentSlide()));
+          setTimeout(function() { applyCaptureFragmentGoto(gotoData, gotoCount, gotoTarget, gotoSeq, false); }, 50);
+        } else {
+          goToVisibleFragmentCount(parseInt(e.data.current || '0', 10) || 0);
+          setTimeout(function() { reportFragmentState(e.data.requestId); }, 50);
+          setTimeout(reportSlideHeight, 50);
+        }
       }
       if (e.data.type === 'tlda-slide-goto') {
+        // A new capture address supersedes any fragment-goto still
+        // settling: invalidate its freshness token so its delayed half
+        // cannot re-address the clone back to the older slide.
+        if (captureHold) captureGotoSeq++;
         var gotoH = e.data.indexh || 0;
         var gotoV = e.data.indexv || 0;
         // The deck strip does not scroll: the CSS above makes
@@ -31206,19 +31935,30 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             var gotoIdx = Reveal.getIndices(gotoSection);
             if (gotoIdx && gotoIdx.h === gotoH && (gotoIdx.v || 0) === gotoV) {
               deckHeld = { section: gotoSection, index: gi };
-              Reveal.setCurrentScrollPage(gotoSection, gi, 0);
+              // Only re-set the scroll page when moving to a DIFFERENT slide
+              // (or during a capture scrollIntoView pass): setCurrentScrollPage's
+              // third argument is the fragment index, so calling it with 0 when
+              // Reveal is already on gotoSection rewinds the user's fragments.
+              if (Reveal.getCurrentSlide() !== gotoSection || e.data.scrollIntoView === true) {
+                Reveal.setCurrentScrollPage(gotoSection, gi, 0);
+              }
               loadSlidesNear(gotoPages, gi);
               // Same move as the bridge's other re-addressing: reveal's stretch
               // sizing ran and left the page's figures at 0x0, and no image
               // load follows when the page's images are already loaded.
-              restoreStretchFigures();
+              restoreStretchFigures(gotoSection);
               movedByScrollPage = true;
               gotoTargetSection = gotoSection;
               break;
             }
           }
         }
-        if (!movedByScrollPage) Reveal.slide(gotoH, gotoV, 0);
+        if (!movedByScrollPage) {
+          var curIdx = Reveal.getIndices ? Reveal.getIndices() : null;
+          if (!curIdx || curIdx.h !== gotoH || (curIdx.v || 0) !== gotoV) {
+            Reveal.slide(gotoH, gotoV, 0);
+          }
+        }
         // Capture hold only: the linearizer walk asks the CLONE to scroll
         // the addressed slide into its own viewport so a native screenshot
         // sees it whole. Walk-only flag — the live navigator never sends it
@@ -31226,14 +31966,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         // deck never scrolls, see above), so reader scroll is untouched
         // either way. The +50ms report below carries the resulting box.
         if (e.data.scrollIntoView === true && !deckLayoutStyle) {
-          try {
-            var scrolled = Reveal.getCurrentSlide && Reveal.getCurrentSlide();
-            if (scrolled && scrolled.scrollIntoView) scrolled.scrollIntoView({
-              behavior: 'instant',
-              block: 'center',
-              inline: 'center',
-            });
-          } catch (scrollError) { /* report still goes out; the box shows where we are */ }
+          // Scroll the section this goto addressed, not Reveal's current
+          // slide: in the scroll-view strip setCurrentScrollPage sets the
+          // address without moving Reveal's pointer (see
+          // whenCurrentSlideImagesLoaded's target), so getCurrentSlide()
+          // can still be the previous slide and the scroll would centre
+          // the wrong page.
+          scrollSlideForCapture(gotoTargetSection || (Reveal.getCurrentSlide && Reveal.getCurrentSlide()));
         }
         // Capture hold only (the scrollIntoView flag is walk-only): answer
         // when the addressed slide's images have loaded, not 50 ms after the
@@ -31428,8 +32167,127 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   }
 })();
 }
-</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fdecks%2Fchapter-sampling-slides.html&amp;course=qtm285" style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-file-app-switch>
-(()=>{const a=document.currentScript.previousElementSibling;const params=new URLSearchParams(location.search);
-if(params.has('_tldaShape')){a.hidden=true;return;}
-const course=params.get('course');if(course){const url=new URL(a.href);url.searchParams.set('course',course);a.href=url.href;}})();
-</script><!--/tlda-file-app-switch--></body></html>
+</script><!--/tlda-publication-body--><!--tlda-file-app-switch--><a class="presentation-mode-switch" href="../../../app.html?location=static%2Fbook%2Fdecks%2Fchapter-sampling-slides.html&amp;course=qtm285" hidden style="position:fixed;top:12px;left:12px;z-index:10000">App</a><script data-tlda-app-link-access data-tlda-file-app-switch>(function installAppLinkAccess(anchor, mode, readToken) {
+  anchor.hidden = true
+  const params = new URLSearchParams(location.search)
+  if (params.has('_tldaShape')) return
+  const destination = new URL(anchor.href, location.href)
+  const course = params.get('course')
+  if (course) destination.searchParams.set('course', course)
+  anchor.href = destination.href
+  if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  let active = null
+  let generation = 0
+
+  async function refresh() {
+    const current = ++generation
+    active?.abort()
+    const controller = new AbortController()
+    active = controller
+    anchor.hidden = true
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    try {
+      const read = async url => {
+        const target = new URL(url, destination)
+        if (target.origin !== destination.origin) throw new Error('Reader resource is not same-origin')
+        const result = await fetch(target.href, { credentials: 'same-origin', redirect: 'error', cache: 'no-store', signal: controller.signal })
+        if (!result.ok || result.redirected) throw new Error('Reader resource is unavailable')
+        return result
+      }
+      const response = await read(destination.href)
+      const doc = new DOMParser().parseFromString(await response.text(), 'text/html')
+      const marker = doc.querySelector('meta[name="tlda-app-reader"]')
+      if (marker?.content !== mode || !marker.dataset.readerBase) return
+      const readerBase = new URL(decodeURIComponent(marker.dataset.readerBase), destination)
+      if (readerBase.origin !== destination.origin || readerBase.search || readerBase.hash
+        || readerBase.username || readerBase.password) return
+      if (!doc.querySelector('script[type="module"][src]')) return
+      let base, wanted, config
+      if (mode === 'files') {
+        base = new URL('./', destination)
+        if (readerBase.href !== base.href) return
+        wanted = destination.searchParams.get('location')
+        const publication = await (await read(new URL('manifest.json', base))).json()
+        const documents = publication?.documents
+        if (!documents || typeof documents !== 'object' || Array.isArray(documents)) return
+        const project = destination.searchParams.get('project')
+        const keys = Object.keys(documents)
+        config = project ? documents[project] : keys.length === 1 ? documents[keys[0]] : null
+        const pages = await (await read(new URL('page-info.json', base))).json()
+        if (!Array.isArray(pages) || !pages.some(page => page?.file === wanted)) return
+      } else {
+        const route = destination.pathname.match(/^\/docs\/([^/]+)\/app\/(.+)$/)
+        if (!route) return
+        const store = readerBase.href.replace(/\/$/, '')
+        base = new URL(`${store}/docs/${route[1]}/`)
+        wanted = route[2].split('/').map(decodeURIComponent).join('/')
+        config = await (await read(`${store}/api/projects/${route[1]}?include=page-info`)).json()
+      }
+      if (!wanted || !config || !(config.pages > 0)) return
+      const manifest = await (await read(new URL('document-manifest.json', base))).json()
+      if (manifest?.version !== 1 || manifest.kind !== 'tlda-document' || !Array.isArray(manifest.pages)
+        || !manifest.source?.format || !manifest.document?.format
+        || !['html-pages', 'slides', 'svg-pages', 'image-pages'].includes(manifest.view?.kind)) return
+      const pages = manifest.view.kind === 'slides' && manifest.pages.some(page => page.variant === 'slides')
+        ? manifest.pages.filter(page => page.variant === 'slides') : manifest.pages
+      // Match the same source/output alternatives used by presentationLocationMatchesPage.
+      const encoded = wanted.split('/').map(encodeURIComponent).join('/')
+      const legacy = wanted.replace(/^book\//, '')
+      const page = pages.find(page => {
+        if (typeof page?.file !== 'string' || !(page.width > 0) || !(page.height > 0)) return false
+        if (mode === 'files') return page.file === wanted
+        const path = new URL(page.file, base).pathname
+        return page.source?.file === wanted || page.source?.file?.replace(/\.qmd$/i, '.html') === legacy
+          || path === `${base.pathname}app/${encoded}` || path === `${base.pathname}${encoded}`
+          || path.endsWith(`/_book/${legacy}`)
+      })
+      if (!page) return
+      const resource = new URL(page.file, base)
+      resource.searchParams.set('_tldaShape', 'app-link-access')
+      if (course) resource.searchParams.set('course', course)
+      await (await read(resource)).arrayBuffer()
+      const readerCourse = destination.searchParams.get('course')
+      if (readerCourse) {
+        // A course reader resolves this same identity before it can connect.
+        // File metadata alone says nothing about that backend's CORS/admission.
+        const identities = JSON.parse(decodeURIComponent(marker.dataset.readerIdentities || ''))
+        if (!Array.isArray(identities) || !identities.length) return
+        const matches = identities.filter(identity => {
+          if (!identity.publicationUrl) return identities.length === 1
+          const declared = new URL(identity.publicationUrl)
+          return declared.origin === destination.origin && destination.pathname.startsWith(declared.pathname)
+        })
+        if (matches.length !== 1) return
+        const identity = matches[0]
+        const backend = new URL(identity.database)
+        if (!['http:', 'https:'].includes(backend.protocol) || backend.username || backend.password
+          || backend.search || backend.hash || !['include', 'same-origin'].includes(identity.credentials)) return
+        const identityUrl = new URL(`${backend.href.replace(/\/$/, '')}/api/classroom/me`)
+        identityUrl.searchParams.set('course', readerCourse)
+        const token = readToken(destination.search, readerCourse, key => window.localStorage.getItem(key))
+        const response = await fetch(identityUrl.href, {
+          credentials: identity.credentials, redirect: 'error', cache: 'no-store', signal: controller.signal,
+          ...(token ? { headers: { 'x-tlda-student-token': token } } : {}),
+        })
+        if (!response.ok || response.redirected) return
+        const principal = await response.json()
+        if (principal.courseId !== readerCourse || !((principal.role === 'student' && principal.studentId)
+          || (principal.role === 'instructor' && principal.instructorId))) return
+      }
+      if (current === generation && !controller.signal.aborted) anchor.hidden = false
+    } catch {
+      // Refusal, missing publication and connectivity failure all leave no link
+      // to an app this page has not established the reader can enter.
+    } finally {
+      clearTimeout(timeout)
+      if (active === controller) active = null
+    }
+  }
+  window.addEventListener('pageshow', refresh)
+  window.addEventListener('pagehide', () => { generation++; active?.abort(); anchor.hidden = true })
+  return refresh()
+})(document.currentScript.previousElementSibling,"files",function readClassroomTokenFrom(search, courseId, getStored) {
+  const fromUrl = new URLSearchParams(search).get('classroomToken')
+  if (fromUrl) return fromUrl
+  try { return getStored(`tlda-classroom-token:${courseId}`) } catch { return null }
+});</script><!--/tlda-file-app-switch--></body></html>
