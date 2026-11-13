@@ -15,7 +15,21 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     return s.length > MAX_FIELD ? s.slice(0, MAX_FIELD) + '…[+' + (s.length - MAX_FIELD) + ']' : s;
   }
 
-  // sendBeacon survives a dying page; keepalive fetch is the fallback.
+  // A published page framed by its reader reports to the back end the reader
+  // is configured with, never to the page's own host; with no back end
+  // configured the report goes to the console. A served page uses its server.
+  function endpoint() {
+    try {
+      var config = window.parent !== window && window.parent.__TLDA_CONFIG__;
+      if (config && config.pages === 'files') return config.database && config.database.http ? config.database.http + '/api/log' : null;
+    } catch (e) {
+      // A cross-origin parent is not a reader of this page.
+    }
+    return '/api/log';
+  }
+
+  // sendBeacon survives a dying page; keepalive fetch is the fallback. A
+  // cross-origin beacon must carry a CORS-safelisted type, so it goes as text.
   function send(ns, msg, data) {
     var payload = {
       ts: new Date().toISOString(),
@@ -32,11 +46,14 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     };
     try {
       var body = JSON.stringify(payload);
+      var url = endpoint();
+      if (!url) { console.error('[doc-health]', payload); return; }
+      var type = /^https?:/.test(url) ? 'text/plain' : 'application/json';
       if (navigator.sendBeacon &&
-          navigator.sendBeacon('/api/log', new Blob([body], { type: 'application/json' }))) return;
-      fetch('/api/log', {
+          navigator.sendBeacon(url, new Blob([body], { type: type }))) return;
+      fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': type },
         body: body,
         keepalive: true,
       }).catch(function () {
@@ -378,6 +395,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 <div class="row" style="text-align:center">
 <h3> Prediction, Inference, and Causality I (Fall 2026) </h3>
 <h6> DATASCI 285 with <a href="https://davidahirshberg.bitbucket.io">David A. Hirshberg</a> </h6>
+<p><a href="book/index.html">book</a> &middot; <a href="/app">app</a></p>
 </div>
 
 
@@ -465,7 +483,7 @@ Homework is assigned Thursday and due the following Thursday. Fridays are for re
 
 <h5> Part 1: One-Sample Inference </h5>
 
-<p>* A starred chapter is less complete than its slides.</p>
+<p>* A starred chapter is less complete than its slides. ** A chapter with two stars is a work in progress.</p>
 
 <table><tbody>
 <tr><td>Th&nbsp;Aug&nbsp;27,&nbsp;4:00</td><td> <a href="book/chapters/chapter-social-pressure-experiment.html">Introduction: The Social Pressure Experiment</a> &middot; <a href="book/decks/chapter-social-pressure-experiment-slides.html">slides</a> </td></tr>
@@ -481,13 +499,13 @@ Homework is assigned Thursday and due the following Thursday. Fridays are for re
 <tr><td>F&nbsp;Sep&nbsp;11,&nbsp;2:30</td><td> Review HW 1; questions on HW 2 </td></tr>
 <tr><td>T&nbsp;Sep&nbsp;15,&nbsp;4:00</td><td> <a href="book/chapters/chapter-sampling-without-replacement.html">Sampling without Replacement and the Hypergeometric Distribution</a> </td></tr>
 <tr><td>Th&nbsp;Sep&nbsp;17,&nbsp;4:00</td><td> <a href="book/chapters/chapter-bootstrap.html">Bootstrap*</a> &middot; <a href="book/decks/chapter-bootstrap-slides.html">slides</a> </td></tr>
-<tr><td>Th&nbsp;Sep&nbsp;17,&nbsp;11:59</td><td> HW 2 due &middot; <a href="book/homework/homework-bootstrap.html">HW 3</a> out [<a href="book/homework/handouts/homework-bootstrap-handout.zip">download zip</a>] </td></tr>
+<tr><td>Th&nbsp;Sep&nbsp;17,&nbsp;11:59</td><td> HW 2 due [<a href="book/homework/homework-calibration-binary-solutions.html">solutions</a>] &middot; <a href="book/homework/homework-bootstrap.html">HW 3</a> out [<a href="book/homework/handouts/homework-bootstrap-handout.zip">download zip</a>] </td></tr>
 <tr><td>F&nbsp;Sep&nbsp;18,&nbsp;2:30</td><td> Review HW 2; questions on HW 3 </td></tr>
 <tr><td>T&nbsp;Sep&nbsp;22,&nbsp;4:00</td><td> Random Variables and Moments* (take 1) </td></tr>
 <tr><td>Th&nbsp;Sep&nbsp;24,&nbsp;4:00</td><td> <em>No class (cancelled)</em> </td></tr>
 <tr><td>F&nbsp;Sep&nbsp;25,&nbsp;2:30</td><td> <em>No class (cancelled)</em> </td></tr>
-<tr><td>T&nbsp;Sep&nbsp;29,&nbsp;4:00</td><td> <a href="book/chapters/chapter-random-variables-and-moments.html">Random Variables and Moments* (take 2)</a> &middot; slides &middot; <em>supplemental reading:</em> <a href="book/chapters/chapter-getting-away-from-bespoke-sampling-distributions.html">Getting Away from Bespoke Sampling Distributions**</a> &middot; <a href="book/chapters/chapter-understanding-sampling-designs-beyond-independence.html">Understanding Sampling Designs Beyond Independence**</a> </td></tr>
-<tr><td>Th&nbsp;Oct&nbsp;1,&nbsp;4:00</td><td> <a href="book/chapters/chapter-standard-deviation.html">Standard Deviation, Markov, and Chebyshev</a> &middot; <a href="book/decks/chapter-standard-deviation-slides.html">slides</a> </td></tr>
+<tr><td>T&nbsp;Sep&nbsp;29,&nbsp;4:00</td><td> What's Common and What Isn't &middot; Means, Variances, and Sample Averages &middot; slides &middot; <em>supplemental reading:</em> <a href="book/chapters/chapter-getting-away-from-bespoke-sampling-distributions.html">Getting Away from Bespoke Sampling Distributions**</a> &middot; <a href="book/chapters/chapter-understanding-sampling-designs-beyond-independence.html">Understanding Sampling Designs Beyond Independence**</a> </td></tr>
+<tr><td>Th&nbsp;Oct&nbsp;1,&nbsp;4:00</td><td> Standard Deviation, Markov, and Chebyshev &middot; <a href="book/decks/chapter-standard-deviation-slides.html">slides</a> </td></tr>
 <tr><td>Th&nbsp;Oct&nbsp;1,&nbsp;11:59</td><td> HW 3 due [<a href="book/homework/homework-bootstrap-solutions.html">solutions</a>] &middot; <a href="book/homework/homework-random-variables-and-moments.html">HW 4</a> out [<a href="book/homework/handouts/homework-random-variables-and-moments-handout.zip">download zip</a>] </td></tr>
 <tr><td>F&nbsp;Oct&nbsp;2,&nbsp;2:30</td><td> Review HW 3; questions on HW 4 </td></tr>
 <tr><td>T&nbsp;Oct&nbsp;6,&nbsp;4:00</td><td> <a href="book/chapters/chapter-normal-approximation.html">Normal Approximation and Sample Size Calculation</a> &middot; <a href="book/decks/chapter-normal-approximation-slides.html">slides</a> </td></tr>
@@ -501,7 +519,7 @@ Homework is assigned Thursday and due the following Thursday. Fridays are for re
 <tr><td>F&nbsp;Oct&nbsp;16,&nbsp;2:30</td><td> Review HW 5 </td></tr>
 <tr><td>T&nbsp;Oct&nbsp;20,&nbsp;4:00</td><td> Quality Assurance and Poisson Approximation &middot; <a href="book/decks/chapter-quality-assurance-slides.html">slides</a> </td></tr>
 <tr><td>Th&nbsp;Oct&nbsp;22,&nbsp;4:00</td><td> Normal Approximation: the Proof &middot; <a href="book/decks/chapter-normal-approximation-proof-slides.html">slides</a> &middot; <b>Exam 1 due</b> </td></tr>
-<tr><td>F&nbsp;Oct&nbsp;23,&nbsp;2:30</td><td> Exam discussion &middot; <em>supplemental reading:</em> <a href="book/supplemental/final-project-topics.pdf">Final Project Topics</a> </td></tr>
+<tr><td>F&nbsp;Oct&nbsp;23,&nbsp;2:30</td><td> Exam discussion &middot; <em>supplemental reading:</em> <a href="https://qtm285.github.io/static/book/supplemental/final-project-topics.pdf">Final Project Topics</a> </td></tr>
 </tbody></table>
 
 <p><b>About the Midterm</b></p>
@@ -517,31 +535,25 @@ Homework is assigned Thursday and due the following Thursday. Fridays are for re
 <tr><td>Th&nbsp;Oct&nbsp;29,&nbsp;4:00</td><td> <em>No class (cancelled)</em> </td></tr>
 <tr><td>F&nbsp;Oct&nbsp;30,&nbsp;2:30</td><td> <em>No class (cancelled)</em> </td></tr>
 <tr><td>T&nbsp;Nov&nbsp;3,&nbsp;4:00</td><td> Comparing Two Groups: Precision, Power and Allocation &middot; <a href="book/decks/georgia-oct29.html">slides</a> </td></tr>
-<tr><td>Th&nbsp;Nov&nbsp;5,&nbsp;4:00</td><td> Why Randomization Works, Part I &middot; <a href="book/decks/nsw-identification-nov03.html">slides</a> </td></tr>
-<tr><td>F&nbsp;Nov&nbsp;6,&nbsp;2:30</td><td> <em>To be confirmed</em> </td></tr>
-</tbody></table>
-
-<p><em><a href="book/homework/homework-06.html">HW 6</a> was posted on Sunday, November 8. [<a href="book/homework/handouts/homework-06-handout.zip">download zip</a> &middot; <a href="book/homework/handouts/homework-06-handout.pdf">PDF</a>]</em></p>
-
-<table><tbody>
-<tr><td>T&nbsp;Nov&nbsp;10,&nbsp;4:00</td><td> Why Randomization Works, Part II </td></tr>
-</tbody></table>
-
-<p><em>The dates for the remaining Part 2 topics are still to be set: Conditioning; Observational Studies and Confounding; Models.</em></p>
-
-<table><tbody>
-<tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;4:00</td><td> TBD </td></tr>
-<tr><td>F&nbsp;Nov&nbsp;13,&nbsp;2:30</td><td> TBD </td></tr>
-<tr><td>T&nbsp;Nov&nbsp;17,&nbsp;4:00</td><td> TBD </td></tr>
-<tr><td>Th&nbsp;Nov&nbsp;19,&nbsp;4:00</td><td> TBD </td></tr>
-<tr><td>F&nbsp;Nov&nbsp;20,&nbsp;2:30</td><td> TBD </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;5,&nbsp;4:00</td><td> Why Randomization Works &middot; <a href="book/decks/nsw-identification-nov03.html">slides</a> </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;5,&nbsp;11:59</td><td> <a href="book/homework/homework-06.html">HW 6</a> out [<a href="book/homework/handouts/homework-06-handout.zip">download zip</a> &middot; <a href="book/homework/handouts/homework-06-handout.pdf">PDF</a>] </td></tr>
+<tr><td>F&nbsp;Nov&nbsp;6,&nbsp;2:30</td><td> Questions on HW 6 </td></tr>
+<tr><td>T&nbsp;Nov&nbsp;10,&nbsp;4:00</td><td> Randomization, Precision, and Power </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;4:00</td><td> Randomization and Sampling </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;11:59</td><td> HW 6 due &middot; HW 7 out </td></tr>
+<tr><td>F&nbsp;Nov&nbsp;13,&nbsp;2:30</td><td> Review HW 6; questions on HW 7 </td></tr>
+<tr><td>T&nbsp;Nov&nbsp;17,&nbsp;4:00</td><td> Conditioning </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;19,&nbsp;4:00</td><td> Noncompliance </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;19,&nbsp;11:59</td><td> HW 7 due &middot; HW 8 out </td></tr>
+<tr><td>F&nbsp;Nov&nbsp;20,&nbsp;2:30</td><td> Review HW 7; questions on HW 8 </td></tr>
 <tr><td>T&nbsp;Nov&nbsp;24,&nbsp;4:00</td><td> <em>No class (Thanksgiving break week)</em> </td></tr>
 <tr><td>Th&nbsp;Nov&nbsp;26,&nbsp;4:00</td><td> <em>No class (Thanksgiving)</em> </td></tr>
 <tr><td>F&nbsp;Nov&nbsp;27,&nbsp;2:30</td><td> <em>No class (Thanksgiving recess)</em> </td></tr>
-<tr><td>T&nbsp;Dec&nbsp;1,&nbsp;4:00</td><td> TBD </td></tr>
-<tr><td>Th&nbsp;Dec&nbsp;3,&nbsp;4:00</td><td> TBD </td></tr>
-<tr><td>F&nbsp;Dec&nbsp;4,&nbsp;2:30</td><td> TBD </td></tr>
-<tr><td>T&nbsp;Dec&nbsp;8,&nbsp;4:00</td><td> TBD </td></tr>
+<tr><td>T&nbsp;Dec&nbsp;1,&nbsp;4:00</td><td> Generalizing from Experiments </td></tr>
+<tr><td>Th&nbsp;Dec&nbsp;3,&nbsp;4:00</td><td> Observational Studies and Confounding </td></tr>
+<tr><td>Th&nbsp;Dec&nbsp;3,&nbsp;11:59</td><td> HW 8 due </td></tr>
+<tr><td>F&nbsp;Dec&nbsp;4,&nbsp;2:30</td><td> Review HW 8 </td></tr>
+<tr><td>T&nbsp;Dec&nbsp;8,&nbsp;4:00</td><td> Final Project Discussions </td></tr>
 <tr><td>Dec&nbsp;10–19</td><td> <em>No final exam.</em> The final project replaces Exam 2. </td></tr>
 </tbody></table>
 
@@ -652,6 +664,21 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   var tldaWheelOwner = 'page';
   var tldaWheelViewportId = '';
 
+  // Identity survives repeated state measurements in this document. A new DOM
+  // element receives a different key, so layout position never invents a
+  // replacement relationship.
+  var tldaVisualIdentityMap = new WeakMap();
+  var tldaVisualIdentityNext = 1;
+  function tldaVisualIdentity(element) {
+    if (!element) return null;
+    var identity = tldaVisualIdentityMap.get(element);
+    if (!identity) {
+      identity = tldaVisualIdentityNext++;
+      tldaVisualIdentityMap.set(element, identity);
+    }
+    return identity;
+  }
+
   // The text an agent reads for a block, for a widened (chapter view) request only. KaTeX puts
   // every formula in the DOM three times -- MathML text, the TeX source in an annotation, and a
   // hidden visual copy -- so textContent runs them together ("E[X]=..x..." beside the TeX beside
@@ -712,9 +739,20 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (slide && slide.tagName === 'SECTION') addressed = slide;
       }
     } catch (e) { /* pre-init Reveal: fall through to present */ }
-    var root = addressed ||
-      document.querySelector('.reveal .slides section.present') ||
+    var presentSlide = document.querySelector('.reveal .slides section.present');
+    var revealSlide = addressed || presentSlide;
+    var root = revealSlide ||
       document.querySelector('main') || document.body;
+    var isRevealSlide = root === addressed || (root === presentSlide && root.classList && (
+      root.classList.contains('slide') || root.classList.contains('quarto-title-block') || root.classList.contains('footnotes')
+    ));
+    if (isRevealSlide && root && typeof root.querySelectorAll === 'function') {
+      var lazyMedia = root.querySelectorAll('img[data-src], video[data-src], source[data-src], iframe[data-src]');
+      for (var lmi = 0; lmi < lazyMedia.length; lmi++) {
+        var lm = lazyMedia[lmi];
+        if (!lm.getAttribute('src') && lm.getAttribute('data-src')) lm.setAttribute('src', lm.getAttribute('data-src'));
+      }
+    }
     var blocks = [];
     // The default candidate set is the prose skeleton, and it is what every
     // deck walk gets: the walk passes no selector, so deck output is the same
@@ -726,27 +764,129 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var candidates = root.querySelectorAll(candidatesSelector || 'h1, h2, h3, h4, li, p');
     var widenedRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
     var pictureLayoutRequest = includePictureLayout === true;
+    var intrinsicGraphicText = 'svg,canvas,.modebar,.plotly-notifier';
+    var intrinsicMathText = 'math,.katex,.MathJax,.MathJax_Display,mjx-container';
+    var renderedMathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+    var displayMathSelector = '.katex-display, .math.display, .MathJax_Display, mjx-container[display="true"], math[display="block"]';
+    var assistiveMathSelector = 'mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml';
+    /**
+     * Whether a BR still breaks the line it sits on. A display of none removes an
+     * element and its break from layout entirely; a hidden visibility and a
+     * zero opacity only stop it being painted, and the break it causes is
+     * still there. So this walks for a removed ancestor and deliberately does
+     * not reuse the visibility test, which would discard real breaks.
+     */
+    function breaksLayoutLine(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var style = getComputedStyle(current);
+        if (!style) break;
+        if (style.display === 'none' || style.contentVisibility === 'hidden') return false;
+        if (current === document.documentElement) break;
+      }
+      return true;
+    }
+
     function isVisibleLayoutElement(element) {
       for (var current = element; current; current = current.parentElement) {
         var currentStyle = getComputedStyle(current);
         var opacity = parseFloat(currentStyle.opacity);
+        // MathJax and KaTeX insert visually clipped MathML for screen readers
+        // beside their visible rendering. It remains in the accessibility
+        // tree, but its text ranges are not visible slide content.
+        if (current.matches && current.matches(assistiveMathSelector)) return false;
         if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
         if (current === document.documentElement) break;
       }
       return true;
     }
+    function isIntrinsicGraphicText(owner) {
+      var graphic = owner.closest && owner.closest(intrinsicGraphicText);
+      if (!graphic) return false;
+      var math = owner.closest && owner.closest(intrinsicMathText);
+      if (math && math.contains(graphic)) {
+        // MathJax can render a separate equation as SVG. Its visible glyph
+        // text is still slide text unless the equation is inside another
+        // graphic, where it is an intrinsic label of that graphic.
+        var outerGraphic = math.parentElement && math.parentElement.closest(intrinsicGraphicText);
+        if (!outerGraphic) return false;
+      }
+      return true;
+    }
+    function visibleDomText(element, fragmentBoundary) {
+      var values = [];
+      var mathWithVisibleText = new Set();
+      var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+      var node;
+      while ((node = walker.nextNode())) {
+        var owner = node.parentElement;
+        var value = String(node.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!value || !owner || isIntrinsicGraphicText(owner) || !isVisibleLayoutElement(owner)) continue;
+        if (fragmentBoundary && owner.closest && owner.closest('.fragment.visible') !== fragmentBoundary) continue;
+        var range = document.createRange();
+        range.selectNodeContents(node);
+        if (!Array.from(range.getClientRects()).some(function(rect) { return rect.width > 1 && rect.height > 1; })) continue;
+        values.push(value);
+        for (var current = owner; current; current = current.parentElement) {
+          if (current.matches && current.matches(renderedMathSelector)) mathWithVisibleText.add(current);
+          if (current === element) break;
+        }
+      }
+      var mathNodes = (element.matches && element.matches(renderedMathSelector) ? [element] : [])
+        .concat(Array.from(element.querySelectorAll(renderedMathSelector)));
+      for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
+        var math = mathNodes[mathIndex];
+        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        if (fragmentBoundary && math.closest && math.closest('.fragment.visible') !== fragmentBoundary) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(renderedMathSelector) : null;
+        if (outerMath) continue;
+        var outerGraphic = math.parentElement && math.parentElement.closest ? math.parentElement.closest(intrinsicGraphicText) : null;
+        if (outerGraphic) continue;
+        var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
+        if (!mathRect || !(mathRect.width > 1 && mathRect.height > 1)
+            || !Number.isFinite(mathRect.top) || !Number.isFinite(mathRect.bottom)) continue;
+        values.push('[visible standalone math; rendered glyph text unavailable]');
+      }
+      return values.join(' ').replace(/\s+/g, ' ').trim();
+    }
     function visibleTextLayoutRects() {
       var rects = [];
-      var mathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
       var mathWithVisibleText = new Set();
+      var slideTitle = null;
+      if (isRevealSlide) {
+        // Quarto marks a slide's heading level on the Reveal section. Only a
+        // direct heading at that level is the slide title; a titleless slide's
+        // first body heading remains part of the picture-order measurement.
+        var titleLevel = root.classList && root.classList.contains('quarto-title-block') ? '1' : null;
+        for (var level = 1; !titleLevel && level <= 6; level++) {
+          if (root.classList && root.classList.contains('level' + level)) titleLevel = String(level);
+        }
+        if (titleLevel) {
+          var titleTag = 'H' + titleLevel;
+          var directChildren = Array.from(root.children || []);
+          for (var childIndex = 0; childIndex < directChildren.length; childIndex++) {
+            if (String(directChildren[childIndex].tagName || '').toUpperCase() === titleTag) {
+              slideTitle = directChildren[childIndex];
+              break;
+            }
+          }
+        }
+      }
+      function isSlideTitleText(owner) {
+        for (var current = owner; current && current !== root; current = current.parentElement) {
+          if (current === slideTitle) return true;
+        }
+        return false;
+      }
       var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       var textNode;
       while ((textNode = walker.nextNode())) {
         var text = textNode.textContent || '';
         var owner = textNode.parentElement;
         // SVG is measured as a picture; its internal labels belong to that
-        // image. Text siblings in an SVG-containing block still count.
-        if (!/\S/.test(text) || !owner || (owner.closest && owner.closest('svg')) || !isVisibleLayoutElement(owner)) continue;
+        // image. Text siblings in an SVG-containing block still count. The
+        // slide title is also excluded; body headings and captions still count.
+        if (!/\S/.test(text) || !owner || isSlideTitleText(owner)
+            || (owner.closest && owner.closest('svg,canvas')) || !isVisibleLayoutElement(owner)) continue;
         var range = document.createRange();
         range.setStart(textNode, 0);
         range.setEnd(textNode, text.length);
@@ -754,11 +894,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
         });
         visibleRects.forEach(function(rect) {
-          rects.push({ top: rect.top, bottom: rect.bottom });
+          rects.push({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom });
         });
         if (visibleRects.length) {
           for (var current = owner; current; current = current.parentElement) {
-            if (current.matches && current.matches(mathSelector)) mathWithVisibleText.add(current);
+            if (current.matches && current.matches(renderedMathSelector)) mathWithVisibleText.add(current);
             if (current === root) break;
           }
         }
@@ -766,18 +906,28 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // MathJax's SVG output can have no text node with a rendered range.
       // Its visible container box is the text bound in that case. Prefer one
       // outer math box and skip math SVGs when pictures are measured below.
-      var mathNodes = root.querySelectorAll(mathSelector);
+      var mathNodes = root.querySelectorAll(renderedMathSelector);
       for (var mathIndex = 0; mathIndex < mathNodes.length; mathIndex++) {
         var math = mathNodes[mathIndex];
-        if (!isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
-        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(mathSelector) : null;
+        if (isSlideTitleText(math) || !isVisibleLayoutElement(math) || mathWithVisibleText.has(math)) continue;
+        var outerMath = math.parentElement && math.parentElement.closest ? math.parentElement.closest(renderedMathSelector) : null;
         if (outerMath && outerMath !== root) continue;
         var mathRect = math.getBoundingClientRect ? math.getBoundingClientRect() : null;
         if (mathRect && mathRect.width > 1 && mathRect.height > 1 && Number.isFinite(mathRect.top) && Number.isFinite(mathRect.bottom)) {
-          rects.push({ top: mathRect.top, bottom: mathRect.bottom });
+          rects.push({ left: mathRect.left, right: mathRect.right, top: mathRect.top, bottom: mathRect.bottom });
         }
       }
       return rects;
+    }
+    function outerInlineMathContainer(element, block) {
+      if (element.closest && element.closest(displayMathSelector)) return null;
+      if (block.matches && block.matches(displayMathSelector)) return null;
+      var container = null;
+      for (var current = element; current && current !== block; current = current.parentElement) {
+        if (current.matches && current.matches(displayMathSelector)) return null;
+        if (current.matches && current.matches(renderedMathSelector)) container = current;
+      }
+      return container;
     }
     for (var blockIndex = 0; blockIndex < candidates.length; blockIndex++) {
       var block = candidates[blockIndex];
@@ -787,12 +937,114 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       if (widenedRequest && block.matches && block.matches('.math.display') && block.parentElement && block.parentElement.closest(candidatesSelector)) continue;
       var style = getComputedStyle(block);
       if (style.display === 'none' || style.visibility === 'hidden') continue;
+      var listItemHasOwnParagraph = false;
+      if (pictureLayoutRequest && block.tagName === 'LI' && block.querySelectorAll) {
+        listItemHasOwnParagraph = Array.from(block.querySelectorAll('p')).some(function(paragraph) {
+          return paragraph.closest && paragraph.closest('li') === block;
+        });
+      }
       var words = [];
+      // Inline fractions expose numerator and denominator text on separate baselines.
+      // Use their outer inline box once per fragment, while leaving display math out.
+      var inlineMathContainers = [];
+      var inlineMathContainerSet = new Set();
+      if (pictureLayoutRequest && block.querySelectorAll) {
+        var mathCandidates = block.matches && block.matches(renderedMathSelector) ? [block] : [];
+        mathCandidates = mathCandidates.concat(Array.from(block.querySelectorAll(renderedMathSelector)));
+        for (var mathCandidateIndex = 0; mathCandidateIndex < mathCandidates.length; mathCandidateIndex++) {
+          var mathContainer = outerInlineMathContainer(mathCandidates[mathCandidateIndex], block);
+          if (!mathContainer || inlineMathContainerSet.has(mathContainer) || !isVisibleLayoutElement(mathContainer)) continue;
+          if (block.tagName === 'LI') {
+            var mathListItem = mathContainer.closest ? mathContainer.closest('li') : null;
+            if (mathListItem && mathListItem !== block) continue;
+            if (listItemHasOwnParagraph && mathContainer.closest && mathContainer.closest('p')) continue;
+          }
+          inlineMathContainerSet.add(mathContainer);
+          inlineMathContainers.push(mathContainer);
+        }
+      }
+      var measuredInlineMathContainers = new Set();
+      function appendInlineMathWords(container) {
+        if (!container || measuredInlineMathContainers.has(container)) return;
+        measuredInlineMathContainers.add(container);
+        var rects = Array.from(container.getClientRects ? container.getClientRects() : []).filter(function(rect) {
+          return rect.width > 1 && rect.height > 1 && Number.isFinite(rect.top) && Number.isFinite(rect.bottom);
+        });
+        if (!rects.length && container.getBoundingClientRect) {
+          var box = container.getBoundingClientRect();
+          if (box && box.width > 1 && box.height > 1 && Number.isFinite(box.top) && Number.isFinite(box.bottom)) rects.push(box);
+        }
+        if (!rects.length) return;
+        var mathText = visibleDomText(container) || '[inline math]';
+        var mathSegment = typeof segmentOf === 'function' ? segmentOf(container) : 0;
+        rects.forEach(function(rect) {
+          words.push({ word: mathText, center: rect.top + rect.height / 2, height: rect.height, left: rect.left, segment: mathSegment });
+        });
+      }
+      // Which authored segment each node sits in. A line partition alone cannot
+      // tell an author's own line break from reflow: both put text on a second
+      // baseline, and BR carries no text, so the walk below never sees it.
+      // Number the segments between BR elements here, in document order, and
+      // every word can say which one it came from. Document order is used
+      // rather than a BR's own box, which is zero-width and not reliably
+      // measurable.
+      //
+      // Only the deck measurement asks for this. The chapter view requests its
+      // own candidate set with includeLineBreaks false, takes one range per
+      // text node rather than per word, and has no use for the distinction, so
+      // it pays for no second walk and its block shape is left exactly as it
+      // was.
+      var segmentByNode = new Map();
+      var authoredSegments = 0;
+      if (pictureLayoutRequest) {
+        var segmentWalker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+        var segmentNode;
+        while ((segmentNode = segmentWalker.nextNode())) {
+          // Only elements carry tagName, so this needs no nodeType check.
+          if (String(segmentNode.tagName || '').toUpperCase() === 'BR') {
+            // A BR removed from layout breaks nothing. Counting it would open
+            // a new segment across text that in fact reflowed, and the
+            // boundary comparison would then exempt a real wrap. Paint-only
+            // invisibility is different: a BR that is merely transparent or
+            // visibility:hidden still occupies layout and still breaks the
+            // line, so it counts. The test is participation in layout, not
+            // visibility.
+            if (breaksLayoutLine(segmentNode)) authoredSegments++;
+            continue;
+          }
+          segmentByNode.set(segmentNode, authoredSegments);
+        }
+      }
+      function segmentOf(target) {
+        var found = segmentByNode.get(target);
+        return Number.isInteger(found) ? found : 0;
+      }
       var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
       var node;
       while ((node = walker.nextNode())) {
         var hidden = node.parentElement ? node.parentElement.closest('[aria-hidden="true"]') : null;
         if (hidden && hidden !== root) continue;
+        if (pictureLayoutRequest && node.parentElement) {
+          var owner = node.parentElement;
+          if (!isVisibleLayoutElement(owner)) continue;
+          // Deck wrapping describes prose, not child bullets or the stacked
+          // glyph rows used to typeset a display equation. Paragraphs measure
+          // their own wraps; list items retain their bullet record without
+          // duplicating the paragraph's line count.
+          if (owner.closest && owner.closest(displayMathSelector)) continue;
+          if (block.tagName === 'LI') {
+            var ownerListItem = owner.closest ? owner.closest('li') : null;
+            if (ownerListItem && ownerListItem !== block) continue;
+            if (listItemHasOwnParagraph && owner.closest && owner.closest('p')) continue;
+          }
+          var ownerMath = owner.closest ? owner.closest(renderedMathSelector) : null;
+          if (ownerMath) {
+            var inlineMathContainer = outerInlineMathContainer(ownerMath, block);
+            if (inlineMathContainer && inlineMathContainerSet.has(inlineMathContainer)) appendInlineMathWords(inlineMathContainer);
+            continue;
+          }
+          if (owner.closest && owner.closest(displayMathSelector)) continue;
+        }
         // Chapter views use readable block text, not wrapped word lines. One
         // Range per text node establishes the same visibility without paying
         // one layout query per word. Deck/export callers keep wrapped lines.
@@ -810,9 +1062,23 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             word: match[0],
             center: rects[0].top + rects[0].height / 2,
             height: rects[0].height,
+            left: rects[0].left,
+            segment: segmentOf(node),
           });
         }
       }
+      // Inline math reaches the word list out of reading order. KaTeX marks its
+      // visible rendering aria-hidden and keeps its MathML for screen readers,
+      // so every text node inside an equation is skipped by the walk above and
+      // the container is collected by this trailing sweep instead -- after the
+      // prose that surrounds it. Grouping alone would therefore report
+      // "Does treated men give us enough power? n = 185" for a line that reads
+      // "Does n = 185 treated men give us enough power?", and a producer told
+      // to shorten that line could not find it on the slide. Each word carries
+      // its own horizontal position, so ordering a line by that position
+      // restores what the line actually reads, whenever its words were
+      // appended.
+      inlineMathContainers.forEach(appendInlineMathWords);
       var lines = [];
       words.forEach(function(word) {
         var line = lines.find(function(candidate) {
@@ -822,8 +1088,49 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           line = { center: word.center, words: [] };
           lines.push(line);
         }
-        line.words.push(word.word);
+        line.words.push(word);
       });
+      lines.forEach(function(line) {
+        line.words.sort(function(a, b) {
+          var left = Number.isFinite(a.left) ? a.left : 0;
+          var right = Number.isFinite(b.left) ? b.left : 0;
+          return left - right;
+        });
+      });
+      // Lines are created in word-arrival order, which is not reading order:
+      // every inline-math container arrives in the trailing sweep after all
+      // prose, so a line made only of an equation is created after the line
+      // below it. Order the lines by their own baseline before anything reads
+      // them, so line 1 is the top line on the slide. Without this, an
+      // equation alone above an authored break is emitted below the prose
+      // that follows it, and the boundary test then calls the author's break
+      // a wrap.
+      //
+      // Deck requests only, like the segment walk and reflowLines above. The
+      // non-deck path keeps the order it has always emitted: its existing key
+      // test fixes the shape of one example, not the ordering of every
+      // request, so leaving the sort ungated would change a contract nothing
+      // here measures.
+      if (pictureLayoutRequest) lines.sort(function(a, b) { return a.center - b.center; });
+      // Which line boundaries are reflow. A boundary is the author's own break
+      // when the next line starts in a later authored segment than the one the
+      // previous line ended in; otherwise the text ran past the edge and came
+      // back on its own. A segment that both breaks and wraps reports the wrap,
+      // because each boundary is judged separately.
+      var reflowBoundaries = [];
+      for (var lineIndex = 1; lineIndex < lines.length; lineIndex++) {
+        var previousEnd = -1;
+        var currentStart = Infinity;
+        lines[lineIndex - 1].words.forEach(function(entry) {
+          var segment = Number.isInteger(entry.segment) ? entry.segment : 0;
+          if (segment > previousEnd) previousEnd = segment;
+        });
+        lines[lineIndex].words.forEach(function(entry) {
+          var segment = Number.isInteger(entry.segment) ? entry.segment : 0;
+          if (segment < currentStart) currentStart = segment;
+        });
+        if (currentStart <= previousEnd) reflowBoundaries.push(lineIndex);
+      }
       // A block inside a closed (collapsed) callout has no layout box, so it has no rendered lines
       // and used to be dropped, though a reader can open the callout. A widened request keeps it,
       // marked with the callout it is closed in.
@@ -832,7 +1139,23 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         var closedHost = block.closest('.callout-collapse');
         if (closedHost && getComputedStyle(closedHost).display === 'none') closedCallout = closedHost;
       }
-      if (lines.length || closedCallout) {
+      var visibleListItem = pictureLayoutRequest && block.tagName === 'LI'
+        && !!String(block.textContent || '').trim() && isVisibleLayoutElement(block);
+      var visibleDisplayMath = false;
+      if (pictureLayoutRequest && !lines.length && isVisibleLayoutElement(block)) {
+        var displayMathNodes = (block.matches && block.matches(displayMathSelector) ? [block] : [])
+          .concat(block.querySelectorAll ? Array.from(block.querySelectorAll(displayMathSelector)) : []);
+        visibleDisplayMath = displayMathNodes.some(function(mathNode) {
+          if (!isVisibleLayoutElement(mathNode)) return false;
+          if (block.tagName === 'LI') {
+            var mathListItem = mathNode.closest ? mathNode.closest('li') : null;
+            if (mathListItem && mathListItem !== block) return false;
+            if (listItemHasOwnParagraph && mathNode.closest && mathNode.closest('p')) return false;
+          }
+          return !!visibleDomText(mathNode);
+        });
+      }
+      if (lines.length || closedCallout || visibleListItem || visibleDisplayMath) {
         // A widened request (the chapter view passes a candidate selector;
         // the deck walk never does) gets two additions on the block shape:
         //   - tables join cells with " | " and rows with " / ", because a
@@ -847,7 +1170,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         // keys, so deck measurement output is byte-identical field for
         // field, not merely compatible.
         var viewRequest = typeof candidatesSelector === 'string' && candidatesSelector !== '';
-        var blockText = (viewRequest ? tldaReadableBlockText(block) : (block.textContent || '')).replace(/\s+/g, ' ').trim();
+        var blockText = (pictureLayoutRequest
+          ? visibleDomText(block)
+          : (viewRequest ? tldaReadableBlockText(block) : (block.textContent || ''))).replace(/\s+/g, ' ').trim();
         if (viewRequest && block.tagName === 'TABLE' && typeof block.querySelectorAll === 'function') {
           var rows = [];
           var trs = block.querySelectorAll('tr');
@@ -865,8 +1190,16 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           tag: block.tagName.toLowerCase(),
           id: block.id || null,
           text: blockText,
-          lines: lines.map(function(line) { return line.words.join(' '); }),
+          lines: lines.map(function(line) {
+            return line.words.map(function(entry) { return entry.word; }).join(' ');
+          }),
+
         };
+        // The index of each line that continues the previous one by reflow
+        // rather than by an authored break. An empty array on a multi-line
+        // block means every break was the author's. Deck requests only: the
+        // chapter view's object keeps the keys it always had.
+        if (pictureLayoutRequest) entry.reflowLines = reflowBoundaries;
         if (viewRequest) {
           var blockRect = block.getBoundingClientRect ? block.getBoundingClientRect() : null;
           var sourceLineAttr = block.getAttribute ? block.getAttribute('data-source-line') : null;
@@ -887,8 +1220,53 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var measurement = { url: window.location.href, title: document.title, blocks: blocks };
     if (pictureLayoutRequest) {
       measurement.visibleTextRects = visibleTextLayoutRects();
+      // Delivery checks use rendered evidence only: source strings can sit in
+      // comments, hidden chunks, or an unused helper. These are the actual
+      // text fragments visible in this addressed state, after Reveal settled.
+      var visibleTextFragments = [];
+      var fragmentNodes = root.querySelectorAll('.fragment.visible');
+      var slideRect = root.getBoundingClientRect();
+      for (var fragmentIndex = 0; fragmentIndex < fragmentNodes.length; fragmentIndex++) {
+        var fragment = fragmentNodes[fragmentIndex];
+        // Measure each fragment's own text separately from visible nested
+        // fragments, while keeping grouped Reveal steps together by index.
+        if (!isVisibleLayoutElement(fragment)) continue;
+        var fragmentText = visibleDomText(fragment, fragment);
+        if (!fragmentText) continue;
+        var fragmentAttr = fragment.getAttribute('data-fragment-index');
+        visibleTextFragments.push({
+          index: fragmentAttr == null ? 'auto:' + fragmentIndex : 'index:' + fragmentAttr,
+          tag: (fragment.tagName || '').toLowerCase(),
+          text: fragmentText,
+        });
+      }
+      measurement.visibleTextFragments = visibleTextFragments;
+
+      // Native heading weight is layout, not inline emphasis. Capture other
+      // rendered bold text, including strong/b tags and explicit CSS weight.
+      var boldText = [];
+      var boldWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      var boldNode;
+      while ((boldNode = boldWalker.nextNode())) {
+        var boldOwner = boldNode.parentElement;
+        var boldValue = String(boldNode.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!boldValue || !boldOwner || (boldOwner.closest && boldOwner.closest('h1,h2,h3,h4,h5,h6,svg,.katex,.MathJax,mjx-container'))) continue;
+        if (!isVisibleLayoutElement(boldOwner)) continue;
+        var boldWeight = parseFloat(getComputedStyle(boldOwner).fontWeight);
+        if (!Number.isFinite(boldWeight) || boldWeight < 600) continue;
+        var boldRange = document.createRange();
+        boldRange.selectNodeContents(boldNode);
+        if (!Array.from(boldRange.getClientRects()).some(function(rect) { return rect.width > 1 && rect.height > 1; })) continue;
+        boldText.push({ tag: (boldOwner.tagName || '').toLowerCase(), text: boldValue, weight: boldWeight });
+      }
+      measurement.boldText = boldText;
+
       var pictures = [];
       var pictureNodes = root.querySelectorAll('img, svg, canvas');
+      var figureSelector = 'figure, .quarto-figure, .cell-output-display';
+      var figureBoxes = (root.matches && root.matches(figureSelector) ? [root] : [])
+        .concat(Array.from(root.querySelectorAll(figureSelector)));
+      var figureBoxIndices = new Map(figureBoxes.map(function(box, index) { return [box, index + 1]; }));
       for (var pictureIndex = 0; pictureIndex < pictureNodes.length; pictureIndex++) {
         var picture = pictureNodes[pictureIndex];
         var tag = (picture.tagName || '').toLowerCase();
@@ -897,16 +1275,79 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (picture.parentElement && picture.parentElement.closest && picture.parentElement.closest('svg')) continue;
         if (tag === 'svg' && picture.closest && picture.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) continue;
         if (!isVisibleLayoutElement(picture)) continue;
+        var figureBox = picture.closest && picture.closest('figure, .quarto-figure, .cell-output-display');
         var pictureRect = picture.getBoundingClientRect ? picture.getBoundingClientRect() : null;
         if (!pictureRect || pictureRect.width < 2 || pictureRect.height < 2) continue;
         pictures.push({
           tag: tag,
           id: picture.id || null,
           alt: tag === 'img' && picture.getAttribute ? picture.getAttribute('alt') : null,
-          layoutRect: { top: pictureRect.top, bottom: pictureRect.bottom },
+          kind: figureBox ? 'figure' : 'picture',
+          figureIndex: figureBox ? figureBoxIndices.get(figureBox) : null,
+          pictureIndex: pictureIndex + 1,
+          elementIdentity: tldaVisualIdentity(figureBox || picture),
+          layoutRect: {
+            x: pictureRect.left - slideRect.left,
+            y: pictureRect.top - slideRect.top,
+            left: pictureRect.left,
+            right: pictureRect.right,
+            top: pictureRect.top,
+            bottom: pictureRect.bottom,
+            width: pictureRect.width,
+            height: pictureRect.height,
+          },
         });
       }
       measurement.pictures = pictures;
+
+      // Scroll extents include hidden Reveal fragments. Measure the visible
+      // text ranges and graphics in this settled state against the slide box.
+      var visibleContentRects = measurement.visibleTextRects.concat(pictures.map(function(picture) {
+        var rect = picture.layoutRect;
+        return {
+          left: slideRect.left + rect.x,
+          right: slideRect.left + rect.x + rect.width,
+          top: slideRect.top + rect.y,
+          bottom: slideRect.top + rect.y + rect.height,
+        };
+      }));
+      if (slideRect.width > 0 && slideRect.height > 0
+          && [slideRect.left, slideRect.right, slideRect.top, slideRect.bottom].every(Number.isFinite)) {
+        var overflowX = 0;
+        visibleContentRects.forEach(function(rect) {
+          overflowX = Math.max(overflowX, slideRect.left - rect.left, rect.right - slideRect.right);
+        });
+        measurement.overflowXPx = Math.max(0, overflowX);
+      } else {
+        measurement.overflowXPx = null;
+      }
+
+      // A plot's Reveal fragment may contain graphics only. Prose synchronized
+      // with it belongs in a separate parallel fragment sequence. SVG/canvas
+      // labels are intrinsic to the graphic and deliberately excluded here.
+      var figureFragmentText = [];
+      var visibleFragments = root.querySelectorAll('.fragment.visible');
+      for (var figureFragmentIndex = 0; figureFragmentIndex < visibleFragments.length; figureFragmentIndex++) {
+        var figureFragment = visibleFragments[figureFragmentIndex];
+        var graphicSelector = 'img, svg, canvas';
+        var graphics = (figureFragment.matches && figureFragment.matches(graphicSelector) ? [figureFragment] : [])
+          .concat(Array.from(figureFragment.querySelectorAll(graphicSelector)));
+        var hasVisibleGraphic = graphics.some(function(graphic) {
+          if ((graphic.tagName || '').toLowerCase() === 'svg' && graphic.closest && graphic.closest('.katex, .math, .MathJax, .MathJax_Display, mjx-container')) return false;
+          if (!isVisibleLayoutElement(graphic)) return false;
+          var rect = graphic.getBoundingClientRect ? graphic.getBoundingClientRect() : null;
+          return rect && rect.width > 1 && rect.height > 1;
+        });
+        if (!hasVisibleGraphic) continue;
+        var fragmentText = visibleDomText(figureFragment);
+        if (!fragmentText) continue;
+        var figureFragmentAttr = figureFragment.getAttribute('data-fragment-index');
+        figureFragmentText.push({
+          index: figureFragmentAttr == null ? 'auto:' + figureFragmentIndex : 'index:' + figureFragmentAttr,
+          text: fragmentText,
+        });
+      }
+      measurement.figureFragmentText = figureFragmentText;
     }
     return measurement;
   }
@@ -984,14 +1425,28 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     var slide = addressed
       || doc.querySelector('.reveal .slides section.present')
       || doc.querySelector('.reveal .slides section');
-    var found = slide ? slide.querySelectorAll('svg, canvas') : [];
+    var renderedMathSelector = '.katex-display, .katex, .math.display, .MathJax, .MathJax_Display, mjx-container, math';
+    function isVisibleFigureElement(element) {
+      for (var current = element; current; current = current.parentElement) {
+        var currentStyle = typeof getComputedStyle === 'function' ? getComputedStyle(current) : null;
+        if (!currentStyle) break;
+        var opacity = parseFloat(currentStyle.opacity);
+        if (currentStyle.display === 'none' || currentStyle.visibility === 'hidden' || currentStyle.visibility === 'collapse' || currentStyle.contentVisibility === 'hidden' || opacity === 0) return false;
+        if (current === doc.documentElement) break;
+      }
+      return true;
+    }
+    var found = slide ? slide.querySelectorAll('img, svg, canvas') : [];
     var nodes = Array.prototype.slice.call(found);
     var figures = [];
     var chain = Promise.resolve();
     nodes.forEach(function(node) {
       chain = chain.then(function() {
+        if (!isVisibleFigureElement(node)) return null;
         var tag = (node.tagName || '').toLowerCase();
         if (tag === 'svg') {
+          if (node.parentElement && node.parentElement.closest && node.parentElement.closest('svg')) return null;
+          if (node.closest && node.closest(renderedMathSelector)) return null;
           var rect = node.getBoundingClientRect();
           var width = Math.max(1, Math.round(rect.width));
           var height = Math.max(1, Math.round(rect.height));
@@ -1002,6 +1457,26 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
             figures.push({ kind: 'svg', png: null, width: width, height: height,
               note: 'SVG did not raster: ' + (e && e.message ? e.message : String(e)) });
           });
+        }
+        if (tag === 'img') {
+          var imgRect = node.getBoundingClientRect();
+          var imgW = Math.max(1, Math.round(imgRect.width));
+          var imgH = Math.max(1, Math.round(imgRect.height));
+          if (imgRect.width < 2 || imgRect.height < 2) return null;
+          try {
+            var imgCanvas = doc.createElement('canvas');
+            imgCanvas.width = imgW;
+            imgCanvas.height = imgH;
+            var imgCtx = imgCanvas.getContext('2d');
+            if (!imgCtx) throw new Error('no 2d context');
+            imgCtx.drawImage(node, 0, 0, imgW, imgH);
+            figures.push({ kind: 'img', png: imgCanvas.toDataURL('image/png'), width: imgW, height: imgH, note: null });
+          } catch (e) {
+            var imgSrc = node.currentSrc || (node.getAttribute && (node.getAttribute('src') || node.getAttribute('data-src'))) || null;
+            figures.push({ kind: 'img', png: imgSrc, width: imgW, height: imgH,
+              note: imgSrc ? null : 'image unreadable: ' + (e && e.message ? e.message : String(e)) });
+          }
+          return null;
         }
         if (tag === 'canvas') {
           if (node.width < 2 || node.height < 2) return null;
@@ -1037,6 +1512,453 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         shapeId: shapeId,
         requestId: requestId,
         figures: [],
+        error: e && e.message ? e.message : String(e),
+      }, '*');
+    });
+  });
+
+  // ---- in-viewer slide rasterizer -------------------------------------------
+  //
+  // A capture in a viewer's window cannot take a native screenshot, so the
+  // slide is drawn into an SVG image and from there onto a canvas. An SVG
+  // image loads nothing from outside itself, so it carries everything the
+  // slide's look depends on: the deck's own style sheets (so pseudo-element
+  // bullets, list markers and fragment states render as in the deck), their
+  // fonts and url() images inlined as data, and the slide inside a copy of
+  // its ancestors' classes so descendant selectors still match. The first
+  // version copied each element's computed style instead; it lost the fonts,
+  // the pseudo-elements and the ground, and drew white slides with
+  // overlapping lines (nsw-identification-nov03 slide 17, 2026-11-10).
+  var tldaRasterAssets = null;
+
+  function tldaFetchDataUrl(url, cache) {
+    if (cache[url]) return cache[url];
+    cache[url] = fetch(url, { credentials: 'same-origin' }).then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.blob();
+    }).then(function(blob) {
+      return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = function() { reject(reader.error); };
+        reader.readAsDataURL(blob);
+      });
+    }).catch(function() { return null; });
+    return cache[url];
+  }
+
+  // Every url(...) in a CSS text, resolved against base and replaced by data.
+  function tldaInlineCssUrls(css, base, cache) {
+    var parts = [];
+    var urls = [];
+    var at = 0;
+    for (;;) {
+      var i = css.indexOf('url(', at);
+      if (i < 0) break;
+      var j = css.indexOf(')', i);
+      if (j < 0) break;
+      var raw = css.slice(i + 4, j).trim();
+      var q = raw.charAt(0);
+      if (q === '"' || q === "'") raw = raw.slice(1, -1);
+      parts.push(css.slice(at, i));
+      if (!raw || raw.indexOf('data:') === 0 || raw.charAt(0) === '#') {
+        parts.push(css.slice(i, j + 1));
+      } else {
+        var abs;
+        try { abs = new URL(raw, base).href; } catch (e) { abs = null; }
+        parts.push(abs ? { url: abs } : css.slice(i, j + 1));
+        if (abs) urls.push(abs);
+      }
+      at = j + 1;
+    }
+    parts.push(css.slice(at));
+    return Promise.all(urls.map(function(u) { return tldaFetchDataUrl(u, cache); })).then(function() {
+      return Promise.all(parts.map(function(p) {
+        if (typeof p === 'string') return p;
+        return tldaFetchDataUrl(p.url, cache).then(function(data) { return data ? 'url("' + data + '")' : 'url("' + p.url + '")'; });
+      }));
+    }).then(function(done) { return done.join(''); });
+  }
+
+  // The deck's style sheets as one CSS text with every url() inlined.
+  // Computed once per document: the sheets and fonts do not change per slide.
+  function tldaRasterCss() {
+    if (tldaRasterAssets) return tldaRasterAssets;
+    var cache = {};
+    // A sheet's text with its @import rules expanded in place: an SVG image
+    // loads no imports, and the deck's Roboto arrives through one (the
+    // Quarto theme imports Google Fonts). A cross-origin sheet hides its
+    // rules, so its text is fetched instead.
+    function sheetText(sheet, href) {
+      var base = href || sheet && sheet.href || document.baseURI;
+      var rules = null;
+      try { rules = sheet ? sheet.cssRules : null; } catch (e) { rules = null; }
+      if (!rules) {
+        if (!href && !(sheet && sheet.href)) return Promise.resolve('');
+        return fetch(href || sheet.href).then(function(r) { return r.ok ? r.text() : ''; }).catch(function() { return ''; })
+          .then(function(css) { return tldaInlineCssUrls(css, base, cache); });
+      }
+      return Promise.all(Array.prototype.map.call(rules, function(rule) {
+        if (rule.type === 3) {
+          var target = null;
+          try { target = new URL(rule.href, base).href; } catch (e) { target = null; }
+          var inner = null;
+          var readable = false;
+          try { inner = rule.styleSheet; readable = !!(inner && inner.cssRules); } catch (e) { readable = false; }
+          return readable ? sheetText(inner, null) : sheetText(null, target);
+        }
+        return tldaInlineCssUrls(rule.cssText, base, cache);
+      })).then(function(parts) { return parts.join('\n'); });
+    }
+    tldaRasterAssets = Promise.all(Array.prototype.map.call(document.styleSheets, function(sheet) { return sheetText(sheet, null); }))
+      .then(function(texts) { return texts.join('\n'); });
+    return tldaRasterAssets;
+  }
+
+  function tldaImageDataUrl(img) {
+    try {
+      var c = document.createElement('canvas');
+      c.width = img.naturalWidth;
+      c.height = img.naturalHeight;
+      c.getContext('2d').drawImage(img, 0, 0);
+      return c.toDataURL('image/png');
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function tldaRasterizeCurrentSlide(opts) {
+    var slide = (window.Reveal && typeof window.Reveal.getCurrentSlide === 'function' && window.Reveal.getCurrentSlide())
+      || document.querySelector('.reveal .slides section.present')
+      || document.querySelector('.reveal .slides section');
+    if (!slide) return Promise.reject(new Error('No active slide section to rasterize'));
+    if (typeof slide.querySelectorAll === 'function') {
+      var lazyEls = slide.querySelectorAll('img[data-src], video[data-src], source[data-src], iframe[data-src]');
+      for (var li = 0; li < lazyEls.length; li++) {
+        var le = lazyEls[li];
+        if (!le.getAttribute('src') && le.getAttribute('data-src')) le.setAttribute('src', le.getAttribute('data-src'));
+      }
+    }
+    var authoredW = Math.max(1, Math.ceil(slide.offsetWidth || 1290));
+    var w = Math.max(authoredW, Math.ceil(slide.scrollWidth || 0));
+    var h = Math.max(1, Math.ceil(Math.max(slide.offsetHeight, slide.scrollHeight) || 1000));
+    var sRect = typeof slide.getBoundingClientRect === 'function' ? slide.getBoundingClientRect() : null;
+    if (sRect && sRect.width > 0 && sRect.height > 0 && typeof slide.querySelectorAll === 'function') {
+      var scaleX = authoredW / sRect.width;
+      var scaleY = (slide.offsetHeight || sRect.height) / sRect.height;
+      var contentNodes = slide.querySelectorAll('p, li, dd, dt, blockquote, figcaption, caption, h1, h2, h3, h4, h5, h6, pre, table, .math.display, mjx-container[display="true"], .katex-display, .callout, img, svg, canvas, video, figure, .cell-output-display');
+      for (var ci = 0; ci < contentNodes.length; ci++) {
+        var cn = contentNodes[ci];
+        if (!cn || typeof cn.getBoundingClientRect !== 'function') continue;
+        if (cn.closest && cn.closest('mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml, .fragment:not(.visible)')) continue;
+        var cnVisible = true;
+        if (typeof getComputedStyle === 'function') {
+          for (var cur = cn; cur && cur !== slide; cur = cur.parentElement) {
+            var cs = getComputedStyle(cur);
+            if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' || cs.contentVisibility === 'hidden' || parseFloat(cs.opacity) === 0)) {
+              cnVisible = false;
+              break;
+            }
+          }
+        }
+        if (!cnVisible) continue;
+        var cr = cn.getBoundingClientRect();
+        if (cr && cr.width > 0 && cr.height > 0) {
+          w = Math.max(w, Math.ceil((cr.right - sRect.left) * scaleX));
+          h = Math.max(h, Math.ceil((cr.bottom - sRect.top) * scaleY));
+        }
+      }
+    }
+    // The ground: the viewer canvas's own colour when the walk found an
+    // opaque one, else the deck theme's background (--r-background-color),
+    // which is what the canvas takes on from the deck. The deck document
+    // itself is transparent in deck mode, so neither comes from its boxes.
+    var themeGround = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+    var ground = (opts && typeof opts.ground === 'string' && opts.ground) || themeGround || '#ffffff';
+    return tldaRasterCss().then(function(css) {
+      var clone = slide.cloneNode(true);
+      var origEls = [slide].concat(Array.prototype.slice.call(slide.querySelectorAll('*')));
+      var cloneEls = [clone].concat(Array.prototype.slice.call(clone.querySelectorAll('*')));
+      var imageJobs = [];
+      for (var i = 0; i < origEls.length && i < cloneEls.length; i++) {
+        var orig = origEls[i];
+        var copy = cloneEls[i];
+        var tag = orig.tagName;
+        if (tag === 'CANVAS') {
+          try {
+            var ci = document.createElement('img');
+            ci.setAttribute('src', orig.toDataURL('image/png'));
+            ci.setAttribute('style', 'width:' + orig.offsetWidth + 'px;height:' + orig.offsetHeight + 'px;' + (copy.getAttribute('style') || ''));
+            ci.className = copy.className;
+            if (copy.parentNode) copy.parentNode.replaceChild(ci, copy);
+          } catch (e) { /* a tainted canvas stays as drawn: blank */ }
+        } else if (tag === 'IMG') {
+          var data = orig.complete && orig.naturalWidth > 0 ? tldaImageDataUrl(orig) : null;
+          var imgUrl = orig.currentSrc || orig.src || (orig.getAttribute && (orig.getAttribute('src') || orig.getAttribute('data-src'))) || '';
+          if (data) {
+            copy.setAttribute('src', data);
+            copy.removeAttribute('srcset');
+          } else if (imgUrl) {
+            (function(c, u) {
+              imageJobs.push(fetch(u).then(function(r) { return r.ok ? r.blob() : null; }).then(function(b) {
+                if (!b) return;
+                return new Promise(function(res) { var fr = new FileReader(); fr.onload = function() { c.setAttribute('src', fr.result); c.removeAttribute('srcset'); res(); }; fr.readAsDataURL(b); });
+              }).catch(function(err) {
+                // An image the viewer cannot fetch would draw as nothing;
+                // mark its place instead so the capture does not pass a gap
+                // off as content.
+                c.setAttribute('alt', 'image not loaded: ' + (err && err.message ? err.message : 'fetch failed'));
+                c.setAttribute('style', (c.getAttribute('style') || '') + ';outline:2px dashed #888;');
+              }));
+            })(copy, imgUrl);
+          }
+        } else if (tag === 'IFRAME' || tag === 'VIDEO' || tag === 'OBJECT' || tag === 'EMBED') {
+          // An embedded document cannot be drawn into an image. Say so in
+          // its place rather than leave a blank that reads as content.
+          var note = document.createElement('div');
+          note.setAttribute('style', 'box-sizing:border-box;width:' + orig.offsetWidth + 'px;height:' + orig.offsetHeight + 'px;border:2px dashed #888;color:#666;font:16px sans-serif;display:flex;align-items:center;justify-content:center;text-align:center;');
+          note.textContent = 'embedded ' + tag.toLowerCase() + ' (not drawn in a viewer capture)';
+          if (copy.parentNode) copy.parentNode.replaceChild(note, copy);
+        }
+      }
+      return Promise.all(imageJobs).then(function() {
+        // Place the slide at the origin, at its authored layout width so prose
+        // never reflows, while the outer root/SVG expands to w x h so wide
+        // display math or tall content is never clipped.
+        ['position', 'left', 'top', 'right', 'bottom', 'inset', 'margin', 'transform', 'width', 'height', 'display', 'opacity', 'visibility'].forEach(function(p) { clone.style.removeProperty(p); });
+        clone.style.setProperty('position', 'relative', 'important');
+        clone.style.setProperty('inset', 'auto', 'important');
+        clone.style.setProperty('left', '0', 'important');
+        clone.style.setProperty('top', '0', 'important');
+        clone.style.setProperty('margin', '0', 'important');
+        clone.style.setProperty('transform', 'none', 'important');
+        clone.style.setProperty('width', authoredW + 'px', 'important');
+        clone.style.setProperty('min-height', h + 'px', 'important');
+        clone.style.setProperty('overflow', 'visible', 'important');
+        clone.style.setProperty('display', 'block', 'important');
+        clone.style.setProperty('opacity', '1', 'important');
+        clone.style.setProperty('visibility', 'visible', 'important');
+        // The slide's ancestors as plain boxes with the same classes, so the
+        // deck's descendant selectors (.reveal .slides section ...) match.
+        var node = clone;
+        for (var el = slide.parentElement; el && el !== document.body && el !== document.documentElement; el = el.parentElement) {
+          var box = document.createElement('div');
+          if (el.className && typeof el.className === 'string') box.className = el.className;
+          if (el.id) box.id = el.id;
+          box.setAttribute('style', 'position:relative !important;inset:auto !important;left:0 !important;top:0 !important;margin:0 !important;padding:0 !important;transform:none !important;width:' + authoredW + 'px !important;height:auto !important;min-height:0 !important;overflow:visible !important;display:block !important;background:transparent !important;zoom:1 !important;');
+          box.appendChild(node);
+          node = box;
+        }
+        // Body-level inheritance (font, colour) that selectors on body supply.
+        var bs = getComputedStyle(document.body);
+        var root = document.createElement('div');
+        root.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+        root.className = (document.documentElement.className || '') + ' ' + (document.body.className || '');
+        root.setAttribute('style', 'width:' + w + 'px;height:' + h + 'px;overflow:hidden;background:transparent;font-family:' + bs.fontFamily.split('"').join("'") + ';font-size:' + bs.fontSize + ';color:' + bs.color + ';line-height:' + bs.lineHeight + ';');
+        var style = document.createElement('style');
+        style.textContent = css;
+        root.appendChild(style);
+        root.appendChild(node);
+        var serialized = new XMLSerializer().serializeToString(root);
+        var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">'
+          + '<rect width="100%" height="100%" fill="' + String(ground).split('"').join('&quot;') + '"/>'
+          + '<foreignObject x="0" y="0" width="' + w + '" height="' + h + '">' + serialized + '</foreignObject></svg>';
+        var viewportW = Number(opts && opts.viewportW) || 1400;
+        var dsf = Number(opts && opts.dsf) || 1;
+        var scale = Math.min(1, viewportW / 1400) * dsf;
+        var outW = Math.max(1, Math.ceil(w * scale));
+        var outH = Math.max(1, Math.ceil(h * scale));
+        // A data: URL, not a blob: URL: Chrome taints a canvas that draws a
+        // foreignObject SVG from a blob, and a tainted canvas cannot export.
+        var url = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        return new Promise(function(resolve, reject) {
+          var img = new Image();
+          img.onload = function() {
+            try {
+              var outCanvas = document.createElement('canvas');
+              outCanvas.width = outW;
+              outCanvas.height = outH;
+              var ctx = outCanvas.getContext('2d');
+              ctx.fillStyle = ground;
+              ctx.fillRect(0, 0, outW, outH);
+              ctx.drawImage(img, 0, 0, outW, outH);
+              var dataUrl = outCanvas.toDataURL('image/png');
+              var comma = dataUrl.indexOf(',');
+              var marks = [];
+              try { marks = tldaReadSlideMarks(slide); } catch (markErr) { marks = [{ kind: 'marks', color: 'all', gesture: 'could not be read (' + (markErr && markErr.message ? markErr.message : String(markErr)) + ')', words: '', written: '' }]; }
+              resolve({
+                pngBase64: comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl,
+                box: { x: 0, y: 0, w: w, h: h },
+                clip: { x: 0, y: 0, width: outW, height: outH },
+                ground: ground,
+                marks: marks,
+              });
+            } catch (err) {
+              reject(err);
+            }
+          };
+          img.onerror = function() {
+            reject(new Error('Failed to load serialized slide SVG into Image'));
+          };
+          img.src = url;
+        });
+      });
+    });
+  }
+
+  // ---- canvas marks over the slides (view's annotations) --------------------
+  //
+  // The walk sends the marks drawn on the deck's canvas as SVG per slide, in
+  // the slide's authored px; each is laid into its slide's section so it is
+  // drawn with the slide. At raster time the marks on the drawn slide are read
+  // back: the words each one touches (a horizontal line underlines or strikes
+  // through them), the figures it lies on, and its box. The headless runner
+  // does the same from outside (cli/lib/deck-capture.mjs); here it runs in
+  // the deck, since a viewer's window cannot reach into the clone.
+  var TLDA_OVERLAY_ELEMENTS = ["defs","marker","g","path","rect","ellipse","text","tspan"];
+  var TLDA_OVERLAY_ATTRIBUTES = ["id","class","transform","fill","stroke","stroke-width","stroke-linecap","stroke-linejoin","opacity","d","marker-end","x","y","dy","width","height","rx","ry","cx","cy","viewBox","refX","refY","markerWidth","markerHeight","orient","font-family","font-size","data-mark","data-kind","data-gesture","data-color","data-written"];
+  function tldaOverlayValueUnsafe(value) {
+    var v = String(value).toLowerCase();
+    if (v.indexOf('javascript:') >= 0 || v.indexOf('data:') >= 0) return true;
+    return v.split('url(#tlda-overlay-arrow)').join('').indexOf('url(') >= 0;
+  }
+  function tldaCleanOverlay(root) {
+    var all = Array.prototype.slice.call(root.getElementsByTagName('*'));
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      if (!el.parentNode) continue;
+      if (TLDA_OVERLAY_ELEMENTS.indexOf(el.localName) < 0) { el.parentNode.removeChild(el); continue; }
+      var attrs = Array.prototype.slice.call(el.attributes);
+      for (var j = 0; j < attrs.length; j++) {
+        if (TLDA_OVERLAY_ATTRIBUTES.indexOf(attrs[j].name) < 0 || tldaOverlayValueUnsafe(attrs[j].value)) el.removeAttribute(attrs[j].name);
+      }
+    }
+  }
+
+  function tldaLayOverlay(overlay) {
+    var laid = 0;
+    var slides = overlay && overlay.slides ? overlay.slides : [];
+    for (var i = 0; i < slides.length; i++) {
+      var o = slides[i];
+      var section = o.id ? document.getElementById(o.id) : null;
+      if (!section && window.Reveal && window.Reveal.getSlide) section = window.Reveal.getSlide(o.h, o.v);
+      if (!section || section.querySelector(':scope > svg.tlda-annotation-overlay')) continue;
+      // Parsed as XML and rebuilt from the allowlist the server also checks
+      // (shared/overlay-svg.mjs), never assigned as markup: an overlay is
+      // data from an agent's request, and markup could carry script.
+      var parsed = new DOMParser().parseFromString('<svg xmlns="http://www.w3.org/2000/svg">' + String(overlay.defs || '') + String(o.svg || '') + '</svg>', 'image/svg+xml');
+      if (parsed.getElementsByTagName('parsererror').length) continue;
+      tldaCleanOverlay(parsed.documentElement);
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'tlda-annotation-overlay');
+      svg.setAttribute('aria-hidden', 'true');
+      svg.setAttribute('style', 'position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:2147483647');
+      Array.prototype.slice.call(parsed.documentElement.childNodes).forEach(function(child) {
+        svg.appendChild(document.importNode(child, true));
+      });
+      section.appendChild(svg);
+      laid++;
+    }
+    return laid;
+  }
+
+  var tldaReadSlideMarks = function readSlideMarks(section) {
+  var marks = Array.prototype.slice.call(section.querySelectorAll(':scope > svg.tlda-annotation-overlay g.tlda-mark'));
+  if (!marks.length) return [];
+  var words = [];
+  var walker = document.createTreeWalker(section, NodeFilter.SHOW_TEXT, {
+    acceptNode: function(n) {
+      return (!n.nodeValue.trim() || (n.parentElement && n.parentElement.closest('svg.tlda-annotation-overlay, script, style, .katex-mathml, mjx-assistive-mml, .MJX_Assistive_MathML')))
+        ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+    },
+  });
+  var range = document.createRange();
+  for (var n = walker.nextNode(); n; n = walker.nextNode()) {
+    var re = /\S+/g;
+    var m;
+    while ((m = re.exec(n.nodeValue))) {
+      range.setStart(n, m.index);
+      range.setEnd(n, m.index + m[0].length);
+      var r = range.getBoundingClientRect();
+      if (r.width && r.height) words.push({ text: m[0], left: r.left, right: r.right, top: r.top, bottom: r.bottom });
+    }
+  }
+  var sr = section.getBoundingClientRect();
+  var scale = section.offsetWidth ? sr.width / section.offsetWidth : 1;
+  var figures = Array.prototype.slice.call(section.querySelectorAll('img, svg, canvas, video, iframe')).filter(function(el) {
+    return !el.closest('svg.tlda-annotation-overlay') && !(el.tagName.toLowerCase() === 'svg' && el.parentElement && el.parentElement.closest('svg'));
+  }).map(function(el) { return { el: el, r: el.getBoundingClientRect() }; }).filter(function(f) {
+    return f.r.width > 40 * scale && f.r.height > 40 * scale;
+  });
+  return marks.map(function(g) {
+    var box = g.getBoundingClientRect();
+    var base = { id: g.dataset.mark, kind: g.dataset.kind, color: g.dataset.color };
+    if (g.dataset.written) base.written = g.dataset.written;
+    if (!box.width && !box.height) { base.gesture = g.dataset.gesture; base.empty = true; base.words = ''; return base; }
+    var gesture = g.dataset.gesture;
+    var hit;
+    if (gesture === 'horizontal line') {
+      var y = (box.top + box.bottom) / 2;
+      var over = words.filter(function(w) { return w.right > box.left && w.left < box.right; });
+      var through = over.filter(function(w) { return y > w.top + (w.bottom - w.top) * 0.3 && y < w.bottom - (w.bottom - w.top) * 0.2; });
+      var under = over.filter(function(w) { return y >= w.bottom - (w.bottom - w.top) * 0.2 && y < w.bottom + 30 * scale; });
+      if (through.length && through.length >= under.length) { hit = through; gesture = 'strikes through'; }
+      else if (under.length) { hit = under; gesture = 'underlines'; }
+      else hit = [];
+    } else {
+      var pad = 6 * scale;
+      hit = words.filter(function(w) { return w.right > box.left - pad && w.left < box.right + pad && w.bottom > box.top - pad && w.top < box.bottom + pad; });
+    }
+    var onFigures = [];
+    figures.forEach(function(f, i) {
+      if (f.r.right > box.left && f.r.left < box.right && f.r.bottom > box.top && f.r.top < box.bottom) {
+        var alt = f.el.getAttribute('alt');
+        onFigures.push('figure ' + (i + 1) + ' of ' + figures.length + (alt ? ' (' + alt.slice(0, 60) + ')' : ''));
+      }
+    });
+    base.gesture = gesture;
+    base.words = hit.map(function(w) { return w.text; }).join(' ').slice(0, 160);
+    if (onFigures.length) base.figures = onFigures;
+    base.box = { x: Math.round((box.left - sr.left) / scale), y: Math.round((box.top - sr.top) / scale), w: Math.round(box.width / scale), h: Math.round(box.height / scale) };
+    return base;
+  });
+};
+
+  window.addEventListener('message', function(event) {
+    if (!event.data || event.data.type !== 'tlda-lay-overlay') return;
+    // Only the capture walk that owns this clone may lay marks into it: the
+    // parent window, in a capture clone. Any other sender is ignored.
+    if (event.source !== window.parent || window.parent === window) return;
+    if (typeof captureHold === 'undefined' || !captureHold) return;
+    var target = window.parent;
+    var laid = 0;
+    var error = null;
+    try { laid = tldaLayOverlay(event.data.overlay); } catch (e) { error = e && e.message ? e.message : String(e); }
+    target.postMessage({ type: 'tlda-overlay-laid', requestId: event.data.requestId || null, laid: laid, error: error }, '*');
+  });
+
+  window.addEventListener('message', function(event) {
+    if (event.data?.type !== 'tlda-raster-slide') return;
+    var requestId = event.data.requestId || null;
+    var target = event.source || window.parent;
+    tldaRasterizeCurrentSlide(event.data).then(function(res) {
+      target.postMessage({
+        type: 'tlda-slide-png',
+        shapeId: shapeId,
+        requestId: requestId,
+        ok: true,
+        pngBase64: res.pngBase64,
+        box: res.box,
+        clip: res.clip,
+        ground: res.ground,
+        marks: res.marks || [],
+      }, '*');
+    }, function(e) {
+      target.postMessage({
+        type: 'tlda-slide-png',
+        shapeId: shapeId,
+        requestId: requestId,
+        ok: false,
         error: e && e.message ? e.message : String(e),
       }, '*');
     });
@@ -1749,6 +2671,25 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   function reportHeadings() {
     var elements = document.querySelectorAll('[id]');
     var positions = {};
+    // Geometry already reported to the reader also carries the callout edge
+    // needed by saved sticky anchors across the static/backend origin split.
+    // This observes the page; it never opens, resizes or styles a solution.
+    var markingPositions = {};
+    var exercises = Array.prototype.slice.call(document.querySelectorAll('.callout-exercise,[id^="exr-"]'))
+      .filter(function(el) { return !el.parentElement.closest('.callout-exercise'); });
+    function markingRect(el) {
+      var rect = el.getBoundingClientRect();
+      return { x: rect.left + window.scrollX, y: rect.top + window.scrollY, w: rect.width, h: rect.height };
+    }
+    document.querySelectorAll('.callout-solution').forEach(function(solution) {
+      var preceding = null;
+      exercises.forEach(function(exercise) { if (exercise.compareDocumentPosition(solution) & Node.DOCUMENT_POSITION_FOLLOWING) preceding = exercise; });
+      if (preceding && preceding.id && solution.getBoundingClientRect().height > 0) markingPositions[preceding.id] = markingRect(solution);
+    });
+    document.querySelectorAll('[id^="ans-"]').forEach(function(answer) {
+      var callout = answer.closest('.callout') || answer;
+      if (callout.getBoundingClientRect().height > 0) markingPositions[answer.id] = markingRect(callout);
+    });
     elements.forEach(function(el) {
       var id = el.id;
       if (!id) return;
@@ -1781,6 +2722,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         type: 'tlda-headings',
         shapeId: shapeId,
         positions: positions,
+        markingPositions: markingPositions,
         outline: outline,
       }, '*');
     }
@@ -2141,6 +3083,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   if (course) destination.searchParams.set('course', course)
   anchor.href = destination.href
   if (destination.origin !== location.origin || !['http:', 'https:'].includes(destination.protocol)) return
+  // The app opens where the reader is: the page's own address (a deck's
+  // #/slide, a chapter's #heading) rides on the link at the moment it is used.
+  anchor.addEventListener('click', () => {
+    const here = new URL(anchor.href)
+    here.hash = location.hash
+    anchor.href = here.href
+  })
   let active = null
   let generation = 0
 
