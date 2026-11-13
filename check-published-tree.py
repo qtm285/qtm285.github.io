@@ -17,7 +17,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from publish_guard import solution_violations
+from publish_guard import schedule_violations, solution_violations
 
 DEFAULT_ALLOWLIST = 'publish-allow-solutions.txt'
 
@@ -34,18 +34,29 @@ def main():
     return 1
 
   violations = solution_violations(args.site_dir, args.allowlist)
-  if not violations:
-    print(f'{args.site_dir}: no published chapter carries worked solutions')
+  sched_issues = schedule_violations(args.site_dir)
+  if not violations and not sched_issues:
+    print(f'{args.site_dir}: no published chapter carries worked solutions; schedule structure clean')
     return 0
 
-  total = sum(row['blocks'] for row in violations)
-  print(f'{len(violations)} published chapter(s) carry {total} worked solution(s), '
-        f'which this site must not serve:', file=sys.stderr)
-  for row in violations:
-    print(f'  {row["page"]}  — {row["blocks"]} solution callout(s)', file=sys.stderr)
-  print(f'\nNothing was published. Either re-render the chapter with '
-        f'`withhold-solutions: true` in its source, or, to serve it anyway, add its '
-        f'path to {args.allowlist} and commit that.', file=sys.stderr)
+  if violations:
+    total = sum(row['blocks'] for row in violations)
+    print(f'{len(violations)} published chapter(s) carry {total} worked solution(s), '
+          f'which this site must not serve:', file=sys.stderr)
+    for row in violations:
+      print(f'  {row["page"]}  — {row["blocks"]} solution callout(s)', file=sys.stderr)
+    print(f'\nEither re-render the chapter with `withhold-solutions: true` in its '
+          f'source, or, to serve it anyway, add its path to {args.allowlist} and '
+          f'commit that.', file=sys.stderr)
+
+  if sched_issues:
+    print(f'{len(sched_issues)} schedule structure violation(s) in {args.site_dir}:',
+          file=sys.stderr)
+    for issue in sched_issues:
+      print(f'  {issue}', file=sys.stderr)
+    print('\nNothing was published. Fix bin/schedule.json and regenerate via '
+          'class-publish rather than splitting Part tables or posting prose '
+          'homework notes.', file=sys.stderr)
   return 1
 
 
