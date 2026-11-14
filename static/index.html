@@ -538,9 +538,9 @@ Homework is assigned Thursday and due the following Thursday. Fridays are for re
 <tr><td>Th&nbsp;Nov&nbsp;5,&nbsp;4:00</td><td> Why Randomization Works &middot; <a href="book/decks/nsw-identification-nov03.html">slides</a> </td></tr>
 <tr><td>Th&nbsp;Nov&nbsp;5,&nbsp;11:59</td><td> <a href="book/homework/homework-06.html">HW 6</a> out [<a href="book/homework/handouts/homework-06-handout.zip">download zip</a> &middot; <a href="book/homework/handouts/homework-06-handout.pdf">PDF</a>] </td></tr>
 <tr><td>F&nbsp;Nov&nbsp;6,&nbsp;2:30</td><td> Questions on HW 6 </td></tr>
-<tr><td>T&nbsp;Nov&nbsp;10,&nbsp;4:00</td><td> Randomization, Precision, and Power </td></tr>
+<tr><td>T&nbsp;Nov&nbsp;10,&nbsp;4:00</td><td> Randomization, Precision, and Power &middot; <a href="book/decks/nsw-precision-nov05.html">slides</a> </td></tr>
 <tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;4:00</td><td> Randomization and Sampling </td></tr>
-<tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;11:59</td><td> HW 6 due &middot; HW 7 out </td></tr>
+<tr><td>Th&nbsp;Nov&nbsp;12,&nbsp;11:59</td><td> HW 6 due [<a href="book/homework/homework-06-solutions.html">solutions</a>] &middot; <a href="book/homework/homework-07.html">HW 7</a> out [<a href="book/homework/handouts/homework-07-handout.zip">download zip</a>] </td></tr>
 <tr><td>F&nbsp;Nov&nbsp;13,&nbsp;2:30</td><td> Review HW 6; questions on HW 7 </td></tr>
 <tr><td>T&nbsp;Nov&nbsp;17,&nbsp;4:00</td><td> Conditioning </td></tr>
 <tr><td>Th&nbsp;Nov&nbsp;19,&nbsp;4:00</td><td> Noncompliance </td></tr>
@@ -2204,21 +2204,110 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       };
     }
 
+    function parsePageLinkAnchor(a) {
+      if (!a || !a.getAttribute) return null;
+      if (a.classList && a.classList.contains('doc-link')) return null;
+      if (a.hasAttribute('data-tlda-app-shell')) return null;
+      if (a.hasAttribute('download')) return null;
+      if (a.getAttribute('role') === 'tab' || a.getAttribute('data-bs-toggle') === 'tab') return null;
+      if (a.classList && a.classList.contains('anchorjs-link')) return null;
+      if (a.getAttribute('role') === 'doc-noteref') return null;
+      if (a.closest && a.closest('.reveal .controls, .reveal .progress')) return null;
+      var href = a.getAttribute('href');
+      if (!href || href.startsWith('javascript:') || href.startsWith('mailto:')) return null;
+      if (/^https?:\/\//.test(href) && !href.includes(window.location.host)) return null;
+      var parsed = href;
+      if (/^https?:\/\//.test(href) && href.includes(window.location.host)) {
+        var hashIdx = href.indexOf('#');
+        try {
+          var linkUrl = new URL(href, window.location.href);
+          var selfUrl = new URL(window.location.href);
+          if (linkUrl.pathname === selfUrl.pathname) {
+            parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+          } else {
+            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+          }
+        } catch (parseErr) {
+          parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
+        }
+      }
+      var parts = parsed.split('#');
+      var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
+      if (targetFile) targetFile = targetFile.split('?')[0] || null;
+      var anchor = (parts[1] || '').replace(/^\/+/, '') || null;
+      var targetPath = parts[0] || null;
+      var targetTitle = ((a.textContent || '').trim()) || null;
+      return {
+        targetFile: targetFile,
+        targetPath: targetPath,
+        targetTitle: targetTitle,
+        anchor: anchor,
+      };
+    }
+
     document.addEventListener('mouseover', function(e) {
       var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link || link.classList.contains('doc-link-unresolved')) return;
-      var payload = docLinkPayload(link);
-      payload.type = 'tlda-doc-link-hover';
-      if (window.parent !== window) window.parent.postMessage(payload, '*');
+      if (link) {
+        if (link.classList.contains('doc-link-unresolved')) return;
+        var payload = docLinkPayload(link);
+        payload.type = 'tlda-doc-link-hover';
+        if (window.parent !== window) window.parent.postMessage(payload, '*');
+        return;
+      }
+      if (window.location.search.indexOf('_tldaH=') !== -1) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var related = e.relatedTarget;
+      if (related && related.closest && related.closest('a[href]') === a) return;
+      var info = parsePageLinkAnchor(a);
+      if (!info || !info.anchor) return;
+      if (!info.targetFile && a.classList && a.classList.contains('quarto-xref')) return;
+      var rect = a.getBoundingClientRect();
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'tlda-page-link-hover',
+          shapeId: shapeId,
+          targetFile: info.targetFile,
+          targetPath: info.targetPath,
+          anchor: info.anchor,
+          text: info.targetTitle || '',
+          rect: {
+            left: rect.left,
+            top: rect.top,
+            right: rect.right,
+            bottom: rect.bottom,
+            width: rect.width,
+            height: rect.height,
+          },
+        }, '*');
+      }
     }, true);
 
     document.addEventListener('mouseout', function(e) {
       var link = e.target.closest && e.target.closest('.doc-link');
-      if (!link) return;
-      var related = e.relatedTarget;
-      if (related && related.closest && related.closest('.doc-link') === link) return;
+      if (link) {
+        var related = e.relatedTarget;
+        if (related && related.closest && related.closest('.doc-link') === link) return;
+        if (window.parent !== window) {
+          window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+        }
+        return;
+      }
+      if (window.location.search.indexOf('_tldaH=') !== -1) return;
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var relatedOut = e.relatedTarget;
+      if (relatedOut && relatedOut.closest && relatedOut.closest('a[href]') === a) return;
+      var info = parsePageLinkAnchor(a);
+      if (!info || !info.anchor) return;
+      if (!info.targetFile && a.classList && a.classList.contains('quarto-xref')) return;
       if (window.parent !== window) {
-        window.parent.postMessage({ type: 'tlda-doc-link-out', shapeId: shapeId }, '*');
+        window.parent.postMessage({
+          type: 'tlda-page-link-out',
+          shapeId: shapeId,
+          clientX: e.clientX,
+          clientY: e.clientY,
+        }, '*');
       }
     }, true);
 

@@ -363,8 +363,10 @@
   }
 
   let frame = 0;
+  // Listeners are installed whether or not the page has a phrase yet: a
+  // phrase added later (by a script, an app, a live cell's output) renders
+  // on the next resize or slide change.
   function start() {
-    if (!document.querySelector('.linetype-text')) return;
     document.fonts.ready.then(renderAll);
     const later = () => {
       cancelAnimationFrame(frame);
