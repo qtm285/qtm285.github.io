@@ -43,7 +43,7 @@
           "format": "qmd"
         }
       ],
-      "pages": 55,
+      "pages": 56,
       "pageFiles": [
         "static/index.html",
         "static/book/index.html",
@@ -89,6 +89,7 @@
         "static/book/decks/nsw-identification-nov03.html",
         "static/book/exams/practice-midterm-1-solutions.html",
         "static/book/homework/homework-06.html",
+        "static/book/homework/homework-07.html",
         "static/book/homework/homework-bootstrap-solutions.html",
         "static/book/homework/homework-calibration-binary-solutions.html",
         "static/book/homework/homework-calibration-solutions.html",

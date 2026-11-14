@@ -2609,20 +2609,6 @@
     "line": 1653
   },
   {
-    "title": "Math Version",
-    "level": "subsubsection",
-    "page": 31,
-    "anchor": "math-version",
-    "line": 1686
-  },
-  {
-    "title": "R Version",
-    "level": "subsubsection",
-    "page": 31,
-    "anchor": "r-version",
-    "line": 1699
-  },
-  {
     "title": "Examples",
     "level": "subsection",
     "page": 31,
@@ -2677,12 +2663,6 @@
     "page": 31,
     "anchor": "appendix-n-both-sides",
     "line": 2137
-  },
-  {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 31,
-    "anchor": "footnotes"
   },
   {
     "title": "Calibrating Interval Estimates using the Bootstrap",
@@ -2822,12 +2802,6 @@
     "anchor": "but-we-cant-argue-that-it-should"
   },
   {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 32,
-    "anchor": "footnotes"
-  },
-  {
     "title": "Calibrating Interval Estimates with Binary Observations",
     "level": "chapter",
     "page": 33
@@ -2845,34 +2819,10 @@
     "anchor": "before-the-election"
   },
   {
-    "title": "Your Sample",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "your-sample"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-population"
-  },
-  {
     "title": "After the Election",
     "level": "subsection",
     "page": 33,
     "anchor": "after-the-election"
-  },
-  {
-    "title": "Your Sample",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "your-sample-1"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-population-1"
   },
   {
     "title": "The Competition",
@@ -2935,40 +2885,10 @@
     "anchor": "finding-the-distribution-of-y_1-in-a-small-population"
   },
   {
-    "title": "Generalizing to Larger Populations",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "generalizing-to-larger-populations"
-  },
-  {
     "title": "Finding the Distribution of \\(Y_1\\) in a Large Population",
     "level": "subsection",
     "page": 33,
     "anchor": "finding-the-distribution-of-y_1-in-a-large-population"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-population-2"
-  },
-  {
-    "title": "The Joint",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-joint"
-  },
-  {
-    "title": "The Marginal",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-marginal"
-  },
-  {
-    "title": "Generalizing to Larger Populations",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "generalizing-to-larger-populations-1"
   },
   {
     "title": "Exercise: Two Calls to A Small Population",
@@ -2983,34 +2903,10 @@
     "anchor": "sec-sampling-to-sums-two"
   },
   {
-    "title": "The Joint",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "the-joint-1"
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "partially-marginalized"
-  },
-  {
-    "title": "Fully Marginalized",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "fully-marginalized"
-  },
-  {
     "title": "From Sampling to Coin Flip Sums: \\(n\\) Responses.",
     "level": "subsection",
     "page": 33,
     "anchor": "from-sampling-to-coin-flip-sums-n-responses."
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "partially-marginalized-1"
   },
   {
     "title": "The Binomial Distribution",
@@ -3047,12 +2943,6 @@
     "level": "subsection",
     "page": 33,
     "anchor": "marginalization"
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 33,
-    "anchor": "partially-marginalized-2"
   },
   {
     "title": "The Hypergeometric Distribution",
@@ -3101,12 +2991,6 @@
     "level": "subsection",
     "page": 33,
     "anchor": "the-estimate-works.-why-does-it-work"
-  },
-  {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 33,
-    "anchor": "footnotes"
   },
   {
     "title": "Normal Approximation: the Proof",
@@ -3522,34 +3406,10 @@
     "anchor": "sample-versus-population"
   },
   {
-    "title": "Before the Election",
-    "level": "subsubsection",
-    "page": 36,
-    "anchor": "before-the-election"
-  },
-  {
-    "title": "After the Election",
-    "level": "subsubsection",
-    "page": 36,
-    "anchor": "after-the-election"
-  },
-  {
     "title": "Success!",
     "level": "subsection",
     "page": 36,
     "anchor": "success"
-  },
-  {
-    "title": "Before the Election",
-    "level": "subsubsection",
-    "page": 36,
-    "anchor": "before-the-election-1"
-  },
-  {
-    "title": "After the Election",
-    "level": "subsubsection",
-    "page": 36,
-    "anchor": "after-the-election-1"
   },
   {
     "title": "Review: Connecting Sample and Population",
@@ -3654,12 +3514,6 @@
     "anchor": "using-the-sampling-distribution-for-calibration"
   },
   {
-    "title": "Review—Our Annotations",
-    "level": "subsubsection",
-    "page": 36,
-    "anchor": "reviewour-annotations"
-  },
-  {
     "title": "Using the Sampling Distribution for Calibration",
     "level": "subsection",
     "page": 36,
@@ -3688,12 +3542,6 @@
     "level": "subsection",
     "page": 36,
     "anchor": "dont-make-this-mistake"
-  },
-  {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 36,
-    "anchor": "footnotes"
   },
   {
     "title": "Quality Assurance and Poisson Approximation",
@@ -4084,12 +3932,6 @@
     "anchor": "step-2.-inference"
   },
   {
-    "title": "Practice working with Distribution Plots",
-    "level": "subsubsection",
-    "page": 39,
-    "anchor": "practice-working-with-distribution-plots"
-  },
-  {
     "title": "Step 3. Causality",
     "level": "subsection",
     "page": 39,
@@ -4135,18 +3977,6 @@
     "level": "subsection",
     "page": 40,
     "anchor": "spread-quick-practice"
-  },
-  {
-    "title": "Quick Practice",
-    "level": "subsubsection",
-    "page": 40,
-    "anchor": "quick-practice"
-  },
-  {
-    "title": "Interpretation",
-    "level": "subsubsection",
-    "page": 40,
-    "anchor": "interpretation"
   },
   {
     "title": "Two Draws",
@@ -4455,12 +4285,6 @@
     "anchor": "squaring-sums-more-terms"
   },
   {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 40,
-    "anchor": "footnotes"
-  },
-  {
     "title": "Comparing Two Groups: Precision, Power and Allocation",
     "level": "chapter",
     "page": 41
@@ -4735,12 +4559,6 @@
     "anchor": "what-each-one-would-tell-us"
   },
   {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 42,
-    "anchor": "footnotes"
-  },
-  {
     "title": "Practice Midterm 1",
     "level": "chapter",
     "page": 43
@@ -4846,125 +4664,191 @@
     "anchor": "footnotes"
   },
   {
-    "title": "Homework: Bootstrap",
+    "title": "20  Homework: Power and the Cost of a Study – Prediction, Inference, and Causality",
     "level": "chapter",
     "page": 45
   },
   {
-    "title": "Bootstrap vs. Binomial",
+    "title": "Table of contents",
     "level": "subsection",
     "page": 45,
+    "anchor": "toc-title"
+  },
+  {
+    "title": "Summary",
+    "level": "section",
+    "page": 45,
+    "anchor": "summary"
+  },
+  {
+    "title": "Speed Round (Optional)",
+    "level": "section",
+    "page": 45,
+    "anchor": "speed-round"
+  },
+  {
+    "title": "1. Expectation and variance",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "speed-expectation"
+  },
+  {
+    "title": "2. Read an interval",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "speed-interval"
+  },
+  {
+    "title": "3. Label the power picture",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "speed-power"
+  },
+  {
+    "title": "4. A sketch and a derivative",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "speed-sketch"
+  },
+  {
+    "title": "What would help?",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "speed-feedback"
+  },
+  {
+    "title": "Was NSW Big Enough?",
+    "level": "section",
+    "page": 45,
+    "anchor": "warm-up-0"
+  },
+  {
+    "title": "Sizing the Study",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "sizing-the-study"
+  },
+  {
+    "title": "What if controls were free?",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "free-controls"
+  },
+  {
+    "title": "Allocating a Fixed Budget",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "fixed-budget"
+  },
+  {
+    "title": "When an Underpowered Study Looks Successful",
+    "level": "section",
+    "page": 45,
+    "anchor": "underpowered-studies"
+  },
+  {
+    "title": "What happens among the significant results?",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "nsw-type-m-s"
+  },
+  {
+    "title": "Final Project: The Skeleton of a Paper",
+    "level": "section",
+    "page": 45,
+    "anchor": "final-project"
+  },
+  {
+    "title": "Reading Tests and p-Values",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "tests-and-confidence-regions"
+  },
+  {
+    "title": "Tests",
+    "level": "subsubsection",
+    "page": 45,
+    "anchor": "tests"
+  },
+  {
+    "title": "p-Values",
+    "level": "subsubsection",
+    "page": 45,
+    "anchor": "p-values"
+  },
+  {
+    "title": "The Skeleton",
+    "level": "subsection",
+    "page": 45,
+    "anchor": "final-project-skeleton"
+  },
+  {
+    "title": "Appendix: How conservative is the bound? (Optional)",
+    "level": "section",
+    "page": 45,
+    "anchor": "bound-note"
+  },
+  {
+    "title": "Homework: Bootstrap",
+    "level": "chapter",
+    "page": 46
+  },
+  {
+    "title": "Bootstrap vs. Binomial",
+    "level": "subsection",
+    "page": 46,
     "anchor": "bootstrap-vs.-binomial"
   },
   {
     "title": "Coverage: How Many Bootstrap Reps Do You Need?",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "coverage-how-many-bootstrap-reps-do-you-need"
   },
   {
     "title": "Binary case",
     "level": "subsubsection",
-    "page": 45,
+    "page": 46,
     "anchor": "binary-case"
   },
   {
     "title": "Checking Coverage in the Vote-History Example",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "checking-coverage-in-the-vote-history-example"
   },
   {
     "title": "Think, Don’t Calculate",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "think-dont-calculate"
   },
   {
     "title": "Calculating Sampling Distributions",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "calculating-sampling-distributions"
   },
   {
     "title": "What Changes If You Change This",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "what-changes-if-you-change-this"
   },
   {
     "title": "Appendix: Throwing Rolls Away",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "appendix-throwing-rolls-away"
   },
   {
     "title": "Footnotes",
     "level": "subsection",
-    "page": 45,
+    "page": 46,
     "anchor": "footnotes"
   },
   {
     "title": "9  Homework: Calibration with Binary Outcomes – Prediction, Inference, and Causality",
-    "level": "chapter",
-    "page": 46
-  },
-  {
-    "title": "Table of contents",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "toc-title"
-  },
-  {
-    "title": "Summary",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "summary"
-  },
-  {
-    "title": "The Point",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "the-point"
-  },
-  {
-    "title": "The Data",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "the-data"
-  },
-  {
-    "title": "Warm Up",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "warm-up"
-  },
-  {
-    "title": "That function width from last week’s homework",
-    "level": "subsubsection",
-    "page": 46,
-    "anchor": "that-function-width-from-last-weeks-homework"
-  },
-  {
-    "title": "Improving Speed and Precision at The Same Time",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "sec-improving-speed-and-precision"
-  },
-  {
-    "title": "Visualizing Calibration",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "visualizing-calibration"
-  },
-  {
-    "title": "Extra Credit: Sampling without Replacement",
-    "level": "subsection",
-    "page": 46,
-    "anchor": "extra-credit-sampling-without-replacement"
-  },
-  {
-    "title": "6  Homework: The Idea of Calibration – Prediction, Inference, and Causality",
     "level": "chapter",
     "page": 47
   },
@@ -4975,79 +4859,55 @@
     "anchor": "toc-title"
   },
   {
-    "title": "A Die",
-    "level": "section",
-    "page": 47,
-    "anchor": "a-die"
-  },
-  {
-    "title": "A population of six sides",
+    "title": "Summary",
     "level": "subsection",
     "page": 47,
-    "anchor": "a-population-of-six-sides"
+    "anchor": "summary"
   },
   {
-    "title": "Marginalization",
+    "title": "The Point",
     "level": "subsection",
     "page": 47,
-    "anchor": "marginalization"
+    "anchor": "the-point"
   },
   {
-    "title": "Estimation",
+    "title": "The Data",
     "level": "subsection",
     "page": 47,
-    "anchor": "estimation"
+    "anchor": "the-data"
   },
   {
-    "title": "Sample Size One",
+    "title": "Warm Up",
+    "level": "subsection",
+    "page": 47,
+    "anchor": "warm-up"
+  },
+  {
+    "title": "That function width from last week’s homework",
     "level": "subsubsection",
     "page": 47,
-    "anchor": "sample-size-one"
+    "anchor": "that-function-width-from-last-weeks-homework"
   },
   {
-    "title": "Sample Size Two",
-    "level": "subsubsection",
-    "page": 47,
-    "anchor": "sample-size-two"
-  },
-  {
-    "title": "Simulating",
-    "level": "section",
-    "page": 47,
-    "anchor": "simulating"
-  },
-  {
-    "title": "NBA Data",
-    "level": "section",
-    "page": 47,
-    "anchor": "nba-data"
-  },
-  {
-    "title": "A population of six players",
+    "title": "Improving Speed and Precision at The Same Time",
     "level": "subsection",
     "page": 47,
-    "anchor": "a-population-of-six-players"
+    "anchor": "sec-improving-speed-and-precision"
   },
   {
-    "title": "Two Samples",
+    "title": "Visualizing Calibration",
     "level": "subsection",
     "page": 47,
-    "anchor": "two-samples"
+    "anchor": "visualizing-calibration"
   },
   {
-    "title": "An Estimation Problem",
+    "title": "Extra Credit: Sampling without Replacement",
     "level": "subsection",
     "page": 47,
-    "anchor": "an-estimation-problem"
+    "anchor": "extra-credit-sampling-without-replacement"
   },
   {
-    "title": "Two Populations",
-    "level": "section",
-    "page": 47,
-    "anchor": "two-populations"
-  },
-  {
-    "title": "19  Homework: Comparing Estimators – Prediction, Inference, and Causality",
+    "title": "6  Homework: The Idea of Calibration – Prediction, Inference, and Causality",
     "level": "chapter",
     "page": 48
   },
@@ -5058,98 +4918,79 @@
     "anchor": "toc-title"
   },
   {
-    "title": "Introduction",
+    "title": "A Die",
     "level": "section",
     "page": 48,
-    "anchor": "introduction",
-    "line": 38
+    "anchor": "a-die"
   },
   {
-    "title": "Summary",
+    "title": "A population of six sides",
     "level": "subsection",
     "page": 48,
-    "anchor": "summary",
-    "line": 40
+    "anchor": "a-population-of-six-sides"
   },
   {
-    "title": "The Point",
+    "title": "Marginalization",
     "level": "subsection",
     "page": 48,
-    "anchor": "the-point",
-    "line": 55
+    "anchor": "marginalization"
   },
   {
-    "title": "Bias, Variance, and Tradeoffs",
+    "title": "Estimation",
+    "level": "subsection",
+    "page": 48,
+    "anchor": "estimation"
+  },
+  {
+    "title": "Sample Size One",
+    "level": "subsubsection",
+    "page": 48,
+    "anchor": "sample-size-one"
+  },
+  {
+    "title": "Sample Size Two",
+    "level": "subsubsection",
+    "page": 48,
+    "anchor": "sample-size-two"
+  },
+  {
+    "title": "Simulating",
     "level": "section",
     "page": 48,
-    "anchor": "bias-variance-and-tradeoffs",
-    "line": 60
+    "anchor": "simulating"
   },
   {
-    "title": "Review: Prior-Based Estimators",
-    "level": "subsection",
-    "page": 48,
-    "anchor": "review-prior-based-estimators",
-    "line": 62
-  },
-  {
-    "title": "The Bias/Variance Tradeoff",
-    "level": "subsection",
-    "page": 48,
-    "anchor": "the-biasvariance-tradeoff",
-    "line": 81
-  },
-  {
-    "title": "Consistency",
-    "level": "subsection",
-    "page": 48,
-    "anchor": "consistency",
-    "line": 342
-  },
-  {
-    "title": "Convergence in Probability",
+    "title": "NBA Data",
     "level": "section",
     "page": 48,
-    "anchor": "convergence-in-probability",
-    "line": 397
+    "anchor": "nba-data"
   },
   {
-    "title": "What Consistency Implies",
+    "title": "A population of six players",
     "level": "subsection",
     "page": 48,
-    "anchor": "what-consistency-implies",
-    "line": 461
+    "anchor": "a-population-of-six-players"
   },
   {
-    "title": "Negligible and Non-Negligible Bias",
+    "title": "Two Samples",
     "level": "subsection",
     "page": 48,
-    "anchor": "negligible-and-non-negligible-bias",
-    "line": 472
+    "anchor": "two-samples"
   },
   {
-    "title": "How Big a Sample?",
+    "title": "An Estimation Problem",
     "level": "subsection",
     "page": 48,
-    "anchor": "how-big-a-sample",
-    "line": 509
+    "anchor": "an-estimation-problem"
   },
   {
-    "title": "The Rotational Design, Revisited",
+    "title": "Two Populations",
     "level": "section",
     "page": 48,
-    "anchor": "the-rotational-design-revisited",
-    "line": 529
+    "anchor": "two-populations"
   },
   {
-    "title": "Extra Credit: An Arrangement You Don’t Know",
-    "level": "subsection",
-    "page": 48,
-    "anchor": "extra-credit-an-arrangement-you-dont-know",
-    "line": 585
-  },
-  {
-    "title": "3  Homework: Basic Descriptive Statistics – Prediction, Inference, and Causality",
+    "title": "19  Homework: Comparing Estimators – Prediction, Inference, and Causality",
     "level": "chapter",
     "page": 49
   },
@@ -5160,676 +5001,533 @@
     "anchor": "toc-title"
   },
   {
-    "title": "Mean and Standard Deviation",
+    "title": "Introduction",
     "level": "section",
     "page": 49,
+    "anchor": "introduction",
+    "line": 38
+  },
+  {
+    "title": "Summary",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "summary",
+    "line": 40
+  },
+  {
+    "title": "The Point",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "the-point",
+    "line": 55
+  },
+  {
+    "title": "Bias, Variance, and Tradeoffs",
+    "level": "section",
+    "page": 49,
+    "anchor": "bias-variance-and-tradeoffs",
+    "line": 60
+  },
+  {
+    "title": "Review: Prior-Based Estimators",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "review-prior-based-estimators",
+    "line": 62
+  },
+  {
+    "title": "The Bias/Variance Tradeoff",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "the-biasvariance-tradeoff",
+    "line": 81
+  },
+  {
+    "title": "Consistency",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "consistency",
+    "line": 342
+  },
+  {
+    "title": "Convergence in Probability",
+    "level": "section",
+    "page": 49,
+    "anchor": "convergence-in-probability",
+    "line": 397
+  },
+  {
+    "title": "What Consistency Implies",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "what-consistency-implies",
+    "line": 461
+  },
+  {
+    "title": "Negligible and Non-Negligible Bias",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "negligible-and-non-negligible-bias",
+    "line": 472
+  },
+  {
+    "title": "How Big a Sample?",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "how-big-a-sample",
+    "line": 509
+  },
+  {
+    "title": "The Rotational Design, Revisited",
+    "level": "section",
+    "page": 49,
+    "anchor": "the-rotational-design-revisited",
+    "line": 529
+  },
+  {
+    "title": "Extra Credit: An Arrangement You Don’t Know",
+    "level": "subsection",
+    "page": 49,
+    "anchor": "extra-credit-an-arrangement-you-dont-know",
+    "line": 585
+  },
+  {
+    "title": "3  Homework: Basic Descriptive Statistics – Prediction, Inference, and Causality",
+    "level": "chapter",
+    "page": 50
+  },
+  {
+    "title": "Table of contents",
+    "level": "subsection",
+    "page": 50,
+    "anchor": "toc-title"
+  },
+  {
+    "title": "Mean and Standard Deviation",
+    "level": "section",
+    "page": 50,
     "anchor": "mean-and-standard-deviation"
   },
   {
     "title": "Definitions",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "definitions"
   },
   {
     "title": "Calculations",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "calculations"
   },
   {
     "title": "Properties",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "properties"
   },
   {
     "title": "Visualization",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "visualization"
   },
   {
     "title": "Supreme Court Justices",
     "level": "section",
-    "page": 49,
+    "page": 50,
     "anchor": "supreme-court-justices"
   },
   {
     "title": "The Data",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "the-data"
   },
   {
     "title": "Breaking Down the Data",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "breaking-down-the-data"
   },
   {
     "title": "Frequencies, Indicators and Means",
     "level": "section",
-    "page": 49,
+    "page": 50,
     "anchor": "frequencies-indicators-and-means"
   },
   {
     "title": "Introduction",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "introduction"
   },
   {
     "title": "Calculating Frequencies in R",
     "level": "subsubsection",
-    "page": 49,
+    "page": 50,
     "anchor": "sec-freq-R"
   },
   {
     "title": "Visualization",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "visualization-1"
   },
   {
     "title": "Exercises",
     "level": "subsection",
-    "page": 49,
+    "page": 50,
     "anchor": "exercises"
   },
   {
     "title": "Calibrating Interval Estimates using the Bootstrap",
     "level": "chapter",
-    "page": 50
+    "page": 51
   },
   {
     "title": "Review",
     "level": "section",
-    "page": 50,
+    "page": 51,
     "anchor": "review"
   },
   {
     "title": "Point and Interval Estimation",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "point-and-interval-estimation"
   },
   {
     "title": "Calibration of Interval Estimates",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "calibration-of-interval-estimates"
   },
   {
     "title": "A Parametric Estimate of the Sampling Distribution",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "a-parametric-estimate-of-the-sampling-distribution"
   },
   {
     "title": "Sampling without Replacement",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "sampling-without-replacement"
   },
   {
     "title": "An Exercise",
     "level": "section",
-    "page": 50,
+    "page": 51,
     "anchor": "an-exercise"
   },
   {
     "title": "A Survey",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "a-survey"
   },
   {
     "title": "Our Sample",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "our-sample"
   },
   {
     "title": "One Bootstrap Sample",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "one-bootstrap-sample"
   },
   {
     "title": "Simulating a Few More Draws",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "simulating-a-few-more-draws"
   },
   {
     "title": "Our Tally",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "our-tally"
   },
   {
     "title": "A Rough Histogram",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "a-rough-histogram"
   },
   {
     "title": "A Fine Histogram",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "a-fine-histogram"
   },
   {
     "title": "The Estimate",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "the-estimate"
   },
   {
     "title": "Our Draws Against It",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "our-draws-against-it"
   },
   {
     "title": "The Bootstrap",
     "level": "section",
-    "page": 50,
+    "page": 51,
     "anchor": "the-bootstrap"
   },
   {
     "title": "The Bootstrap Interpretation in Our Turnout Poll",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "the-bootstrap-interpretation-in-our-turnout-poll"
   },
   {
     "title": "Bootstrapping",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "bootstrapping"
   },
   {
     "title": "The Bootstrap is Nonparametric",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "the-bootstrap-is-nonparametric"
   },
   {
     "title": "Beyond Binary Responses",
     "level": "section",
-    "page": 50,
+    "page": 51,
     "anchor": "beyond-binary-responses"
   },
   {
     "title": "Vote History",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "vote-history"
   },
   {
     "title": "No Parametric Form This Time",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "no-parametric-form-this-time"
   },
   {
     "title": "The Sampling Distribution of Average Vote History",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "the-sampling-distribution-of-average-vote-history"
   },
   {
     "title": "The Bootstrap Sampling Distribution of Average Vote History",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "the-bootstrap-sampling-distribution-of-average-vote-history"
   },
   {
     "title": "But We Can’t Argue That It Should",
     "level": "subsection",
-    "page": 50,
+    "page": 51,
     "anchor": "but-we-cant-argue-that-it-should"
-  },
-  {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 50,
-    "anchor": "footnotes"
   },
   {
     "title": "Calibrating Interval Estimates with Binary Observations",
     "level": "chapter",
-    "page": 51
+    "page": 52
   },
   {
     "title": "Sampling and Calibration Review",
     "level": "section",
-    "page": 51,
+    "page": 52,
     "anchor": "sampling-and-calibration-review"
   },
   {
     "title": "Before the Election",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "before-the-election"
-  },
-  {
-    "title": "Your Sample",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "your-sample"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-population"
   },
   {
     "title": "After the Election",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "after-the-election"
-  },
-  {
-    "title": "Your Sample",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "your-sample-1"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-population-1"
   },
   {
     "title": "The Competition",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "the-competition"
   },
   {
     "title": "Calibration using the Sampling Distribution",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "calibration-using-the-sampling-distribution"
   },
   {
     "title": "Question",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "question"
   },
   {
     "title": "Calibration in Reality",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "calibration-in-reality"
   },
   {
     "title": "Probability Review",
     "level": "section",
-    "page": 51,
+    "page": 52,
     "anchor": "probability-review"
   },
   {
     "title": "Warm-up: Card Probabilities",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "warm-up-card-probabilities"
   },
   {
     "title": "Two Cards with Replacement",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "two-cards-with-replacement"
   },
   {
     "title": "Thinking about Marginalization",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "thinking-about-marginalization"
   },
   {
     "title": "Starting Simple",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "starting-simple"
   },
   {
     "title": "Finding the Distribution of \\(Y_1\\) in a Small Population",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "finding-the-distribution-of-y_1-in-a-small-population"
-  },
-  {
-    "title": "Generalizing to Larger Populations",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "generalizing-to-larger-populations"
   },
   {
     "title": "Finding the Distribution of \\(Y_1\\) in a Large Population",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "finding-the-distribution-of-y_1-in-a-large-population"
-  },
-  {
-    "title": "The Population",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-population-2"
-  },
-  {
-    "title": "The Joint",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-joint"
-  },
-  {
-    "title": "The Marginal",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-marginal"
-  },
-  {
-    "title": "Generalizing to Larger Populations",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "generalizing-to-larger-populations-1"
   },
   {
     "title": "Exercise: Two Calls to A Small Population",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "sec-two-calls-to-small"
   },
   {
     "title": "From Sampling to Coin Flip Sums: Two Responses",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "sec-sampling-to-sums-two"
-  },
-  {
-    "title": "The Joint",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "the-joint-1"
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "partially-marginalized"
-  },
-  {
-    "title": "Fully Marginalized",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "fully-marginalized"
   },
   {
     "title": "From Sampling to Coin Flip Sums: \\(n\\) Responses.",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "from-sampling-to-coin-flip-sums-n-responses."
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "partially-marginalized-1"
   },
   {
     "title": "The Binomial Distribution",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "the-binomial-distribution"
   },
   {
     "title": "Payoff",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "payoff"
   },
   {
     "title": "Sampling without Replacement",
     "level": "section",
-    "page": 51,
+    "page": 52,
     "anchor": "sampling-without-replacement"
   },
   {
     "title": "Warm-up: Card Probabilities without Replacement",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "warm-up-card-probabilities-without-replacement"
   },
   {
     "title": "The Pattern",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "the-pattern"
   },
   {
     "title": "Marginalization",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "marginalization"
-  },
-  {
-    "title": "Partially Marginalized",
-    "level": "subsubsection",
-    "page": 51,
-    "anchor": "partially-marginalized-2"
   },
   {
     "title": "The Hypergeometric Distribution",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "the-hypergeometric-distribution"
   },
   {
     "title": "Calibration using the Binomial Distribution",
     "level": "section",
-    "page": 51,
+    "page": 52,
     "anchor": "calibration-using-the-binomial-distribution"
   },
   {
     "title": "Looking Back on Your Success",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "looking-back-on-your-success"
   },
   {
     "title": "Calibration Comparison",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "calibration-comparison"
   },
   {
     "title": "Our Competitors’ Calibration",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "our-competitors-calibration"
   },
   {
     "title": "All of Our Competitors",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "all-of-our-competitors"
   },
   {
     "title": "Why Does it Work?",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "why-does-it-work"
   },
   {
     "title": "The Estimate Works. Why Does it Work?",
     "level": "subsection",
-    "page": 51,
+    "page": 52,
     "anchor": "the-estimate-works.-why-does-it-work"
   },
   {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 51,
-    "anchor": "footnotes"
-  },
-  {
     "title": "Normal Approximation and Sample Size Calculation",
-    "level": "chapter",
-    "page": 52
-  },
-  {
-    "title": "Review",
-    "level": "section",
-    "page": 52,
-    "anchor": "review"
-  },
-  {
-    "title": "Where We Left Off: Exact and Guaranteed",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "where-we-left-off-exact-and-guaranteed"
-  },
-  {
-    "title": "The Bootstrap",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "the-bootstrap"
-  },
-  {
-    "title": "Normal Approximation",
-    "level": "section",
-    "page": 52,
-    "anchor": "normal-approximation"
-  },
-  {
-    "title": "The Normal Distribution",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "the-normal-distribution"
-  },
-  {
-    "title": "Normal Approximation",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "normal-approximation-1"
-  },
-  {
-    "title": "The Width of Normal Distributions",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "the-width-of-normal-distributions"
-  },
-  {
-    "title": "Calibration Using Normal Approximation",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "calibration-using-normal-approximation"
-  },
-  {
-    "title": "When This Works",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "when-this-works"
-  },
-  {
-    "title": "Normal Approximation in Context",
-    "level": "section",
-    "page": 52,
-    "anchor": "normal-approximation-in-context"
-  },
-  {
-    "title": "A Proportion when Sampling with Replacement",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "a-proportion-when-sampling-with-replacement"
-  },
-  {
-    "title": "A Proportion when Sampling without Replacement",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "a-proportion-when-sampling-without-replacement"
-  },
-  {
-    "title": "A Mean when Sampling with Replacement",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "a-mean-when-sampling-with-replacement"
-  },
-  {
-    "title": "Using Normal Approximation",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "using-normal-approximation"
-  },
-  {
-    "title": "Sample Size Calculation",
-    "level": "section",
-    "page": 52,
-    "anchor": "sample-size-calculation"
-  },
-  {
-    "title": "An Interval for Turnout in 2020",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "an-interval-for-turnout-in-2020"
-  },
-  {
-    "title": "Thinking Speculatively About Intervals",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "thinking-speculatively-about-intervals"
-  },
-  {
-    "title": "The Easy Version",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "the-easy-version"
-  },
-  {
-    "title": "Starting from Scratch",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "starting-from-scratch"
-  },
-  {
-    "title": "Why Can We Use 1/4?",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "why-can-we-use-14"
-  },
-  {
-    "title": "Case Study",
-    "level": "section",
-    "page": 52,
-    "anchor": "case-study"
-  },
-  {
-    "title": "The National Supported Work Demonstration",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "the-national-supported-work-demonstration"
-  },
-  {
-    "title": "Activities",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "activities"
-  },
-  {
-    "title": "Solutions and Discussion",
-    "level": "subsection",
-    "page": 52,
-    "anchor": "solutions-and-discussion"
-  },
-  {
-    "title": "Point and Interval Estimates",
     "level": "chapter",
     "page": 53
   },
@@ -5840,397 +5538,504 @@
     "anchor": "review"
   },
   {
-    "title": "Friday’s Lab",
+    "title": "Where We Left Off: Exact and Guaranteed",
     "level": "subsection",
     "page": 53,
+    "anchor": "where-we-left-off-exact-and-guaranteed"
+  },
+  {
+    "title": "The Bootstrap",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "the-bootstrap"
+  },
+  {
+    "title": "Normal Approximation",
+    "level": "section",
+    "page": 53,
+    "anchor": "normal-approximation"
+  },
+  {
+    "title": "The Normal Distribution",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "the-normal-distribution"
+  },
+  {
+    "title": "Normal Approximation",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "normal-approximation-1"
+  },
+  {
+    "title": "The Width of Normal Distributions",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "the-width-of-normal-distributions"
+  },
+  {
+    "title": "Calibration Using Normal Approximation",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "calibration-using-normal-approximation"
+  },
+  {
+    "title": "When This Works",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "when-this-works"
+  },
+  {
+    "title": "Normal Approximation in Context",
+    "level": "section",
+    "page": 53,
+    "anchor": "normal-approximation-in-context"
+  },
+  {
+    "title": "A Proportion when Sampling with Replacement",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "a-proportion-when-sampling-with-replacement"
+  },
+  {
+    "title": "A Proportion when Sampling without Replacement",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "a-proportion-when-sampling-without-replacement"
+  },
+  {
+    "title": "A Mean when Sampling with Replacement",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "a-mean-when-sampling-with-replacement"
+  },
+  {
+    "title": "Using Normal Approximation",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "using-normal-approximation"
+  },
+  {
+    "title": "Sample Size Calculation",
+    "level": "section",
+    "page": 53,
+    "anchor": "sample-size-calculation"
+  },
+  {
+    "title": "An Interval for Turnout in 2020",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "an-interval-for-turnout-in-2020"
+  },
+  {
+    "title": "Thinking Speculatively About Intervals",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "thinking-speculatively-about-intervals"
+  },
+  {
+    "title": "The Easy Version",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "the-easy-version"
+  },
+  {
+    "title": "Starting from Scratch",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "starting-from-scratch"
+  },
+  {
+    "title": "Why Can We Use 1/4?",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "why-can-we-use-14"
+  },
+  {
+    "title": "Case Study",
+    "level": "section",
+    "page": 53,
+    "anchor": "case-study"
+  },
+  {
+    "title": "The National Supported Work Demonstration",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "the-national-supported-work-demonstration"
+  },
+  {
+    "title": "Activities",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "activities"
+  },
+  {
+    "title": "Solutions and Discussion",
+    "level": "subsection",
+    "page": 53,
+    "anchor": "solutions-and-discussion"
+  },
+  {
+    "title": "Point and Interval Estimates",
+    "level": "chapter",
+    "page": 54
+  },
+  {
+    "title": "Review",
+    "level": "section",
+    "page": 54,
+    "anchor": "review"
+  },
+  {
+    "title": "Friday’s Lab",
+    "level": "subsection",
+    "page": 54,
     "anchor": "fridays-lab"
   },
   {
     "title": "Sampling Code",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "sampling-code"
   },
   {
     "title": "Sampling Distribution",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "sampling-distribution"
   },
   {
     "title": "Fake Data Simulation",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "fake-data-simulation"
   },
   {
     "title": "Visualizing the Sampling Distribution",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "visualizing-the-sampling-distribution"
   },
   {
     "title": "Sampling Distributions in Real Studies",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "sampling-distributions-in-real-studies"
   },
   {
     "title": "What Do We Do with a Sampling Distribution?",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "what-do-we-do-with-a-sampling-distribution"
   },
   {
     "title": "Polling",
     "level": "section",
-    "page": 53,
+    "page": 54,
     "anchor": "polling"
   },
   {
     "title": "Context",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "context"
   },
   {
     "title": "Polling Results",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "polling-results"
   },
   {
     "title": "Sample Versus Population",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "sample-versus-population"
-  },
-  {
-    "title": "Before the Election",
-    "level": "subsubsection",
-    "page": 53,
-    "anchor": "before-the-election"
-  },
-  {
-    "title": "After the Election",
-    "level": "subsubsection",
-    "page": 53,
-    "anchor": "after-the-election"
   },
   {
     "title": "Success!",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "success"
-  },
-  {
-    "title": "Before the Election",
-    "level": "subsubsection",
-    "page": 53,
-    "anchor": "before-the-election-1"
-  },
-  {
-    "title": "After the Election",
-    "level": "subsubsection",
-    "page": 53,
-    "anchor": "after-the-election-1"
   },
   {
     "title": "Review: Connecting Sample and Population",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "review-connecting-sample-and-population"
   },
   {
     "title": "Our Poll",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "our-poll"
   },
   {
     "title": "Our First Friend’s Poll",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "our-first-friends-poll"
   },
   {
     "title": "Our Second Friend’s Poll",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "our-second-friends-poll"
   },
   {
     "title": "The Sampling Distribution of our Estimate",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "the-sampling-distribution-of-our-estimate"
   },
   {
     "title": "The Sampling Distribution in R",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "the-sampling-distribution-in-r"
   },
   {
     "title": "Annotating the Sampling Distribution Histogram",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "annotating-the-sampling-distribution-histogram"
   },
   {
     "title": "Revisiting our Questions",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "revisiting-our-questions"
   },
   {
     "title": "Interval Estimation",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "interval-estimation"
   },
   {
     "title": "Interval Estimation: Our Friends’ Polls",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "interval-estimation-our-friends-polls"
   },
   {
     "title": "Interval Estimation: 100 Polls",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "interval-estimation-100-polls"
   },
   {
     "title": "Coverage Probability and Sampling Distributions",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "coverage-probability-and-sampling-distributions"
   },
   {
     "title": "Calculating Coverage",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "calculating-coverage"
   },
   {
     "title": "The Coverage Probability",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "the-coverage-probability"
   },
   {
     "title": "Ad-hoc Interval Estimates",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "ad-hoc-interval-estimates"
   },
   {
     "title": "Calibrated Interval Estimates",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "calibrated-interval-estimates"
   },
   {
     "title": "Using the Sampling Distribution for Calibration",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "using-the-sampling-distribution-for-calibration"
-  },
-  {
-    "title": "Review—Our Annotations",
-    "level": "subsubsection",
-    "page": 53,
-    "anchor": "reviewour-annotations"
   },
   {
     "title": "Using the Sampling Distribution for Calibration",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "using-the-sampling-distribution-for-calibration-1"
   },
   {
     "title": "A Problem",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "a-problem"
   },
   {
     "title": "Communication",
     "level": "section",
-    "page": 53,
+    "page": 54,
     "anchor": "communication"
   },
   {
     "title": "Why Confidence Intervals?",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "why-confidence-intervals"
   },
   {
     "title": "Don’t Make this Mistake",
     "level": "subsection",
-    "page": 53,
+    "page": 54,
     "anchor": "dont-make-this-mistake"
-  },
-  {
-    "title": "Footnotes",
-    "level": "subsection",
-    "page": 53,
-    "anchor": "footnotes"
   },
   {
     "title": "Sampling",
     "level": "chapter",
-    "page": 54
+    "page": 55
   },
   {
     "title": "Surveys",
     "level": "section",
-    "page": 54,
+    "page": 55,
     "anchor": "surveys"
   },
   {
     "title": "What A Population Looks Like",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "what-a-population-looks-like"
   },
   {
     "title": "What We’re Estimating",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "what-were-estimating"
   },
   {
     "title": "Estimating It",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "estimating-it"
   },
   {
     "title": "Convenience Sampling",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "convenience-sampling"
   },
   {
     "title": "Sampling with Replacement",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "sampling-with-replacement"
   },
   {
     "title": "Sampling without Replacement",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "sampling-without-replacement"
   },
   {
     "title": "Which do you think works best?",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "which-do-you-think-works-best"
   },
   {
     "title": "Fake Data Simulation",
     "level": "subsection",
-    "page": 54,
+    "page": 55,
     "anchor": "fake-data-simulation"
   },
   {
     "title": "Experiments",
     "level": "section",
-    "page": 54,
+    "page": 55,
     "anchor": "experiments"
   },
   {
     "title": "Introduction",
     "level": "chapter",
-    "page": 55
+    "page": 56
   },
   {
     "title": "Plan for Today",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "plan-for-today"
   },
   {
     "title": "Style",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "style"
   },
   {
     "title": "What This Class Is About",
     "level": "section",
-    "page": 55,
+    "page": 56,
     "anchor": "what-this-class-is-about"
   },
   {
     "title": "The Social Pressure Experiment",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "the-social-pressure-experiment"
   },
   {
     "title": "A Missed Opportunity?",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "a-missed-opportunity"
   },
   {
     "title": "Your Imaginary Mailer Campaign",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "your-imaginary-mailer-campaign"
   },
   {
     "title": "Step 1a. Individual-Level Prediction",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "step-1a.-individual-level-prediction"
   },
   {
     "title": "Step 1b. Summarizing Our Predictions",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "step-1b.-summarizing-our-predictions"
   },
   {
     "title": "Step 2. Inference",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "step-2.-inference"
-  },
-  {
-    "title": "Practice working with Distribution Plots",
-    "level": "subsubsection",
-    "page": 55,
-    "anchor": "practice-working-with-distribution-plots"
   },
   {
     "title": "Step 3. Causality",
     "level": "subsection",
-    "page": 55,
+    "page": 56,
     "anchor": "step-3.-causality"
   },
   {
     "title": "The Syllabus",
     "level": "section",
-    "page": 55,
+    "page": 56,
     "anchor": "the-syllabus"
   },
   {
     "title": "Letters",
     "level": "section",
-    "page": 55,
+    "page": 56,
     "anchor": "letters"
   },
   {
     "title": "Terminology",
     "level": "section",
-    "page": 55,
+    "page": 56,
     "anchor": "sec-terminology"
   }
 ]

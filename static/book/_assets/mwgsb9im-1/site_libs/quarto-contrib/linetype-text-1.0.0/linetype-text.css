@@ -1,0 +1,65 @@
+/* linetype-text.css
+   A phrase drawn in a ggplot linetype: the real text, faint, with an opaque
+   dashed/dotted stroke along its letters' centerlines on top. The text stays
+   real text (selectable, searchable, read aloud); the stroke is decoration.
+
+   Calibration knobs. Ghost opacity is per linetype: the sparser the pattern,
+   the more the faint letters carry the reading. */
+:root {
+  --ltx-stroke-width-em: 0.075;
+  /* Figures here are drawn by svglite, which converts a line's width from
+     1/96 in to points but not its dash lengths: a "44" dash is 4 x 4/3 line
+     widths on screen (measured: stroke 1.07, dashes 5.69,5.69). At 4/3 a
+     dash is half a letter long at body size, so a letter gets two or three;
+     0.7 keeps the patterns' proportions with enough dashes to read the
+     letters (David's choice). Set 1.3333 for the figures' exact spacing. */
+  --ltx-dash-scale: 0.7;
+  --ltx-ghost-dashed: 0.16;
+  --ltx-ghost-dotted: 0.27;
+  --ltx-ghost-dotdash: 0.21;
+  --ltx-ghost-longdash: 0.14;
+  --ltx-ghost-twodash: 0.21;
+  --ltx-ghost-custom: 0.2;
+}
+
+.linetype-text {
+  position: relative;
+  display: inline-block;
+  white-space: pre;
+  vertical-align: baseline;
+}
+
+.linetype-text .ltx-probe {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  vertical-align: baseline;
+  overflow: hidden;
+}
+
+.linetype-text.ltx-rendered .ltx-ghost {
+  color: transparent;
+}
+
+.linetype-text svg .ltx-ghost-glyphs {
+  fill: currentColor;
+  stroke: none;
+  opacity: var(--ltx-ghost, 0.2);
+}
+
+.linetype-text svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.linetype-text svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-linejoin: round;
+}
