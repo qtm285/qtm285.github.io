@@ -43,7 +43,7 @@
           "format": "qmd"
         }
       ],
-      "pages": 57,
+      "pages": 56,
       "pageFiles": [
         "static/index.html",
         "static/book/index.html",
@@ -87,7 +87,6 @@
         "static/book/decks/chapter-standard-deviation-slides.html",
         "static/book/decks/georgia-oct29.html",
         "static/book/decks/nsw-identification-nov03.html",
-        "static/book/decks/nsw-precision-nov05.html",
         "static/book/exams/practice-midterm-1-solutions.html",
         "static/book/homework/homework-06.html",
         "static/book/homework/homework-07.html",
