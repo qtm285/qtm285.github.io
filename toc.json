@@ -4858,343 +4858,343 @@
     "level": "section",
     "page": 45,
     "anchor": "random-mechanisms",
-    "line": 15
+    "line": 16
   },
   {
     "title": "Imagining Something That Isn’t There",
     "level": "subsection",
     "page": 45,
     "anchor": "imagining-something-that-isnt-there",
-    "line": 475
+    "line": 476
   },
   {
     "title": "Michigan: The Ideal Case",
     "level": "subsection",
     "page": 45,
     "anchor": "michigan-the-ideal-case",
-    "line": 544
+    "line": 516
   },
   {
     "title": "Imagining Sampling: NSW",
     "level": "subsection",
     "page": 45,
     "anchor": "imagining-sampling-nsw",
-    "line": 640
+    "line": 612
   },
   {
     "title": "Imagining Randomization: Georgia",
     "level": "subsection",
     "page": 45,
     "anchor": "imagining-randomization-georgia",
-    "line": 684
+    "line": 656
   },
   {
     "title": "Imagining Randomization More Easily: California",
     "level": "subsection",
     "page": 45,
     "anchor": "imagining-randomization-more-easily-california",
-    "line": 753
+    "line": 700
   },
   {
     "title": "Conditioning",
     "level": "section",
     "page": 45,
     "anchor": "expectations",
-    "line": 841
+    "line": 788
   },
   {
     "title": "Subpopulations and Two-Stage Sampling",
     "level": "subsection",
     "page": 45,
     "anchor": "subpopulations-and-two-stage-sampling",
-    "line": 843
+    "line": 790
   },
   {
     "title": "Conditional Probability",
     "level": "subsection",
     "page": 45,
     "anchor": "conditional-probability-and-expectation",
-    "line": 880
+    "line": 827
   },
   {
     "title": "Conditional Expectation and Variance",
     "level": "subsection",
     "page": 45,
     "anchor": "conditional-expectation-and-variance",
-    "line": 931
+    "line": 878
   },
   {
     "title": "Two Things to Distinguish",
     "level": "subsection",
     "page": 45,
     "anchor": "two-things-to-distinguish",
-    "line": 1019
+    "line": 966
   },
   {
     "title": "Another Two",
     "level": "subsection",
     "page": 45,
     "anchor": "another-two",
-    "line": 1048
+    "line": 995
   },
   {
     "title": "🔧 The ‘When’ Rule",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-when-rule",
-    "line": 1083
+    "line": 1030
   },
   {
     "title": "🔧 Conditioning on Something Independent",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-independent-conditioning",
-    "line": 1324
+    "line": 1271
   },
   {
     "title": "🔧 Linearity",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-linearity",
-    "line": 1463
+    "line": 1410
   },
   {
     "title": "Identification",
     "level": "section",
     "page": 45,
     "anchor": "identification",
-    "line": 1524
+    "line": 1471
   },
   {
     "title": "What If Every Michigan Household Got the Letter?",
     "level": "subsection",
     "page": 45,
     "anchor": "two-estimands-in-michigan",
-    "line": 1526
+    "line": 1473
   },
   {
     "title": "Identification in Michigan",
     "level": "subsection",
     "page": 45,
     "anchor": "identification-in-michigan",
-    "line": 1611
+    "line": 1558
   },
   {
     "title": "Causality in California?",
     "level": "subsection",
     "page": 45,
     "anchor": "california",
-    "line": 1907
+    "line": 1752
   },
   {
     "title": "Bias and Variance",
     "level": "section",
     "page": 45,
     "anchor": "location",
-    "line": 2057
+    "line": 1854
   },
   {
     "title": "Two Stories, One Estimation Problem",
     "level": "subsection",
     "page": 45,
     "anchor": "a-new-model-for-sampling-pairs",
-    "line": 2059
+    "line": 1856
   },
   {
     "title": "🔧 Preflipping Is Stratified Sampling",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-conditional-independence",
-    "line": 2192
+    "line": 1952
   },
   {
     "title": "Conditional Bias and Variance",
     "level": "subsection",
     "page": 45,
     "anchor": "conditional-from-stratified",
-    "line": 2544
+    "line": 2221
   },
   {
     "title": "Unconditioning",
     "level": "section",
     "page": 45,
     "anchor": "unconditioning",
-    "line": 3164
+    "line": 2625
   },
   {
     "title": "From Conditional to Unconditional",
     "level": "subsection",
     "page": 45,
     "anchor": "from-conditional-to-unconditional",
-    "line": 3166
+    "line": 2627
   },
   {
     "title": "🔧 The Law of Iterated Expectations",
     "level": "subsection",
     "page": 45,
     "anchor": "the-law-of-iterated-expectations",
-    "line": 3217
+    "line": 2678
   },
   {
     "title": "Iterated Expectations with Unequal Group Sizes",
     "level": "subsection",
     "page": 45,
     "anchor": "unequal-group-sizes",
-    "line": 3274
+    "line": 2735
   },
   {
     "title": "🔧 Iterated Expectations: California",
     "level": "subsection",
     "page": 45,
     "anchor": "the-law-of-iterated-expectations-california",
-    "line": 3301
+    "line": 2762
   },
   {
     "title": "A Plot-Reading Exercise",
     "level": "subsection",
     "page": 45,
     "anchor": "a-plot-reading-exercise",
-    "line": 3332
+    "line": 2793
   },
   {
     "title": "Spread Within and Between Groups",
     "level": "subsection",
     "page": 45,
     "anchor": "spread-within-and-between-groups",
-    "line": 3359
+    "line": 2820
   },
   {
     "title": "🔧 The Law of Total Variance",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-total-variance",
-    "line": 3384
+    "line": 2845
   },
   {
     "title": "Check Your Understanding",
     "level": "subsection",
     "page": 45,
     "anchor": "check-your-understanding",
-    "line": 3446
+    "line": 2907
   },
   {
     "title": "Is It Unbiased Unconditionally?",
     "level": "subsection",
     "page": 45,
     "anchor": "is-it-unbiased-unconditionally",
-    "line": 3474
+    "line": 2935
   },
   {
     "title": "The Variance of the Subsample Mean",
     "level": "subsection",
     "page": 45,
     "anchor": "the-variance-of-the-subsample-mean",
-    "line": 3566
+    "line": 2971
   },
   {
     "title": "Compared With Complete Randomization",
     "level": "subsection",
     "page": 45,
     "anchor": "compared-with-complete-randomization",
-    "line": 3877
+    "line": 3034
   },
   {
     "title": "Estimating Variance: What We Don’t Know ★",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-estimating-variance",
-    "line": 3937
+    "line": 3094
   },
   {
     "title": "Estimating the Variance: Plugging In ★",
     "level": "subsection",
     "page": 45,
     "anchor": "estimating-the-variance-plugging-in",
-    "line": 3971
+    "line": 3128
   },
   {
     "title": "Appendix: Direct Calculations",
     "level": "section",
     "page": 45,
     "anchor": "calculation-from-class",
-    "line": 4005
+    "line": 3162
   },
   {
     "title": "🔧 Each Pair Is Independent of the Other Labels",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-independent-pairs",
-    "line": 4029
+    "line": 3186
   },
   {
     "title": "Irrelevance of independent conditioning variables",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-irrelevance",
-    "line": 4051
+    "line": 3208
   },
   {
     "title": "🔧 The Indicator Trick ★",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-indicator-trick",
-    "line": 4143
+    "line": 3300
   },
   {
     "title": "🔧 The Law of Iterated Iterated Expectations1 ★",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-iterated-iterated",
-    "line": 4177
+    "line": 3334
   },
   {
     "title": "🔧 Factoring Conditional Expectations",
     "level": "subsection",
     "page": 45,
     "anchor": "sec-conditional-factorization",
-    "line": 4288
+    "line": 3445
   },
   {
     "title": "A Subsample Mean is Conditionally Unbiased",
     "level": "subsection",
     "page": 45,
     "anchor": "direct-unbiasedness-proof",
-    "line": 4363
+    "line": 3520
   },
   {
     "title": "The Expanded Variance Calculation",
     "level": "subsection",
     "page": 45,
     "anchor": "expanded-variance-calculation",
-    "line": 4392
+    "line": 3549
   },
   {
     "title": "Step 1. Total Variance",
     "level": "subsection",
     "page": 45,
     "anchor": "expanded-total-variance",
-    "line": 4411
+    "line": 3568
   },
   {
     "title": "Step 2. Centering and Squaring",
     "level": "subsection",
     "page": 45,
     "anchor": "expanded-centering",
-    "line": 4435
+    "line": 3592
   },
   {
     "title": "Step 3. Taking Expectations Term-by-Term",
     "level": "subsection",
     "page": 45,
     "anchor": "step-3.-taking-expectations-term-by-term",
-    "line": 4468
+    "line": 3625
   },
   {
     "title": "Step 4. Putting the Pieces Together",
     "level": "subsection",
     "page": 45,
     "anchor": "step-4.-putting-the-pieces-together",
-    "line": 4496
+    "line": 3653
   },
   {
     "title": "Practice Midterm 1",

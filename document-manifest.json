@@ -5202,7 +5202,7 @@
           "id": "random-mechanisms",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 15,
+          "sourceLine": 16,
           "sourceLineIsHeading": true
         },
         {
@@ -5213,7 +5213,7 @@
           "id": "imagining-something-that-isnt-there",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 475,
+          "sourceLine": 476,
           "sourceLineIsHeading": true
         },
         {
@@ -5224,7 +5224,7 @@
           "id": "michigan-the-ideal-case",
           "fragmentSteps": 3,
           "frames": 4,
-          "sourceLine": 544,
+          "sourceLine": 516,
           "sourceLineIsHeading": true
         },
         {
@@ -5235,7 +5235,7 @@
           "id": "imagining-sampling-nsw",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 640,
+          "sourceLine": 612,
           "sourceLineIsHeading": true
         },
         {
@@ -5246,7 +5246,7 @@
           "id": "imagining-randomization-georgia",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 684,
+          "sourceLine": 656,
           "sourceLineIsHeading": true
         },
         {
@@ -5257,7 +5257,7 @@
           "id": "imagining-randomization-more-easily-california",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 753,
+          "sourceLine": 700,
           "sourceLineIsHeading": true
         },
         {
@@ -5268,7 +5268,7 @@
           "id": "expectations",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 841,
+          "sourceLine": 788,
           "sourceLineIsHeading": true
         },
         {
@@ -5279,7 +5279,7 @@
           "id": "subpopulations-and-two-stage-sampling",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 843,
+          "sourceLine": 790,
           "sourceLineIsHeading": true
         },
         {
@@ -5290,7 +5290,7 @@
           "id": "conditional-probability-and-expectation",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 880,
+          "sourceLine": 827,
           "sourceLineIsHeading": true
         },
         {
@@ -5301,7 +5301,7 @@
           "id": "conditional-expectation-and-variance",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 931,
+          "sourceLine": 878,
           "sourceLineIsHeading": true
         },
         {
@@ -5312,7 +5312,7 @@
           "id": "two-things-to-distinguish",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 1019,
+          "sourceLine": 966,
           "sourceLineIsHeading": true
         },
         {
@@ -5323,7 +5323,7 @@
           "id": "another-two",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 1048,
+          "sourceLine": 995,
           "sourceLineIsHeading": true
         },
         {
@@ -5334,7 +5334,7 @@
           "id": "sec-when-rule",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 1083,
+          "sourceLine": 1030,
           "sourceLineIsHeading": true
         },
         {
@@ -5345,7 +5345,7 @@
           "id": "sec-independent-conditioning",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 1324,
+          "sourceLine": 1271,
           "sourceLineIsHeading": true
         },
         {
@@ -5356,7 +5356,7 @@
           "id": "sec-linearity",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 1463,
+          "sourceLine": 1410,
           "sourceLineIsHeading": true
         },
         {
@@ -5367,7 +5367,7 @@
           "id": "identification",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 1524,
+          "sourceLine": 1471,
           "sourceLineIsHeading": true
         },
         {
@@ -5378,7 +5378,7 @@
           "id": "two-estimands-in-michigan",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 1526,
+          "sourceLine": 1473,
           "sourceLineIsHeading": true
         },
         {
@@ -5389,7 +5389,7 @@
           "id": "identification-in-michigan",
           "fragmentSteps": 2,
           "frames": 3,
-          "sourceLine": 1611,
+          "sourceLine": 1558,
           "sourceLineIsHeading": true
         },
         {
@@ -5400,7 +5400,7 @@
           "id": "california",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 1907,
+          "sourceLine": 1752,
           "sourceLineIsHeading": true
         },
         {
@@ -5411,7 +5411,7 @@
           "id": "location",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 2057,
+          "sourceLine": 1854,
           "sourceLineIsHeading": true
         },
         {
@@ -5422,7 +5422,7 @@
           "id": "a-new-model-for-sampling-pairs",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 2059,
+          "sourceLine": 1856,
           "sourceLineIsHeading": true
         },
         {
@@ -5433,7 +5433,7 @@
           "id": "sec-conditional-independence",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 2192,
+          "sourceLine": 1952,
           "sourceLineIsHeading": true
         },
         {
@@ -5444,7 +5444,7 @@
           "id": "conditional-from-stratified",
           "fragmentSteps": 2,
           "frames": 3,
-          "sourceLine": 2544,
+          "sourceLine": 2221,
           "sourceLineIsHeading": true
         },
         {
@@ -5455,7 +5455,7 @@
           "id": "unconditioning",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3164,
+          "sourceLine": 2625,
           "sourceLineIsHeading": true
         },
         {
@@ -5466,7 +5466,7 @@
           "id": "from-conditional-to-unconditional",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3166,
+          "sourceLine": 2627,
           "sourceLineIsHeading": true
         },
         {
@@ -5477,7 +5477,7 @@
           "id": "section",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3211,
+          "sourceLine": 2672,
           "sourceLineIsHeading": true
         },
         {
@@ -5488,7 +5488,7 @@
           "id": "the-law-of-iterated-expectations",
           "fragmentSteps": 2,
           "frames": 3,
-          "sourceLine": 3217,
+          "sourceLine": 2678,
           "sourceLineIsHeading": true
         },
         {
@@ -5499,7 +5499,7 @@
           "id": "unequal-group-sizes",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3274,
+          "sourceLine": 2735,
           "sourceLineIsHeading": true
         },
         {
@@ -5510,7 +5510,7 @@
           "id": "the-law-of-iterated-expectations-california",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3301,
+          "sourceLine": 2762,
           "sourceLineIsHeading": true
         },
         {
@@ -5521,7 +5521,7 @@
           "id": "a-plot-reading-exercise",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3332,
+          "sourceLine": 2793,
           "sourceLineIsHeading": true
         },
         {
@@ -5532,7 +5532,7 @@
           "id": "spread-within-and-between-groups",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3359,
+          "sourceLine": 2820,
           "sourceLineIsHeading": true
         },
         {
@@ -5543,7 +5543,7 @@
           "id": "sec-total-variance",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3384,
+          "sourceLine": 2845,
           "sourceLineIsHeading": true
         },
         {
@@ -5554,7 +5554,7 @@
           "id": "check-your-understanding",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3446,
+          "sourceLine": 2907,
           "sourceLineIsHeading": true
         },
         {
@@ -5565,7 +5565,7 @@
           "id": "section-1",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3468,
+          "sourceLine": 2929,
           "sourceLineIsHeading": true
         },
         {
@@ -5576,7 +5576,7 @@
           "id": "is-it-unbiased-unconditionally",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3474,
+          "sourceLine": 2935,
           "sourceLineIsHeading": true
         },
         {
@@ -5587,7 +5587,7 @@
           "id": "the-variance-of-the-subsample-mean",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 3566,
+          "sourceLine": 2971,
           "sourceLineIsHeading": true
         },
         {
@@ -5598,7 +5598,7 @@
           "id": "compared-with-complete-randomization",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3877,
+          "sourceLine": 3034,
           "sourceLineIsHeading": true
         },
         {
@@ -5609,7 +5609,7 @@
           "id": "sec-estimating-variance",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3937,
+          "sourceLine": 3094,
           "sourceLineIsHeading": true
         },
         {
@@ -5620,7 +5620,7 @@
           "id": "estimating-the-variance-plugging-in",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 3971,
+          "sourceLine": 3128,
           "sourceLineIsHeading": true
         },
         {
@@ -5631,7 +5631,7 @@
           "id": "calculation-from-class",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4005,
+          "sourceLine": 3162,
           "sourceLineIsHeading": true
         },
         {
@@ -5642,7 +5642,7 @@
           "id": "when-the-trick-isnt-available",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4007,
+          "sourceLine": 3164,
           "sourceLineIsHeading": true
         },
         {
@@ -5653,7 +5653,7 @@
           "id": "appendix-variance-tools",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4023,
+          "sourceLine": 3180,
           "sourceLineIsHeading": true
         },
         {
@@ -5664,7 +5664,7 @@
           "id": "sec-independent-pairs",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4029,
+          "sourceLine": 3186,
           "sourceLineIsHeading": true
         },
         {
@@ -5675,7 +5675,7 @@
           "id": "sec-irrelevance",
           "fragmentSteps": 1,
           "frames": 2,
-          "sourceLine": 4051,
+          "sourceLine": 3208,
           "sourceLineIsHeading": true
         },
         {
@@ -5686,7 +5686,7 @@
           "id": "sec-indicator-trick",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4143,
+          "sourceLine": 3300,
           "sourceLineIsHeading": true
         },
         {
@@ -5697,7 +5697,7 @@
           "id": "sec-iterated-iterated",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4177,
+          "sourceLine": 3334,
           "sourceLineIsHeading": true
         },
         {
@@ -5708,7 +5708,7 @@
           "id": "sec-conditional-factorization",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4288,
+          "sourceLine": 3445,
           "sourceLineIsHeading": true
         },
         {
@@ -5719,7 +5719,7 @@
           "id": "appendix-variance-result",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4357,
+          "sourceLine": 3514,
           "sourceLineIsHeading": true
         },
         {
@@ -5730,7 +5730,7 @@
           "id": "direct-unbiasedness-proof",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4363,
+          "sourceLine": 3520,
           "sourceLineIsHeading": true
         },
         {
@@ -5741,7 +5741,7 @@
           "id": "expanded-variance-calculation",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4392,
+          "sourceLine": 3549,
           "sourceLineIsHeading": true
         },
         {
@@ -5752,7 +5752,7 @@
           "id": "expanded-total-variance",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4411,
+          "sourceLine": 3568,
           "sourceLineIsHeading": true
         },
         {
@@ -5763,7 +5763,7 @@
           "id": "expanded-centering",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4435,
+          "sourceLine": 3592,
           "sourceLineIsHeading": true
         },
         {
@@ -5774,7 +5774,7 @@
           "id": "step-3.-taking-expectations-term-by-term",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4468,
+          "sourceLine": 3625,
           "sourceLineIsHeading": true
         },
         {
@@ -5785,7 +5785,7 @@
           "id": "step-4.-putting-the-pieces-together",
           "fragmentSteps": 0,
           "frames": 1,
-          "sourceLine": 4496,
+          "sourceLine": 3653,
           "sourceLineIsHeading": true
         }
       ],
