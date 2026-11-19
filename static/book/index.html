@@ -1146,7 +1146,7 @@ Checking your course work…
 </tr>
 <tr class="even">
 <td>T Nov 17</td>
-<td>Conditioning</td>
+<td>Conditioning · <a href="decks/ordinary-sampling-ii-nov17.html">slides</a></td>
 </tr>
 <tr class="odd">
 <td>Th Nov 19</td>
@@ -1791,6 +1791,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
   var tldaWheelOwner = 'page';
   var tldaWheelViewportId = '';
 
+  // Installed by the Reveal bridge after init. Ordinary document rasters do
+  // not request a fragment snapshot and retain their existing path.
+  var tldaPrepareCaptureSnapshot = null;
   // Identity survives repeated state measurements in this document. A new DOM
   // element receives a different key, so layout position never invents a
   // replacement relationship.
@@ -1853,7 +1856,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     return title.replace(/\s+/g, ' ').trim();
   }
 
-  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks) {
+  function tldaMeasureRenderedLines(candidatesSelector, includePictureLayout, includeLineBreaks, includeDiagnostics) {
     // In a Reveal deck after a scroll-view goto, section.present stays on the
     // title slide while the address moves; getCurrentSlide() reads the
     // addressed slide. Measure that first (the hidden!==root guard below keeps
@@ -1880,6 +1883,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (!lm.getAttribute('src') && lm.getAttribute('data-src')) lm.setAttribute('src', lm.getAttribute('data-src'));
       }
     }
+    // Pictures still settle and activate addressed media through this bridge,
+    // but consume no export diagnostics. Null means unmeasured, not clean.
+    if (includeDiagnostics === false) return null;
     var blocks = [];
     // The default candidate set is the prose skeleton, and it is what every
     // deck walk gets: the walk passes no selector, so deck output is the same
@@ -2496,6 +2502,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
                 : null,
               event.data.includePictureLayout === true,
               event.data.includeLineBreaks !== false,
+              event.data.includeDiagnostics !== false,
             ),
           }, '*');
         });
@@ -2754,7 +2761,39 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
     }
   }
 
+  // Source stamps travel with the raster, in its coordinate system. This
+  // keeps Library copy targets paired with the pixels they describe even
+  // after the short-lived capture frame has been removed.
+  function tldaRasterSourceBoxes(slide, w, h) {
+    var base = slide.getBoundingClientRect();
+    if (!(base.width > 0 && base.height > 0)) return [];
+    var sx = slide.offsetWidth / base.width;
+    var sy = slide.offsetHeight / base.height;
+    return Array.from(slide.querySelectorAll('[data-source-line]')).flatMap(function(el) {
+      var line = Number(el.getAttribute('data-source-line'));
+      if (!(line > 0) || el.closest('.fragment:not(.visible), .notes, .discussion')) return [];
+      var source = el.closest('[data-source-file]');
+      var target = el.closest('figure, .quarto-figure, table') || el;
+      var r = target.getBoundingClientRect();
+      if (!(r.width > 0 && r.height > 0)) return [];
+      var left = Math.max(0, (r.left - base.left) * sx / w);
+      var top = Math.max(0, (r.top - base.top) * sy / h);
+      var right = Math.min(1, (r.right - base.left) * sx / w);
+      var bottom = Math.min(1, (r.bottom - base.top) * sy / h);
+      if (!(right > left && bottom > top)) return [];
+      return [{ file: source ? source.getAttribute('data-source-file') : null,
+        line: line, endLine: Number(el.getAttribute('data-source-end-line')) || line,
+        kind: target.tagName.toLowerCase(), left: left, top: top, width: right - left, height: bottom - top }];
+    });
+  }
+
   function tldaRasterizeCurrentSlide(opts) {
+    var snapshot = null;
+    if (opts && opts.expectedState !== undefined) {
+      if (!tldaPrepareCaptureSnapshot) return Promise.reject(new Error('Requested PNG state is unsupported by this document'));
+      try { snapshot = tldaPrepareCaptureSnapshot(opts.expectedState); }
+      catch (err) { return Promise.reject(err); }
+    }
     var slide = (window.Reveal && typeof window.Reveal.getCurrentSlide === 'function' && window.Reveal.getCurrentSlide())
       || document.querySelector('.reveal .slides section.present')
       || document.querySelector('.reveal .slides section');
@@ -2766,43 +2805,54 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         if (!le.getAttribute('src') && le.getAttribute('data-src')) le.setAttribute('src', le.getAttribute('data-src'));
       }
     }
-    var authoredW = Math.max(1, Math.ceil(slide.offsetWidth || 1290));
-    var w = Math.max(authoredW, Math.ceil(slide.scrollWidth || 0));
-    var h = Math.max(1, Math.ceil(Math.max(slide.offsetHeight, slide.scrollHeight) || 1000));
-    var sRect = typeof slide.getBoundingClientRect === 'function' ? slide.getBoundingClientRect() : null;
-    if (sRect && sRect.width > 0 && sRect.height > 0 && typeof slide.querySelectorAll === 'function') {
-      var scaleX = authoredW / sRect.width;
-      var scaleY = (slide.offsetHeight || sRect.height) / sRect.height;
-      var contentNodes = slide.querySelectorAll('p, li, dd, dt, blockquote, figcaption, caption, h1, h2, h3, h4, h5, h6, pre, table, .math.display, mjx-container[display="true"], .katex-display, .callout, img, svg, canvas, video, figure, .cell-output-display');
-      for (var ci = 0; ci < contentNodes.length; ci++) {
-        var cn = contentNodes[ci];
-        if (!cn || typeof cn.getBoundingClientRect !== 'function') continue;
-        if (cn.closest && cn.closest('mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml, .fragment:not(.visible)')) continue;
-        var cnVisible = true;
-        if (typeof getComputedStyle === 'function') {
-          for (var cur = cn; cur && cur !== slide; cur = cur.parentElement) {
-            var cs = getComputedStyle(cur);
-            if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' || cs.contentVisibility === 'hidden' || parseFloat(cs.opacity) === 0)) {
-              cnVisible = false;
-              break;
+    return Promise.all([tldaRasterCss(), snapshot ? snapshot.ready : null]).then(function(prepared) {
+      var css = prepared[0];
+      // No asynchronous work between establishing the requested state and
+      // freezing its geometry, source regions, marks and DOM below.
+      var copiedState = snapshot ? snapshot.freeze() : null;
+      if (snapshot) slide = snapshot.slide;
+      var authoredW = Math.max(1, Math.ceil(slide.offsetWidth || 1290));
+      var w = Math.max(authoredW, Math.ceil(slide.scrollWidth || 0));
+      var h = Math.max(1, Math.ceil(Math.max(slide.offsetHeight, slide.scrollHeight) || 1000));
+      var sRect = typeof slide.getBoundingClientRect === 'function' ? slide.getBoundingClientRect() : null;
+      if (sRect && sRect.width > 0 && sRect.height > 0 && typeof slide.querySelectorAll === 'function') {
+        var scaleX = authoredW / sRect.width;
+        var scaleY = (slide.offsetHeight || sRect.height) / sRect.height;
+        var contentNodes = slide.querySelectorAll('p, li, dd, dt, blockquote, figcaption, caption, h1, h2, h3, h4, h5, h6, pre, table, .math.display, mjx-container[display="true"], .katex-display, .callout, img, svg, canvas, video, figure, .cell-output-display');
+        for (var ci = 0; ci < contentNodes.length; ci++) {
+          var cn = contentNodes[ci];
+          if (!cn || typeof cn.getBoundingClientRect !== 'function') continue;
+          if (cn.closest && cn.closest('mjx-assistive-mml, .MJX_Assistive_MathML, .katex-mathml, .fragment:not(.visible)')) continue;
+          var cnVisible = true;
+          if (typeof getComputedStyle === 'function') {
+            for (var cur = cn; cur && cur !== slide; cur = cur.parentElement) {
+              var cs = getComputedStyle(cur);
+              if (cs && (cs.display === 'none' || cs.visibility === 'hidden' || cs.visibility === 'collapse' || cs.contentVisibility === 'hidden' || parseFloat(cs.opacity) === 0)) {
+                cnVisible = false;
+                break;
+              }
             }
           }
-        }
-        if (!cnVisible) continue;
-        var cr = cn.getBoundingClientRect();
-        if (cr && cr.width > 0 && cr.height > 0) {
-          w = Math.max(w, Math.ceil((cr.right - sRect.left) * scaleX));
-          h = Math.max(h, Math.ceil((cr.bottom - sRect.top) * scaleY));
+          if (!cnVisible) continue;
+          var cr = cn.getBoundingClientRect();
+          if (cr && cr.width > 0 && cr.height > 0) {
+            w = Math.max(w, Math.ceil((cr.right - sRect.left) * scaleX));
+            h = Math.max(h, Math.ceil((cr.bottom - sRect.top) * scaleY));
+          }
         }
       }
-    }
-    // The ground: the viewer canvas's own colour when the walk found an
-    // opaque one, else the deck theme's background (--r-background-color),
-    // which is what the canvas takes on from the deck. The deck document
-    // itself is transparent in deck mode, so neither comes from its boxes.
-    var themeGround = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
-    var ground = (opts && typeof opts.ground === 'string' && opts.ground) || themeGround || '#ffffff';
-    return tldaRasterCss().then(function(css) {
+      // The ground: the viewer canvas's own colour when the walk found an
+      // opaque one, else the deck theme's background (--r-background-color),
+      // which is what the canvas takes on from the deck. The deck document
+      // itself is transparent in deck mode, so neither comes from its boxes.
+      var themeGround = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+      var ground = (opts && typeof opts.ground === 'string' && opts.ground) || themeGround || '#ffffff';
+      var sourceBoxes = opts && opts.sourceBoxes ? tldaRasterSourceBoxes(slide, w, h) : [];
+      var frozenMarks = snapshot ? readRasterMarks() : null;
+      function readRasterMarks() {
+        try { return tldaReadSlideMarks(slide); }
+        catch (markErr) { return [{ kind: 'marks', color: 'all', gesture: 'could not be read (' + (markErr && markErr.message ? markErr.message : String(markErr)) + ')', words: '', written: '' }]; }
+      }
       var clone = slide.cloneNode(true);
       var origEls = [slide].concat(Array.prototype.slice.call(slide.querySelectorAll('*')));
       var cloneEls = [clone].concat(Array.prototype.slice.call(clone.querySelectorAll('*')));
@@ -2892,7 +2942,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           + '<foreignObject x="0" y="0" width="' + w + '" height="' + h + '">' + serialized + '</foreignObject></svg>';
         var viewportW = Number(opts && opts.viewportW) || 1400;
         var dsf = Number(opts && opts.dsf) || 1;
-        var scale = Math.min(1, viewportW / 1400) * dsf;
+        var pixelWidth = Number(opts && opts.pixelWidth);
+        var scale = Number.isFinite(pixelWidth) && pixelWidth > 0
+          ? pixelWidth / w : Math.min(1, viewportW / 1400) * dsf;
         var outW = Math.max(1, Math.ceil(w * scale));
         var outH = Math.max(1, Math.ceil(h * scale));
         // A data: URL, not a blob: URL: Chrome taints a canvas that draws a
@@ -2902,6 +2954,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
           var img = new Image();
           img.onload = function() {
             try {
+              if (snapshot) snapshot.assertOwned();
               var outCanvas = document.createElement('canvas');
               outCanvas.width = outW;
               outCanvas.height = outH;
@@ -2911,14 +2964,14 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
               ctx.drawImage(img, 0, 0, outW, outH);
               var dataUrl = outCanvas.toDataURL('image/png');
               var comma = dataUrl.indexOf(',');
-              var marks = [];
-              try { marks = tldaReadSlideMarks(slide); } catch (markErr) { marks = [{ kind: 'marks', color: 'all', gesture: 'could not be read (' + (markErr && markErr.message ? markErr.message : String(markErr)) + ')', words: '', written: '' }]; }
               resolve({
                 pngBase64: comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl,
                 box: { x: 0, y: 0, w: w, h: h },
                 clip: { x: 0, y: 0, width: outW, height: outH },
                 ground: ground,
-                marks: marks,
+                marks: frozenMarks || readRasterMarks(),
+                sourceBoxes: sourceBoxes,
+                copiedState: copiedState,
               });
             } catch (err) {
               reject(err);
@@ -3066,6 +3119,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 
   window.addEventListener('message', function(event) {
     if (event.data?.type !== 'tlda-raster-slide') return;
+    if (event.data.expectedState !== undefined && event.source !== window.parent) return;
     var requestId = event.data.requestId || null;
     var target = event.source || window.parent;
     tldaRasterizeCurrentSlide(event.data).then(function(res) {
@@ -3079,6 +3133,8 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         clip: res.clip,
         ground: res.ground,
         marks: res.marks || [],
+        sourceBoxes: res.sourceBoxes || [],
+        copiedState: res.copiedState,
       }, '*');
     }, function(e) {
       target.postMessage({
@@ -3349,10 +3405,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         try {
           var linkUrl = new URL(href, window.location.href);
           var selfUrl = new URL(window.location.href);
-          if (linkUrl.pathname === selfUrl.pathname) {
+          if (linkUrl.pathname === selfUrl.pathname && linkUrl.search === selfUrl.search) {
             parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
           } else {
-            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+            parsed = linkUrl.pathname + linkUrl.search + (hashIdx >= 0 ? href.slice(hashIdx) : '');
           }
         } catch (parseErr) {
           parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
@@ -3362,7 +3418,8 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       var targetFile = (parts[0] || '').replace(/^\.\//,'').replace(/^.*\//,'') || null;
       if (targetFile) targetFile = targetFile.split('?')[0] || null;
       var anchor = (parts[1] || '').replace(/^\/+/, '') || null;
-      var targetPath = parts[0] || null;
+      // Quarto relativizes authored /docs/<project>/ routes against its output root.
+      var targetPath = (parts[0] || '').replace(/^(?:\.\.?\/)+(?=docs\/[^/]+\/)/, '/') || null;
       var targetTitle = ((a.textContent || '').trim()) || null;
       return {
         targetFile: targetFile,
@@ -3370,6 +3427,15 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         targetTitle: targetTitle,
         anchor: anchor,
       };
+    }
+
+    function isPreviewablePageLink(info, a) {
+      if (!info) return false;
+      if (info.anchor) {
+        if (!info.targetFile && a && a.classList && a.classList.contains('quarto-xref')) return false;
+        return true;
+      }
+      return /^\/docs\/[^/]+\/.+\.html(?:\?|$)/i.test(info.targetPath || '');
     }
 
     document.addEventListener('mouseover', function(e) {
@@ -3387,8 +3453,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       var related = e.relatedTarget;
       if (related && related.closest && related.closest('a[href]') === a) return;
       var info = parsePageLinkAnchor(a);
-      if (!info || !info.anchor) return;
-      if (!info.targetFile && a.classList && a.classList.contains('quarto-xref')) return;
+      if (!isPreviewablePageLink(info, a)) return;
       var rect = a.getBoundingClientRect();
       if (window.parent !== window) {
         window.parent.postMessage({
@@ -3426,8 +3491,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       var relatedOut = e.relatedTarget;
       if (relatedOut && relatedOut.closest && relatedOut.closest('a[href]') === a) return;
       var info = parsePageLinkAnchor(a);
-      if (!info || !info.anchor) return;
-      if (!info.targetFile && a.classList && a.classList.contains('quarto-xref')) return;
+      if (!isPreviewablePageLink(info, a)) return;
       if (window.parent !== window) {
         window.parent.postMessage({
           type: 'tlda-page-link-out',
@@ -3721,10 +3785,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         try {
           var linkUrl = new URL(href, window.location.href);
           var selfUrl = new URL(window.location.href);
-          if (linkUrl.pathname === selfUrl.pathname) {
+          if (linkUrl.pathname === selfUrl.pathname && linkUrl.search === selfUrl.search) {
             parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
           } else {
-            parsed = linkUrl.pathname + (hashIdx >= 0 ? href.slice(hashIdx) : '');
+            parsed = linkUrl.pathname + linkUrl.search + (hashIdx >= 0 ? href.slice(hashIdx) : '');
           }
         } catch (parseErr) {
           parsed = hashIdx >= 0 ? href.slice(hashIdx) : '';
@@ -3739,7 +3803,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
       // on it. targetPath keeps the whole path, which is what you need to OPEN a
       // document of this project that has no shape on the canvas yet, and
       // targetTitle is what the link called it.
-      var targetPath = parts[0] || null;
+      var targetPath = (parts[0] || '').replace(/^(?:\.\.?\/)+(?=docs\/[^/]+\/)/, '/') || null;
       var targetTitle = ((a.textContent || '').trim()) || null;
       // Same-document anchors only: a cross-chapter anchor lives in an iframe
       // this document cannot reach. Re-measure after opening so the parent
@@ -3760,6 +3824,8 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         }, '*');
       }
     }, true);
+    // Scroll non-deck HTML preview iframes to [data-source-line] when explicitly addressed via ?_tldaLine=<n>.
+    scrollPreviewToSourceLine();
     // Keep authored content styling. Duplicate embedded TOCs are hidden
     // separately above; these rules are dark-mode states the parent toggles.
     var style = document.createElement('style');
@@ -3941,6 +4007,43 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
         markingPositions: markingPositions,
         outline: outline,
       }, '*');
+    }
+    scrollPreviewToSourceLine();
+  }
+
+  function scrollPreviewToSourceLine() {
+    var line = Number(params.get('_tldaLine'));
+    if (!Number.isInteger(line) || line < 1) return;
+    var file = (params.get('_tldaLineFile') || '').replace(/^\.\//, '');
+    function findMatch(strictFile) {
+      var best = null;
+      var bestScore = Infinity;
+      document.querySelectorAll('[data-source-line], [id^="line-"]').forEach(function(el) {
+        var sf = (el.getAttribute('data-source-file') || '').replace(/^\.\//, '');
+        if (strictFile) {
+          if (file ? (sf !== file && !(sf && sf.slice(-file.length) === file)) : !!sf) return;
+        }
+        var match = el.id ? el.id.match(/^line-(\d+)$/) : null;
+        var start = Number(match ? match[1] : el.getAttribute('data-source-line'));
+        var end = Number(el.getAttribute('data-source-end-line')) || start;
+        if (!(start > 0)) return;
+        var score;
+        if (start <= line && line <= end) score = 0;
+        else if (start > line && start - line <= 20) score = start - line;
+        else if (start < line) score = 20 + (line - start);
+        else score = 10000 + (start - line);
+        if (score < bestScore) {
+          best = el;
+          bestScore = score;
+        }
+      });
+      return best;
+    }
+    var best = findMatch(true) || (!file ? findMatch(false) : null);
+    if (best) {
+      var pane = best.closest && best.closest('.tab-pane');
+      if (pane && pane.id) openTabPaneById(pane.id, false);
+      if (best.scrollIntoView) best.scrollIntoView({ block: 'start' });
     }
   }
 
