@@ -43,7 +43,7 @@
           "format": "qmd"
         }
       ],
-      "pages": 59,
+      "pages": 60,
       "pageFiles": [
         "static/index.html",
         "static/book/index.html",
@@ -85,6 +85,7 @@
         "static/book/decks/chapter-sampling-slides.html",
         "static/book/decks/chapter-social-pressure-experiment-slides.html",
         "static/book/decks/chapter-standard-deviation-slides.html",
+        "static/book/decks/conditioning-nov12.html",
         "static/book/decks/georgia-oct29.html",
         "static/book/decks/nsw-identification-nov03.html",
         "static/book/decks/nsw-precision-nov05.html",

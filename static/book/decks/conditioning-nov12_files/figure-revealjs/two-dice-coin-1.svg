@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='792.00pt' height='285.12pt' viewBox='0 0 792.00 285.12'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: none;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3OTIuMDB8MC4wMHwyODUuMTI='>
+    <rect x='0.00' y='0.00' width='792.00' height='285.12' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8MC4wMHwyODUuMTI=)'>
+<rect x='0.00' y='-0.000000000000057' width='792.00' height='285.12' style='stroke-width: 1.07; stroke: none;' />
+</g>
+<defs>
+  <clipPath id='cpMTMuMjZ8Nzg2LjUyfDUuNDh8MjY2LjY3'>
+    <rect x='13.26' y='5.48' width='773.26' height='261.19' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMTMuMjZ8Nzg2LjUyfDUuNDh8MjY2LjY3)'>
+<rect x='13.26' y='5.48' width='773.26' height='261.19' style='stroke-width: 1.07; stroke: none;' />
+<polyline points='13.26,241.61 786.52,241.61 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='13.26,188.84 786.52,188.84 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='13.26,136.08 786.52,136.08 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='13.26,83.31 786.52,83.31 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='13.26,30.54 786.52,30.54 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='212.43,266.67 212.43,5.48 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<polyline points='587.35,266.67 587.35,5.48 ' style='stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;' />
+<line x1='189.00' y1='215.23' x2='657.64' y2='30.54' style='stroke-width: 1.07; stroke: #808080; stroke-opacity: 0.45; stroke-linecap: butt;' />
+<circle cx='95.27' cy='188.84' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.20; fill: #F8766D; fill-opacity: 0.20;' />
+<circle cx='142.14' cy='241.61' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.20; fill: #F8766D; fill-opacity: 0.20;' />
+<circle cx='189.00' cy='215.23' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.50;' />
+<circle cx='235.87' cy='56.93' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.20; fill: #F8766D; fill-opacity: 0.20;' />
+<circle cx='282.73' cy='136.08' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.20; fill: #F8766D; fill-opacity: 0.20;' />
+<circle cx='329.59' cy='241.61' r='3.56' style='stroke-width: 0.71; stroke: #F8766D; stroke-opacity: 0.20; fill: #F8766D; fill-opacity: 0.20;' />
+<circle cx='470.19' cy='83.31' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.20; fill: #00BFC4; fill-opacity: 0.20;' />
+<circle cx='517.05' cy='241.61' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.20; fill: #00BFC4; fill-opacity: 0.20;' />
+<circle cx='563.92' cy='136.08' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.20; fill: #00BFC4; fill-opacity: 0.20;' />
+<circle cx='610.78' cy='56.93' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.20; fill: #00BFC4; fill-opacity: 0.20;' />
+<circle cx='657.64' cy='30.54' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.95; fill: #00BFC4; fill-opacity: 0.95;' />
+<circle cx='704.51' cy='188.84' r='3.56' style='stroke-width: 0.71; stroke: #00BFC4; stroke-opacity: 0.20; fill: #00BFC4; fill-opacity: 0.20;' />
+</g>
+<g clip-path='url(#cpMC4wMHw3OTIuMDB8MC4wMHwyODUuMTI=)'>
+<text x='9.37' y='246.62' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='7.78px' lengthAdjust='spacingAndGlyphs'>0</text>
+<text x='9.37' y='193.85' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='7.78px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text x='9.37' y='141.09' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='7.78px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text x='9.37' y='88.32' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='7.78px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='9.37' y='35.55' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='7.78px' lengthAdjust='spacingAndGlyphs'>8</text>
+<text x='212.43' y='278.17' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='42.78px' lengthAdjust='spacingAndGlyphs'>red die</text>
+<text x='587.35' y='278.17' text-anchor='middle' style='font-size: 14.00px;fill: #AAAAAA; font-family: "Arial";' textLength='58.34px' lengthAdjust='spacingAndGlyphs'>green die</text>
+</g>
+</g>
+</svg>

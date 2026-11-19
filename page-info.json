@@ -4135,6 +4135,237 @@
   {
     "width": 1290,
     "height": 1000,
+    "file": "static/book/decks/conditioning-nov12.html",
+    "title": "Randomization and Sampling",
+    "slides": [
+      {
+        "index": 0,
+        "indexh": 0,
+        "indexv": 0,
+        "title": "Randomization and Sampling",
+        "id": "title-slide",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": null,
+        "sourceLineIsHeading": null,
+        "sourceKind": "title-metadata"
+      },
+      {
+        "index": 1,
+        "indexh": 1,
+        "indexv": 0,
+        "title": "What Ordinary Sampling Is",
+        "id": "what-ordinary-sampling-is",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 13,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 2,
+        "indexh": 1,
+        "indexv": 1,
+        "title": "What Ordinary Sampling Is",
+        "id": "what-ordinary-sampling-is-1",
+        "fragmentSteps": 1,
+        "frames": 2,
+        "sourceLine": 17,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 3,
+        "indexh": 1,
+        "indexv": 2,
+        "title": "We Could Have Done This in Our Turnout Poll",
+        "id": "we-could-have-done-this-in-our-turnout-poll",
+        "fragmentSteps": 3,
+        "frames": 4,
+        "sourceLine": 155,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 4,
+        "indexh": 1,
+        "indexv": 3,
+        "title": "It Wouldn’t Have Made a Difference",
+        "id": "it-wouldnt-have-made-a-difference",
+        "fragmentSteps": 1,
+        "frames": 2,
+        "sourceLine": 279,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 5,
+        "indexh": 1,
+        "indexv": 4,
+        "title": "The Caveat in Small Samples",
+        "id": "the-caveat-small-samples-small-populations",
+        "fragmentSteps": 1,
+        "frames": 2,
+        "sourceLine": 433,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 6,
+        "indexh": 1,
+        "indexv": 5,
+        "title": "Ordinary Sampling and Potential Outcomes",
+        "id": "ordinary-sampling-in-two-stages",
+        "fragmentSteps": 2,
+        "frames": 3,
+        "sourceLine": 496,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 7,
+        "indexh": 2,
+        "indexv": 0,
+        "title": "Why We’re Talking About It",
+        "id": "why-so-much",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 622,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 8,
+        "indexh": 2,
+        "indexv": 1,
+        "title": "Imagining Something That Isn’t There",
+        "id": "imagining-something-that-isnt-there",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 627,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 9,
+        "indexh": 2,
+        "indexv": 2,
+        "title": "We Have to Flip Coins to Get Independence",
+        "id": "coin-flip-randomization",
+        "fragmentSteps": 4,
+        "frames": 5,
+        "sourceLine": 830,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 10,
+        "indexh": 2,
+        "indexv": 3,
+        "title": "The Same Probability Model",
+        "id": "exactly-the-same-probability-model",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 1387,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 11,
+        "indexh": 2,
+        "indexv": 4,
+        "title": "Activity: Treatment and Judging Chocolates",
+        "id": "activity-treatment-and-judging-chocolates",
+        "fragmentSteps": 2,
+        "frames": 3,
+        "sourceLine": 1430,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 12,
+        "indexh": 2,
+        "indexv": 5,
+        "title": "One Conceptual Caveat",
+        "id": "one-conceptual-caveat",
+        "fragmentSteps": 1,
+        "frames": 2,
+        "sourceLine": 1520,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 13,
+        "indexh": 3,
+        "indexv": 0,
+        "title": "What Observations Tell Us",
+        "id": "what-observations-tell-us",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 1664,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 14,
+        "indexh": 3,
+        "indexv": 1,
+        "title": "Asking Your Neighbor",
+        "id": "asking-your-neighbor",
+        "fragmentSteps": 4,
+        "frames": 5,
+        "sourceLine": 1666,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 15,
+        "indexh": 4,
+        "indexv": 0,
+        "title": "The Same Distribution",
+        "id": "the-same-distribution",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 2090,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 16,
+        "indexh": 4,
+        "indexv": 1,
+        "title": "What Population Are We Sampling?",
+        "id": "what-population-are-we-sampling",
+        "fragmentSteps": 1,
+        "frames": 2,
+        "sourceLine": 2518,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 17,
+        "indexh": 4,
+        "indexv": 2,
+        "title": "We Observe Independent Pairs",
+        "id": "we-observe-independent-pairs",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 2637,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 18,
+        "indexh": 4,
+        "indexv": 3,
+        "title": "Why Does This Matter?",
+        "id": "why-does-this-matter",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 2688,
+        "sourceLineIsHeading": true
+      },
+      {
+        "index": 19,
+        "indexh": 4,
+        "indexv": 4,
+        "title": "How the Models Fit Together",
+        "id": "the-picture",
+        "fragmentSteps": 0,
+        "frames": 1,
+        "sourceLine": 2747,
+        "sourceLineIsHeading": true
+      }
+    ],
+    "variant": "slides",
+    "map": "static/book/decks/conditioning-nov12.html"
+  },
+  {
+    "width": 1290,
+    "height": 1000,
     "file": "static/book/decks/georgia-oct29.html",
     "title": "Comparing Two Groups: Precision, Power and Allocation",
     "slides": [
