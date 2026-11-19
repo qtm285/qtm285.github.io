@@ -1141,28 +1141,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </ul>
 
 </section>
-<section id="two-random-mechanisms" class="slide level2 library">
-<h2 data-source-line="515" data-source-end-line="515">Two Random Mechanisms</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="517" data-source-end-line="530">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/two-random-mechanisms-grids-1.png" alt="Georgia: every voter in the square with their group colour and their one turnout outcome, already decided."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/two-random-mechanisms-grids-2.png" alt="Michigan: every household in the square with both turnout outcomes, without and with the letter, not yet decided."></p>
-</div>
-</div>
-</div>
-<ul>
-<li data-source-line="532" data-source-end-line="532">Last class we talked about two random mechanisms: sampling and randomization.</li>
-<li data-source-line="533" data-source-end-line="533">They’re two conceptually distinct things.</li>
-<li data-source-line="534" data-source-end-line="534">We analyze them the same way.</li>
-<li data-source-line="535" data-source-end-line="535">Today is the math of independent pairs. It’s the same for both.</li>
-<li data-source-line="536" data-source-end-line="536">The math connecting them comes at the end.</li>
-</ul>
-
-</section>
 <section id="michigan-the-ideal-case" class="slide level2">
 <h2 data-source-line="544" data-source-end-line="544">Michigan: The Ideal Case</h2>
 <div class="r-stack" style="width:100%">
@@ -1313,23 +1292,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </ul>
 
 </section>
-<section id="independent-pairs" class="slide level2 library">
-<h2 data-source-line="728" data-source-end-line="728">Independent Pairs</h2>
 
-
-<img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/independent-pairs-california-1.png" style="width:100.0%" alt="California: the sampled residents in their degree-group colours over the made-up population." class="r-stretch" data-source-line="730" data-source-end-line="739"><ul>
-<li><span class="agent-new">Last class, we talked about two mechanisms that give us independent pairs <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span>.</span> 
-<ul>
-<li data-source-line="741" data-source-end-line="741"><span class="agent-new">A sampling mechanism and a randomization mechanism.</span> </li>
-</ul></li>
-<li data-source-line="742" data-source-end-line="742">Today is the math of independent pairs. We don’t care where the pairs come from.</li>
-<li><span class="agent-new">In our first section, we’ll talk about California in the language of ordinary sampling.</span> 
-<ul>
-<li data-source-line="744" data-source-end-line="744"><span class="agent-new">That’s the actual story in California.</span> </li>
-</ul></li>
-</ul>
-
-</section>
 <section id="imagining-randomization-more-easily-california" class="slide level2">
 <h2 data-source-line="753" data-source-end-line="753">Imagining Randomization More Easily: California</h2>
 <div class="r-stack" style="width:100%">
@@ -1945,100 +1908,8 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 
 
 </section>
-<section id="identification-michigan-long-formal-proof" class="slide level2 library">
-<h2 data-source-line="1805" data-source-end-line="1805">Identification in Michigan: Long Formal Proof</h2>
-<ul>
-<li><span class="agent-new">We find the <a href="#/conditional-probability-and-expectation" class="quarto-xref">conditional probability</a> of calling household <span class="math inline">j</span> when we sample with replacement and flip a coin.</span> </li>
-</ul>
 
-<p data-source-line="1809" data-source-end-line="1816"><span class="math display">
-\P(J_i=j \mid W_i=w)
-\overset{\texttip{\small{\text{?}}}{Divide the joint probability by $\P(W_i=w)$ using the definition of conditional probability.}}{=}
-\frac{\P(W_i=w, J_i=j)}{\P(W_i=w)}
-\overset{\texttip{\small{\text{?}}}{Calling household $j$ and flipping $w$ on a fair coin has probability $\frac{1}{m}\times\frac{1}{2}$, and summing over the $m$ households gives $\P(W_i=w)=\frac{1}{2}$.}}{=}
-\frac{\frac{1}{m} \times \frac{1}{2}}{\frac{1}{2}}
-= \frac{1}{m}.
-</span></p>
-<ul>
-<li><span class="agent-new">We write the observed outcome <span class="math inline">Y_i</span> in terms of the potential outcomes with the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>.</span> </li>
-</ul>
 
-<p data-source-line="1820" data-source-end-line="1830"><span class="math display">
-\begin{aligned}
-Y_i
-&amp;\overset{\texttip{\small{\text{?}}}{On call $i$, we observe the potential outcome of household $J_i$ under assignment $W_i$.}}{=}
-y_{J_i}(W_i) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Since $W_i$ is $0$ or $1$, one of $1_{=0}(W_i)$ and $1_{=1}(W_i)$ is $1$ and the other is $0$, so they sum to $1$.}}{=}
-1_{=0}(W_i)\,y_{J_i}(W_i) + 1_{=1}(W_i)\,y_{J_i}(W_i) \\
-&amp;\overset{\texttip{\small{\text{?}}}{The indicator trick: $1_{=w'}(W_i)\,y_{J_i}(W_i) = 1_{=w'}(W_i)\,y_{J_i}(w')$ for $w'=0,1$, since both equal $y_{J_i}(w')$ when $W_i=w'$ and $0$ otherwise.}}{=}
-1_{=0}(W_i)\,y_{J_i}(0) + 1_{=1}(W_i)\,y_{J_i}(1).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">Now we apply <a href="#/sec-linearity" class="quarto-xref">linearity</a>, the <a href="#/sec-when-rule" class="quarto-xref">‘when’ rule</a>, and the definition of <a href="#/conditional-expectation-and-variance" class="quarto-xref">conditional expectation</a>.</span> </li>
-</ul>
-
-<p data-source-line="1834" data-source-end-line="1850"><span class="math display">
-\begin{aligned}
-\mu(w) = \mathop{\mathrm{E}}(Y_i \mid W_i=w)
-&amp;\overset{\texttip{\small{\text{?}}}{Substitute $Y_i = 1_{=0}(W_i)\,y_{J_i}(0) + 1_{=1}(W_i)\,y_{J_i}(1)$.}}{=}
-\mathop{\mathrm{E}}\cb{1_{=0}(W_i)\,y_{J_i}(0) + 1_{=1}(W_i)\,y_{J_i}(1) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Linearity and the 'when' rule pull out the functions $1_{=0}(W_i)$ and $1_{=1}(W_i)$ as $1_{=0}(w)$ and $1_{=1}(w)$.}}{=}
-1_{=0}(w)\,\mathop{\mathrm{E}}\cb{y_{J_i}(0) \mid W_i=w} + 1_{=1}(w)\,\mathop{\mathrm{E}}\cb{y_{J_i}(1) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Since $w$ is $0$ or $1$, the indicator $1_{=w}(w)$ is $1$ and the other indicator is $0$.}}{=}
-\mathop{\mathrm{E}}\cb{y_{J_i}(w) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Average the function $y_{J_i}(w)$ of $J_i$ over the conditional distribution of $J_i$.}}{=}
-\sum_{j=1}^{m} y_j(w)\,\P(J_i=j \mid W_i=w) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Substitute $\P(J_i=j \mid W_i=w) = 1/m$.}}{=}
-\frac{1}{m}\sum_{j=1}^{m} y_j(w)
-\overset{\texttip{\small{\text{?}}}{Recognize $\frac{1}{m}\sum_{j=1}^m y_j(w)$ as the causal estimand $\mu_C(w)$.}}{=}
-\mu_C(w).
-\end{aligned}
-</span></p>
-
-</section>
-<section id="identification-michigan-previous-picture" class="slide level2 library">
-<h2 data-source-line="1862" data-source-end-line="1862">Identification in Michigan: Previous Picture</h2>
-<div class="r-stack" style="width:100%">
-<div class="fragment fade-out" data-fragment-index="0" style="width:100%; transition:none">
-
-<div class="cell" data-source-line="1867" data-source-end-line="1874">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/identification-population-1.svg" style="width:100.0%" alt="The two scores for each of twelve people."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="0" style="width:100%; transition:none">
-
-<div class="cell" data-source-line="1878" data-source-end-line="1885">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/identification-letter-1.svg" style="width:100.0%" alt="All twelve letter scores stay filled while the no-letter scores fade."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment" data-fragment-index="1" style="width:100%; transition:none">
-
-<div class="cell" data-source-line="1889" data-source-end-line="1896">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/identification-population-formal-1.svg" style="width:100.0%" alt="The two scores for each of twelve people."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-
-</section>
 <section id="california" class="slide level2">
 <h2 data-source-line="1907" data-source-end-line="1907">Causality in California?</h2>
 
@@ -2085,54 +1956,7 @@ y_{J_i}(W_i) \\
 
 
 </section>
-<section id="california-long-calculation" class="slide level2 library">
-<h2 data-source-line="2009" data-source-end-line="2009">California: Long Calculation</h2>
-<ul>
-<li><span class="agent-new">We find the <a href="#/conditional-probability-and-expectation" class="quarto-xref">conditional probability</a> of calling person <span class="math inline">j</span> under ordinary sampling.</span> </li>
-</ul>
-
-<p data-source-line="2013" data-source-end-line="2023"><span class="math display">
-\begin{aligned}
-\P(J_i=j \mid W_i=w)
-&amp;\overset{\texttip{\small{\text{?}}}{Divide the joint probability by $\P(W_i=w)$ using the definition of conditional probability.}}{=}
-\frac{\P(W_i=w, J_i=j)}{\P(W_i=w)}
-\overset{\texttip{\small{\text{?}}}{Calling person $j$ gives $W_i=w$ only when $w_j=w$, so the joint probability is $1_{=w}(w_j)\times\frac{1}{m}$, and summing over all $m$ people gives $\P(W_i=w)=\frac{m_w}{m}$.}}{=}
-\frac{1_{=w}(w_j) \times \frac{1}{m}}{\frac{m_w}{m}}
-= \frac{1_{=w}(w_j)}{m_w} \\
-&amp;\qqtext{for} m_w = \sum_{k=1}^m 1_{=w}(w_k) &gt; 0.
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">Now we run the same steps as in <a href="#/identification-in-michigan" class="quarto-xref">Michigan</a> with the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>, <a href="#/sec-linearity" class="quarto-xref">linearity</a>, and <a href="#/conditional-expectation-and-variance" class="quarto-xref">conditional expectation</a>.</span> </li>
-</ul>
-
-<p data-source-line="2027" data-source-end-line="2041"><span class="math display">
-\begin{aligned}
-\mu(w) = \mathop{\mathrm{E}}(Y_i \mid W_i=w)
-&amp;\overset{\texttip{\small{\text{?}}}{Rewrite $Y_i = y_{J_i}(W_i)$ as $1_{=0}(W_i)\,y_{J_i}(0) + 1_{=1}(W_i)\,y_{J_i}(1)$ with the indicator trick, as in Michigan.}}{=}
-\mathop{\mathrm{E}}\cb{1_{=0}(W_i)\,y_{J_i}(0) + 1_{=1}(W_i)\,y_{J_i}(1) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Linearity of conditional expectation pulls out $1_{=0}(W_i)$ and $1_{=1}(W_i)$ as $1_{=0}(w)$ and $1_{=1}(w)$.}}{=}
-1_{=0}(w)\,\mathop{\mathrm{E}}\cb{y_{J_i}(0) \mid W_i=w} + 1_{=1}(w)\,\mathop{\mathrm{E}}\cb{y_{J_i}(1) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Since $w$ is $0$ or $1$, the indicator $1_{=w}(w)$ is $1$ and the other indicator is $0$.}}{=}
-\mathop{\mathrm{E}}\cb{y_{J_i}(w) \mid W_i=w} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Average the function $y_{J_i}(w)$ of $J_i$ over the conditional distribution of $J_i$.}}{=}
-\sum_{j=1}^{m} y_j(w)\,\P(J_i=j \mid W_i=w) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Substitute $\P(J_i=j \mid W_i=w) = 1_{=w}(w_j)/m_w$.}}{=}
-\frac{1}{m_w}\sum_{j=1}^{m} 1_{=w}(w_j)\, y_j(w).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">That’s the mean of <span class="math inline">y_j(w)</span> among the <span class="math inline">m_w</span> people with <span class="math inline">w_j=w</span>, not among all <span class="math inline">m</span> people.</span> 
-<ul>
-<li data-source-line="2043" data-source-end-line="2043"><span class="agent-new">It differs from <span class="math inline">\mu_C(w)</span> whenever that group has a different mean of <span class="math inline">y_j(w)</span> from the whole population.</span> </li>
-</ul></li>
-<li data-source-line="2044" data-source-end-line="2044"><span class="agent-new">Under imagined coin-flip randomization, <span class="math inline">\P(J_i=j \mid W_i=w) = 1/m</span> again.</span> 
-<ul>
-<li data-source-line="2045" data-source-end-line="2045"><span class="agent-new">Then the last step averages over all <span class="math inline">m</span> people and gives <span class="math inline">\mu_C(w)</span>.</span> </li>
-</ul></li>
-</ul>
-
-</section></section>
+</section>
 <section>
 <section id="location" class="title-slide slide level1 center">
 <h1 data-source-line="2057" data-source-end-line="2057">Bias and Variance</h1>
@@ -2179,28 +2003,7 @@ y_{J_i}(W_i) \\
 <li id="fn1"><p>Identification tells us what we’re estimating. It doesn’t add another source of variance.<a href="#/fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div><ol class="aside-footnotes"></ol></aside></section>
-<section id="preflipping-is-stratified-sampling" class="slide level2 library">
-<h2 data-source-line="2155" data-source-end-line="2155">Preflipping Is Stratified Sampling: Separate Intuition Slide</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="2157" data-source-end-line="2172">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/preflipped-coins-two-stage-plots-1.png" alt="The illustrative California population by degree status with subpopulation means and standard deviations."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/preflipped-coins-two-stage-plots-2.png" alt="The California CPS sample by degree status with subsample means and standard deviations."></p>
-</div>
-</div>
-</div>
-<ul>
-<li><span class="agent-new">Flip all <span class="math inline">n</span> coins first. <span class="math inline">N_1</span> come up <span class="groupb">green</span> and <span class="math inline">N_0</span> come up <span class="groupa">red</span>.</span> 
-<ul>
-<li data-source-line="2174" data-source-end-line="2174"><span class="agent-new">Then we roll the <span class="groupb">green</span> die <span class="math inline">N_1</span> times and the <span class="groupa">red</span> die <span class="math inline">N_0</span> times.</span> </li>
-<li data-source-line="2175" data-source-end-line="2175"><span class="agent-new">That’s stratified sampling with replacement.</span> </li>
-</ul></li>
-</ul>
-
-</section>
 <section id="sec-conditional-independence" class="slide level2">
 <h2 data-source-line="2192" data-source-end-line="2192">🔧 Preflipping Is Stratified Sampling</h2>
 
@@ -2257,89 +2060,7 @@ y_{J_i}(W_i) \\
 
 
 </section>
-<section id="preflipping-earlier-detailed-proof" class="slide level2 library">
-<h2 data-source-line="2461" data-source-end-line="2461">Preflipping: Earlier Detailed Proof</h2>
-<p><strong>Claim.</strong> </p>
-<ul>
-<li data-source-line="2463" data-source-end-line="2463"><span class="agent-new"><strong>Claim.</strong> Let <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span> be independent and identically distributed pairs.</span> 
-<ul>
-<li data-source-line="2465" data-source-end-line="2465"><span class="agent-new">Conditional on <span class="math inline">W_1=w_1 \ldots W_n=w_n</span> (with counts <span class="math inline">n_1</span> and <span class="math inline">n_0</span>), the responses factor by group:</span> </li>
-</ul></li>
-</ul>
 
-<p data-source-line="2468" data-source-end-line="2474"><span class="math display">
-\begin{aligned}
-&amp;\P(Y_1=y_1 \ldots Y_n=y_n \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;= \cb*{\prod_{i: w_i=1} \P_1(y_i)} \cb*{\prod_{i: w_i=0} \P_0(y_i)}
-\qqtext{for} \P_w(y) = \P(Y_1=y \mid W_1=w).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">When each call’s second stage samples uniformly from group <span class="math inline">w</span>, the <span class="math inline">n_1</span> responses with <span class="math inline">w_i=1</span> and the <span class="math inline">n_0</span> responses with <span class="math inline">w_i=0</span> have <strong>the same joint distribution</strong> as stratified sampling with replacement at sizes <span class="math inline">n_1</span> and <span class="math inline">n_0</span>.</span> </li>
-</ul>
-<p data-source-line="2476" data-source-end-line="2476"><strong>Proof.</strong> </p>
-<div class="fragment" data-fragment-index="0" data-source-line="2478" data-source-end-line="2478">
-<ul>
-<li><span class="agent-new">Because the pairs are identically distributed, <span class="math inline">\P(W_i=w, Y_i=y)=\P(W_1=w, Y_1=y)</span> and <span class="math inline">\P(W_i=w)=\P(W_1=w)</span>, so <span class="math inline">\P(Y_i=y \mid W_i=w)=\P_w(y)</span> on every call.</span> </li>
-<li data-source-line="2482" data-source-end-line="2482"><span class="agent-new">First, summing the independent-pair probabilities over all responses factors the label probability:</span> </li>
-</ul>
-
-<p data-source-line="2485" data-source-end-line="2496"><span class="math display">
-\begin{aligned}
-&amp;\P(W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Add the disjoint probabilities over every possible response sequence $y_1 \ldots y_n$.}}{=}
-\sum_{y_1} \cdots \sum_{y_n} \P(W_1=w_1, Y_1=y_1 \ldots W_n=w_n, Y_n=y_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{The pairs are independent, so their joint probability is the product of the pair probabilities.}}{=}
-\sum_{y_1} \cdots \sum_{y_n} \P(W_1=w_1, Y_1=y_1) \cdots \P(W_n=w_n, Y_n=y_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Each sum over $y_i$ acts only on call $i$'s factor, leaving $\P(W_i=w_i)$.}}{=}
-\cb*{\sum_{y_1}\P(W_1=w_1, Y_1=y_1)} \cdots \cb*{\sum_{y_n}\P(W_n=w_n, Y_n=y_n)} \\
-&amp;= \P(W_1=w_1) \cdots \P(W_n=w_n).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">Now apply the <a href="#/conditional-probability-and-expectation" class="quarto-xref">definition of conditional probability</a> in five steps:</span> </li>
-</ul>
-
-<p data-source-line="2500" data-source-end-line="2515"><span class="math display">
-\begin{aligned}
-&amp;\P(Y_1=y_1 \ldots Y_n=y_n \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{This is the definition of conditional probability.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1 \ldots W_n=w_n, Y_n=y_n)}{\P(W_1=w_1 \ldots W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{The joint probability of the independent pairs is the product of their pair probabilities.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1) \cdots \P(W_n=w_n, Y_n=y_n)}{\P(W_1=w_1 \ldots W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Substitute the factored label probability just proved.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1) \cdots \P(W_n=w_n, Y_n=y_n)}{\P(W_1=w_1) \cdots \P(W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{A fraction of products is a product of fractions.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1)}{\P(W_1=w_1)} \cdots \frac{\P(W_n=w_n, Y_n=y_n)}{\P(W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{This is the definition of conditional probability again, once for each call, with $\P(Y_i=y_i\mid W_i=w_i)=\P_{w_i}(y_i)$.}}{=}
-\P(Y_1=y_1 \mid W_1=w_1) \cdots \P(Y_n=y_n \mid W_n=w_n) \\
-&amp;= \P_{w_1}(y_1) \cdots \P_{w_n}(y_n).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">When <span class="math inline">n_1&gt;0</span> and <span class="math inline">n_0&gt;0</span>, write <span class="math inline">U=(Y_{i_1} \ldots Y_{i_{n_1}})</span> for the calls with <span class="math inline">w_i=1</span> and <span class="math inline">V=(Y_{k_1} \ldots Y_{k_{n_0}})</span> for the calls with <span class="math inline">w_i=0</span>:</span> </li>
-</ul>
-
-<p data-source-line="2519" data-source-end-line="2532"><span class="math display">
-\begin{aligned}
-&amp;\P(U=u, V=v \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{For fixed $w_1 \ldots w_n$, $(U=u, V=v)$ is the single response sequence with $y_{i_r}=u_r$ and $y_{k_s}=v_s$; reorder the product by group.}}{=}
-\cb*{\prod_{r=1}^{n_1}\P_1(u_r)}\cb*{\prod_{s=1}^{n_0}\P_0(v_s)} \\
-&amp;\P(U=u \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Sum over all $v_1 \ldots v_{n_0}$; each $\sum_{v_s}\P_0(v_s)=1$.}}{=}
-\cb*{\prod_{r=1}^{n_1}\P_1(u_r)}\prod_{s=1}^{n_0}\cb*{\sum_{v_s}\P_0(v_s)} \\
-&amp;= \prod_{r=1}^{n_1}\P_1(u_r) \\
-&amp;\P(V=v \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Sum over all $u_1 \ldots u_{n_1}$ the same way, so $\P(U=u, V=v\mid W_1=w_1\ldots W_n=w_n)=\P(U=u\mid W_1=w_1\ldots W_n=w_n)\,\P(V=v\mid W_1=w_1\ldots W_n=w_n)$.}}{=}
-\prod_{s=1}^{n_0}\P_0(v_s).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">When <span class="math inline">n_0=0</span> (all <span class="math inline">w_i=1</span>), the product is <span class="math inline">\prod_{r=1}^n \P_1(y_r)</span> directly, and when <span class="math inline">n_1=0</span> (all <span class="math inline">w_i=0</span>), it is <span class="math inline">\prod_{s=1}^n \P_0(y_s)</span>.</span> </li>
-</ul>
-</div>
-
-</section>
 <section id="conditional-from-stratified" class="slide level2">
 <h2 data-source-line="2544" data-source-end-line="2544">Conditional Bias and Variance</h2>
 
@@ -2347,16 +2068,16 @@ y_{J_i}(W_i) \\
 \hat\mu(w) = \frac{1}{N_w}\sum_{i=1}^n 1_{=w}(W_i) Y_i \qqtext{for} N_w = \sum_{i=1}^n 1_{=w}(W_i).
 </span></p>
 <ul>
-<li><strong>Claim.</strong> <span class="agent-new">When <span class="math inline">N_w &gt; 0</span>, the conditional mean and variance of <span class="math inline">\hat\mu(w)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> are <span class="math inline">\mu(w)</span> and <span class="math inline">\sigma^2(w)/N_w</span>, respectively.</span> <span class="agent-new">When <span class="math inline">N_1 &gt; 0</span> and <span class="math inline">N_0 &gt; 0</span>, the conditional mean of <span class="math inline">\hat\mu(1)-\hat\mu(0)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> is <span class="math inline">\mu(1)-\mu(0)</span>, and its conditional variance is the sum of the two subsample means’ conditional variances.</span> <span class="step-cue">Intuitive proof</span> </li>
+<li><strong>Claim.</strong> <span class="agent-new">The conditional mean and variance of <span class="math inline">\hat\mu(w)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> are <span class="math inline">\mu(w)</span> and <span class="math inline">\sigma^2(w)/N_w</span>, respectively.</span> <span class="agent-new">The conditional mean of <span class="math inline">\hat\mu(1)-\hat\mu(0)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> is <span class="math inline">\mu(1)-\mu(0)</span>, and its conditional variance is the sum of the two subsample means’ conditional variances.</span> <span class="step-cue">Intuitive proof</span> </li>
 </ul>
-<p data-source-line="2550" data-source-end-line="2550"><span class="agent-new">That is, these hold.</span> </p>
+<p data-source-line="2552" data-source-end-line="2552">Unless these involve dividing by zero. That is, these equivalences hold.</p>
 
-<p data-source-line="2552" data-source-end-line="2552"><span class="math display">
+<p data-source-line="2554" data-source-end-line="2561"><span class="math display">
 \begin{aligned}
-\mathop{\mathrm{E}}\cb{\hat\mu(w) \mid W_1 \ldots W_n} &amp;= \mu(w) &amp;&amp;\qqtext{when} N_w &gt; 0 \\
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(w) \mid W_1 \ldots W_n} &amp;= \frac{\sigma^2(w)}{N_w} &amp;&amp;\qqtext{when} N_w &gt; 0 \\
-\mathop{\mathrm{E}}\cb{\hat\mu(1)-\hat\mu(0)\mid W_1 \ldots W_n} &amp;= \mu(1)-\mu(0) &amp;&amp;\qqtext{when} N_1&gt;0\qqtext{and}N_0&gt;0 \\
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)-\hat\mu(0)\mid W_1 \ldots W_n} &amp;= \frac{\sigma^2(1)}{N_1}+\frac{\sigma^2(0)}{N_0} &amp;&amp;\qqtext{when} N_1&gt;0\qqtext{and}N_0&gt;0.
+\mathop{\mathrm{E}}\cb{\hat\mu(w) \mid W_1 \ldots W_n} &amp;= \mu(w) \\
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(w) \mid W_1 \ldots W_n} &amp;= \frac{\sigma^2(w)}{N_w} \\
+\mathop{\mathrm{E}}\cb{\hat\mu(1)-\hat\mu(0)\mid W_1 \ldots W_n} &amp;= \mu(1)-\mu(0) \\
+\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)-\hat\mu(0)\mid W_1 \ldots W_n} &amp;= \frac{\sigma^2(1)}{N_1}+\frac{\sigma^2(0)}{N_0}.
 \end{aligned}
 </span></p>
 <div class="fragment" data-fragment-index="0">
@@ -2418,59 +2139,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 
 
 </section>
-<section id="conditional-difference-variance" class="slide level2 library">
-<h2 data-source-line="2948" data-source-end-line="2948">Conditional Variance of the Difference</h2>
-<ul>
-<li><strong>Claim.</strong> <span class="agent-new">When <span class="math inline">N_1 &gt; 0</span> and <span class="math inline">N_0 &gt; 0</span>, the conditional variance of <span class="math inline">\hat\mu(1) - \hat\mu(0)</span> is the sum of the conditional variances of <span class="math inline">\hat\mu(1)</span> and <span class="math inline">\hat\mu(0)</span>.</span> <span class="step-cue">Intuitive proof</span> </li>
-</ul>
-
-<p data-source-line="2952" data-source-end-line="2954"><span class="math display">
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n} = \frac{\sigma^2(1)}{N_1} + \frac{\sigma^2(0)}{N_0} \qqtext{when} N_1 &gt; 0 \qqtext{and} N_0 &gt; 0.
-</span></p>
-<div class="fragment" data-fragment-index="0">
-<p><strong>Proof. In intuitive terms.</strong> </p>
-<ul>
-<li data-source-line="2957" data-source-end-line="2957"><span class="agent-new">Given the labels, the difference in subsample means has the same distribution as under <a href="#/conditional-from-stratified" class="quarto-xref">stratified sampling with replacement</a>.</span> </li>
-<li data-source-line="2959" data-source-end-line="2959"><span class="agent-new">Under stratified sampling, the two subsample means are two functions of independent samples.</span> </li>
-<li data-source-line="2960" data-source-end-line="2960"><span class="agent-new">So they are independent, and <a href="https://qtm285.github.io/static/book/decks/candy-oct27.html#/could-we-calculate-the-width">their variances add when we subtract them</a>.</span> <span class="step-cue">Formal proof</span> </li>
-</ul>
-</div>
-<div class="fragment" data-fragment-index="1" data-source-line="2961" data-source-end-line="2961">
-<p><strong>Proof. In formal terms.</strong> </p>
-<ul>
-<li data-source-line="2965" data-source-end-line="2965"><span class="agent-new">When both groups are represented, the difference in subsample means is a function of the labels and responses.</span> </li>
-</ul>
-
-<p data-source-line="2969" data-source-end-line="2976"><span class="math display">
-\begin{aligned}
-\hat\mu(1)-\hat\mu(0) &amp;= d(W_1 \ldots W_n,Y_1 \ldots Y_n) \\
-&amp;\qqtext{where} d(w_1 \ldots w_n,y_1 \ldots y_n)
-= \frac{1}{n_1}\sum_{i:w_i=1}y_i-\frac{1}{n_0}\sum_{i:w_i=0}y_i \\
-&amp;\qqtext{and} n_w=\sum_{i=1}^n 1_{=w}(w_i).
-\end{aligned}
-</span></p>
-<ul>
-<li><span class="agent-new">Applying the <a href="#/conditional-from-stratified" class="quarto-xref">general result</a> to this function and its squared distance from <span class="math inline">\mu(1)-\mu(0)</span> gives the conditional mean and conditional variance, respectively.</span> </li>
-<li data-source-line="2978" data-source-end-line="2978"><span class="agent-new">Under stratified sampling with replacement, the two averages in <span class="math inline">d(w_1 \ldots w_n,Y_1 \ldots Y_n)</span> are two functions of independent samples.</span> </li>
-<li data-source-line="2979" data-source-end-line="2979"><span class="agent-new">Each is <a href="#/conditional-from-stratified" class="quarto-xref">unbiased for its group’s mean</a>, so their difference has mean <span class="math inline">\mu(1)-\mu(0)</span>.</span> </li>
-<li data-source-line="2980" data-source-end-line="2980"><span class="agent-new">They are independent, so <a href="https://qtm285.github.io/static/book/decks/georgia-oct29.html#/our-estimator">their variances add when we subtract them</a>.</span> <span class="agent-new">Write <span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}_{\mathrm{strat}}</span> for variance under stratified sampling.</span> </li>
-</ul>
-
-<p data-source-line="2983" data-source-end-line="2992"><span class="math display">
-\begin{aligned}
-&amp;\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)-\hat\mu(0)\mid W_1=w_1 \ldots W_n=w_n} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Apply the general result to the squared distance from $\mu(1)-\mu(0)$, the mean under both distributions.}}{=}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}_{\mathrm{strat}}\cb{d(w_1 \ldots w_n,Y_1 \ldots Y_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Each subsample mean has variance $\sigma^2(w)/n_w$, and variances add for independent differences.}}{=}
-\frac{\sigma^2(1)}{n_1}+\frac{\sigma^2(0)}{n_0}
-\qqtext{when} n_1&gt;0\qqtext{and}n_0&gt;0.
-\end{aligned}
-</span></p>
-</div>
-
-
-
-</section></section>
+</section>
 <section>
 <section id="unconditioning" class="title-slide slide level1 center">
 <h1 data-source-line="3164" data-source-end-line="3164">Unconditioning</h1>
@@ -2638,18 +2307,18 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <tr class="odd">
 <td><span class="math inline">0.58</span></td>
 <td>0</td>
-<td><span class="math inline">29.96K</span></td>
+<td><span class="math inline">29.95K</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">0.42</span></td>
 <td>1</td>
-<td><span class="math inline">73.32K</span></td>
+<td><span class="math inline">73.30K</span></td>
 </tr>
 </tbody>
 </table>
 <p>What is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span>? <span class="step-cue"></span> </p>
 <div class="fragment" data-fragment-index="0" data-source-line="3326" data-source-end-line="3326">
-<p data-source-line="3329" data-source-end-line="3329"><span class="math inline">0.58 \times 29.96K + 0.42 \times 73.32K \approx 48K</span>.</p>
+<p data-source-line="3329" data-source-end-line="3329"><span class="math inline">0.58 \times 29.95K + 0.42 \times 73.30K \approx 48K</span>.</p>
 </div>
 </section>
 <section id="a-plot-reading-exercise" class="slide level2">
@@ -2811,28 +2480,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{aligned}
 </span></p>
 </section>
-<section id="the-difference-is-unbiased-too" class="slide level2 library">
-<h2 data-source-line="3510" data-source-end-line="3510">The Difference Is Unbiased Too</h2>
-<ul>
-<li data-source-line="3512" data-source-end-line="3512"><strong>Claim.</strong> With the same pretense, the difference in subsample means is unbiased too.</li>
-</ul>
 
-<p data-source-line="3514" data-source-end-line="3516"><span class="math display">
-\mathop{\mathrm{E}}[\hat\mu(1) - \hat\mu(0)] = \mu(1) - \mu(0).
-</span></p>
-<ul>
-<li data-source-line="3518" data-source-end-line="3518"><strong>Proof.</strong> This follows from <a href="#/sec-linearity" class="quarto-xref">linearity</a> and <a href="#/is-it-unbiased-unconditionally" class="quarto-xref">unbiasedness</a> of <span class="math inline">\hat\mu(w)</span>.</li>
-</ul>
-
-<p data-source-line="3520" data-source-end-line="3526"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{E}}[\hat\mu(1) - \hat\mu(0)]
-&amp;= \mathop{\mathrm{E}}[\hat\mu(1)] - \mathop{\mathrm{E}}[\hat\mu(0)] \\
-&amp;= \mu(1) - \mu(0).
-\end{aligned}
-</span></p>
-
-</section>
 <section id="the-variance-of-the-subsample-mean" class="slide level2">
 <h2 data-source-line="3566" data-source-end-line="3566">The Variance of the Subsample Mean</h2>
 <ul>
@@ -2892,139 +2540,11 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 </div>
 
 </section>
-<section id="variance-four-slide-claim" class="slide level2 library">
-<h2 data-source-line="3629" data-source-end-line="3629">The Variance of the Subsample Mean: Four-Slide Version</h2>
-<ul>
-<li data-source-line="3631" data-source-end-line="3631"><strong>Claim.</strong> Let the pairs <span class="math inline">(W_i, Y_i)</span> be independent and identically distributed.
-<ul>
-<li data-source-line="3632" data-source-end-line="3632">Then the variance of a subsample mean is the expected value of the subpopulation variance divided by the number of people in the subsample.</li>
-</ul></li>
-</ul>
-
-<p data-source-line="3634" data-source-end-line="3639"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{\hat\mu(1)} &amp;= \mathop{\mathrm{E}}\sb*{ \frac{\sigma^2(1)}{N_1} } \\
-&amp;\qqtext{for} N_1 = \sum_{i=1}^n 1_{=1}(W_i) \qqtext{and} \sigma^2(w) = \mathop{\mathrm{\mathop{\mathrm{V}}}}[Y_i \mid W_i = w].
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="3641" data-source-end-line="3641">This is like what we saw in the unconditional case, but with a twist.</li>
-<li data-source-line="3642" data-source-end-line="3642">The number of people in the subsample is random.
-<ul>
-<li data-source-line="3643" data-source-end-line="3643">So instead of <span class="math inline">1/n</span>, we have <span class="math inline">\mathop{\mathrm{E}}[ \frac{1}{N_1} ]</span>.</li>
-</ul></li>
-</ul>
-</section>
-<section id="step-1-total-variance" class="slide level2 library scrollable">
-<h2 data-source-line="3645" data-source-end-line="3645">Step 1. Total Variance</h2>
-
-
-<img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/step1-total-variance-tiny-1.svg" style="width:100.0%" class="r-stretch" data-source-line="3647" data-source-end-line="3652"><ul>
-<li data-source-line="3654" data-source-end-line="3654">We’ll start by using the <a href="#/sec-total-variance" class="quarto-xref">Law of Total Variance</a>, conditioning on <span class="math inline">W_1 \ldots W_n</span>.</li>
-<li data-source-line="3655" data-source-end-line="3655">And then we’ll have to calculate two terms.
-<ol type="1">
-<li data-source-line="3656" data-source-end-line="3656">The expected value of the conditional variance.</li>
-<li data-source-line="3657" data-source-end-line="3657">The variance of the conditional expectation.</li>
-</ol></li>
-</ul>
-
-<p data-source-line="3659" data-source-end-line="3668"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{ \hat \mu(1) } &amp;= \underset{\textcolor{gray}{\text{within-groups term}}}{\mathop{\mathrm{E}}\sb{ \mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{ \hat \mu(1) \mid W_1 \ldots W_n }}} \\
-&amp;+ \underset{\textcolor{gray}{\text{between-groups term}}}{\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{ \mathop{\mathrm{E}}\cb{\hat \mu(1) \mid W_1 \ldots W_n} }} \\
-&amp;\overset{\texttip{\small{\text{?}}}{Conditional unbiasedness ($N_1&gt;0$) and our empty-group convention ($N_1=0$) give $\mathop{\mathrm{E}}\cb{\hat\mu(1)\mid W_1\ldots W_n}=\mu(1)$ on every label list.}}{=}
-\mathop{\mathrm{E}}\sb{\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)\mid W_1\ldots W_n}}+\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{\mu(1)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{The subpopulation mean $\mu(1)$ is constant, so its variance is zero.}}{=}
-\mathop{\mathrm{E}}\sb{\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)\mid W_1\ldots W_n}}+0.
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="3670" data-source-end-line="3670">This is one place it helps to know our estimator is <em>conditionally unbiased</em>.
-<ul>
-<li data-source-line="3671" data-source-end-line="3671">That conditional expectation is the constant <span class="math inline">\mu(1)</span>, as we <a href="#/is-it-unbiased-unconditionally" class="quarto-xref">showed</a>.</li>
-<li data-source-line="3672" data-source-end-line="3672">So the ‘between-groups’ variance term is zero.</li>
-</ul></li>
-</ul>
-</section>
-<section id="step-2" class="slide level2 library">
-<h2 data-source-line="3674" data-source-end-line="3674">Step 2. The Conditional Variance</h2>
-<ul>
-<li><span class="agent-new">When <span class="math inline">N_1 &gt; 0</span>, <a href="#/conditional-from-stratified" class="quarto-xref">we already have</a> the conditional variance of <span class="math inline">\hat\mu(1)</span>.</span> </li>
-</ul>
-
-<p data-source-line="3678" data-source-end-line="3682"><span class="math display">
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)\mid W_1 \ldots W_n}
-\overset{\texttip{\small{\text{?}}}{The variance of the mean of $N_1$ conditionally independent draws, each with variance $\sigma^2(1)$.}}{=}
-\frac{\sigma^2(1)}{N_1} \qqtext{when} N_1 &gt; 0.
-</span></p>
-<ul>
-<li><span class="agent-new">When <span class="math inline">N_1 = 0</span>, <a href="#/is-it-unbiased-unconditionally" class="quarto-xref">our estimator equals the constant <span class="math inline">\mu(1)</span></a>:</span> </li>
-</ul>
-
-<p data-source-line="3686" data-source-end-line="3694"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1)\mid W_1 \ldots W_n}
-&amp;\overset{\texttip{\small{\text{?}}}{When $N_1 = 0$, we're pretending $\hat\mu(1)$ is $\mu(1)$.}}{=}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\mu(1) \mid W_1 \ldots W_n} \\
-&amp;\overset{\texttip{\small{\text{?}}}{The constant $\mu(1)$ has conditional variance zero.}}{=}
-0 \qqtext{when} N_1 = 0.
-\end{aligned}
-</span></p>
-
-</section>
-<section id="step-3-putting-the-pieces-together" class="slide level2 library">
-<h2 data-source-line="3707" data-source-end-line="3707">Step 3. Putting the Pieces Together</h2>
-<ul>
-<li><span class="agent-new">Now we take the expectation of Step 2’s conditional variance.</span> </li>
-</ul>
-
-<p data-source-line="3711" data-source-end-line="3719"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{ \hat \mu(1) }
-&amp;\overset{\texttip{\small{\text{?}}}{From Step 1. The between-groups term is zero.}}{=}
-\mathop{\mathrm{E}}\sb{ \mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{ \hat \mu(1) \mid W_1 \ldots W_n }} \\
-&amp;\overset{\texttip{\small{\text{?}}}{From Step 2: $\sigma^2(1)/N_1$ when $N_1 &gt; 0$, and $0$ when $N_1 = 0$ under our empty-group convention.}}{=}
-\mathop{\mathrm{E}}\left[ \begin{cases} \sigma^2(1)/N_1 &amp; \text{when } N_1 &gt; 0 \\ 0 &amp; \text{when } N_1 = 0 \end{cases} \right].
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="3721" data-source-end-line="3721">Reading <span class="math inline">\frac{\sigma^2(1)}{N_1}</span> as <span class="math inline">0</span> when <span class="math inline">N_1 = 0</span>, we write this compactly as <span class="math inline">\mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{\hat\mu(1)} = \mathop{\mathrm{E}}\sb{\frac{\sigma^2(1)}{N_1}}</span>.</li>
-</ul>
-</section>
-<section id="the-variance-of-differences-in-means" class="slide level2 library">
-<h2 data-source-line="3723" data-source-end-line="3723">The Variance of Differences in Means</h2>
-<ul>
-<li data-source-line="3725" data-source-end-line="3725"><strong>Claim.</strong> <span class="agent-new">With the same pretense,</span> the variance of the difference in subsample means …
-<ul>
-<li data-source-line="3726" data-source-end-line="3726">… is the sum of the variances of the subsample means.</li>
-</ul></li>
-</ul>
-
-<p data-source-line="3728" data-source-end-line="3733"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1) - \hat\mu(0)] &amp;= \mathop{\mathrm{E}}\sb*{ 1_{&gt;0}(N_1)\,\frac{\sigma^2(1)}{N_1} + 1_{&gt;0}(N_0)\,\frac{\sigma^2(0)}{N_0} } \\
-&amp;\qqtext{for} N_w = \sum_{i=1}^n 1_{=w}(W_i).
-\end{aligned}
-</span></p>
-<ul>
-<li><strong>Proof.</strong> <span class="agent-new">This follows from the <a href="#/sec-total-variance" class="quarto-xref">law of total variance</a> and <a href="#/conditional-from-stratified" class="quarto-xref">conditional bias and variance</a>, in the same way as for <a href="#/the-variance-of-the-subsample-mean" class="quarto-xref">one subsample mean</a>.</span> </li>
-</ul>
-
-<p data-source-line="3737" data-source-end-line="3747"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{\mathop{\mathrm{V}}}}[\hat\mu(1) - \hat\mu(0)]
-&amp;\overset{\texttip{\small{\text{?}}}{The law of total variance, conditioning on $W_1 \ldots W_n$.}}{=}
-\mathop{\mathrm{E}}\sb{\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n}} + \mathop{\mathrm{\mathop{\mathrm{V}}}}\sb{\mathop{\mathrm{E}}\cb{\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n}} \\
-&amp;\overset{\texttip{\small{\text{?}}}{With our pretense and linearity, the conditional mean is the constant $\mu(1)-\mu(0)$, whose variance is zero.}}{=}
-\mathop{\mathrm{E}}\sb{\mathop{\mathrm{\mathop{\mathrm{V}}}}\cb{\hat\mu(1) - \hat\mu(0) \mid W_1 \ldots W_n}} \\
-&amp;\overset{\texttip{\small{\text{?}}}{When $N_1&gt;0$ and $N_0&gt;0$, Conditional Bias and Variance gives $\sigma^2(1)/N_1 + \sigma^2(0)/N_0$. When one subsample is empty, its mean is constant and contributes no variance, leaving the other group's conditional variance, as the indicators record.}}{=}
-\mathop{\mathrm{E}}\sb*{ 1_{&gt;0}(N_1)\,\frac{\sigma^2(1)}{N_1} + 1_{&gt;0}(N_0)\,\frac{\sigma^2(0)}{N_0} }.
-\end{aligned}
-</span></p>
 
 
 
-</section>
+
+
 <section id="compared-with-complete-randomization" class="slide level2 scrollable">
 <h2 data-source-line="3877" data-source-end-line="3877">Compared With Complete Randomization</h2>
 
@@ -3719,588 +3239,25 @@ two ⍿.</p>
 \end{aligned}
 </span></p>
 </section>
-<section id="our-estimator-and-target" class="slide level2 library">
-<h2 data-source-line="4516" data-source-end-line="4516">Our Estimator and Target</h2>
 
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="4518" data-source-end-line="4531">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/estimator-and-target-plots-previous-flow-1.svg" alt="The illustrative California population, with income plotted by four-year degree status and the two subpopulation means and standard deviations drawn as points with arms."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/estimator-and-target-plots-previous-flow-2.svg" alt="The California CPS sample of 2,271 people, with income plotted by four-year degree status and the two subsample means and standard deviations drawn as points with arms."></p>
-</div>
-</div>
-</div>
-<div class="columns">
-<div class="column">
-<h3 id="estimation-target" data-source-line="4538" data-source-end-line="4538">Estimation Target</h3>
 
-<p data-source-line="4539" data-source-end-line="4546"><span class="math display">
-\begin{aligned}
-&amp;\mu(1)-\mu(0) \\
-\qqtext{for} \mu(w) &amp;= \mathop{\mathrm{E}}(Y_i\mid W_i=w) \\
-&amp;= \frac{1}{m_w}\sum_{j=1}^m 1_{=w}(w_j)y_j \\
-\qqtext{where} m_w &amp;= \sum_{j=1}^m 1_{=w}(w_j).
-\end{aligned}
-</span></p>
-</div><div class="column">
-<h3 id="estimator" data-source-line="4552" data-source-end-line="4552">Estimator</h3>
 
-<p data-source-line="4553" data-source-end-line="4560"><span class="math display">
-\begin{aligned}
-&amp;\hat\mu(1) - \hat\mu(0) \\
-\qqtext{for} \hat\mu(w)
-&amp;= \frac{1}{N_w}\sum_{i=1}^n 1_{=w}(W_i) Y_i \\
-\qqtext{where} N_w &amp;= \sum_{i=1}^n 1_{=w}(W_i).
-\end{aligned}
-</span></p>
-</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </section>
-<section id="spread-tools-previous-flow" class="slide level2 center library">
-<h2 data-source-line="4572" data-source-end-line="4572"></h2>
-<div style="text-align: center; font-size: 1.4em;">
-<p data-source-line="4575" data-source-end-line="4575">We’ll start with some mathematical tools.</p>
-</div>
-</section>
-<section id="spread-result-previous-flow" class="slide level2 center library">
-<h2 data-source-line="4578" data-source-end-line="4578"></h2>
-<div style="text-align: center; font-size: 1.4em;">
-<p data-source-line="4581" data-source-end-line="4581">Now we use our tools to prove our result.</p>
-</div>
-</section>
-<section id="unbiasedness-in-michigan" class="slide level2 library">
-<h2 data-source-line="4584" data-source-end-line="4584">Unbiasedness in Michigan</h2>
-<div class="r-stack" style="width:100%">
-<div class="fragment fade-out" data-fragment-index="0" style="width:100%; transition:none">
-
-<div class="cell" data-source-line="4589" data-source-end-line="4596">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/unbiasedness-michigan-observed-1.svg" style="width:100.0%" alt="Three of the six calls received the letter. Their mean is 7. The population letter mean is 4.83."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment fade-in" data-fragment-index="0" style="width:100%; transition:none">
-
-<div class="cell" data-source-line="4600" data-source-end-line="4607">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/unbiasedness-michigan-repeated-1.svg" style="width:100.0%" alt="The same six calls stay visible. Beside them, the histogram of nonempty letter-group sample means is centered at 4.83."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li><span class="agent-new">We made six calls and flipped a coin on each call. Three got the letter. Their scores average 7 points.</span> </li>
-<li data-source-line="4612" data-source-end-line="4612"><span class="agent-new">The twelve people’s letter scores average 4.83 points.</span> </li>
-<li data-source-line="4613" data-source-end-line="4613"><span class="agent-new">What would happen to the sample mean if we made six new calls and flipped new coins?</span> <span class="step-cue">Repeat</span> </li>
-</ul>
-<div class="fragment" data-fragment-index="0" data-source-line="4614" data-source-end-line="4614">
-<ul>
-<li><span class="agent-new">Across samples with at least one letter call, the expected letter mean is 4.83 points.</span> </li>
-</ul>
-</div>
-
-</section>
-<section id="almost-unbiased-in-large-samples" class="slide level2 library">
-<h2 data-source-line="4628" data-source-end-line="4628">Almost Unbiased in Large Samples</h2>
-
-<p data-source-line="4630" data-source-end-line="4639"><span class="math display">
-\begin{aligned}
-\mathop{\mathrm{E}}\sb{\hat\mu(1)}
-&amp;= \mathop{\mathrm{E}}\sb{\mathop{\mathrm{E}}\cb{\hat\mu(1) \mid W_1 \ldots W_n}} \\
-&amp;= \sum_{\substack{w_1 \ldots w_n \\ \sum_{i=1}^{n} 1_{=1}(w_i) &gt; 0}} \mu(1) \times \P(W_1=w_1 \ldots W_n=w_n) \\
-&amp;\quad + \sum_{\substack{w_1 \ldots w_n \\ \sum_{i=1}^{n} 1_{=1}(w_i) = 0}} \text{whatever} \times \P(W_1=w_1 \ldots W_n=w_n) \\
-&amp;= (1-p_0) \ \mu(1) \ + \ p_0 \ \text{whatever} \qqtext{for} p_0 = \P(W_i=0 \text{ for all } i) \\
-&amp;\approx \mu(1) \qqtext{if} p_0 \approx 0.
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="4641" data-source-end-line="4641">When our sample is large, it’s very unlikely that there’s nobody in the subsample for any group.
-<ul>
-<li data-source-line="4642" data-source-end-line="4642">So if we make up anything at all reasonable, we’ll get an estimator that’s pretty close to unbiased.</li>
-</ul></li>
-<li data-source-line="4643" data-source-end-line="4643">So we’ll mostly ignore this issue from here on.</li>
-<li data-source-line="4644" data-source-end-line="4644">We’ll call subsample means unbiased estimators of subpopulation means.
-<ul>
-<li data-source-line="4645" data-source-end-line="4645">They’re close enough.</li>
-<li data-source-line="4646" data-source-end-line="4646">But you should be aware that there is a subtle issue here.</li>
-</ul></li>
-</ul>
-</section>
-<section id="spread-opening-earlier-draft" class="slide level2 library">
-<h2 data-source-line="4648" data-source-end-line="4648">Spread Opening: Earlier Draft</h2>
-<ul>
-<li><span class="agent-new">We just asked whether the subsample means are still unbiased in this design. What about their variance?</span> </li>
-<li data-source-line="4650" data-source-end-line="4650"><span class="agent-new">With stratified sampling, we chose how many people to draw from each group. With <span class="math inline">n_1</span> draws from group 1, the variance of its mean was <span class="math inline">\sigma^2(1)/n_1</span>.</span> </li>
-<li data-source-line="4651" data-source-end-line="4651"><span class="agent-new">Now we draw from the whole population. The number of people we get from group 1 is random.</span> </li>
-<li data-source-line="4652" data-source-end-line="4652"><strong>Q.</strong> Does the same variance formula still work? <span class="step-cue"></span> </li>
-</ul>
-<div class="fragment" data-fragment-index="0" data-source-line="4653" data-source-end-line="4653">
-<ul>
-<li data-source-line="4656" data-source-end-line="4656"><strong>A.</strong> Almost.</li>
-</ul>
-</div>
-</section>
-<section id="one-or-two-group-1-calls" class="slide level2 library">
-<h2 data-source-line="4659" data-source-end-line="4659">One or Two Group 1 Calls</h2>
-
-
-<img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/group-one-mean-one-or-two-calls-1.svg" style="width:100.0%" alt="Distributions of the group 1 sample mean for label lists 1,0,0 and 1,0,1. Both center at 1.25. With two group 1 calls the extreme values have probability one ninth instead of one third." class="r-stretch" data-source-line="4661" data-source-end-line="4687"><ul>
-<li><span class="agent-new">In our six-person population, the group 1 outcomes are <span class="math inline">1</span>, <span class="math inline">1.25</span> and <span class="math inline">1.5</span>.</span> </li>
-<li data-source-line="4689" data-source-end-line="4689"><span class="agent-new">Both sample means are centered at <span class="math inline">1.25</span>. With two group 1 calls, the variance is half as large.</span> </li>
-<li data-source-line="4690" data-source-end-line="4690"><span class="agent-new">How much does the sample mean vary when the number of group 1 calls is random?</span> </li>
-</ul>
-</section>
-<section id="how-to-write-subsample-means" class="slide level2 library">
-<h2 data-source-line="4693" data-source-end-line="4693">How to Write Subsample Means</h2>
-
-<p data-source-line="4695" data-source-end-line="4697"><span class="math display">
-\hat\mu(1) = \frac{\sum_{i:W_i=1} Y_i}{\sum_{i:W_i=1} 1} = \frac{\sum_{i=1}^{n} 1_{=1}(W_i) Y_{i}}{\sum_{i=1}^{n} 1_{=1}(W_i)}
-</span></p>
-<ul>
-<li data-source-line="4699" data-source-end-line="4699">It’s easy to make mistakes using <em>linearity of expectations</em> when we’re summing over a subsample.
-<ul>
-<li data-source-line="4700" data-source-end-line="4700">Can we or can we not ‘push’ or ‘pull’ an expectation through a sum …</li>
-<li data-source-line="4701" data-source-end-line="4701">… when the terms in that sum depend on the value of a random variable?</li>
-</ul></li>
-<li data-source-line="4702" data-source-end-line="4702">To make this a lot more obvious, we can rewrite these as sums over the whole sample.
-<ul>
-<li data-source-line="4703" data-source-end-line="4703">Instead of ‘excluding’ the terms where <span class="math inline">W_i=0</span>, we ‘make them zero’ by multiplying in the indicator <span class="math inline">1_{=1}(W_i)</span>.</li>
-<li data-source-line="4704" data-source-end-line="4704">Then, of course we can distribute expectations through the sum.</li>
-<li data-source-line="4705" data-source-end-line="4705">The question becomes whether we can ‘pull out’ the indicator.</li>
-<li data-source-line="4706" data-source-end-line="4706">And we have a rule for that.</li>
-<li data-source-line="4707" data-source-end-line="4707">We can do it if we’re conditioning on <span class="math inline">W_i</span>.</li>
-</ul></li>
-<li data-source-line="4708" data-source-end-line="4708">When we write a subsample mean, we can do that …
-<ul>
-<li data-source-line="4709" data-source-end-line="4709">in the numerator, the sum of observations in the subsample.</li>
-<li data-source-line="4710" data-source-end-line="4710">in the denominator, the number of those terms, which is a <em>sum of ones</em> over the subsample.</li>
-</ul></li>
-</ul>
-</section>
-<section id="does-the-stratified-sampling-proof-still-work-previous-opener" class="slide level2 library">
-<h2 data-source-line="4712" data-source-end-line="4712">What About the Variance?</h2>
-
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="4714" data-source-end-line="4727">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/spread-transition-plots-previous-opener-1.png" alt="Michigan sampled households after coin-flip assignment."></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/spread-transition-plots-previous-opener-2.png" alt="California sampled residents' incomes by degree group."></p>
-</div>
-</div>
-</div>
-<ul>
-<li data-source-line="4729" data-source-end-line="4729">In Michigan and in California, we still have the same statistical problem.
-<ul>
-<li data-source-line="4730" data-source-end-line="4730">Identification tells us what we’re estimating.</li>
-<li data-source-line="4731" data-source-end-line="4731">It doesn’t add another source of variance.</li>
-</ul></li>
-<li data-source-line="4732" data-source-end-line="4732">Last time, we saw this design is a lot like <a href="../docs/conditioning-nov12/decks/conditioning-nov12.html#it-wouldnt-have-made-a-difference">stratified sampling with proportional allocation</a>.
-<ul>
-<li data-source-line="4733" data-source-end-line="4733">With replacement, a subsample mean had variance <span class="math inline">\sigma^2(w)/n_w</span>.</li>
-<li data-source-line="4734" data-source-end-line="4734">The difference had variance <span class="math inline">\sigma^2(1)/n_1 + \sigma^2(0)/n_0</span>.</li>
-</ul></li>
-<li><strong>Q.</strong> This is a different design. Do we still get that? <span class="step-cue"></span> </li>
-</ul>
-<div class="fragment" data-fragment-index="0" data-source-line="4735" data-source-end-line="4735">
-<ul>
-<li data-source-line="4738" data-source-end-line="4738"><strong>A.</strong> Almost.</li>
-</ul>
-</div>
-
-</section>
-<section id="sec-conditional-independence-direct-tool" class="slide level2 library">
-<h2 data-source-line="4766" data-source-end-line="4766">🔧 Conditional Independence</h2>
-
-
-<img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/conditional-independence-tinypop-direct-tool-1.svg" style="width:100.0%" alt="The six-point toy population with each group's mean and standard deviation shown as a point with arms." class="r-stretch" data-source-line="4768" data-source-end-line="4775"><div class="panel-tabset">
-<ul id="tabset-4" class="panel-tabset-tabby"><li data-source-line="4779" data-source-end-line="4779"><a data-tabby-default="" href="#tabset-4-1">The Rule</a></li><li data-source-line="4795" data-source-end-line="4795"><a href="#tabset-4-2">Proof</a></li></ul>
-<div class="tab-content">
-<div id="tabset-4-1">
-<ul>
-<li data-source-line="4781" data-source-end-line="4781">Flipping all <span class="math inline">n</span> coins first fixes the labels <span class="math inline">W_1 \ldots W_n</span>.
-<ul>
-<li data-source-line="4782" data-source-end-line="4782">That tells us which group’s die we roll on each call.</li>
-</ul></li>
-<li data-source-line="4783" data-source-end-line="4783">The die rolls are independent given the labels.
-<ul>
-<li data-source-line="4784" data-source-end-line="4784">We call the responses <em>conditionally independent</em>.</li>
-</ul></li>
-</ul>
-
-<p data-source-line="4786" data-source-end-line="4791"><span class="math display">
-\begin{aligned}
-&amp;\P(Y_1=y_1 \ldots Y_n=y_n \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;=\P(Y_1=y_1 \mid W_1=w_1) \cdots \P(Y_n=y_n \mid W_n=w_n).
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="4793" data-source-end-line="4793">In particular, the responses in either group are independent draws from that group.</li>
-</ul>
-</div>
-<div id="tabset-4-2">
-<ul>
-<li data-source-line="4797" data-source-end-line="4797">We use the <a href="#/conditional-probability-and-expectation" class="quarto-xref">definition of conditional probability</a> and <a href="#/sec-independent-pairs" class="quarto-xref">each pair’s independence of the other labels</a>.</li>
-</ul>
-
-<p data-source-line="4799" data-source-end-line="4813"><span class="math display">
-\begin{aligned}
-&amp;\P(Y_1=y_1 \ldots Y_n=y_n \mid W_1=w_1 \ldots W_n=w_n) \\
-&amp;\overset{\texttip{\small{\text{?}}}{This is the definition of conditional probability.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1 \ldots W_n=w_n, Y_n=y_n)}{\P(W_1=w_1 \ldots W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{The joint probability of the independent pairs is the product of their pair probabilities.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1) \cdots \P(W_n=w_n, Y_n=y_n)}{\P(W_1=w_1 \ldots W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{In the calculation for each pair and the other labels, sum over the remaining response $y_i$. This leaves the probability of the whole label list on the left and the product of the label probabilities on the right.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1) \cdots \P(W_n=w_n, Y_n=y_n)}{\P(W_1=w_1) \cdots \P(W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{A fraction of products is a product of fractions.}}{=}
-\frac{\P(W_1=w_1, Y_1=y_1)}{\P(W_1=w_1)} \cdots \frac{\P(W_n=w_n, Y_n=y_n)}{\P(W_n=w_n)} \\
-&amp;\overset{\texttip{\small{\text{?}}}{This is the definition of conditional probability again, once for each pair.}}{=}
-\P(Y_1=y_1 \mid W_1=w_1) \cdots \P(Y_n=y_n \mid W_n=w_n).
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="4817" data-source-end-line="4817">We can also keep only the calls from one group.</li>
-<li data-source-line="4818" data-source-end-line="4818">For labels <span class="math inline">1, 0, 1</span>, we keep calls 1 and 3.
-<ul>
-<li data-source-line="4819" data-source-end-line="4819">Sum over the possible responses on call 2.</li>
-</ul></li>
-</ul>
-
-<p data-source-line="4821" data-source-end-line="4831"><span class="math display">
-\begin{aligned}
-&amp;\P(Y_1=y_1,Y_3=y_3\mid W_1=1,W_2=0,W_3=1) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Each possible middle response gives one disjoint way to get the two responses we kept.}}{=}
-\sum_y \P(Y_1=y_1,Y_2=y,Y_3=y_3\mid W_1=1,W_2=0,W_3=1) \\
-&amp;\overset{\texttip{\small{\text{?}}}{Use the product from Conditional Independence. Only the middle factor depends on $y$.}}{=}
-\P(Y_1=y_1\mid W_1=1)\cb*{\sum_y\P(Y_2=y\mid W_2=0)}\P(Y_3=y_3\mid W_3=1) \\
-&amp;\overset{\texttip{\small{\text{?}}}{The conditional probabilities on call 2 sum to $1$.}}{=}
-\P(Y_1=y_1\mid W_1=1)\,\P(Y_3=y_3\mid W_3=1).
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="4833" data-source-end-line="4833">Every call we leave out contributes a factor of one.</li>
-<li data-source-line="4834" data-source-end-line="4834">This leaves independent draws from the group we keep.</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<section id="some-income-data-histograms" class="slide level2 library">
-<h2 data-source-line="4838" data-source-end-line="4838">Some Income Data: Histograms</h2>
-<div class="columns">
-<div class="column">
-
-<div class="cell" data-source-line="4844" data-source-end-line="4850">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/map-sample-1.svg" alt="A map of California counties with the 2,271 sampled CPS residents plotted in the two degree-group colours."></p>
-</figure>
-</div>
-</div>
-</div>
-</div><div class="column">
-
-<div class="cell" data-source-line="4854" data-source-end-line="4867">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/income-hist-no-degree-1.svg" alt="The sample incomes of residents without a four-year degree, with their mean marked in the group-a colour."></p>
-</figure>
-</div>
-</div>
-</div>
-
-<div class="cell" data-source-line="4868" data-source-end-line="4880">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/income-hist-degree-1.svg" alt="The sample incomes of residents with a four-year degree, on the same breaks, with their mean marked in the group-b colour."></p>
-</figure>
-</div>
-</div>
-</div>
-</div></div>
-</section>
-<section id="unbiased-and-biased-estimators" class="slide level2 library">
-<h2 data-source-line="4885" data-source-end-line="4885">Unbiased and Biased Estimators</h2>
-
-
-<div class="cell quarto-layout-panel" data-layout-ncol="2" data-source-line="4888" data-source-end-line="4910">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/unnamed-chunk-4-1.svg"></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/unnamed-chunk-4-2.svg"></p>
-</div>
-</div>
-</div>
-</section>
-<section id="the-two-laws-behind-the-factorization" class="slide level2 library">
-<h2 data-source-line="4920" data-source-end-line="4920">The Two Laws Behind the Factorization</h2>
-
-<p data-source-line="4923" data-source-end-line="4931">This is a subtle application of two of our ‘laws’. <span class="math display">
-\begin{aligned}
-&amp;\mathop{\mathrm{E}}[Y \mid W] = \mathop{\mathrm{E}}[ \mathop{\mathrm{E}}\sb{Y \mid V, W} \mid W] \quad \text{ for any random variables $V, W, Y$}
-&amp;&amp; \text{Law of Iterated Iterated Expectations} \\
-&amp;\mathop{\mathrm{E}}[ \textcolor{#118AB2}{Y} \mid \textcolor{#118AB2}{W}, \textcolor{#EF476F}{W'} ] = \textcolor{#118AB2}{\mathop{\mathrm{E}}[ Y \mid W ]} \quad \text{ when $W'$ is independent of $W,Y$ }
-&amp;&amp; \text{Irrelevance of Independent Conditioning Variables}
-\end{aligned}
-</span></p>
-</section>
-<section id="subpopulations-and-two-stage-sampling-old-text" class="slide level2 library">
-<h2 data-source-line="4933" data-source-end-line="4933">Subpopulations and Two-Stage Sampling: Old Text</h2>
-<ul>
-<li data-source-line="4936" data-source-end-line="4936"><strong>Conditioning</strong> is, in effect, a way of thinking about sampling as a two-stage process.
-<ul>
-<li data-source-line="4937" data-source-end-line="4937">First, we choose the color of our dot, i.e., the value of <span class="math inline">W_i</span>.
-<ul>
-<li data-source-line="4938" data-source-end-line="4938">We choose it according to its frequency in the population.</li>
-</ul></li>
-<li data-source-line="4939" data-source-end-line="4939">Then, we choose a specific one of those dots, i.e.&nbsp;<span class="math inline">J_i</span>, from those with that color.
-<ul>
-<li data-source-line="4940" data-source-end-line="4940">We choose it with equal probability.</li>
-</ul></li>
-</ul></li>
-<li data-source-line="4941" data-source-end-line="4941">We can think of it this way because the result is our actual sampling model.
-<ul>
-<li data-source-line="4942" data-source-end-line="4942">Each person still gets chosen with probability <span class="math inline">1/m</span>.</li>
-</ul></li>
-</ul>
-
-<p data-source-line="4944" data-source-end-line="4952"><span class="math display">
-\begin{aligned}
-\P(J_i=j) =
-\begin{cases}
-   \frac{m_1}{m} \ \times \frac{1}{m_1}  \ = \ \frac{1}{m} &amp; \text{if the }j\text{th dot is green } (w_j=1) \\
-   \frac{m_0}{m} \ \times \frac{1}{m_0}  \ = \ \frac{1}{m} &amp; \text{otherwise.}
-\end{cases}
-\end{aligned}
-</span></p>
-<ul>
-<li data-source-line="4954" data-source-end-line="4954">The first stage is ‘a coin flip’.
-<ul>
-<li data-source-line="4955" data-source-end-line="4955">It decides whether we roll the ‘red die’ or the ‘green die’ in the second.</li>
-</ul></li>
-</ul>
-</section>
-<section id="proof-sketch-conditional-unbiasedness" class="slide level2 library">
-<h2 data-source-line="4957" data-source-end-line="4957">Proof Sketch: Conditional Unbiasedness</h2>
-<ul>
-<li><strong>Proof sketch</strong> 
-<ul>
-<li data-source-line="4960" data-source-end-line="4960">Use the <a href="#/sec-linearity" class="quarto-xref"><strong>linearity of conditional expectations</strong></a> to push the conditional expectation into the sum.</li>
-<li data-source-line="4962" data-source-end-line="4962">Then use the <a href="#/sec-irrelevance" class="quarto-xref"><strong>irrelevance of independent conditioning variables</strong></a>.
-<ul>
-<li data-source-line="4963" data-source-end-line="4963">That writes things in terms of the <em>random variable</em> <span class="math inline">\mu(W_i)</span>.</li>
-</ul></li>
-<li data-source-line="4964" data-source-end-line="4964">Then the <a href="#/sec-indicator-trick" class="quarto-xref"><strong>indicator trick</strong></a>.</li>
-<li data-source-line="4965" data-source-end-line="4965">What’s <span class="math inline">1_{=1}(W_i) \mu(W_i)</span>?</li>
-<li data-source-line="4966" data-source-end-line="4966">How is it related to <span class="math inline">\mu(1)</span>?</li>
-</ul></li>
-</ul>
-</section>
-<section id="unconditional-unbiasedness-two-slide-split" class="slide level2 library">
-<h2 data-source-line="4968" data-source-end-line="4968">Unconditional Unbiasedness: Two-Slide Split</h2>
-<ul>
-<li data-source-line="4970" data-source-end-line="4970"><strong>Claim.</strong> Conditional unbiasedness implies unconditional unbiasedness.</li>
-</ul>
-<p><strong>Proof.</strong> </p>
-<ul>
-<li data-source-line="4972" data-source-end-line="4972">We use the <a href="#/the-law-of-iterated-expectations" class="quarto-xref">law of iterated expectations</a>.</li>
-</ul>
-
-<p data-source-line="4976" data-source-end-line="4981"><span class="math display">
-\mathop{\mathrm{E}}\sb{\hat\mu(1)}
-= \mathop{\mathrm{E}}\sb{\mathop{\mathrm{E}}\cb{\hat\mu(1) \mid W_1 \ldots W_n}}
-= \mathop{\mathrm{E}}\sb{ \begin{cases} \mu(1) &amp; \text{when } \sum_{i=1}^n 1_{=1}(W_i) &gt; 0 \\ \mu(1) &amp; \text{when } \sum_{i=1}^n 1_{=1}(W_i) = 0 \end{cases} }
-= \mu(1).
-</span></p>
-</section>
-<section id="identification-in-michigan-flip-first" class="slide level2 library">
-<h2 data-source-line="4983" data-source-end-line="4983">Identification in Michigan: Flip First</h2>
-
-<div class="r-stack" style="width:100%" data-source-line="4985" data-source-end-line="5067">
-<div class="fragment fade-out" data-fragment-index="0" style="width:100%">
-
-<div class="cell" data-source-line="5072" data-source-end-line="5080">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/lib-identification-population-1.svg" style="width:100.0%" alt="Twelve people, each with two connected potential outcomes, red without treatment and green with it. Wide faint red and green lines mark the two population means."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="0" style="width:100%">
-
-<div class="cell" data-source-line="5084" data-source-end-line="5092">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/lib-identification-flip-1-1.svg" style="width:100.0%" alt="Every coin flipped. Each person shows the outcome the coin picked and the other is hollow. Thin red and green lines mark the means of the visible dots, near the wide population lines."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="1" style="width:100%">
-
-<div class="cell" data-source-line="5096" data-source-end-line="5104">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/lib-identification-flip-2-1.svg" style="width:100.0%" alt="A second round of flips: a different hollow pattern, and the thin lines again near the wide ones."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment current-visible" data-fragment-index="2" style="width:100%">
-
-<div class="cell" data-source-line="5108" data-source-end-line="5116">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/lib-identification-flip-3-1.svg" style="width:100.0%" alt="A third round of flips, with the thin lines again near the wide ones."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-<div class="fragment fade-in" data-fragment-index="3" style="width:100%">
-
-<div class="cell" data-source-line="5120" data-source-end-line="5128">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><img data-src="ordinary-sampling-ii-nov17_files/figure-revealjs/lib-identification-sampled-from-flip-1.svg" style="width:100.0%" alt="Six people called from the third flip; the rest fade. The thin lines are the means of the visible dots among the people we called."></p>
-</figure>
-</div>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li><p data-source-line="5133" data-source-end-line="5133"><strong>Claim.</strong> Sampling with replacement and coin flips identify <span class="math inline">\mu_C(w)</span>. That is, <span class="math inline">\mu_C(w) = \mu(w)</span>.</p></li>
-<li><p>The wide lines are the causal estimands, the average of all twelve red dots and of all twelve green dots. <span class="step-cue">Flip</span> </p></li>
-<li data-source-line="5135" data-source-end-line="5135"><p data-source-line="5136" data-source-end-line="5136">Remember you can flip the coin to decide how you’re randomized before you make your phone call.</p></li>
-<li><p data-source-line="5137" data-source-end-line="5137">That’s the order in which we’re doing this in analytic terms.</p></li>
-</ul>
-<div class="fragment" data-fragment-index="0">
-<ul>
-<li>Flip everyone’s coin first. Each person shows the dot the coin picked, and the other goes hollow. <span class="step-cue">Flip again</span> </li>
-<li data-source-line="5140" data-source-end-line="5140">The thin lines are the averages of the dots we can see.</li>
-<li data-source-line="5142" data-source-end-line="5142">The coin doesn’t look at the dots, so the hollow pattern has nothing to do with the heights.</li>
-<li data-source-line="5143" data-source-end-line="5143">The thin lines land near the wide ones, and on average over flips, exactly on them.</li>
-</ul>
-</div>
-<div class="fragment" data-fragment-index="1">
-<ul>
-<li>Flip again. <span class="step-cue">And again</span> </li>
-</ul>
-</div>
-<div class="fragment" data-fragment-index="2" data-source-line="5147" data-source-end-line="5147">
-<ul>
-<li>And again. <span class="step-cue">Sample</span> </li>
-</ul>
-</div>
-<div class="fragment" data-fragment-index="3" data-source-line="5151" data-source-end-line="5151">
-<ul>
-<li data-source-line="5155" data-source-end-line="5155">Now call six people from the flipped population.</li>
-<li data-source-line="5156" data-source-end-line="5156">That’s our data, and we’ve already shown its group means are unbiased for the thin lines.</li>
-</ul>
-</div>
-<ul>
-<li data-source-line="5159" data-source-end-line="5159">Randomization is the flipping step. <span class="math inline">W_i</span> is independent of <span class="math inline">J_i</span>, and conditioning on <span class="math inline">W_i = w</span> is flipping first.</li>
-</ul>
-
-</section>
-<section id="identification-in-michigan-proof-with-the-tools" class="slide level2 library">
-<h2 data-source-line="5201" data-source-end-line="5201">Identification in Michigan: Proof With the Tools</h2>
-<ul>
-<li><span class="agent-new">The coin says letter.</span> <span class="step-cue">Letter</span> </li>
-<li data-source-line="5203" data-source-end-line="5203"><span class="agent-new"><strong>Q.</strong> What’s the chance we then call person 5?</span> <span class="step-cue"></span> </li>
-</ul>
-<div class="fragment" data-fragment-index="1" data-source-line="5204" data-source-end-line="5204">
-<ul>
-<li><span class="agent-new"><strong>A.</strong> One in twelve, like everyone else. The coin doesn’t care who we call.</span> </li>
-</ul>
-
-<p data-source-line="5209" data-source-end-line="5216"><span class="math display">
-\P(J_i=5 \mid W_i=1)
-\overset{\texttip{\small{\text{?}}}{The definition of conditional probability.}}{=}
-\frac{\P(W_i=1, J_i=5)}{\P(W_i=1)}
-\overset{\texttip{\small{\text{?}}}{The coin is fair and doesn't depend on who we call, so the chance of both is $\frac{1}{2} \times \frac{1}{12}$.}}{=}
-\frac{\frac{1}{2} \times \frac{1}{12}}{\frac{1}{2}}
-= \frac{1}{12}.
-</span></p>
-<ul>
-<li><span class="agent-new"><strong>Q.</strong> What’s the expected score on a letter call?</span> <span class="step-cue"></span> </li>
-</ul>
-</div>
-<div class="fragment" data-fragment-index="2" data-source-line="5218" data-source-end-line="5218">
-<ul>
-<li><span class="agent-new"><strong>A.</strong> The average of the twelve letter scores. Everyone is equally likely to be called, and we see their letter score.</span> </li>
-</ul>
-
-<p data-source-line="5224" data-source-end-line="5231"><span class="math display">
-\mathop{\mathrm{E}}[Y_i \mid W_i=1]
-\overset{\texttip{\small{\text{?}}}{The definition of conditional expectation. On a letter call we see the letter score $y_{J_i}(1)$ of the person we call.}}{=}
-\sum_{j=1}^{12} y_j(1)\, \P(J_i=j \mid W_i=1)
-\overset{\texttip{\small{\text{?}}}{Each person has conditional probability $\frac{1}{12}$, as in the warm-up.}}{=}
-\sum_{j=1}^{12} y_j(1) \times \frac{1}{12}
-= \mu_C(1).
-</span></p>
-<ul>
-<li data-source-line="5233" data-source-end-line="5233"><strong>Claim.</strong> Sampling with replacement and coin flips identify <span class="math inline">\mu_C(w)</span>. That is, <span class="math inline">\mu_C(w)=\mu(w)</span>.</li>
-</ul>
-
-<p data-source-line="5235" data-source-end-line="5244"><span class="math display">
-\begin{aligned}
-\mu_C(w)=\frac{1}{m}\sum_{j=1}^m y_j(w)
-&amp;\overset{\texttip{\small{\text{?}}}{Uniform sampling gives each of the $m$ people probability $1/m$.}}{=} \mathop{\mathrm{E}}\cb{y_{J_i}(w)}\\
-&amp;\overset{\texttip{\small{\text{?}}}{Irrelevance of independent conditioning variables: the coin $W_i$ is independent of the call $J_i$.}}{=} \mathop{\mathrm{E}}\cb{y_{J_i}(w)\mid W_i=w}\\
-&amp;\overset{\texttip{\small{\text{?}}}{Since $1_{=w}(w)=1$, pull $1_{=w}(W_i)$ inside the conditional expectation given $W_i=w$ by linearity.}}{=} \mathop{\mathrm{E}}\cb{1_{=w}(W_i)\,y_{J_i}(w)\mid W_i=w}\\
-&amp;\overset{\texttip{\small{\text{?}}}{The indicator trick: $1_{=w}(W_i)\,y_{J_i}(w)=1_{=w}(W_i)\,y_{J_i}(W_i)$.}}{=} \mathop{\mathrm{E}}\cb{1_{=w}(W_i)\,y_{J_i}(W_i)\mid W_i=w}\\
-&amp;\overset{\texttip{\small{\text{?}}}{Pull $1_{=w}(W_i)$ back out by linearity ($1_{=w}(w)=1$).}}{=} \mathop{\mathrm{E}}\cb{y_{J_i}(W_i)\mid W_i=w} \overset{\texttip{\small{\text{?}}}{Definition: $Y_i=y_{J_i}(W_i)$.}}{=} \mathop{\mathrm{E}}(Y_i\mid W_i=w)=\mu(w).
-\end{aligned}
-</span></p>
-</div>
-
-</section>
-<section id="post-class-revision-notes" class="slide level2 library">
-<h2 data-source-line="5257" data-source-end-line="5257">Post-Class Revision Notes</h2>
-
-
-<script type="ojs-module-contents">
-eyJjb250ZW50cyI6W119
-</script>
-<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
-<div id="exercise-loading-status" class="d-flex gap-2">
-
-</div>
-<div class="spinner-grow spinner-grow-sm">
-
-</div>
-</div>
-<script type="vfs-file">
-W10=
-</script>
-</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

@@ -4730,13 +4730,6 @@
     "line": 475
   },
   {
-    "title": "Two Random Mechanisms",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "two-random-mechanisms",
-    "line": 515
-  },
-  {
     "title": "Michigan: The Ideal Case",
     "level": "subsection",
     "page": 44,
@@ -4756,13 +4749,6 @@
     "page": 44,
     "anchor": "imagining-randomization-georgia",
     "line": 684
-  },
-  {
-    "title": "Independent Pairs",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "independent-pairs",
-    "line": 728
   },
   {
     "title": "Imagining Randomization More Easily: California",
@@ -4856,32 +4842,11 @@
     "line": 1611
   },
   {
-    "title": "Identification in Michigan: Long Formal Proof",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "identification-michigan-long-formal-proof",
-    "line": 1805
-  },
-  {
-    "title": "Identification in Michigan: Previous Picture",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "identification-michigan-previous-picture",
-    "line": 1862
-  },
-  {
     "title": "Causality in California?",
     "level": "subsection",
     "page": 44,
     "anchor": "california",
     "line": 1907
-  },
-  {
-    "title": "California: Long Calculation",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "california-long-calculation",
-    "line": 2009
   },
   {
     "title": "Bias and Variance",
@@ -4898,13 +4863,6 @@
     "line": 2059
   },
   {
-    "title": "Preflipping Is Stratified Sampling: Separate Intuition Slide",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "preflipping-is-stratified-sampling",
-    "line": 2155
-  },
-  {
     "title": "🔧 Preflipping Is Stratified Sampling",
     "level": "subsection",
     "page": 44,
@@ -4912,25 +4870,11 @@
     "line": 2192
   },
   {
-    "title": "Preflipping: Earlier Detailed Proof",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "preflipping-earlier-detailed-proof",
-    "line": 2461
-  },
-  {
     "title": "Conditional Bias and Variance",
     "level": "subsection",
     "page": 44,
     "anchor": "conditional-from-stratified",
     "line": 2544
-  },
-  {
-    "title": "Conditional Variance of the Difference",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "conditional-difference-variance",
-    "line": 2948
   },
   {
     "title": "Unconditioning",
@@ -5003,53 +4947,11 @@
     "line": 3474
   },
   {
-    "title": "The Difference Is Unbiased Too",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "the-difference-is-unbiased-too",
-    "line": 3510
-  },
-  {
     "title": "The Variance of the Subsample Mean",
     "level": "subsection",
     "page": 44,
     "anchor": "the-variance-of-the-subsample-mean",
     "line": 3566
-  },
-  {
-    "title": "The Variance of the Subsample Mean: Four-Slide Version",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "variance-four-slide-claim",
-    "line": 3629
-  },
-  {
-    "title": "Step 1. Total Variance",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "step-1-total-variance",
-    "line": 3645
-  },
-  {
-    "title": "Step 2. The Conditional Variance",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "step-2",
-    "line": 3674
-  },
-  {
-    "title": "Step 3. Putting the Pieces Together",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "step-3-putting-the-pieces-together",
-    "line": 3707
-  },
-  {
-    "title": "The Variance of Differences in Means",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "the-variance-of-differences-in-means",
-    "line": 3723
   },
   {
     "title": "Compared With Complete Randomization",
@@ -5155,125 +5057,6 @@
     "page": 44,
     "anchor": "step-4.-putting-the-pieces-together",
     "line": 4496
-  },
-  {
-    "title": "Our Estimator and Target",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "our-estimator-and-target",
-    "line": 4516
-  },
-  {
-    "title": "Unbiasedness in Michigan",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "unbiasedness-in-michigan",
-    "line": 4584
-  },
-  {
-    "title": "Almost Unbiased in Large Samples",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "almost-unbiased-in-large-samples",
-    "line": 4628
-  },
-  {
-    "title": "Spread Opening: Earlier Draft",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "spread-opening-earlier-draft",
-    "line": 4648
-  },
-  {
-    "title": "One or Two Group 1 Calls",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "one-or-two-group-1-calls",
-    "line": 4659
-  },
-  {
-    "title": "How to Write Subsample Means",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "how-to-write-subsample-means",
-    "line": 4693
-  },
-  {
-    "title": "What About the Variance?",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "does-the-stratified-sampling-proof-still-work-previous-opener",
-    "line": 4712
-  },
-  {
-    "title": "🔧 Conditional Independence",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "sec-conditional-independence-direct-tool",
-    "line": 4766
-  },
-  {
-    "title": "Some Income Data: Histograms",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "some-income-data-histograms",
-    "line": 4838
-  },
-  {
-    "title": "Unbiased and Biased Estimators",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "unbiased-and-biased-estimators",
-    "line": 4885
-  },
-  {
-    "title": "The Two Laws Behind the Factorization",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "the-two-laws-behind-the-factorization",
-    "line": 4920
-  },
-  {
-    "title": "Subpopulations and Two-Stage Sampling: Old Text",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "subpopulations-and-two-stage-sampling-old-text",
-    "line": 4933
-  },
-  {
-    "title": "Proof Sketch: Conditional Unbiasedness",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "proof-sketch-conditional-unbiasedness",
-    "line": 4957
-  },
-  {
-    "title": "Unconditional Unbiasedness: Two-Slide Split",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "unconditional-unbiasedness-two-slide-split",
-    "line": 4968
-  },
-  {
-    "title": "Identification in Michigan: Flip First",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "identification-in-michigan-flip-first",
-    "line": 4983
-  },
-  {
-    "title": "Identification in Michigan: Proof With the Tools",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "identification-in-michigan-proof-with-the-tools",
-    "line": 5201
-  },
-  {
-    "title": "Post-Class Revision Notes",
-    "level": "subsection",
-    "page": 44,
-    "anchor": "post-class-revision-notes",
-    "line": 5257
   },
   {
     "title": "Practice Midterm 1",
