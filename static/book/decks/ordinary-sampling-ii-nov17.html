@@ -1125,18 +1125,18 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </ul>
 <p><span class="math display">(W_1, Y_1) \ldots (W_n, Y_n)</span> </p>
 <ul>
-<li data-source-line="495" data-source-end-line="495"><span class="agent-new">Two conceptually distinct random mechanisms give us pairs like these.</span> 
+<li data-source-line="495" data-source-end-line="495">Two conceptually distinct random mechanisms give us pairs like these.
 <ul>
-<li data-source-line="497" data-source-end-line="497">Ordinary sampling with replacement for a population with two responses.</li>
-<li><span class="agent-new">Sampling with replacement followed by coin-flip randomization.</span> </li>
+<li data-source-line="498" data-source-end-line="498">Ordinary sampling with replacement for a population with two responses.</li>
+<li data-source-line="499" data-source-end-line="499">Sampling with replacement followed by coin-flip randomization.</li>
 </ul></li>
-<li data-source-line="499" data-source-end-line="499"><span class="agent-new">In most studies, one step is real and we imagine the other.</span> 
+<li data-source-line="500" data-source-end-line="500">In most studies, one step is real and we imagine the other.
 <ul>
-<li data-source-line="500" data-source-end-line="500">In experiments, we imagine we’re randomizing a sample from a larger population.</li>
+<li data-source-line="501" data-source-end-line="501">In experiments, we imagine we’re randomizing a sample from a larger population.</li>
 <li data-source-line="502" data-source-end-line="502">In observational studies, we imagine our groups came from randomization.</li>
 </ul></li>
-<li><span class="agent-new">Either way, we’re trying to get back to independent and identically distributed pairs.</span> </li>
-<li data-source-line="503" data-source-end-line="503">Today is the math of independent pairs. We don’t care where the pairs come from.</li>
+<li data-source-line="503" data-source-end-line="503">Either way, we’re trying to get back to independent and identically distributed pairs.</li>
+<li data-source-line="504" data-source-end-line="504">Today is the math of independent pairs. We don’t care where the pairs come from.</li>
 <li data-source-line="505" data-source-end-line="505">Here are some examples of causal stories about populations.</li>
 </ul>
 
@@ -1198,20 +1198,20 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">What is the average effect of the letter on turnout across Michigan households?</span> </li>
-<li data-source-line="590" data-source-end-line="590"><span class="agent-new">Our model of the Gerber, Green and Larimer experiment in Michigan has two steps in its random mechanism.</span> 
+<li data-source-line="590" data-source-end-line="590">What is the average effect of the letter on turnout across Michigan households?</li>
+<li data-source-line="591" data-source-end-line="591">Our model of the Gerber, Green and Larimer experiment in Michigan has two steps in its random mechanism.
 <ul>
-<li data-source-line="591" data-source-end-line="591"><span class="agent-new">We sample households with replacement.</span> <span class="step-cue">Sample</span> </li>
-<li data-source-line="592" data-source-end-line="592"><span class="agent-new">Then we flip a coin on each call to decide whether that household gets the letter.</span> <span class="step-cue">Flip coins</span> </li>
+<li>We sample households with replacement. <span class="step-cue">Sample</span> </li>
+<li data-source-line="592" data-source-end-line="592">Then we flip a coin on each call to decide whether that household gets the letter. <span class="step-cue">Flip coins</span> </li>
 </ul></li>
 <li data-source-line="593" data-source-end-line="593">This is not the random mechanism that was actually used, but close enough, easy to work with.</li>
-<li><span class="agent-new">It gives us independent and identically distributed pairs <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span>.</span> </li>
-<li data-source-line="595" data-source-end-line="595"><span class="agent-new">Imagine two copies of each household, one with the letter and one without.</span> <span class="step-cue">Double the grid</span> 
+<li data-source-line="595" data-source-end-line="595">It gives us independent and identically distributed pairs <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span>.</li>
+<li>Imagine two copies of each household, one with the letter and one without. <span class="step-cue">Double the grid</span> 
 <ul>
-<li data-source-line="596" data-source-end-line="596"><span class="agent-new">Calling a household and flipping a fair coin gives each copy probability <span class="math inline">(1/m)(1/2)=1/(2m)</span>.</span> </li>
-<li data-source-line="597" data-source-end-line="597"><span class="agent-new">That’s ordinary sampling from the doubled population.</span> </li>
+<li data-source-line="596" data-source-end-line="596">Calling a household and flipping a fair coin gives each copy probability <span class="math inline">(1/m)(1/2)=1/(2m)</span>.</li>
+<li data-source-line="598" data-source-end-line="598">That’s ordinary sampling from the doubled population.</li>
 </ul></li>
-<li data-source-line="598" data-source-end-line="598"><span class="agent-new">In that doubled population, the difference in mean turnout is the average treatment effect of the letter.</span> </li>
+<li data-source-line="599" data-source-end-line="599">In that doubled population, the difference in mean turnout is the average treatment effect of the letter.</li>
 </ul>
 
 </section>
@@ -1244,11 +1244,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">In the NSW study, the job program was randomized among the participants we see.</span> </li>
-<li data-source-line="644" data-source-end-line="644"><span class="agent-new">We can compare mean employment among the <span class="groupb">treated</span> and <span class="groupa">control</span> participants.</span> </li>
-<li data-source-line="645" data-source-end-line="645"><span class="agent-new">Each participant had two potential employment outcomes, <span class="groupa">without</span> and <span class="groupb">with</span> the program.</span> </li>
-<li data-source-line="646" data-source-end-line="646"><span class="agent-new">We imagine the participants were sampled from a larger population.</span> <span class="step-cue">Imagine sampling</span> </li>
-<li data-source-line="647" data-source-end-line="647"><span class="agent-new">What is the average effect of the job program on employment in that population?</span> </li>
+<li data-source-line="644" data-source-end-line="644">In the NSW study, the job program was randomized among the participants we see.</li>
+<li data-source-line="645" data-source-end-line="645">We can compare mean employment among the <span class="groupb">treated</span> and <span class="groupa">control</span> participants.</li>
+<li data-source-line="646" data-source-end-line="646">Each participant had two potential employment outcomes, <span class="groupa">without</span> and <span class="groupb">with</span> the program.</li>
+<li>We imagine the participants were sampled from a larger population. <span class="step-cue">Imagine sampling</span> </li>
+<li data-source-line="647" data-source-end-line="647">What is the average effect of the job program on employment in that population?</li>
 </ul>
 
 </section>
@@ -1281,13 +1281,13 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">In Georgia, we sampled voters and compared turnout among <span class="groupb">Black</span> and <span class="groupa">non-Black</span> voters.</span> </li>
-<li data-source-line="688" data-source-end-line="688"><span class="agent-new">What would it take to interpret that difference as the average effect of race on turnout?</span> 
+<li data-source-line="688" data-source-end-line="688">In Georgia, we sampled voters and compared turnout among <span class="groupb">Black</span> and <span class="groupa">non-Black</span> voters.</li>
+<li data-source-line="689" data-source-end-line="689">What would it take to interpret that difference as the average effect of race on turnout?
 <ul>
-<li data-source-line="689" data-source-end-line="689"><span class="agent-new">We’d have to imagine randomizing which group each voter belongs to.</span> <span class="step-cue">Imagine randomization</span> </li>
-<li data-source-line="690" data-source-end-line="690"><span class="agent-new">What would it mean to do that?</span> </li>
+<li>We’d have to imagine randomizing which group each voter belongs to. <span class="step-cue">Imagine randomization</span> </li>
+<li data-source-line="690" data-source-end-line="690">What would it mean to do that?</li>
 </ul></li>
-<li data-source-line="691" data-source-end-line="691"><span class="agent-new">We’re going to look at something where it’s easier to imagine a causal story.</span> </li>
+<li data-source-line="692" data-source-end-line="692">We’re going to look at something where it’s easier to imagine a causal story.</li>
 </ul>
 
 </section>
@@ -1348,9 +1348,9 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">How much would getting a four-year degree change someone’s income?</span> </li>
-<li data-source-line="764" data-source-end-line="764"><span class="agent-new">In our first section, we’ll talk about a survey of the population of California in the language of ordinary sampling.</span> </li>
-<li data-source-line="765" data-source-end-line="765">The population is all California residents between 25 and 35 with at least an 8th grade education.</li>
+<li data-source-line="764" data-source-end-line="764">How much would getting a four-year degree change someone’s income?</li>
+<li data-source-line="765" data-source-end-line="765">In our first section, we’ll talk about a survey of the population of California in the language of ordinary sampling.</li>
+<li data-source-line="766" data-source-end-line="766">The population is all California residents between 25 and 35 with at least an 8th grade education.</li>
 <li>We sampled residents and asked them two questions. <span class="step-cue">Sample</span> 
 <ul>
 <li data-source-line="767" data-source-end-line="767">Their income.</li>
@@ -1424,7 +1424,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">We define conditional probability so we can always do this multiplication.</span> </li>
+<li data-source-line="846" data-source-end-line="846">We define conditional probability so we can always do this multiplication.</li>
 </ul>
 
 <p data-source-line="848" data-source-end-line="853"><span class="math display">
@@ -1434,7 +1434,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">When we use the definition, it works out. It’s rolling the green die.</span> </li>
+<li data-source-line="855" data-source-end-line="855">When we use the definition, it works out. It’s rolling the green die.</li>
 </ul>
 
 <p data-source-line="857" data-source-end-line="870"><span class="math display">
@@ -1452,8 +1452,8 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 \end{aligned}
 </span></p>
 <ul>
-<li><p><span class="agent-new">That’s <span class="math inline">1/m_1</span> for each graduate and <span class="math inline">0</span> for everyone else.</span> </p></li>
-<li data-source-line="872" data-source-end-line="872"><p data-source-line="874" data-source-end-line="874">The Conditional Probability of <span class="math inline">Y_i</span> is the probability resulting from the second stage.</p>
+<li><p data-source-line="872" data-source-end-line="872">That’s <span class="math inline">1/m_1</span> for each graduate and <span class="math inline">0</span> for everyone else.</p></li>
+<li><p data-source-line="874" data-source-end-line="874">The Conditional Probability of <span class="math inline">Y_i</span> is the probability resulting from the second stage.</p>
 <ul>
 <li data-source-line="875" data-source-end-line="875"><span class="math inline">\P(Y_i=y \mid W_i=1)</span> is the probability distribution of <span class="math inline">Y_i</span> when we’re ‘rolling the green die’.</li>
 <li data-source-line="876" data-source-end-line="876"><span class="math inline">\P(Y_i=y \mid W_i=0)</span> is the probability distribution of <span class="math inline">Y_i</span> when we’re ‘rolling the red die’.</li>
@@ -1474,7 +1474,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><span class="agent-new">Conditional expectation and conditional variance are expectation and variance over this distribution.</span> </li>
+<li data-source-line="897" data-source-end-line="897">Conditional expectation and conditional variance are expectation and variance over this distribution.</li>
 </ul>
 
 <p data-source-line="899" data-source-end-line="908"><span class="math display">
@@ -1629,7 +1629,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </tbody>
 </table>
 <ul>
-<li><span class="agent-new">Both groups have the same variance, so here <span class="math inline">\sigma^2(W)</span> isn’t random at all.</span> </li>
+<li data-source-line="1027" data-source-end-line="1027">Both groups have the same variance, so here <span class="math inline">\sigma^2(W)</span> isn’t random at all.</li>
 </ul>
 </div>
 </section>
@@ -1647,11 +1647,11 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 </div>
 <ul>
-<li><p><strong>Intuition.</strong> If we’re rolling the <span class="groupb">green</span> die, we know our coin came up <span class="groupb">green</span>. <span class="agent-new">It’s another way of thinking about the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>.</span> </p></li>
-<li data-source-line="1055" data-source-end-line="1055"><p><strong>Claim.</strong> <span class="agent-new">When we condition on <span class="math inline">W=w</span>, we can write <span class="math inline">w</span> wherever we see <span class="math inline">W</span>.</span> </p></li>
+<li><p data-source-line="1055" data-source-end-line="1055"><strong>Intuition.</strong> If we’re rolling the <span class="groupb">green</span> die, we know our coin came up <span class="groupb">green</span>. It’s another way of thinking about the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>.</p></li>
+<li><p data-source-line="1057" data-source-end-line="1057"><strong>Claim.</strong> When we condition on <span class="math inline">W=w</span>, we can write <span class="math inline">w</span> wherever we see <span class="math inline">W</span>.</p></li>
 </ul>
 
-<p data-source-line="1057" data-source-end-line="1057"><span class="math display">
+<p data-source-line="1059" data-source-end-line="1061"><span class="math display">
 \mathop{\mathrm{E}}\cb{f(W, Y) \mid W=w} = \mathop{\mathrm{E}}\cb{f(w, Y) \mid W=w} \qqtext{for any function} f.
 </span></p>
 <ul>
@@ -1659,7 +1659,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </ul>
 <div class="fragment" data-fragment-index="0" data-source-line="1063" data-source-end-line="1063">
 <ul>
-<li><span class="agent-new"><span class="math inline">W</span> can’t be two different things at once.</span> </li>
+<li data-source-line="1067" data-source-end-line="1067"><span class="math inline">W</span> can’t be two different things at once.</li>
 </ul>
 
 <p data-source-line="1069" data-source-end-line="1080"><span class="math display">
@@ -1675,7 +1675,7 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">To condition on <span class="math inline">W=w</span>, we divide by <span class="math inline">\P(W=w)</span>.</span> </li>
+<li data-source-line="1082" data-source-end-line="1082">To condition on <span class="math inline">W=w</span>, we divide by <span class="math inline">\P(W=w)</span>.</li>
 </ul>
 
 <p data-source-line="1084" data-source-end-line="1094"><span class="math display">
@@ -1690,8 +1690,8 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">A conditional expectation is a sum weighted by these probabilities.</span> </li>
-<li data-source-line="1096" data-source-end-line="1096">The indicator trick lets us drop terms.</li>
+<li data-source-line="1096" data-source-end-line="1096">A conditional expectation is a sum weighted by these probabilities.</li>
+<li data-source-line="1097" data-source-end-line="1097">The indicator trick lets us drop terms.</li>
 </ul>
 
 <p data-source-line="1099" data-source-end-line="1111"><span class="math display">
@@ -1729,10 +1729,10 @@ if (new URLSearchParams(window.location.search).has("_tldaShape")) {
 </div>
 <ul>
 <li><p data-source-line="1296" data-source-end-line="1296"><strong>Intuition.</strong> If our <span class="groupa">red</span> folks and <span class="groupb">green</span> folks have the same distribution, it doesn’t matter whether we roll the <span class="groupa">red</span> die or the big six-sided one.</p></li>
-<li><p><strong>Claim.</strong> <span class="agent-new">When <span class="math inline">W</span> and <span class="math inline">Y</span> are independent, conditioning on <span class="math inline">W</span> doesn’t change the distribution or expectation of <span class="math inline">Y</span>.</span> </p></li>
+<li><p data-source-line="1298" data-source-end-line="1298"><strong>Claim.</strong> When <span class="math inline">W</span> and <span class="math inline">Y</span> are independent, conditioning on <span class="math inline">W</span> doesn’t change the distribution or expectation of <span class="math inline">Y</span>.</p></li>
 </ul>
 
-<p data-source-line="1298" data-source-end-line="1298"><span class="math display">
+<p data-source-line="1300" data-source-end-line="1305"><span class="math display">
 \begin{aligned}
 \P(Y=y \mid W=w) &amp;= \P(Y=y) \\
 \mathop{\mathrm{E}}\cb{f(Y) \mid W=w} &amp;= \mathop{\mathrm{E}}\cb{f(Y)} \qqtext{for any function} f.
@@ -1856,9 +1856,9 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 </div>
 </div>
 <ul>
-<li><span class="agent-new">What would mean turnout be if nobody got the letter?</span> </li>
-<li data-source-line="1488" data-source-end-line="1488"><span class="agent-new">What would it be if every household got the letter?</span> </li>
-<li data-source-line="1489" data-source-end-line="1489"><span class="agent-new">That’s a causal question. It’s about the potential outcomes.</span> </li>
+<li data-source-line="1488" data-source-end-line="1488">What would mean turnout be if nobody got the letter?</li>
+<li data-source-line="1489" data-source-end-line="1489">What would it be if every household got the letter?</li>
+<li data-source-line="1490" data-source-end-line="1490">That’s a causal question. It’s about the potential outcomes.</li>
 </ul>
 
 <p data-source-line="1492" data-source-end-line="1494"><span class="math display">
@@ -1873,7 +1873,7 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 <ul>
 <li data-source-line="1499" data-source-end-line="1499">That is, if the causal question has a statistical answer.</li>
 </ul></li>
-<li><span class="agent-new"><strong>Q.</strong> Do sampling with replacement and a coin flip identify <span class="math inline">\mu_C(w)</span>?</span> </li>
+<li data-source-line="1500" data-source-end-line="1500"><strong>Q.</strong> Do sampling with replacement and a coin flip identify <span class="math inline">\mu_C(w)</span>?</li>
 </ul>
 
 </section>
@@ -1903,21 +1903,21 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 <ul>
 <li data-source-line="1697" data-source-end-line="1697">Remember you can flip the coin to decide how you’re randomized before you make your phone call.</li>
 <li data-source-line="1700" data-source-end-line="1700">That’s the order in which we’re doing this in analytic terms.</li>
-<li><span class="agent-new">If the coin says letter, our second stage is sampling uniformly from the potential outcomes with the letter.</span> 
+<li data-source-line="1701" data-source-end-line="1701">If the coin says letter, our second stage is sampling uniformly from the potential outcomes with the letter.
 <ul>
-<li data-source-line="1701" data-source-end-line="1701"><span class="agent-new">The second-stage expected value, <span class="math inline">\mu(1)</span>, is the mean of that population of potential outcomes, <span class="math inline">\mu_C(1)</span>.</span> <span class="step-cue">Formal proof</span> </li>
+<li>The second-stage expected value, <span class="math inline">\mu(1)</span>, is the mean of that population of potential outcomes, <span class="math inline">\mu_C(1)</span>. <span class="step-cue">Formal proof</span> </li>
 </ul></li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="1" data-source-line="1702" data-source-end-line="1702">
 <p><strong>Proof. In formal terms.</strong> </p>
 <ul>
-<li data-source-line="1706" data-source-end-line="1706"><span class="agent-new">On call <span class="math inline">i</span>, we see <span class="math inline">Y_i = y_{J_i}(W_i)</span>.</span> 
+<li data-source-line="1706" data-source-end-line="1706">On call <span class="math inline">i</span>, we see <span class="math inline">Y_i = y_{J_i}(W_i)</span>.
 <ul>
-<li data-source-line="1708" data-source-end-line="1708"><span class="agent-new">That’s the potential outcome of the household we called, under the assignment the coin picked.</span> </li>
+<li data-source-line="1709" data-source-end-line="1709">That’s the potential outcome of the household we called, under the assignment the coin picked.</li>
 </ul></li>
-<li data-source-line="1709" data-source-end-line="1709"><span class="agent-new"><a href="#/sec-when-rule" class="quarto-xref">The ‘when’ rule</a> lets us write <span class="math inline">w</span> in place of <span class="math inline">W_i</span>.</span> </li>
-<li data-source-line="1710" data-source-end-line="1710"><span class="agent-new">The coin is independent of who we call. So <a href="#/sec-independent-conditioning" class="quarto-xref">conditioning on it</a> changes nothing.</span> </li>
+<li data-source-line="1710" data-source-end-line="1710"><a href="#/sec-when-rule" class="quarto-xref">The ‘when’ rule</a> lets us write <span class="math inline">w</span> in place of <span class="math inline">W_i</span>.</li>
+<li data-source-line="1711" data-source-end-line="1711">The coin is independent of who we call. So <a href="#/sec-independent-conditioning" class="quarto-xref">conditioning on it</a> changes nothing.</li>
 </ul>
 
 <p data-source-line="1713" data-source-end-line="1725"><span class="math display">
@@ -1955,15 +1955,15 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 <li><p data-source-line="1767" data-source-end-line="1767">Causal estimand. <span class="math inline">\mu_C(w) = \frac{1}{m}\sum_{j=1}^m y_j(w)</span>.</p></li>
 <li><p data-source-line="1768" data-source-end-line="1768">Statistical estimand. <span class="math inline">\mu(w) = \mathop{\mathrm{E}}[Y_i \mid W_i = w]</span>.</p></li>
 <li><p data-source-line="1769" data-source-end-line="1769"><strong>Q.</strong> Are these the same?</p></li>
-<li><p><span class="agent-new">Nobody flipped a coin in California.</span> </p>
+<li><p data-source-line="1771" data-source-end-line="1771">Nobody flipped a coin in California.</p>
 <ul>
-<li data-source-line="1771" data-source-end-line="1771"><span class="agent-new">Whether you have a degree is a fact about you, like your potential incomes.</span> </li>
-<li data-source-line="1772" data-source-end-line="1772"><span class="agent-new">So <span class="math inline">W_i</span> is <span class="math inline">w_{J_i}</span>. It isn’t independent of who we call.</span> </li>
+<li data-source-line="1772" data-source-end-line="1772">Whether you have a degree is a fact about you, like your potential incomes.</li>
+<li data-source-line="1773" data-source-end-line="1773">So <span class="math inline">W_i</span> is <span class="math inline">w_{J_i}</span>. It isn’t independent of who we call.</li>
 </ul></li>
-<li data-source-line="1773" data-source-end-line="1773"><p><span class="agent-new">Two of <a href="#/identification-in-michigan" class="quarto-xref">Michigan’s</a> steps still work.</span> </p></li>
+<li><p data-source-line="1774" data-source-end-line="1774">Two of <a href="#/identification-in-michigan" class="quarto-xref">Michigan’s</a> steps still work.</p></li>
 </ul>
 
-<p data-source-line="1774" data-source-end-line="1774"><span class="math display">
+<p data-source-line="1776" data-source-end-line="1784"><span class="math display">
 \begin{aligned}
 \mu(w) = \mathop{\mathrm{E}}(Y_i \mid W_i=w)
 &amp;\overset{\texttip{\small{\text{?}}}{On call $i$, we observe the potential income of person $J_i$ under their own degree status $W_i$.}}{=}
@@ -1980,10 +1980,10 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 \mathop{\mathrm{E}}\cb{y_{J_i}(w) \mid W_i=w} \neq \mathop{\mathrm{E}}\cb{y_{J_i}(w)} = \mu_C(w).
 </span></p>
 <ul>
-<li><span class="agent-new">The miracle would be that people with degrees are just like people without them.</span> 
+<li data-source-line="1792" data-source-end-line="1792">The miracle would be that people with degrees are just like people without them.
 <ul>
-<li data-source-line="1792" data-source-end-line="1792"><span class="agent-new">But kids from richer families are more likely to get degrees.</span> </li>
-<li data-source-line="1793" data-source-end-line="1793"><span class="agent-new">And they tend to earn more, degree or not.</span> </li>
+<li data-source-line="1793" data-source-end-line="1793">But kids from richer families are more likely to get degrees.</li>
+<li data-source-line="1794" data-source-end-line="1794">And they tend to earn more, degree or not.</li>
 </ul></li>
 </ul>
 
@@ -2011,17 +2011,17 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 </div>
 </div>
 <ul>
-<li><span class="agent-new">In Michigan and in California, we’re dealing with the same statistical setup.</span><sup>1</sup> 
+<li>In Michigan and in California, we’re dealing with the same statistical setup.<sup>1</sup> 
 <ul>
-<li data-source-line="1873" data-source-end-line="1873"><span class="agent-new">We observe independent and identically distributed pairs <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span>.</span> </li>
-<li data-source-line="1874" data-source-end-line="1874"><span class="agent-new">We estimate <span class="math inline">\mu(1)-\mu(0)</span> with a difference in subsample means.</span> </li>
+<li data-source-line="1873" data-source-end-line="1873">We observe independent and identically distributed pairs <span class="math inline">(W_1, Y_1) \ldots (W_n, Y_n)</span>.</li>
+<li data-source-line="1875" data-source-end-line="1875">We estimate <span class="math inline">\mu(1)-\mu(0)</span> with a difference in subsample means.</li>
 </ul></li>
-<li data-source-line="1875" data-source-end-line="1875">Last time, we saw this design is a lot like stratified sampling with proportional allocation.
+<li data-source-line="1876" data-source-end-line="1876">Last time, we saw this design is a lot like stratified sampling with proportional allocation.
 <ul>
-<li><span class="agent-new">When we used stratified sampling, subsample means were unbiased.</span> </li>
-<li data-source-line="1877" data-source-end-line="1877">When we sample with replacement within strata, <span class="agent-new">a subsample mean has variance <span class="math inline">\sigma^2(w)/n_w</span>.</span> </li>
+<li data-source-line="1877" data-source-end-line="1877">When we used stratified sampling, subsample means were unbiased.</li>
+<li data-source-line="1878" data-source-end-line="1878">When we sample with replacement within strata, a subsample mean has variance <span class="math inline">\sigma^2(w)/n_w</span>.</li>
 </ul></li>
-<li data-source-line="1878" data-source-end-line="1878"><strong>Q.</strong> This is a different design. Do we still get that? <span class="step-cue"></span> </li>
+<li><strong>Q.</strong> This is a different design. Do we still get that? <span class="step-cue"></span> </li>
 </ul>
 <div class="fragment" data-fragment-index="0" data-source-line="1879" data-source-end-line="1879">
 <ul>
@@ -2052,8 +2052,8 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 </div>
 </div>
 <ul>
-<li><strong>Intuition.</strong> <span class="agent-new">If we flip all our coins first, all that’s left is rolling the <span class="groupb">green</span> die on some calls and the <span class="groupa">red</span> die on the others. That’s stratified sampling.</span> </li>
-<li data-source-line="1971" data-source-end-line="1971"><strong>Claim.</strong> <span class="agent-new">When the pairs <span class="math inline">(W_1,Y_1) \ldots (W_n,Y_n)</span> are independent and identically distributed, the conditional distribution of <span class="math inline">(Y_1 \ldots Y_n)</span> given <span class="math inline">W_1=w_1 \ldots W_n=w_n</span> is the (unconditional) distribution of responses when we use stratified sampling with replacement, with call <span class="math inline">i</span> drawn from group <span class="math inline">w_i</span>.</span> </li>
+<li data-source-line="1971" data-source-end-line="1971"><strong>Intuition.</strong> If we flip all our coins first, all that’s left is rolling the <span class="groupb">green</span> die on some calls and the <span class="groupa">red</span> die on the others. That’s stratified sampling.</li>
+<li data-source-line="1972" data-source-end-line="1972"><strong>Claim.</strong> When the pairs <span class="math inline">(W_1,Y_1) \ldots (W_n,Y_n)</span> are independent and identically distributed, the conditional distribution of <span class="math inline">(Y_1 \ldots Y_n)</span> given <span class="math inline">W_1=w_1 \ldots W_n=w_n</span> is the (unconditional) distribution of responses when we use stratified sampling with replacement, with call <span class="math inline">i</span> drawn from group <span class="math inline">w_i</span>.</li>
 </ul>
 
 <p data-source-line="1974" data-source-end-line="1980"><span class="math display">
@@ -2101,7 +2101,7 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 \hat\mu(w) = \frac{1}{N_w}\sum_{i=1}^n 1_{=w}(W_i) Y_i \qqtext{for} N_w = \sum_{i=1}^n 1_{=w}(W_i).
 </span></p>
 <ul>
-<li><strong>Claim.</strong> <span class="agent-new">The conditional mean and variance of <span class="math inline">\hat\mu(w)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> are <span class="math inline">\mu(w)</span> and <span class="math inline">\sigma^2(w)/N_w</span>, respectively.</span> <span class="agent-new">The conditional mean of <span class="math inline">\hat\mu(1)-\hat\mu(0)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> is <span class="math inline">\mu(1)-\mu(0)</span>, and its conditional variance is the sum of the two subsample means’ conditional variances.</span> <span class="step-cue">Intuitive proof</span> </li>
+<li><strong>Claim.</strong> The conditional mean and variance of <span class="math inline">\hat\mu(w)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> are <span class="math inline">\mu(w)</span> and <span class="math inline">\sigma^2(w)/N_w</span>, respectively. The conditional mean of <span class="math inline">\hat\mu(1)-\hat\mu(0)</span> given the labels <span class="math inline">W_1 \ldots W_n</span> is <span class="math inline">\mu(1)-\mu(0)</span>, and its conditional variance is the sum of the two subsample means’ conditional variances. <span class="step-cue">Intuitive proof</span> </li>
 </ul>
 <p data-source-line="2229" data-source-end-line="2229">Unless these involve dividing by zero. That is, these equivalences hold.</p>
 
@@ -2116,19 +2116,19 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 <div class="fragment" data-fragment-index="0">
 <p><strong>Proof. In intuitive terms.</strong> </p>
 <ul>
-<li data-source-line="2241" data-source-end-line="2241"><span class="agent-new">Once we know the labels, <span class="math inline">\hat\mu(w)</span> is the average of the responses on the calls with label <span class="math inline">w</span>.</span> </li>
-<li data-source-line="2243" data-source-end-line="2243"><span class="agent-new"><a href="#/sec-conditional-independence" class="quarto-xref">Preflipping</a> says that given the labels, those responses are independent rolls of group <span class="math inline">w</span>’s die.</span> </li>
-<li data-source-line="2244" data-source-end-line="2244"><span class="agent-new">That’s sampling with replacement from group <span class="math inline">w</span>, and <span class="math inline">\hat\mu(w)</span> is the sample mean. We solved that problem.</span> <span class="step-cue">Formal proof</span> </li>
+<li data-source-line="2241" data-source-end-line="2241">Once we know the labels, <span class="math inline">\hat\mu(w)</span> is the average of the responses on the calls with label <span class="math inline">w</span>.</li>
+<li data-source-line="2244" data-source-end-line="2244"><a href="#/sec-conditional-independence" class="quarto-xref">Preflipping</a> says that given the labels, those responses are independent rolls of group <span class="math inline">w</span>’s die.</li>
+<li>That’s sampling with replacement from group <span class="math inline">w</span>, and <span class="math inline">\hat\mu(w)</span> is the sample mean. We solved that problem. <span class="step-cue">Formal proof</span> </li>
 </ul>
 </div>
 <div class="fragment" data-fragment-index="1" data-source-line="2245" data-source-end-line="2245">
 <p><strong>Proof. In formal terms.</strong> </p>
 <ul>
-<li data-source-line="2249" data-source-end-line="2249"><p><span class="agent-new">These are all instances of the same general result.</span> </p></li>
-<li data-source-line="2251" data-source-end-line="2251"><p><span class="agent-new">We’re going to show that for every function <span class="math inline">f</span>, the conditional mean of <span class="math inline">f(W_1 \ldots W_n, Y_1 \ldots Y_n)</span> given <span class="math inline">W_1=w_1 \ldots W_n=w_n</span> and the mean of <span class="math inline">f(w_1 \ldots w_n, Y_1 \ldots Y_n)</span> under stratified sampling coincide.</span> </p></li>
+<li data-source-line="2249" data-source-end-line="2249"><p data-source-line="2251" data-source-end-line="2251">These are all instances of the same general result.</p></li>
+<li><p data-source-line="2253" data-source-end-line="2253">We’re going to show that for every function <span class="math inline">f</span>, the conditional mean of <span class="math inline">f(W_1 \ldots W_n, Y_1 \ldots Y_n)</span> given <span class="math inline">W_1=w_1 \ldots W_n=w_n</span> and the mean of <span class="math inline">f(w_1 \ldots w_n, Y_1 \ldots Y_n)</span> under stratified sampling coincide.</p></li>
 </ul>
 
-<p data-source-line="2253" data-source-end-line="2253"><span class="math display">
+<p data-source-line="2255" data-source-end-line="2267"><span class="math display">
 \begin{aligned}
 &amp;\mathop{\mathrm{E}}\cb{f(W_1 \ldots W_n, Y_1 \ldots Y_n) \mid W_1=w_1 \ldots W_n=w_n} \\
 &amp;\overset{\texttip{\small{\text{?}}}{The 'when' rule. We are conditioning on the whole list of labels, so we put their values into $f$.}}{=}
@@ -2142,7 +2142,7 @@ a(w)\mathop{\mathrm{E}}[Y\mid W=w]+b(w)\mathop{\mathrm{E}}[Z\mid W=w].
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">Applying the result to <span class="math inline">g</span>, <span class="math inline">h</span>, <span class="math inline">d</span>, and <span class="math inline">k</span> gives the four claims, respectively.</span> </li>
+<li data-source-line="2269" data-source-end-line="2269">Applying the result to <span class="math inline">g</span>, <span class="math inline">h</span>, <span class="math inline">d</span>, and <span class="math inline">k</span> gives the four claims, respectively.</li>
 </ul>
 
 <p data-source-line="2271" data-source-end-line="2287"><span class="math display">
@@ -2298,8 +2298,8 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 </div>
 </div>
 <ul>
-<li><span class="agent-new">Drop the person in <span class="groupb">group 1</span> with <span class="math inline">y_j = 1.25</span>, so the group means don’t change.</span> </li>
-<li data-source-line="2746" data-source-end-line="2746"><strong>Q.</strong> Is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span> still midway between the two group means? <span class="step-cue"></span> </li>
+<li data-source-line="2746" data-source-end-line="2746">Drop the person in <span class="groupb">group 1</span> with <span class="math inline">y_j = 1.25</span>, so the group means don’t change.</li>
+<li><strong>Q.</strong> Is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span> still midway between the two group means? <span class="step-cue"></span> </li>
 </ul>
 <div class="fragment" data-fragment-index="0" data-source-line="2747" data-source-end-line="2747">
 <table class="caption-top">
@@ -2368,13 +2368,13 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <tr class="even">
 <td><span class="math inline">0.42</span></td>
 <td>1</td>
-<td><span class="math inline">73.37K</span></td>
+<td><span class="math inline">73.18K</span></td>
 </tr>
 </tbody>
 </table>
 <p>What is <span class="math inline">\mathop{\mathrm{E}}[Y_i]</span>? <span class="step-cue"></span> </p>
 <div class="fragment" data-fragment-index="0" data-source-line="2787" data-source-end-line="2787">
-<p data-source-line="2790" data-source-end-line="2790"><span class="math inline">0.58 \times 29.93K + 0.42 \times 73.37K \approx 48K</span>.</p>
+<p data-source-line="2790" data-source-end-line="2790"><span class="math inline">0.58 \times 29.93K + 0.42 \times 73.18K \approx 48K</span>.</p>
 </div>
 </section>
 <section id="a-plot-reading-exercise" class="slide level2">
@@ -2401,9 +2401,9 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \frac{1}{2}\mu(0)+\frac{1}{2}\mu(1) = \frac{1}{2}\p{25\text{k}+\epsilon}+\frac{1}{2}\p{75\text{k}-\epsilon_-} = 50\text{k}+\frac{1}{2}\p{\epsilon-\epsilon_-}.
 </span></p>
 <ul>
-<li><span class="agent-new">The mean <span class="groupa">without a degree</span> is further above $25k than the mean <span class="groupb">with one</span> is below $75k.</span> </li>
-<li data-source-line="2815" data-source-end-line="2815"><span class="agent-new">So <span class="math inline">\epsilon&gt;\epsilon_-</span>, and the average is above $50k.</span> </li>
-<li data-source-line="2816" data-source-end-line="2816">We got a smaller number because we put more weight on the lower group. There are more people in it.</li>
+<li data-source-line="2815" data-source-end-line="2815">The mean <span class="groupa">without a degree</span> is further above $25k than the mean <span class="groupb">with one</span> is below $75k.</li>
+<li data-source-line="2816" data-source-end-line="2816">So <span class="math inline">\epsilon&gt;\epsilon_-</span>, and the average is above $50k.</li>
+<li data-source-line="2817" data-source-end-line="2817">We got a smaller number because we put more weight on the lower group. There are more people in it.</li>
 </ul>
 </div>
 </section>
@@ -2462,7 +2462,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <p><strong>Proof.</strong> </p>
 <div class="fragment" data-fragment-index="0" data-source-line="2883" data-source-end-line="2883">
 <ul>
-<li><span class="agent-new">We used the excess form of variance in homework.</span> </li>
+<li data-source-line="2887" data-source-end-line="2887">We used the excess form of variance in homework.</li>
 </ul>
 
 <p data-source-line="2889" data-source-end-line="2891"><span class="math display">
@@ -2523,9 +2523,9 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <section id="is-it-unbiased-unconditionally" class="slide level2">
 <h2 data-source-line="2935" data-source-end-line="2935">Is It Unbiased Unconditionally?</h2>
 <ul>
-<li><span class="agent-new">When the group is empty, there’s nobody to average, so the estimator isn’t defined.</span> </li>
-<li data-source-line="2937" data-source-end-line="2937"><span class="agent-new">For today, let’s pretend that when group <span class="math inline">w</span> is empty, <span class="math inline">\hat\mu(w)</span> takes the value of the estimand, <span class="math inline">\mu(w)</span>.</span> </li>
-<li data-source-line="2938" data-source-end-line="2938">This makes the conditional mean of <span class="math inline">\hat\mu(w)</span> equal to <span class="math inline">\mu(w)</span> no matter what.</li>
+<li data-source-line="2937" data-source-end-line="2937">When the group is empty, there’s nobody to average, so the estimator isn’t defined.</li>
+<li data-source-line="2938" data-source-end-line="2938">For today, let’s pretend that when group <span class="math inline">w</span> is empty, <span class="math inline">\hat\mu(w)</span> takes the value of the estimand, <span class="math inline">\mu(w)</span>.</li>
+<li data-source-line="2939" data-source-end-line="2939">This makes the conditional mean of <span class="math inline">\hat\mu(w)</span> equal to <span class="math inline">\mu(w)</span> no matter what.</li>
 </ul>
 
 <p data-source-line="2941" data-source-end-line="2947"><span class="math display">
@@ -2563,9 +2563,9 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <section id="the-variance-of-the-subsample-mean" class="slide level2">
 <h2 data-source-line="2971" data-source-end-line="2971">The Variance of the Subsample Mean</h2>
 <ul>
-<li><strong>Claim.</strong> <span class="agent-new">With the same pretense …</span> 
+<li data-source-line="2973" data-source-end-line="2973"><strong>Claim.</strong> With the same pretense …
 <ul>
-<li data-source-line="2973" data-source-end-line="2973">… the variance of a subsample mean is the expected value of the subpopulation variance divided by the number of people in the subsample.</li>
+<li data-source-line="2974" data-source-end-line="2974">… the variance of a subsample mean is the expected value of the subpopulation variance divided by the number of people in the subsample.</li>
 <li data-source-line="2975" data-source-end-line="2975">… the variance of the difference in subsample means is the sum of the variances of the subsample means.</li>
 </ul></li>
 </ul>
@@ -2578,13 +2578,13 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 </span></p>
 <ul>
 <li data-source-line="2984" data-source-end-line="2984">This is like what we saw in the unconditional case, but with a twist.</li>
-<li data-source-line="2985" data-source-end-line="2985">The number of people in the subsample is random. So instead of <span class="math inline">1/n</span>, we have <span class="agent-new"><span class="math inline">\mathop{\mathrm{E}}\sb{\frac{1_{&gt;0}(N_w)}{N_w}}</span></span>.</li>
+<li data-source-line="2985" data-source-end-line="2985">The number of people in the subsample is random. So instead of <span class="math inline">1/n</span>, we have <span class="math inline">\mathop{\mathrm{E}}\sb{\frac{1_{&gt;0}(N_w)}{N_w}}</span>.</li>
 <li><strong>Proof.</strong> </li>
 </ul>
 <div class="fragment" data-source-line="2986" data-source-end-line="2986">
 <ul>
-<li><span class="agent-new">We have the <a href="#/conditional-from-stratified" class="quarto-xref">conditional variance</a> when <span class="math inline">N_w &gt; 0</span>.</span> </li>
-<li data-source-line="2990" data-source-end-line="2990"><span class="agent-new">When <span class="math inline">N_w = 0</span>, the constant <span class="math inline">\mu(w)</span> has conditional variance <span class="math inline">0</span>.</span> </li>
+<li data-source-line="2990" data-source-end-line="2990">We have the <a href="#/conditional-from-stratified" class="quarto-xref">conditional variance</a> when <span class="math inline">N_w &gt; 0</span>.</li>
+<li data-source-line="2991" data-source-end-line="2991">When <span class="math inline">N_w = 0</span>, the constant <span class="math inline">\mu(w)</span> has conditional variance <span class="math inline">0</span>.</li>
 </ul>
 
 <p data-source-line="2993" data-source-end-line="2998"><span class="math display">
@@ -2594,8 +2594,8 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{cases}
 </span></p>
 <ul>
-<li><span class="agent-new">Now apply the <a href="#/sec-total-variance" class="quarto-xref">law of total variance</a>, conditioning on <span class="math inline">W_1 \ldots W_n</span>.</span> </li>
-<li data-source-line="3000" data-source-end-line="3000">This is one place it helps to know our estimator is <em>conditionally unbiased</em>.</li>
+<li data-source-line="3000" data-source-end-line="3000">Now apply the <a href="#/sec-total-variance" class="quarto-xref">law of total variance</a>, conditioning on <span class="math inline">W_1 \ldots W_n</span>.</li>
+<li data-source-line="3001" data-source-end-line="3001">This is one place it helps to know our estimator is <em>conditionally unbiased</em>.</li>
 </ul>
 
 <p data-source-line="3003" data-source-end-line="3017"><span class="math display">
@@ -2614,7 +2614,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">The proof for the difference is analogous.</span> </li>
+<li data-source-line="3019" data-source-end-line="3019">The proof for the difference is analogous.</li>
 </ul>
 </div>
 
@@ -2633,7 +2633,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 </div>
 </div>
 <ul>
-<li><span class="agent-new">Under <a href="https://qtm285.github.io/static/book/decks/nsw-precision-nov05.html#/what-do-we-do-about-it/0">complete randomization</a>, dropping <span class="math inline">\textcolor{#1b9e77}{\sigma^2(\tau)}</span> gave an upper bound.</span><sup>1</sup> </li>
+<li>Under <a href="https://qtm285.github.io/static/book/decks/nsw-precision-nov05.html#/what-do-we-do-about-it/0">complete randomization</a>, dropping <span class="math inline">\textcolor{#1b9e77}{\sigma^2(\tau)}</span> gave an upper bound.<sup>1</sup> </li>
 </ul>
 
 <p data-source-line="3065" data-source-end-line="3071"><span class="math display">
@@ -2644,7 +2644,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">This was the conservative formula under complete randomization, but here it is the actual variance.</span> </li>
+<li data-source-line="3073" data-source-end-line="3073">This was the conservative formula under complete randomization, but here it is the actual variance.</li>
 </ul>
 
 <p data-source-line="3075" data-source-end-line="3078"><span class="math display">
@@ -2656,7 +2656,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <aside><div>
 <hr>
 <ol start="2">
-<li id="fn2"><p><span class="agent-new">Shuffling <span class="math inline">m</span> people without replacement kept the group sizes at <span class="math inline">m_1</span> and <span class="math inline">m_0</span> and gave the factor <span class="math inline">m/(m-1)</span>. Sampling with replacement and flipping coins drops <span class="math inline">m/(m-1)</span> and averages over the random group sizes <span class="math inline">N_1</span> and <span class="math inline">N_0</span>.</span><a href="#/fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Shuffling <span class="math inline">m</span> people without replacement kept the group sizes at <span class="math inline">m_1</span> and <span class="math inline">m_0</span> and gave the factor <span class="math inline">m/(m-1)</span>. Sampling with replacement and flipping coins drops <span class="math inline">m/(m-1)</span> and averages over the random group sizes <span class="math inline">N_1</span> and <span class="math inline">N_0</span>.<a href="#/fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </div><ol class="aside-footnotes"></ol></aside></section>
 <section id="sec-estimating-variance" class="slide level2">
@@ -2802,7 +2802,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 <p><strong>Proof.</strong> </p>
 <div class="fragment" data-fragment-index="0" data-source-line="3242" data-source-end-line="3242">
 <ul>
-<li><span class="agent-new">Because <span class="math inline">W'</span> is independent of <span class="math inline">(W, Y)</span>, it is also independent of <span class="math inline">W</span> alone.</span> </li>
+<li data-source-line="3246" data-source-end-line="3246">Because <span class="math inline">W'</span> is independent of <span class="math inline">(W, Y)</span>, it is also independent of <span class="math inline">W</span> alone.</li>
 </ul>
 
 <p data-source-line="3248" data-source-end-line="3260"><span class="math display">
@@ -2819,9 +2819,9 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">Dropping <span class="math inline">W'</span> doesn’t change the conditional probability of <span class="math inline">Y</span>.</span> 
+<li data-source-line="3262" data-source-end-line="3262">Dropping <span class="math inline">W'</span> doesn’t change the conditional probability of <span class="math inline">Y</span>.
 <ul>
-<li data-source-line="3262" data-source-end-line="3262"><span class="agent-new">Its probability <span class="math inline">\P(W'=w')</span> factors out of top and bottom and cancels.</span> </li>
+<li data-source-line="3263" data-source-end-line="3263">Its probability <span class="math inline">\P(W'=w')</span> factors out of top and bottom and cancels.</li>
 </ul></li>
 </ul>
 
@@ -2841,7 +2841,7 @@ k(w_1 \ldots w_n,y_1 \ldots y_n)
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">So the conditional distribution we average over doesn’t change either.</span> </li>
+<li data-source-line="3281" data-source-end-line="3281">So the conditional distribution we average over doesn’t change either.</li>
 </ul>
 
 <p data-source-line="3283" data-source-end-line="3296"><span class="math display">
@@ -3164,7 +3164,7 @@ two ⍿.</p>
 </span></p>
 <p><strong>Proof.</strong> </p>
 <ul>
-<li data-source-line="3530" data-source-end-line="3530"><span class="agent-new">We use <a href="#/sec-linearity" class="quarto-xref">linearity</a>, <a href="#/sec-irrelevance" class="quarto-xref">irrelevance of independent conditioning variables</a>, and the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>.</span> </li>
+<li data-source-line="3530" data-source-end-line="3530">We use <a href="#/sec-linearity" class="quarto-xref">linearity</a>, <a href="#/sec-irrelevance" class="quarto-xref">irrelevance of independent conditioning variables</a>, and the <a href="#/sec-indicator-trick" class="quarto-xref">indicator trick</a>.</li>
 </ul>
 
 <p data-source-line="3534" data-source-end-line="3547"><span class="math display">
@@ -3198,8 +3198,8 @@ two ⍿.</p>
 \end{aligned}
 </span></p>
 <ul>
-<li><span class="agent-new">As in the lecture, use zero for the variance term when the group is empty.</span> </li>
-<li data-source-line="3561" data-source-end-line="3561">This is like what we saw in the unconditional case, but with a twist.</li>
+<li data-source-line="3561" data-source-end-line="3561">As in the lecture, use zero for the variance term when the group is empty.</li>
+<li data-source-line="3562" data-source-end-line="3562">This is like what we saw in the unconditional case, but with a twist.</li>
 <li data-source-line="3563" data-source-end-line="3563">The number of people in the subsample is random.
 <ul>
 <li data-source-line="3564" data-source-end-line="3564">So instead of <span class="math inline">1/n</span>, we have <span class="math inline">\mathop{\mathrm{E}}[ \frac{1}{N_1} ]</span>.</li>
@@ -3245,7 +3245,7 @@ two ⍿.</p>
 <section id="expanded-centering" class="slide level2">
 <h2 data-source-line="3592" data-source-end-line="3592">Step 2. Centering and Squaring</h2>
 <ul>
-<li><span class="agent-new">Take a label list where group 1 isn’t empty, <span class="math inline">\sum_{i=1}^n 1_{=1}(W_i) &gt; 0</span>.</span> </li>
+<li data-source-line="3594" data-source-end-line="3594">Take a label list where group 1 isn’t empty, <span class="math inline">\sum_{i=1}^n 1_{=1}(W_i) &gt; 0</span>.</li>
 </ul>
 
 <p data-source-line="3596" data-source-end-line="3613"><span class="math display">
@@ -3279,7 +3279,7 @@ two ⍿.</p>
 <h2 data-source-line="3625" data-source-end-line="3625">Step 3. Taking Expectations Term-by-Term</h2>
 <h3 id="squared-terms-ij" data-source-line="3627" data-source-end-line="3627">Squared Terms (<span class="math inline">i=j</span>)</h3>
 
-<p data-source-line="3629" data-source-end-line="3639"><span class="agent-new">We use <a href="#/sec-irrelevance" class="quarto-xref">irrelevance of independent conditioning variables</a>.</span> <span class="math display">
+<p data-source-line="3629" data-source-end-line="3639">We use <a href="#/sec-irrelevance" class="quarto-xref">irrelevance of independent conditioning variables</a>. <span class="math display">
 \begin{aligned}
 \mathop{\mathrm{E}}\sb*{\textcolor{#EF476F}{Z_i}\textcolor{#118AB2}{Z_j} \mid W_1 \ldots W_n}
 &amp;\overset{\texttip{\small{\text{?}}}{Because $i=j$}}{=}
@@ -3302,7 +3302,7 @@ two ⍿.</p>
 <section id="step-4.-putting-the-pieces-together" class="slide level2">
 <h2 data-source-line="3653" data-source-end-line="3653">Step 4. Putting the Pieces Together</h2>
 <ul>
-<li><span class="agent-new">When group 1 is empty, the estimate is constant. Use zero for its conditional variance here as well.</span> </li>
+<li data-source-line="3655" data-source-end-line="3655">When group 1 is empty, the estimate is constant. Use zero for its conditional variance here as well.</li>
 </ul>
 
 <p data-source-line="3657" data-source-end-line="3671"><span class="math display">
