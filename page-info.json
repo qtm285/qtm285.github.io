@@ -4158,7 +4158,7 @@
         "id": "what-ordinary-sampling-is",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 13,
+        "sourceLine": 14,
         "sourceLineIsHeading": true
       },
       {
@@ -4169,7 +4169,7 @@
         "id": "what-ordinary-sampling-is-1",
         "fragmentSteps": 1,
         "frames": 2,
-        "sourceLine": 17,
+        "sourceLine": 18,
         "sourceLineIsHeading": true
       },
       {
@@ -4180,7 +4180,7 @@
         "id": "we-could-have-done-this-in-our-turnout-poll",
         "fragmentSteps": 3,
         "frames": 4,
-        "sourceLine": 155,
+        "sourceLine": 156,
         "sourceLineIsHeading": true
       },
       {
@@ -4191,7 +4191,7 @@
         "id": "it-wouldnt-have-made-a-difference",
         "fragmentSteps": 1,
         "frames": 2,
-        "sourceLine": 279,
+        "sourceLine": 280,
         "sourceLineIsHeading": true
       },
       {
@@ -4202,7 +4202,7 @@
         "id": "the-caveat-small-samples-small-populations",
         "fragmentSteps": 1,
         "frames": 2,
-        "sourceLine": 433,
+        "sourceLine": 434,
         "sourceLineIsHeading": true
       },
       {
@@ -4213,7 +4213,7 @@
         "id": "ordinary-sampling-in-two-stages",
         "fragmentSteps": 2,
         "frames": 3,
-        "sourceLine": 496,
+        "sourceLine": 497,
         "sourceLineIsHeading": true
       },
       {
@@ -4224,7 +4224,7 @@
         "id": "why-so-much",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 622,
+        "sourceLine": 623,
         "sourceLineIsHeading": true
       },
       {
@@ -4235,7 +4235,7 @@
         "id": "imagining-something-that-isnt-there",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 627,
+        "sourceLine": 628,
         "sourceLineIsHeading": true
       },
       {
@@ -4246,7 +4246,7 @@
         "id": "coin-flip-randomization",
         "fragmentSteps": 4,
         "frames": 5,
-        "sourceLine": 830,
+        "sourceLine": 831,
         "sourceLineIsHeading": true
       },
       {
@@ -4257,7 +4257,7 @@
         "id": "exactly-the-same-probability-model",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 1387,
+        "sourceLine": 1388,
         "sourceLineIsHeading": true
       },
       {
@@ -4268,7 +4268,7 @@
         "id": "activity-treatment-and-judging-chocolates",
         "fragmentSteps": 2,
         "frames": 3,
-        "sourceLine": 1430,
+        "sourceLine": 1431,
         "sourceLineIsHeading": true
       },
       {
@@ -4279,7 +4279,7 @@
         "id": "one-conceptual-caveat",
         "fragmentSteps": 1,
         "frames": 2,
-        "sourceLine": 1520,
+        "sourceLine": 1521,
         "sourceLineIsHeading": true
       },
       {
@@ -4290,7 +4290,7 @@
         "id": "what-observations-tell-us",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 1664,
+        "sourceLine": 1665,
         "sourceLineIsHeading": true
       },
       {
@@ -4301,7 +4301,7 @@
         "id": "asking-your-neighbor",
         "fragmentSteps": 4,
         "frames": 5,
-        "sourceLine": 1666,
+        "sourceLine": 1667,
         "sourceLineIsHeading": true
       },
       {
@@ -4312,7 +4312,7 @@
         "id": "the-same-distribution",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 2090,
+        "sourceLine": 2091,
         "sourceLineIsHeading": true
       },
       {
@@ -4323,7 +4323,7 @@
         "id": "what-population-are-we-sampling",
         "fragmentSteps": 1,
         "frames": 2,
-        "sourceLine": 2518,
+        "sourceLine": 2519,
         "sourceLineIsHeading": true
       },
       {
@@ -4334,7 +4334,7 @@
         "id": "we-observe-independent-pairs",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 2637,
+        "sourceLine": 2638,
         "sourceLineIsHeading": true
       },
       {
@@ -4345,7 +4345,7 @@
         "id": "why-does-this-matter",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 2688,
+        "sourceLine": 2689,
         "sourceLineIsHeading": true
       },
       {
@@ -4356,7 +4356,7 @@
         "id": "the-picture",
         "fragmentSteps": 0,
         "frames": 1,
-        "sourceLine": 2747,
+        "sourceLine": 2748,
         "sourceLineIsHeading": true
       }
     ],
